@@ -1,0 +1,36 @@
+import 'package:flutter/material.dart';
+import 'package:swappr/utils/constants/sizes.dart';
+
+import '../../../utils/constants/colors.dart';
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const CustomAppBar({
+    super.key,
+    required this.title,
+  });
+
+  final String title;
+
+  @override
+  Size get preferredSize => Size.fromHeight(TSizes.appBarHeight);
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      toolbarHeight: TSizes.appBarHeight,
+      leadingWidth: 25,
+      leading: IconButton(
+        onPressed: (){},
+        icon: Icon(Icons.keyboard_arrow_left_outlined),
+        style: IconButton.styleFrom(
+          foregroundColor: TColors.primary,
+          iconSize: 35
+        ),
+      ),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleSmall,
+      ),
+    );
+  }
+}
