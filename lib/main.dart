@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: TAppTheme.lightTheme,
       darkTheme: TAppTheme.darkTheme,
       debugShowCheckedModeBanner: false,
-      home: OnboardingScreen(),
+      home: const OnboardingScreen(),
     );
   }
 }

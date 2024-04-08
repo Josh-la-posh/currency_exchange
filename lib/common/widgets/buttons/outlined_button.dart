@@ -7,12 +7,12 @@ class TOutlinedButton extends StatelessWidget {
   TOutlinedButton({
     super.key,
     required this.onTap,
-    required this.borderColor,
+    // required this.borderColor,
     this.textColor,
     required this.buttonText,
   });
   VoidCallback onTap;
-  Color borderColor;
+  // Color borderColor;
   Color? textColor;
   String buttonText;
 
@@ -22,7 +22,7 @@ class TOutlinedButton extends StatelessWidget {
       height: 48.0,
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
-          side: BorderSide(color: borderColor)
+          // side: BorderSide(color: borderColor)
         ),
         onPressed: onTap,
         child: Center(

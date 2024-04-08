@@ -5,10 +5,10 @@ class TSizes {
 
   // Padding and margin sizes
   static const double xs = 4.0;
-  static const double sm = 8.0;
-  static const double md = 16.0;
-  static const double lg = 24.0;
-  static const double xl = 32.0;
+  static const double sm = 6.0;
+  static const double md = 8.0;
+  static const double lg = 14.0;
+  static const double xl = 22.0;
 
   // Icon sizes
   static const double iconXs = 12.0;
@@ -17,12 +17,15 @@ class TSizes {
   static const double iconLg = 32.0;
 
   // Font sizes
+  static const double fontSize9 = 9.0;
+  static const double fontSize10 = 10.0;
   static const double fontSize11 = 11.0;
   static const double fontSize12 = 12.0;
   static const double fontSize13 = 13.0;
   static const double fontSize14 = 14.0;
   static const double fontSize16 = 16.0;
   static const double fontSize18 = 18.0;
+  static const double fontSize20 = 20.0;
   static const double fontSize22 = 22.0;
 
   // Font weights
@@ -32,6 +35,12 @@ class TSizes {
   static const fontWeightMd = FontWeight.w600;
   static const fontWeightLg = FontWeight.w700;
   static const fontWeightXl = FontWeight.w900;
+
+  // Letter spacing
+  static const letterSpacingSm = 0.02;
+
+  // Line height
+  static const double lineHeight = 24.0;
 
   // Button sizes
   static const double buttonHeight = 48.0;
@@ -46,9 +55,10 @@ class TSizes {
   // Appbar height
   static const double appBarHeight = 80.0;
 
-  // Deault spacing between sections
+  // Default spacing between sections
   static const double defaultSpace = 24.0;
   static const double spaceBtwItems = 16.0;
+  static const double spaceBtwButtons = 18.0;
   static const double spaceBtwElements = 20.0;
   static const double spaceBtwSections = 32.0;
 
@@ -58,5 +68,15 @@ class TSizes {
 
   // Input field
   static const double spaceBtwInputFields = 16.0;
+
+  // Bottom navigation height
+  static const double bottomNavBar = 66.0;
+
+  // Form Input Height
+  static const double textInputFieldHeight = 48.0;
+  static const double textReviewHeight = 58.0;
+
+  // Icon left size
+  static const double iconBackSize = 23.0;
 
 }

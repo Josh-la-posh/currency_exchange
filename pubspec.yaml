@@ -20,11 +20,14 @@ dependencies:
   logger: ^2.1.0
   url_launcher: ^6.2.5
   flutter_native_splash: ^2.4.0
+  intl_phone_field: ^3.2.0
+  flutter_slidable: ^3.1.0
 
 
   get: ^4.6.6
   get_storage: ^2.1.1
   iconsax: ^0.0.8
+  flutter_svg: ^2.0.10+1
 
 
 
@@ -43,7 +46,9 @@ flutter:
   #------------- LOCAL ASSETS --------------------#
   assets:
     - assets/logos/
-    - assets/icons/
+    - assets/icons/bottomNavIcons/
+    - assets/icons/profileIcons/
+    - assets/icons/countryIcons/
     - assets/images/
 
   #-------------- LOCAL FONTS --------------------#

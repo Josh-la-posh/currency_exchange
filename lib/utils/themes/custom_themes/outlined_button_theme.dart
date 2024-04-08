@@ -14,18 +14,18 @@ class TOutlinedButtonTheme {
           backgroundColor: TColors.white,
           side: const BorderSide(color: TColors.primary),
           textStyle: const TextStyle(fontSize: TSizes.fontSize16, color: TColors.primary, fontWeight: TSizes.fontWeightMd, fontFamily: TTexts.fontFamily),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TSizes.borderRadiusSm))
       )
   );
 
   static final darkOutlinedButtonTheme = OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
           elevation: 0,
-          foregroundColor: TColors.white,
+          foregroundColor: TColors.primary,
           backgroundColor: TColors.black,
-          side: const BorderSide(color: TColors.white),
+          side: const BorderSide(color: TColors.primary),
           textStyle: const TextStyle(fontSize: TSizes.fontSize16, color: TColors.primary, fontWeight: TSizes.fontWeightMd, fontFamily: TTexts.fontFamily),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TSizes.borderRadiusSm))
       )
   );
 }

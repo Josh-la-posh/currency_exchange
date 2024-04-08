@@ -39,25 +39,26 @@ class TTextFormFieldTheme {
   );
 
   static InputDecorationTheme darkInputDecorationTheme = InputDecorationTheme(
-    fillColor: TColors.textFieldBackground,
+    filled: true,
+    fillColor: TColors.secondaryBorder,
     errorMaxLines: 3,
-    prefixIconColor: Colors.grey,
-    suffixIconColor: TColors.white,
-    labelStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.textPrimary),
-    hintStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.textPrimary),
+    prefixIconColor: TColors.grey,
+    suffixIconColor: TColors.grey,
+    labelStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.textSecondary),
+    hintStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.textSecondary),
     errorStyle: const TextStyle().copyWith(fontStyle: FontStyle.normal),
     floatingLabelStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.white.withOpacity(0.8)),
     border: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-      borderSide: const BorderSide(width: 1, color: TColors.white),
+      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder),
     ),
     enabledBorder: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-      borderSide: const BorderSide(width: 1, color: TColors.white),
+      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder),
     ),
     focusedBorder: const OutlineInputBorder().copyWith(
         borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-        borderSide: const BorderSide(width: 1, color: TColors.white)
+        borderSide: BorderSide(width: 1, color: TColors.secondaryBorder)
     ),
     errorBorder: const OutlineInputBorder().copyWith(
         borderRadius: BorderRadius.circular(TSizes.buttonRadius),

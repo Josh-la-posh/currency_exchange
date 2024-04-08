@@ -16,7 +16,7 @@ class OnboardingScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         height: THelperFunctions.screenHeight(),
-        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace * 3.25),
+        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace * 3),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -24,21 +24,20 @@ class OnboardingScreen extends StatelessWidget {
               'Swap NGN for GBP',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
-            const SizedBox(height: TSizes.spaceBtwItems-2),
+            const SizedBox(height: TSizes.md),
             Text(
               'Cheap, Fast and Safe',
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            const SizedBox(height: TSizes.defaultSpace * 2.6),
+            const SizedBox(height: TSizes.defaultSpace * 2),
             TElevatedButton(
-              onTap: (){Get.offAll(const SignUpScreen());},
+              onTap: (){Get.to(() => const SignUpScreen());},
               buttonText: 'Sign Up',
             ),
-            const SizedBox(height: TSizes.spaceBtwElements,),
+            const SizedBox(height: TSizes.spaceBtwButtons,),
             TOutlinedButton(
-              onTap: (){Get.offAll(const LoginScreen());},
+              onTap: (){Get.to(() => const LoginScreen());},
               buttonText: 'Log In',
-              borderColor: THelperFunctions.isDarkMode(context) ? TColors.white : TColors.primary,
             ),
           ],
         ),
