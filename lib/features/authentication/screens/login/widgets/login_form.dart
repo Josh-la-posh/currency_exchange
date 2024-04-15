@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
+import 'package:swappr/data/modules/app_navigator.dart';
 import 'package:swappr/features/authentication/screens/forgot_poassword/forgot_password.dart';
+import 'package:swappr/features/home/routes/names.dart';
+import 'package:swappr/features/home/screens/home.dart';
 import 'package:swappr/utils/layouts/navigation_menu.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/texts.dart';
@@ -77,14 +80,15 @@ class LoginForm extends StatelessWidget {
                 ),
                 const SizedBox(height: TSizes.spaceBtwItems),
 
-                TElevatedButton(onTap: () => Get.to(() => const NavigationMenu()), buttonText: 'Sign In')
+                // TElevatedButton(onTap: () => Get.to(() => const NavigationMenu()), buttonText: 'Sign In')
+                TElevatedButton(onTap: () {Get.to(HomeScreen());}, buttonText: 'Sign In')
               ],
             )
         ),
         const SizedBox(height: TSizes.md),
         Center(
           child: TextButton(
-              onPressed: (){Get.to(() => const SignUpScreen());},
+              onPressed: (){Get.to(() => const CreateAccountScreen());},
               child: Text('No account yet? Sign Up', style: Theme.of(context).textTheme.labelMedium,)
           ),
         )

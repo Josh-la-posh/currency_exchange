@@ -40,7 +40,10 @@ class TSizes {
   static const letterSpacingSm = 0.02;
 
   // Line height
-  static const double lineHeight = 24.0;
+  static const double lineHeight24 = 24.0;
+  static const double lineHeight22 = 22.0;
+  static const double lineHeight18 = 18.0;
+  static const double lineHeight16 = 16.0;
 
   // Button sizes
   static const double buttonHeight = 48.0;

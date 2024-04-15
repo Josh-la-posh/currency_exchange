@@ -31,7 +31,7 @@ class OnboardingScreen extends StatelessWidget {
             ),
             const SizedBox(height: TSizes.defaultSpace * 2),
             TElevatedButton(
-              onTap: (){Get.to(() => const SignUpScreen());},
+              onTap: (){Get.to(() => const CreateAccountScreen());},
               buttonText: 'Sign Up',
             ),
             const SizedBox(height: TSizes.spaceBtwButtons,),

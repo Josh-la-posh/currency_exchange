@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/features/home/models/offer.dart';
+
+import '../../../common/widgets/divider.dart';
+import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/sizes.dart';
+import '../icons/svg.dart';
+import '../screens/offer_details.dart';
+
+class OfferItem extends StatelessWidget {
+  // final OfferEntity item;
+  const OfferItem({
+    super.key,
+    // required this.item
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          dense: true,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: TSizes.md),
+          onTap: (){
+            Get.to(() => const OfferDetailsScreen());
+          },
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelMedium,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: 'has: 20,000 NGN',
+                                style: TextStyle(fontSize: TSizes.fontSize13)
+                            ),
+                          ]
+                      )
+                  ),
+                  const SizedBox(height: TSizes.md,),
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelMedium,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: 'needs: 95 GBP',
+                                style: TextStyle(
+                                  fontSize: TSizes.fontSize13,
+                                )
+                            ),
+                          ]
+                      )
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelMedium,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: '600 NGN // GBP',
+                                style: TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
+                            ),
+                          ]
+                      )
+                  ),
+                  const SizedBox(height: TSizes.md,),
+                  Row(
+                    children: [
+                      OfferEyeIcon(),
+                      const SizedBox(width: TSizes.md,),
+                      RichText(
+                          text: TextSpan(
+                              style: Theme.of(context).textTheme.labelSmall,
+                              children: <TextSpan> [
+                                TextSpan(
+                                    text: '20',
+                                    style: TextStyle(
+                                      color: TColors.textPrimaryO80,
+                                    )
+                                ),
+                              ]
+                          )
+                      ),
+                      const SizedBox(width: TSizes.lg,),
+                      RichText(
+                          text: TextSpan(
+                              style: Theme.of(context).textTheme.labelSmall,
+                              children: <TextSpan> [
+                                TextSpan(
+                                    text: '40 secs ago',
+                                    style: TextStyle(
+                                      color: TColors.textPrimary.withOpacity(0.5),
+                                    )
+                                ),
+                              ]
+                          )
+                      ),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+        const DividerWidget()
+      ],
+    );
+  }
+}

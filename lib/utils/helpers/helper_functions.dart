@@ -69,4 +69,19 @@ class THelperFunctions {
     }
     return wrappedList;
   }
+
+  static String getStringMultiplication(String a, String b) {
+    int? intNum1 = int.tryParse(a);
+    int? intNum2 = int.tryParse(b);
+    int result;
+
+    if (intNum1 != null && intNum2 != null) {
+      result = intNum1 * intNum2;
+      return result.toString();
+    } else {
+      result = 0;
+      return result.toString();
+    }
+    // return result.toString();
+  }
 }

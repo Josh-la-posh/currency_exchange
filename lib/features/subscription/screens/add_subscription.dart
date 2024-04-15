@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:swappr/common/styles/spacing_styles.dart';
+import 'package:swappr/common/widgets/currencyWidget.dart';
+import 'package:swappr/features/profile/widgets/layout.dart';
+import 'package:swappr/features/subscription/screens/layout.dart';
+import 'package:swappr/features/subscription/widgets/subscription_form.dart';
+import 'package:swappr/features/transaction_history/widgets/layout.dart';
+
+import '../../../utils/constants/sizes.dart';
+
+class AddSubscriptionScreen extends StatelessWidget {
+  const AddSubscriptionScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SubscribeScreenLayout(
+      childWidget: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const CurrencyWidget(),
+            const SizedBox(height: TSizes.spaceBtwSections,),
+            Text('Subscribe', style: Theme.of(context).textTheme.titleMedium,),
+            const SizedBox(height: TSizes.sm,),
+            Text('Notify me when an offer is created that matches this criteria:', style: Theme.of(context).textTheme.labelMedium,),
+            const SizedBox(height: TSizes.spaceBtwItems,),
+            const SubscriptionForm()
+          ],
+        ),
+      ),
+    );
+  }
+}

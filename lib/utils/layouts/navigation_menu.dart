@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:swappr/features/dashboard/screens/history/history.dart';
-import 'package:swappr/features/dashboard/screens/home/home.dart';
-import 'package:swappr/features/dashboard/screens/profile/profile.dart';
-import 'package:swappr/features/dashboard/screens/subscribe/subscribe.dart';
+import 'package:swappr/features/transaction_history/screens/history.dart';
+import 'package:swappr/features/home/screens/home.dart';
+import 'package:swappr/features/profile/screens/profile.dart';
+import 'package:swappr/features/subscription/screens/subscribe.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 
