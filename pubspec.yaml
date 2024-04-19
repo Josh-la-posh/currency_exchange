@@ -27,6 +27,9 @@ dependencies:
   permission_handler: ^11.0.0
   local_auth: ^2.2.0
   dio: ^5.4.3+1
+  flutter_dotenv: ^5.1.0
+  timeline_tile: ^2.0.0
+  timelines: ^0.1.0
 
 
   get: ^4.6.6

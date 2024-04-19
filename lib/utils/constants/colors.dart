@@ -29,6 +29,7 @@ class TColors {
   // Border Colors
   static const Color primaryBorder = TColors.primary;
   static Color secondaryBorder = const Color(0xFFD0CDE1).withOpacity(0.3);
+  static Color timeLineBorder = const Color(0xFF303030).withOpacity(0.4);
 
   // Error and Validation Colors
 

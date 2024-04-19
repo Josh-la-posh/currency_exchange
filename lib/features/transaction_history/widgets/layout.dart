@@ -13,7 +13,7 @@ class TransactionScreenLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-      currentRoute: RouteType.Home,
+      currentRoute: RouteType.History,
       childWidget: Container(
         padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
         child: childWidget,

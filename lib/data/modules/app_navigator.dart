@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../provider/auth_provider.dart';
+
 class AppNavigator {
   static final AppNavigator _instance = AppNavigator._();
 
@@ -32,11 +34,11 @@ class AppNavigator {
   void popContext(BuildContext context) =>
       navigatorKey.currentState!.pop(context);
 
-  // void resetProviders() {
-  //   var authProvider = Provider.of<AuthProvider>(
-  //     navigatorKey.currentState!.context,
-  //     listen: false,
-  //   );
-  //   authProvider.removeUser();
-  // }
+  void resetProviders() {
+    var authProvider = Provider.of<AuthProvider>(
+      navigatorKey.currentState!.context,
+      listen: false,
+    );
+    authProvider.removeUser();
+  }
 }

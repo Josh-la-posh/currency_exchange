@@ -81,7 +81,7 @@ class LoginForm extends StatelessWidget {
                 const SizedBox(height: TSizes.spaceBtwItems),
 
                 // TElevatedButton(onTap: () => Get.to(() => const NavigationMenu()), buttonText: 'Sign In')
-                TElevatedButton(onTap: () {Get.to(HomeScreen());}, buttonText: 'Sign In')
+                TElevatedButton(onTap: () {Get.to(() => const HomeScreen());}, buttonText: 'Sign In')
               ],
             )
         ),

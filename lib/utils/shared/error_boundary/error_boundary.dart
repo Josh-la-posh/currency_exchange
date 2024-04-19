@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:swappr/features/home/routes/names.dart';
+import 'package:swappr/utils/constants/colors.dart';
 
 import '../../../data/modules/app_navigator.dart';
 
@@ -56,7 +57,7 @@ class ErrorBoundary extends StatelessWidget {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor:
-                    MaterialStateProperty.all(Color(0xFF1B88DF)),
+                    MaterialStateProperty.all(TColors.primary),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(4.8),

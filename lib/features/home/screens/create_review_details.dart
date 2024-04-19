@@ -9,6 +9,7 @@ import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.da
 import 'package:swappr/common/widgets/divider.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/features/home/icons/svg.dart';
+import 'package:swappr/features/home/screens/create_offer_success_screen.dart';
 import 'package:swappr/features/home/screens/home.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/sizes.dart';
@@ -24,9 +25,9 @@ class CreateReviewDetailsScreen extends StatelessWidget {
     final offerDetail = Provider.of<OfferProvider>(context);
     final data = offerDetail.createOfferEntity;
 
-    DateTime now = DateTime.now();
-    DateTime expiryTime = DateTime.now().add(Duration(hours: int.parse(data.expireHour)));
-    Duration difference = expiryTime.difference(now);
+    // DateTime now = DateTime.now();
+    // DateTime expiryTime = DateTime.now().add(Duration(hours: int.parse(data.expireHour)));
+    // Duration difference = expiryTime.difference(now);
     return Scaffold(
       body: Padding(
         padding: TSpacingStyle.homePadding,
@@ -62,7 +63,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     ),
                                     TextSpan(
                                         text: '${THelperFunctions.getStringMultiplication(data.hasAmount, data.minimumRate)} ${data.neededCurrency}',
-                                        style: TextStyle(fontWeight: TSizes.fontWeightLg)
+                                        style: const TextStyle(fontWeight: TSizes.fontWeightLg)
                                     ),
                                   ]
                               )
@@ -178,7 +179,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                             children: <TextSpan> [
                                               TextSpan(
                                                   text: '${data.preferredRate} ${data.selectedCurrency}',
-                                                  style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                                  style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                               )
                                             ]
                                         )
@@ -192,7 +193,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                             children: <TextSpan> [
                                               TextSpan(
                                                   text: '${THelperFunctions.getStringMultiplication(data.preferredRate, data.hasAmount)} ${data.neededCurrency}',
-                                                  style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                                  style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                               )
                                             ]
                                         )
@@ -227,7 +228,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                             children: <TextSpan> [
                                               TextSpan(
                                                   text: '${data.minimumRate} ${data.selectedCurrency}',
-                                                  style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                                  style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                               )
                                             ]
                                         )
@@ -241,7 +242,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                             children: <TextSpan> [
                                               TextSpan(
                                                   text: '${THelperFunctions.getStringMultiplication(data.minimumRate, data.hasAmount)} ${data.neededCurrency}',
-                                                  style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                                  style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                               )
                                             ]
                                         )
@@ -275,7 +276,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                           TextSpan(
                                               text: '${data.expireHour} hour',
                                               // text: '${difference.inHours}h ${difference.inMinutes % 60}m hour',
-                                              style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                              style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                           )
                                         ]
                                     )
@@ -352,7 +353,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         children: <TextSpan> [
                                           TextSpan(
                                               text: '${TPriceCalculator.calculateFee(data.selectedCurrency)} ${data.selectedCurrency}',
-                                              style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                              style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                           )
                                         ]
                                     )
@@ -361,7 +362,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: TSizes.spaceBtwSections),
-                          TElevatedButton(onTap: (){Get.to(HomeScreen());}, buttonText: 'Pay ${TPriceCalculator.calculateTotalPrice(data.hasAmount, data.selectedCurrency)} ${data.selectedCurrency}'),
+                          TElevatedButton(onTap: (){Get.to(()=> const CreateOfferSuccessPage());}, buttonText: 'Pay ${TPriceCalculator.calculateTotalPrice(data.hasAmount ?? '0', data.selectedCurrency)} ${data.selectedCurrency}'),
                           const SizedBox(height: TSizes.spaceBtwElements),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

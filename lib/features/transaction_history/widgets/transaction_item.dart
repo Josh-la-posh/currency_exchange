@@ -21,9 +21,9 @@ class TransactionItem extends StatelessWidget {
             onTap: (){
               showModalBottomSheet(
                   backgroundColor: TColors.white,
-                  isDismissible: false,
+                  // isDismissible: false,
                   isScrollControlled: true,
-                  enableDrag: false,
+                  // enableDrag: false,
                   context: context,
                   builder: (cdx) => const TransactionDetails()
               );
@@ -44,7 +44,7 @@ class TransactionItem extends StatelessWidget {
                                 children: const <TextSpan> [
                                   TextSpan(
                                       text: '400 GPB - 20,000 NGN',
-                                      style: TextStyle(fontSize: TSizes.fontSize11)
+                                      style: TextStyle(fontSize: TSizes.fontSize11, fontWeight: TSizes.fontWeightLg)
                                   ),
                                 ]
                             )

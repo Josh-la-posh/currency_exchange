@@ -4,7 +4,7 @@ import 'package:swappr/features/profile/routes/routes.dart';
 import 'package:swappr/features/subscription/routes/routes.dart';
 import 'package:swappr/features/transaction_history/routes/routes.dart';
 
-import '../../features/authentication/models/routes/routes.dart';
+import '../../features/authentication/routes/routes.dart';
 
 Route _createCustomRoute(Widget page) {
   return PageRouteBuilder(

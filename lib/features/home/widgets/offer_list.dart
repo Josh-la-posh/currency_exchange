@@ -67,9 +67,9 @@ class OfferList extends StatelessWidget {
                     onTap: (){
                       showModalBottomSheet(
                           backgroundColor: TColors.white,
-                          isDismissible: false,
+                          // isDismissible: false,
                           isScrollControlled: true,
-                          enableDrag: false,
+                          // enableDrag: false,
                           context: context,
                           builder: (cdx) =>  const FilterScreen()
                       );

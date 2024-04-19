@@ -14,7 +14,7 @@ class ProfileScreenLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-      currentRoute: RouteType.Home,
+      currentRoute: RouteType.Profile,
       childWidget: Container(
         padding: TSpacingStyle.dashboardPadding,
         child: childWidget,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../configs/env_config.dart';
+
 class THelperFunctions {
 
   static void showAlert(String title, String message) {
@@ -83,5 +85,21 @@ class THelperFunctions {
       return result.toString();
     }
     // return result.toString();
+  }
+
+  static int addUpBooleans(List<bool> arr) {
+    int num = 0;
+    for (bool t in arr) {
+      if (t == true) {
+        num += 1;
+      }
+    }
+    return num;
+  }
+
+  static void showDebugMessageInConsole(List<String> message) {
+    if (EnvConfigurationModule.instance.getEnvType() == 'DEV') {
+      print(message);
+    }
   }
 }

@@ -2,26 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/utils/constants/colors.dart';
-
-import '../../features/home/screens/home.dart';
-import '../../utils/constants/image_strings.dart';
-import '../../utils/constants/sizes.dart';
-import '../styles/spacing_styles.dart';
-import 'buttons/elevated_button.dart';
-import 'custom_shapes/currency_widget_with_back.dart';
+import '../../../common/styles/spacing_styles.dart';
+import '../../../common/widgets/buttons/elevated_button.dart';
+import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
+import '../../../utils/constants/image_strings.dart';
+import '../../../utils/constants/sizes.dart';
+import '../../../utils/helpers/helper_functions.dart';
+import '../screens/home.dart';
 
 
 class SuccessScreenWidget extends StatelessWidget {
   SuccessScreenWidget({
     super.key,
-    required this.child
+    required this.text,
+    required this.child,
   });
+  String text;
   Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
+    return Padding(
         padding: TSpacingStyle.homePadding,
         child: SizedBox(
           height: double.infinity,
@@ -36,17 +37,17 @@ class SuccessScreenWidget extends StatelessWidget {
                   const Image(image: AssetImage(TImages.success)),
                   const SizedBox(height: TSizes.spaceBtwElements,),
                   Text(
-                    'You have successfully created an offer',
+                    text,
                     style: Theme.of(context).textTheme.labelMedium,
                   ),
                   const SizedBox(height: TSizes.spaceBtwSections * 2,),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace),
-                    width: double.infinity,
-                    color: TColors.primaryBackground,
-                    child: child
+                      height: THelperFunctions.screenHeight() * 0.25,
+                      padding: const EdgeInsets.symmetric(vertical: TSizes.xl, horizontal: TSizes.lg),
+                      color: TColors.primaryBackground,
+                      child: child
                   ),
-                  const SizedBox(height: TSizes.spaceBtwSections * 2,),
+                  const SizedBox(height: TSizes.spaceBtwSections * 1.5,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                     child: TElevatedButton(onTap: (){Get.to(() => const HomeScreen());}, buttonText: 'Done'),
@@ -56,7 +57,6 @@ class SuccessScreenWidget extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
+      );
   }
 }

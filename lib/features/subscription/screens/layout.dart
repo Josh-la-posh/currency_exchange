@@ -13,7 +13,7 @@ class SubscribeScreenLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-      currentRoute: RouteType.Home,
+      currentRoute: RouteType.Subscribe,
       childWidget: Container(
         padding: TSpacingStyle.dashboardPadding,
         child: childWidget,

@@ -2,13 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/common/widgets/buttons/outlined_button.dart';
-import 'package:swappr/common/widgets/currencyWidget.dart';
 import 'package:swappr/features/home/screens/accept_review_details.dart';
 import 'package:swappr/features/home/widgets/negotiation_screen.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
@@ -191,9 +186,9 @@ class OfferDetailsScreen extends StatelessWidget {
                   onPressed: () {
                     showModalBottomSheet(
                         backgroundColor: TColors.white,
-                        isDismissible: false,
+                        // isDismissible: false,
                         isScrollControlled: true,
-                        enableDrag: false,
+                        // enableDrag: false,
                         context: context,
                         builder: (ctx) => const NegotiationScreen()
                     );

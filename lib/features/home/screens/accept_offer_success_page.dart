@@ -6,20 +6,20 @@ import 'package:swappr/features/home/widgets/success_page.dart';
 import 'package:swappr/utils/layouts/list_layout.dart';
 import '../../../utils/constants/colors.dart';
 
-class CreateOfferSuccessPage extends StatelessWidget {
-  const CreateOfferSuccessPage({super.key});
+class AcceptOfferSuccessPage extends StatelessWidget {
+  const AcceptOfferSuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SuccessScreenWidget(
-        text: 'You have successfully created an offer',
+        body: SuccessScreenWidget(
+          text: 'You have successfully swapped 57,000 NGN for 95 GBP.',
           child: TListLayout(
-              itemCount: 4,
+              itemCount: 3,
               itemBuilder: (_, index) => MyTimeLine(
-                  isFirst: index == 0 ? true : false,
-                  isLast: index == 3 ? true : false,
-                  isDone: index == 3 ? false : true,
+                isFirst: index == 0 ? true : false,
+                isLast: index == 2 ? true : false,
+                isDone: index == 2 ? false : true,
                 startChild: Container(
                   padding: const EdgeInsets.only(bottom: 17),
                   child: RichText(
@@ -38,12 +38,12 @@ class CreateOfferSuccessPage extends StatelessWidget {
                   ),
                 ),
                 endChild: Container(
-                  padding: const EdgeInsets.only(bottom: 17),
-                    child: Text('You created this offer', style: Theme.of(context).textTheme.labelMedium,)
+                    padding: const EdgeInsets.only(bottom: 17),
+                    child: Text('You accepted this offer', style: Theme.of(context).textTheme.labelMedium,)
                 ),
               )
           ),
-      )
+        )
     );
   }
 }
