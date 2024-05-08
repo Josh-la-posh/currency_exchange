@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:swappr/utils/constants/colors.dart';
 
 import '../configs/env_config.dart';
 
@@ -55,8 +58,14 @@ class THelperFunctions {
     return MediaQuery.of(Get.context!).size.width;
   }
 
-  static String getFormattedDate(DateTime date, {String format = 'dd MM yyyy'}) {
-    return DateFormat(format).format(date);
+  static String getFormattedDate(String date, {String format = 'MMM dd'}) {
+    final dateTime = DateTime.parse(date);
+    return DateFormat(format).format(dateTime);
+  }
+
+  static String getFormattedTime(String date, {String format = 'h:mm a'}) {
+    final dateTime = DateTime.parse(date);
+    return DateFormat(format).format(dateTime);
   }
 
   static List<T> removeDuplicates<T>(List<T> list) {
@@ -97,9 +106,83 @@ class THelperFunctions {
     return num;
   }
 
+  static String maskEmail(String email) {
+    String maskedEmail = '';
+    List<String> parts = email.split('@');
+
+    if (parts.length == 2) {
+      String username = parts[0];
+      String domain = parts[1];
+
+      if (username.isNotEmpty) {
+        String firstLetter = username[0];
+        String maskedUsername = '$firstLetter${'*' * (username.length - 1)}';
+        maskedEmail = '$maskedUsername@$domain';
+      }
+    }
+
+    return maskedEmail;
+  }
+
+  static String maskPhoneNumberHelper(String phoneNumber) {
+    if (phoneNumber.length < 6) {
+      // Handle invalid phone numbers
+      return phoneNumber;
+    }
+
+    // Extract the first three digits
+    String prefix = phoneNumber.substring(0, 3);
+
+    // Extract the last three digits
+    String suffix = phoneNumber.substring(phoneNumber.length - 3);
+
+    // Replace the middle digits with asterisks
+    String middleDigits = phoneNumber.substring(3, phoneNumber.length - 3);
+    middleDigits = '*' * middleDigits.length;
+
+    // Concatenate the formatted phone number
+    String formattedPhoneNumber = prefix + middleDigits + suffix;
+
+    return formattedPhoneNumber;
+  }
+
+  static String getInitials(firstName, lastName) {
+    String firstInitial = firstName[0];
+    String lastInitial = lastName[0];
+    return '$firstInitial $lastInitial';
+  }
+
   static void showDebugMessageInConsole(List<String> message) {
     if (EnvConfigurationModule.instance.getEnvType() == 'DEV') {
       print(message);
     }
+  }
+
+  static void showTextForDuration(
+      BuildContext context,
+      String text,
+      {Duration duration = const Duration(seconds: 3)}
+      ) async {
+    final overlayState = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+        builder: (context) => Container(
+          width: THelperFunctions.screenWidth() * 0.4,
+          height: 40,
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+          // margin: EdgeInsets.only(top: THelperFunctions.screenHeight() - 600),
+          decoration: BoxDecoration(
+            color: TColors.primary,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+        )
+    );
+
+    overlayState!.insert(overlayEntry);
+    await Future.delayed(duration);
+    overlayEntry.remove();
   }
 }

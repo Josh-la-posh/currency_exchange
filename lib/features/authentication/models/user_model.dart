@@ -1,3 +1,64 @@
+class LoginModal {
+  final String access_token;
+
+  const LoginModal({
+    required this.access_token
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'access_token': access_token,
+    };
+  }
+
+  factory LoginModal.fromJson(Map<String, dynamic> json) {
+    return LoginModal(
+      access_token: json['access_token'],
+    );
+  }
+}
+
+class RoleModel {
+  String? id;
+  String? name;
+  String? description;
+  bool? active;
+  String? createdDate;
+  String? lastModifiedDate;
+
+   RoleModel({
+    this.id,
+    this.name,
+    this.description,
+    this.active,
+    this.createdDate,
+    this.lastModifiedDate
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'active': active,
+      'createdDate': createdDate,
+      'lastModifiedDate': lastModifiedDate,
+    };
+  }
+
+  factory RoleModel.fromJson(Map<String, dynamic> json) {
+    return RoleModel(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      active: json['active'],
+      createdDate: json['createdDate'],
+      lastModifiedDate: json['lastModifiedDate'],
+    );
+  }
+
+}
+
 class UserModel {
   final String id;
   final String firstName;
@@ -5,19 +66,19 @@ class UserModel {
   final String email;
   final String password;
   final bool isVerified;
-  final String nin;
+  final String? nin;
   final String country;
   final String status;
   final String phoneNumber;
-  final int otp;
-  final String emailOtp;
+  final int? otp;
+  final int? emailOtp;
   final bool isEmailVerified;
-  final String otpExpiration;
-  final String currentDate;
+  final String? otpExpiration;
+  final String createdDate;
   final String lastModifiedDate;
-  final String role;
+  Map<String,dynamic>? role;
 
-  const UserModel({
+   UserModel({
     required this.id,
     required this.firstName,
     required this.lastName,
@@ -32,9 +93,9 @@ class UserModel {
     required this.emailOtp,
     required this.isEmailVerified,
     required this.otpExpiration,
-    required this.currentDate,
+    required this.createdDate,
     required this.lastModifiedDate,
-    required this.role
+    this.role
   });
 
   Map<String, dynamic> toJson() {
@@ -53,7 +114,7 @@ class UserModel {
       'emailOtp': emailOtp,
       'isEmailVerified': isEmailVerified,
       'otpExpiration': otpExpiration,
-      'currentDate': currentDate,
+      'createdDate': createdDate,
       'lastModifiedDate': lastModifiedDate,
       'role': role
     };
@@ -75,7 +136,7 @@ class UserModel {
       emailOtp: json['emailOtp'],
       isEmailVerified: json['isEmailVerified'],
       otpExpiration: json['otpExpiration'],
-      currentDate: json['currentDate'],
+      createdDate: json['createdDate'],
       lastModifiedDate: json['lastModifiedDate'],
       role: json['role'],
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/features/home/models/offer.dart';
 
 import '../../../common/widgets/divider.dart';
@@ -10,9 +11,10 @@ import '../icons/svg.dart';
 import '../screens/offer_details.dart';
 
 class OfferItem extends StatelessWidget {
-  // final OfferEntity item;
+  final OfferEntity item;
   const OfferItem({
     super.key,
+    required this.item
     // required this.item
   });
 
@@ -24,7 +26,7 @@ class OfferItem extends StatelessWidget {
           dense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: TSizes.md),
           onTap: (){
-            Get.to(() => const OfferDetailsScreen());
+            Get.to(() => OfferDetailsScreen(item: item));
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,9 +37,9 @@ class OfferItem extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                           style: Theme.of(context).textTheme.labelMedium,
-                          children: const <TextSpan> [
+                          children: <TextSpan> [
                             TextSpan(
-                                text: 'has: 20,000 NGN',
+                                text: 'has: ${item.amount} ${item.debitedCurrency}',
                                 style: TextStyle(fontSize: TSizes.fontSize13)
                             ),
                           ]
@@ -47,9 +49,9 @@ class OfferItem extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                           style: Theme.of(context).textTheme.labelMedium,
-                          children: const <TextSpan> [
+                          children: <TextSpan> [
                             TextSpan(
-                                text: 'needs: 95 GBP',
+                                text: 'needs: ${item.creditedCurrency}',
                                 style: TextStyle(
                                   fontSize: TSizes.fontSize13,
                                 )
@@ -65,9 +67,9 @@ class OfferItem extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                           style: Theme.of(context).textTheme.labelMedium,
-                          children: const <TextSpan> [
+                          children: <TextSpan> [
                             TextSpan(
-                                text: '600 NGN // GBP',
+                                text: '${item.rate} ${item.debitedCurrency} // ${item.creditedCurrency}',
                                 style: TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
                             ),
                           ]
@@ -83,7 +85,7 @@ class OfferItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '20',
+                                    text: '${item.views}',
                                     style: TextStyle(
                                       color: TColors.textPrimaryO80,
                                     )

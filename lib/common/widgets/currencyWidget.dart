@@ -24,12 +24,13 @@ class CurrencyWidget extends StatelessWidget {
           SizedBox(
             width: THelperFunctions.screenWidth() / 3,
             child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TransferWiseIcon(),
               const SizedBox(height: TSizes.sm,),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   RichText(
                       text: TextSpan(
@@ -60,6 +61,79 @@ class CurrencyWidget extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.xs,),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.bodySmall,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: '1 EUR',
+                                style: TextStyle(fontSize: TSizes.fontSize11)
+                            )
+                          ]
+                      )
+                  ),
+                  const SizedBox(width: TSizes.xs,),
+                  ApproximateIcon(),
+                  const SizedBox(width: TSizes.xs,),
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.bodySmall,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: '600 NGN',
+                                style: TextStyle(fontSize: TSizes.fontSize11)
+                            )
+                          ]
+                      )
+                  ),
+                ],
+              ),
+            ],
+            ),
+          ),
+          SizedBox(
+            width: THelperFunctions.screenWidth() / 3,
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              WorldRemitIcon(),
+              const SizedBox(height: TSizes.sm,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.bodySmall,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: '1 GBP',
+                                style: TextStyle(fontSize: TSizes.fontSize11)
+                            )
+                          ]
+                      )
+                  ),
+                  const SizedBox(width: TSizes.xs,),
+                  ApproximateIcon(),
+                  const SizedBox(width: TSizes.xs,),
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.bodySmall,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: '400 NGN',
+                                style: TextStyle(fontSize: TSizes.fontSize11)
+                            )
+                          ]
+                      )
+                  ),
+                ],
+              ),
+              const SizedBox(height: TSizes.xs,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   RichText(
                       text: TextSpan(
@@ -94,82 +168,13 @@ class CurrencyWidget extends StatelessWidget {
           SizedBox(
             width: THelperFunctions.screenWidth() / 3,
             child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              WorldRemitIcon(),
-              const SizedBox(height: TSizes.sm,),
-              Row(
-                children: [
-                  RichText(
-                      text: TextSpan(
-                          style: Theme.of(context).textTheme.bodySmall,
-                          children: const <TextSpan> [
-                            TextSpan(
-                                text: '1 GBP',
-                                style: TextStyle(fontSize: TSizes.fontSize11)
-                            )
-                          ]
-                      )
-                  ),
-                  const SizedBox(width: TSizes.xs,),
-                  ApproximateIcon(),
-                  const SizedBox(width: TSizes.xs,),
-                  RichText(
-                      text: TextSpan(
-                          style: Theme.of(context).textTheme.bodySmall,
-                          children: const <TextSpan> [
-                            TextSpan(
-                                text: '400 NGN',
-                                style: TextStyle(fontSize: TSizes.fontSize11)
-                            )
-                          ]
-                      )
-                  ),
-                ],
-              ),
-              const SizedBox(height: TSizes.xs,),
-              Row(
-                children: [
-                  RichText(
-                      text: TextSpan(
-                          style: Theme.of(context).textTheme.bodySmall,
-                          children: const <TextSpan> [
-                            TextSpan(
-                                text: '1 EUR',
-                                style: TextStyle(fontSize: TSizes.fontSize11)
-                            )
-                          ]
-                      )
-                  ),
-                  const SizedBox(width: TSizes.xs,),
-                  ApproximateIcon(),
-                  const SizedBox(width: TSizes.xs,),
-                  RichText(
-                      text: TextSpan(
-                          style: Theme.of(context).textTheme.bodySmall,
-                          children: const <TextSpan> [
-                            TextSpan(
-                                text: '600 NGN',
-                                style: TextStyle(fontSize: TSizes.fontSize11)
-                            )
-                          ]
-                      )
-                  ),
-                ],
-              ),
-            ],
-                      ),
-          ),
-          SizedBox(
-            // width: THelperFunctions.screenWidth() / 3,
-            child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AzimoIcon(),
               const SizedBox(height: TSizes.sm,),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   RichText(
                       text: TextSpan(
@@ -200,6 +205,7 @@ class CurrencyWidget extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.xs,),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   RichText(
                       text: TextSpan(

@@ -1,25 +1,21 @@
 import 'package:flutter/foundation.dart';
-import 'package:swappr/features/home/models/my_currency.dart';
+import '../../utils/constants/enums.dart';
 
 class CurrencyProvider extends ChangeNotifier {
+  Currency _selectedCurrency = Currency.Select;
+  List<Currency> _currencies = Currency.values;
 
-  int selectedCurrency = 0;
 
-  final List<Currency> _currencies = [
-    // Currency('USD'),
-    Currency('EUR'),
-    Currency('GBP'),
-    Currency('NGN'),
-  ];
+  Currency get selectedCurrency => _selectedCurrency;
+  List<Currency> get currencies => _currencies;
 
-  List<Currency>? get currencies => _currencies;
-  SelectedCurrency selectedCurrencyProvider = SelectedCurrency();
-
-  void updateCurrency(Currency currency) {
-    for (var item in _currencies) {
-      item.isSelected = (item == currency);
-    }
-    selectedCurrencyProvider.updatedCurrency(currency);
+  void setSelectedCurrency(Currency currency) {
+    _selectedCurrency = currency;
     notifyListeners();
+  }
+
+  resetState() {
+    _currencies = [];
+    _selectedCurrency = Currency.Select;
   }
 }

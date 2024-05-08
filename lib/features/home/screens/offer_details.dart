@@ -2,31 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/styles/spacing_styles.dart';
+import 'package:swappr/features/home/models/offer.dart';
 import 'package:swappr/features/home/screens/accept_review_details.dart';
 import 'package:swappr/features/home/widgets/negotiation_screen.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 
 class OfferDetailsScreen extends StatelessWidget {
-  const OfferDetailsScreen({super.key});
+  final OfferEntity? item;
+  const OfferDetailsScreen({
+    super.key,
+    this.item
+  });
 
   @override
   Widget build(BuildContext context) {
     final offerProvider = Provider.of<OfferProvider>(context);
-    final selectedOffer = offerProvider.selectedOffer;
-
-    // if (selectedOffer == null){
-    //   return Scaffold(
-    //     appBar: AppBar(
-    //       title: Text('Offer Details'),
-    //     ),
-    //     body: Center(
-    //       child: Text('No offer selected'),
-    //     ),
-    //   );
-    // }
 
     return Scaffold(
       body: Padding(
@@ -64,9 +58,9 @@ class OfferDetailsScreen extends StatelessWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: Theme.of(context).textTheme.labelMedium,
-                                        children: const <TextSpan> [
+                                        children: <TextSpan> [
                                           TextSpan(
-                                              text: 'has: 20,000 NGN',
+                                              text: 'has: ${item?.amount} ${item?.debitedCurrency}',
                                           ),
                                         ]
                                     )
@@ -75,9 +69,9 @@ class OfferDetailsScreen extends StatelessWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: Theme.of(context).textTheme.labelMedium,
-                                        children: const <TextSpan> [
+                                        children: <TextSpan> [
                                           TextSpan(
-                                              text: 'needs: 95 GBP',
+                                              text: 'needs: ${item?.creditedCurrency}',
                                           ),
                                         ]
                                     )
@@ -90,10 +84,10 @@ class OfferDetailsScreen extends StatelessWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: Theme.of(context).textTheme.labelMedium,
-                                        children: const <TextSpan> [
+                                        children: <TextSpan> [
                                           TextSpan(
-                                              text: '600 NGN // GBP',
-                                              style: TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
+                                              text: '${item?.rate} ${item?.debitedCurrency} // ${item?.creditedCurrency}',
+                                              style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
                                           ),
                                         ]
                                     )
@@ -141,7 +135,7 @@ class OfferDetailsScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: TSizes.md,),
                                 Text(
-                                  'This offer expires in 2 hours, 37 minutes',
+                                  'This offer expires in ${item?.createdDate == null ? '' : THelperFunctions.getFormattedTime(item!.createdDate) ?? ''}',
                                   style: Theme.of(context).textTheme.labelSmall,
                                 )
                               ],
@@ -174,7 +168,7 @@ class OfferDetailsScreen extends StatelessWidget {
                     width: double.infinity,
                     height: TSizes.buttonHeight,
                     child: ElevatedButton(
-                      onPressed: () {Get.to(() => const AcceptReviewDetailsScreen());},
+                      onPressed: () {Get.to(() => AcceptReviewDetailsScreen(item: item));},
                       child: const Text("I'm interested"),
                     ),
                   ),
@@ -190,7 +184,7 @@ class OfferDetailsScreen extends StatelessWidget {
                         isScrollControlled: true,
                         // enableDrag: false,
                         context: context,
-                        builder: (ctx) => const NegotiationScreen()
+                        builder: (ctx) => NegotiationScreen(id: item!.id)
                     );
                   }, // Handle button press
                   child: const Text("I'm interested, but..."),

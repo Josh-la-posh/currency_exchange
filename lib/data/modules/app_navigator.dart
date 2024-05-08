@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:swappr/data/provider/currency_provider.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/data/provider/subscription_provider.dart';
+import 'package:swappr/data/provider/transaction_provider.dart';
+import 'package:swappr/data/provider/wallet_provider.dart';
 import '../provider/auth_provider.dart';
 
 class AppNavigator {
@@ -39,6 +43,31 @@ class AppNavigator {
       navigatorKey.currentState!.context,
       listen: false,
     );
+    var currencyProvider = Provider.of<CurrencyProvider>(
+      navigatorKey.currentState!.context,
+      listen: false,
+    );
+    var offerProvider = Provider.of<OfferProvider>(
+      navigatorKey.currentState!.context,
+      listen: false,
+    );
+    var subscriptionProvider = Provider.of<SubscriptionProvider>(
+      navigatorKey.currentState!.context,
+      listen: false,
+    );
+    var transactionProvider = Provider.of<TransactionProvider>(
+      navigatorKey.currentState!.context,
+      listen: false,
+    );
+    var walletProvider = Provider.of<WalletProvider>(
+      navigatorKey.currentState!.context,
+      listen: false,
+    );
     authProvider.removeUser();
+    currencyProvider.resetState();
+    offerProvider.resetState();
+    subscriptionProvider.resetState();
+    transactionProvider.resetState();
+    walletProvider.resetState();
   }
 }

@@ -1,15 +1,10 @@
 // ignore_for_file: constant_identifier_names
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/features/home/routes/names.dart';
-import 'package:swappr/features/home/screens/home.dart';
-import 'package:swappr/features/profile/screens/profile.dart';
 import 'package:swappr/features/subscription/routes/names.dart';
-import 'package:swappr/features/subscription/screens/subscribe.dart';
-import 'package:swappr/features/transaction_history/routes/names.dart';
-import 'package:swappr/features/transaction_history/screens/history.dart';
+import 'package:swappr/features/transaction/routes/names.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import '../../data/modules/app_navigator.dart';
 import '../../data/provider/auth_provider.dart';
@@ -177,16 +172,17 @@ class _AppLayoutState extends State<AppLayout>
           } else {
             // Get.to(const HomeScreen());
 
-            if (widget.currentRoute != RouteType.Home) {
-              if (widget.navKey != null) {
+            if (widget.navKey != null) {
+              if (widget.currentRoute != RouteType.Home) {
                 widget.navKey!.currentState!
                     .pushNamed(HOME_INDEX_SCREEN_ROUTE);
-              } else {
+              }
+            } else {
                 AppNavigator.instance.navigateToHandler(
                     HOME_INDEX_SCREEN_ROUTE
                 );
               }
-            }
+
           }
         },
         items: [

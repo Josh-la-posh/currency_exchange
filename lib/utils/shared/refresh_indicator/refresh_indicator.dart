@@ -17,7 +17,7 @@ class CustomRefreshIndicator extends StatelessWidget {
     double screenHeight = MediaQuery.of(context).size.height;
     return RefreshIndicator(
       backgroundColor: TColors.primary,
-      color: const Color(0xFF0869B6),
+      color: TColors.primary,
       displacement: screenHeight / 3,
       strokeWidth: 3,
       triggerMode: triggerMode,

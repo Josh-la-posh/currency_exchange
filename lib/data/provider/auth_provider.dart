@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swappr/data/modules/session_manager.dart';
 import 'package:swappr/features/authentication/models/create_account_model.dart';
-import 'package:swappr/features/authentication/models/reset_password_model.dart';
+import 'package:swappr/features/authentication/models/password_model.dart';
 import 'package:swappr/features/authentication/models/user_model.dart';
 import 'package:swappr/utils/constants/app.dart';
 import 'package:swappr/utils/local_storage/local_storage.dart';
@@ -106,11 +106,11 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // reset password
-  ResetPasswordModel? _resetPasswordDetails;
+  ChangePasswordModel? _resetPasswordDetails;
 
-  ResetPasswordModel? get resetPasswordDetails => _resetPasswordDetails;
+  ChangePasswordModel? get resetPasswordDetails => _resetPasswordDetails;
 
-  saveResetPasswordDetails(ResetPasswordModel resetDetails) {
+  saveResetPasswordDetails(ChangePasswordModel resetDetails) {
     _resetPasswordDetails = resetDetails;
     notifyListeners();
   }

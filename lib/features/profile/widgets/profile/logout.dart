@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swappr/data/modules/session_manager.dart';
 
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
@@ -20,7 +21,9 @@ class LogoutButton extends StatelessWidget {
             ),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TSizes.borderRadiusSm))
         ),
-        onPressed: (){},
+        onPressed: (){
+          UserSession.instance.logoutUser(logoutMessage: 'You have successfully logged out');
+        },
         child: RichText(
             text: TextSpan(
                 style: Theme.of(context).textTheme.labelMedium,

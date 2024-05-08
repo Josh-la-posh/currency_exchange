@@ -1,64 +1,101 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:swappr/features/home/models/offer.dart';
+import 'package:swappr/features/home/models/offer_details_entity.dart';
+import 'package:swappr/utils/constants/enums.dart';
 
 class OfferProvider extends ChangeNotifier {
-  final List<OfferEntity> _offers = [];
+  OfferDetailsEntity? _offerDetails;
+  List<OfferEntity> _offers = [];
+  OfferEntity? _offerDetail;
+  List<Currency> _currencies = Currency.values;
+  Currency _selectedCurrency = Currency.Select;
+  List<Date> _dates = Date.values;
+  Date _selectedDate = Date.Select;
   OfferEntity? _selectedOffer;
-  String? buyingCurrency;
-  String? sellingCurrency;
+  Currency creditedCurrency = Currency.Select;
+  Currency debitedCurrency = Currency.Select;
+  int amount = 0;
+  int rate = 0;
+  int expireIn = 1;
+  int negotiatorRate = 0;
+  int negotiatorAmount = 0;
   String? waitingHour;
-  List<String> currencies;
-  List hours = ['1', '2', '3', '4', '5'];
+  List hours = [1, 2, 3, 4, 5];
+  bool _filterAll = false;
 
-  List<String> get availableBuyingCurrencies {
-    if (sellingCurrency == null) return currencies;
-    if (sellingCurrency == buyingCurrency) return currencies;
-    return currencies.where((currency) => currency != sellingCurrency).toList();
-  }
-
-  CreateOfferEntity _createOfferEntity = CreateOfferEntity(hasAmount: '', minimumRate: '', preferredRate: '', selectedCurrency: '', expireHour: '', neededCurrency: '');
+  CreateOfferEntity _createOfferEntity = CreateOfferEntity(
+      debitedCurrency: Currency.Select, creditedCurrency: Currency.Select, amount: 0, rate: 0, expireIn: 1);
   CreateOfferEntity get createOfferEntity => _createOfferEntity;
 
+  OfferDetailsEntity? get offerDetails => _offerDetails;
   List<OfferEntity> get offers => _offers;
+  OfferEntity? get offerDetail => _offerDetail;
   OfferEntity? get selectedOffer => _selectedOffer;
-
-  // Future<void> fetchOffers() async {
-  //   // await Future.delayed(Duration(seconds: 2));
-  //   final response = await '';
-  //
-  //   if (response.statusCode == 200) {
-  //     final data = jsonDecode(response.body) as List<dynamic>;
-  //     _offers.addAll(
-  //       data.map((dynamic offerData) => Offer.fromJson(offerData)).toList());
-  //   } else {
-  //     print('Error fetching offers: ${response.statusCode}');
-  //   }
-  //   notifyListeners();
-  // }
+  List<Currency> get currencies => _currencies;
+  Currency get selectedCurrency => _selectedCurrency;
+  List<Date> get dates => _dates;
+  Date get selectedDate => _selectedDate;
+  bool get filterAll => _filterAll;
 
 
-  OfferProvider(this.currencies);
 
-  void updateSelectedBuyingCurrencies(String newBuyingCurrency) {
-    if (newBuyingCurrency != sellingCurrency) {
-      buyingCurrency = newBuyingCurrency;
-      notifyListeners();
-    } else {
-      sellingCurrency = 'select';
-      notifyListeners();
-    }
+  List<Currency> get availableBuyingCurrencies {
+    if (debitedCurrency == null) return currencies;
+    if (debitedCurrency == creditedCurrency) return currencies;
+    return currencies.where((currency) => currency != debitedCurrency).toList();
   }
 
-  void updateSelectedSellingCurrencies(String newSellingCurrency) {
-    if (newSellingCurrency != buyingCurrency) {
-      sellingCurrency = newSellingCurrency;
-      notifyListeners();
-    } else {
-      sellingCurrency = 'select';
-      notifyListeners();
-    }
+  void saveOfferDetails(OfferDetailsEntity data) {
+    _offerDetails = data;
+    notifyListeners();
+  }
+
+  void saveOffers(List<OfferEntity> data) {
+    _offers = data;
+    notifyListeners();
+  }
+
+  setFilterAll(bool val) {
+    _filterAll = val;
+    notifyListeners();
+  }
+
+  void saveOffersById(OfferEntity id) {
+    _offerDetail = id;
+    notifyListeners();
+  }
+
+  // void updateSelectedBuyingCurrencies(String newBuyingCurrency) {
+  //   if (newBuyingCurrency != debitedCurrency) {
+  //     creditedCurrency = newBuyingCurrency;
+  //     notifyListeners();
+  //   } else {
+  //     debitedCurrency = 'select';
+  //     notifyListeners();
+  //   }
+  // }
+  //
+  // void updateSelectedSellingCurrencies(String newdebitedCurrency) {
+  //   if (newdebitedCurrency != creditedCurrency) {
+  //     debitedCurrency = newdebitedCurrency;
+  //     notifyListeners();
+  //   } else {
+  //     debitedCurrency = 'select';
+  //     notifyListeners();
+  //   }
+  // }
+
+  void setSelectedCurrency(Currency val) {
+    _selectedCurrency = val;
+    notifyListeners();
+  }
+
+  void setSelectedDate(Date val) {
+    _selectedDate = val;
+    notifyListeners();
   }
 
   void setSelectedOffer(OfferEntity offer) {
@@ -66,39 +103,68 @@ class OfferProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateHasAmount(String amount) {
-    _createOfferEntity.hasAmount = amount;
+  void updateAmount(String val) {
+    _createOfferEntity.amount = int.parse(val);
+    amount = int.parse(val);
+  }
+
+  void updateDebitedCurrency(Currency currency) {
+    _createOfferEntity.debitedCurrency = currency;
+    debitedCurrency = currency;
     notifyListeners();
   }
 
-  void updateNeedAmount(String amount) {
-    _createOfferEntity.neededCurrency = amount;
+  void updateCreditedCurrency(Currency currency) {
+    _createOfferEntity.creditedCurrency = currency;
+    creditedCurrency = currency;
     notifyListeners();
   }
 
-  void updateHasCurrency(String currency) {
-    _createOfferEntity.selectedCurrency = currency;
+  void updateRate(String val) {
+    _createOfferEntity.rate = int.parse(val);
+    rate = int.parse(val);
     notifyListeners();
   }
 
-  void updateNeededCurrency(String currency) {
-    _createOfferEntity.neededCurrency = currency;
+  // void updateMinimumRate(String amount) {
+  //   _createOfferEntity.minimumRate = amount;
+  //   notifyListeners();
+  // }
+
+  void updateExpiryIn(time) {
+    _createOfferEntity.expireIn = time;
+    expireIn = time;
     notifyListeners();
   }
 
-  void updatePreferredRate(String amount) {
-    _createOfferEntity.preferredRate = amount;
+  void setNegotiatorAmount(String val) {
+    negotiatorAmount = int.parse(val);
     notifyListeners();
   }
 
-  void updateMinimumRate(String amount) {
-    _createOfferEntity.minimumRate = amount;
+  void setNegotiatorRate(String val) {
+    negotiatorRate = int.parse(val);
     notifyListeners();
   }
 
-  void updateExpiryHour(String time) {
-    _createOfferEntity.expireHour = time;
-    notifyListeners();
+  resetState() {
+    _offers = [];
+    _offerDetails = null;
+    _currencies = [];
+    _dates = [];
+    creditedCurrency = Currency.Select;
+    debitedCurrency = Currency.Select;
+    _selectedOffer = null;
+    _createOfferEntity.amount = 0;
+    _createOfferEntity.creditedCurrency = Currency.Select;
+    _createOfferEntity.debitedCurrency = Currency.Select;
+    _createOfferEntity.rate = 0;
+    amount = 0;
+    rate = 0;
+    // _createOfferEntity.minimumRate = '';
+    _createOfferEntity.expireIn = 0;
+    negotiatorAmount = 0;
+    negotiatorRate = 0;
   }
 
 }

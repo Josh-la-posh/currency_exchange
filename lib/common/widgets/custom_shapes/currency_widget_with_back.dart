@@ -13,7 +13,7 @@ class CurrencyWidgetWithBack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5),
+      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

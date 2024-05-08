@@ -53,6 +53,7 @@ flutter:
 
   #------------- LOCAL ASSETS --------------------#
   assets:
+    - .env
     - assets/logos/
     - assets/icons/bottomNavIcons/
     - assets/icons/profileIcons/

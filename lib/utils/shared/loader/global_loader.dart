@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:swappr/utils/constants/colors.dart';
 import 'loader.dart';
 
 class GlobalAppLoader extends StatelessWidget {
@@ -11,7 +12,7 @@ class GlobalAppLoader extends StatelessWidget {
     return GlobalLoaderOverlay(
       useDefaultLoading: false,
       overlayWidget: const Loader(),
-      overlayColor: const Color.fromRGBO(8, 105, 182, 1.0),
+      overlayColor: TColors.primary,
       overlayOpacity: 0.7,
       duration: const Duration(seconds: 1),
       child: app,

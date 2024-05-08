@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/transaction_history/widgets/transaction_details.dart';
+import 'package:swappr/features/transaction/models/transaction_entity.dart';
+import 'package:swappr/features/transaction/widgets/transaction_details.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../icons/svg.dart';
 
 class TransactionItem extends StatelessWidget {
+  final TransactionEntity item;
   const TransactionItem({
     super.key,
+    required this.item
   });
 
   @override
   Widget build(BuildContext context) {
-    const String status = 'in progress';
+    String? status = item.status;
     return Column(
       children: [
         Padding(
@@ -21,11 +25,9 @@ class TransactionItem extends StatelessWidget {
             onTap: (){
               showModalBottomSheet(
                   backgroundColor: TColors.white,
-                  // isDismissible: false,
                   isScrollControlled: true,
-                  // enableDrag: false,
                   context: context,
-                  builder: (cdx) => const TransactionDetails()
+                  builder: (cdx) => TransactionDetails(item: item,)
               );
             },
             title: Row(
@@ -41,10 +43,11 @@ class TransactionItem extends StatelessWidget {
                         RichText(
                             text: TextSpan(
                                 style: Theme.of(context).textTheme.labelSmall,
-                                children: const <TextSpan> [
+                                children: <TextSpan> [
                                   TextSpan(
-                                      text: '400 GPB - 20,000 NGN',
-                                      style: TextStyle(fontSize: TSizes.fontSize11, fontWeight: TSizes.fontWeightLg)
+                                      // text: '400 GPB - 20,000 NGN',
+                                      text:'${item.amount} ${item.creditedCurrency}',
+                                      style: const TextStyle(fontSize: TSizes.fontSize11, fontWeight: TSizes.fontWeightLg)
                                   ),
                                 ]
                             )
@@ -52,14 +55,14 @@ class TransactionItem extends StatelessWidget {
                         RichText(
                             text: TextSpan(
                                 style: Theme.of(context).textTheme.labelSmall,
-                                children: const <TextSpan> [
+                                children: <TextSpan> [
                                   TextSpan(
-                                      text: 'in progress',
+                                      text: '${item.status}',
                                       style: TextStyle(
                                         fontSize: TSizes.fontSize9,
                                         color: status == 'in progress'
                                             ? TColors.golden
-                                            : status == 'completed'
+                                            : status == 'successful'
                                             ? TColors.primary
                                             : TColors.danger,
 
@@ -78,10 +81,11 @@ class TransactionItem extends StatelessWidget {
                     RichText(
                         text: TextSpan(
                             style: Theme.of(context).textTheme.labelMedium,
-                            children: const <TextSpan> [
+                            children: <TextSpan> [
                               TextSpan(
-                                  text: '600 NGN // GBP',
-                                  style: TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary)
+                                  // text: '600 NGN // GBP ',
+                                  text: item.rate == null ? '' : item.rate.toString(),
+                                  style: const TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary)
                               ),
                             ]
                         )
@@ -91,7 +95,7 @@ class TransactionItem extends StatelessWidget {
                             style: Theme.of(context).textTheme.labelSmall,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: 'June 56, 10:00AM',
+                                  text: '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
                                   style: TextStyle(
                                       color: TColors.textPrimary.withOpacity(0.5),
                                       fontSize: TSizes.fontSize9

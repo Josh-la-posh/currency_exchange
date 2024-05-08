@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:provider/provider.dart';
+import 'package:swappr/data/provider/subscription_provider.dart';
+import 'package:swappr/features/subscription/apis/api.dart';
+import 'package:swappr/features/subscription/models/subscribeEnity.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 
 class SubscriptionItem extends StatelessWidget {
-  const SubscriptionItem({
+  final SubscriptionEntity item;
+  SubscriptionItem({
+    required this.item,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<SubscriptionProvider>(context);
     return Column(
       children: [
         SizedBox(
@@ -24,7 +31,7 @@ class SubscriptionItem extends StatelessWidget {
                 children: [
                   SlidableAction(
                     onPressed: ((context){
-                      print('I am working');
+                      SubscriptionService.instance.deleteSubscription(id: item.id, subscriptionProvider: provider);
                     }),
                     backgroundColor: TColors.danger,
                     icon: Icons.delete,
@@ -35,7 +42,7 @@ class SubscriptionItem extends StatelessWidget {
             ),
             child: ListTile(
               dense: true,
-              contentPadding: const EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 10),
               title: Column(
                 children: [
                   Row(
@@ -45,9 +52,9 @@ class SubscriptionItem extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.labelMedium,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                    text: 'has: NGN',
+                                    text: 'has: ${item.currency}',
                                     style: TextStyle(fontSize: TSizes.fontSize13)
                                 ),
                               ]
@@ -56,9 +63,9 @@ class SubscriptionItem extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.labelMedium,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                    text: '600 NGN // GBP',
+                                    text: '${item.minRate} - ${item.maxRate} ${item.currency} // ${item.currency}',
                                     style: TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
                                 ),
                               ]
@@ -75,9 +82,9 @@ class SubscriptionItem extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.labelMedium,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                    text: 'needs: GBP',
+                                    text: 'needs: ${item.currency}',
                                     style: TextStyle(fontSize: TSizes.fontSize13)
                                 ),
                               ]

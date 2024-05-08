@@ -1,98 +1,195 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
-import 'package:swappr/features/authentication/screens/forgot_poassword/forgot_password.dart';
+import 'package:swappr/data/provider/transaction_provider.dart';
+import 'package:swappr/features/authentication/apis/api.dart';
+import 'package:swappr/features/authentication/routes/names.dart';
+import 'package:swappr/features/authentication/screens/email_verify/email_verify.dart';
+import 'package:swappr/features/authentication/screens/reset_password/forgot_password.dart';
 import 'package:swappr/features/home/routes/names.dart';
 import 'package:swappr/features/home/screens/home.dart';
 import 'package:swappr/utils/layouts/navigation_menu.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/texts.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:swappr/utils/validators/validation.dart';
 
+import '../../../../../data/provider/auth_provider.dart';
+import '../../../../../data/provider/wallet_provider.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../sign_up/sign_up.dart';
 
-class LoginForm extends StatelessWidget {
+class LoginForm extends StatefulWidget {
+  final String? email;
+  final String? password;
+  final bool rememberMe;
+
   const LoginForm({
     super.key,
+    required this.email,
+    required this.password,
+    required this.rememberMe,
   });
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final formKey = GlobalKey<FormState>();
+  late String? _email = widget.email;
+  late String? _password = widget.password;
+
+  late bool _rememberMe = widget.rememberMe;
+  bool _obscurePasswordText = true;
+
+  var authProvider = Provider.of<AuthProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var walletProvider = Provider.of<WalletProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var transactionProvider = Provider.of<TransactionProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Form(
-            child: Column(
+    return Form(
+      key: formKey,
+        child: Column(
+          children: [
+            /// Email
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// Email
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Email', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(
-                      height: TSizes.textInputFieldHeight,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                /// Password
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Password', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(
-                      height: TSizes.textInputFieldHeight,
-                      child: TextFormField(
-                        // obscureText: ,
-                        decoration: const InputDecoration(
-                          suffixIcon: Icon(Iconsax.eye_slash),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: TSizes.xs),
-
-                // Forgot password
-                Align(
-                  alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: (){Get.to(() => const ForgotPasswordScreen());},
-                      child: RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelMedium,
-                              children: const <TextSpan> [
-                                TextSpan(
-                                    text: 'Forgot password?',
-                                    style: TextStyle(color: TColors.textPrimary)
-                                )
-                              ]
-                          )
-                      ),
-                    )
-                ),
-                const SizedBox(height: TSizes.spaceBtwItems),
-
-                // TElevatedButton(onTap: () => Get.to(() => const NavigationMenu()), buttonText: 'Sign In')
-                TElevatedButton(onTap: () {Get.to(() => const HomeScreen());}, buttonText: 'Sign In')
+                Text('Email', style: Theme.of(context).textTheme.labelMedium,),
+                SizedBox(
+                  child: TextFormField(
+                    style: Theme.of(context).textTheme.labelMedium,
+                    onChanged: (val) => _email = val,
+                    validator: TValidator.validateEmail,
+                    onSaved: (email) {
+                      setState(() {
+                        _email = email as String;
+                      });
+                    },
+                    decoration: const InputDecoration(
+                    ),
+                  ),
+                )
               ],
-            )
+            ),
+            const SizedBox(height: TSizes.spaceBtwInputFields),
+
+            /// Password
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Password', style: Theme.of(context).textTheme.labelMedium,),
+                SizedBox(
+                  child: TextFormField(
+                    style: Theme.of(context).textTheme.labelMedium,
+                    validator: TValidator.validateLoginPassword,
+                    onChanged: (pass) => _password = pass,
+                    onSaved: (pass) {
+                      setState(() {
+                        _password = pass as String;
+                      });
+                    },
+                    obscureText: _obscurePasswordText,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _obscurePasswordText = !_obscurePasswordText;
+                            });
+                          },
+                          icon: Icon(_obscurePasswordText ? Iconsax.eye : Iconsax.eye_slash)
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: TSizes.xs),
+
+            // Forgot password
+            Align(
+              alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: (){
+                    AppNavigator.instance.navigateToHandler(
+                      AUTH_FORGOT_PASSWORD_SCREEN_ROUTE
+                    );
+                    // Get.to(() => const ForgotPasswordScreen());
+                    },
+                  child: RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelMedium,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: 'Forgot password?',
+                                style: TextStyle(color: TColors.textPrimary)
+                            )
+                          ]
+                      )
+                  ),
+                )
+            ),
+            const SizedBox(height: TSizes.spaceBtwItems),
+
+            // TElevatedButton(onTap: () => Get.to(() => const NavigationMenu()), buttonText: 'Sign In')
+            TElevatedButton(
+                onTap: () {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    AuthService.instance.login(
+                        email: _email as String,
+                        password: _password as String,
+                        authProvider: authProvider,
+                        walletProvider: walletProvider,
+                        transactionProvider: transactionProvider,
+                        rememberMe: _rememberMe,
+                        handleEmailNotVerified: () {
+                          Get.to(EmailVerificationScreen(
+                            email: _email as String,
+                            sendEmailOtpOnBuild: true,
+                            onSuccess: () {
+                              AuthService.instance.login(
+                                  email: _email as String,
+                                  password: _password as String,
+                                  authProvider: authProvider,
+                                  walletProvider: walletProvider,
+                                  transactionProvider: transactionProvider,
+                                  rememberMe: _rememberMe,
+                                  handleEmailNotVerified: (){}
+                              );
+                            },
+                          )
+                          );
+                        }
+                    );
+                  }
+                  // Get.to(() => const HomeScreen());
+                  },
+                buttonText: 'Sign In'),
+            const SizedBox(height: TSizes.md),
+            Center(
+              child: TextButton(
+                  onPressed: (){Get.to(() => const CreateAccountScreen());},
+                  child: Text('No account yet? Sign Up', style: Theme.of(context).textTheme.labelMedium,)
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: TSizes.md),
-        Center(
-          child: TextButton(
-              onPressed: (){Get.to(() => const CreateAccountScreen());},
-              child: Text('No account yet? Sign Up', style: Theme.of(context).textTheme.labelMedium,)
-          ),
-        )
-      ],
     );
   }
 }

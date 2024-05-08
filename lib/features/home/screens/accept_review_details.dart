@@ -7,15 +7,22 @@ import 'package:swappr/common/widgets/buttons/elevated_button.dart';
 import 'package:swappr/common/widgets/currencyWidget.dart';
 import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
 import 'package:swappr/common/widgets/divider.dart';
+import 'package:swappr/features/home/models/offer.dart';
+import 'package:swappr/features/home/screens/accept_offer_success_page.dart';
 import 'package:swappr/features/home/screens/create_offer_success_screen.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 
+import '../../../data/provider/subscription_provider.dart';
 import '../icons/svg.dart';
 
 class AcceptReviewDetailsScreen extends StatelessWidget {
-  const AcceptReviewDetailsScreen({super.key});
+  final OfferEntity? item;
+  const AcceptReviewDetailsScreen({
+    super.key,
+    this.item,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +32,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CurrencyWidgetWithBack(),
+            const CurrencyWidgetWithBack(),
             const SizedBox(height: TSizes.spaceBtwSections / 2,),
             Expanded(
               child: SingleChildScrollView(
@@ -44,16 +51,16 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                               text: TextSpan(
                                   text: 'You are about to swap ',
                                   style: Theme.of(context).textTheme.labelMedium,
-                                  children: const <TextSpan> [
+                                  children: <TextSpan> [
                                     TextSpan(
-                                        text: '57,000 NGN ',
+                                        text: '${item?.amount} ${item?.debitedCurrency} ',
                                         style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                     ),
                                     TextSpan(
                                         text: 'for '
                                     ),
                                     TextSpan(
-                                        text: '95 GBP',
+                                        text: '${item?.creditedCurrency}',
                                         style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                     ),
                                   ]
@@ -103,9 +110,9 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: Theme.of(context).textTheme.labelSmall,
-                                        children: const <TextSpan> [
+                                        children: <TextSpan> [
                                           TextSpan(
-                                              text: '57,000 NGN',
+                                              text: '${item?.amount} ${item?.debitedCurrency}',
                                               style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                           )
                                         ]
@@ -134,9 +141,9 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: Theme.of(context).textTheme.labelSmall,
-                                        children: const <TextSpan> [
+                                        children: <TextSpan> [
                                           TextSpan(
-                                              text: '95 GBP',
+                                              text: '${item?.creditedCurrency}',
                                               style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                           )
                                         ]
@@ -165,9 +172,9 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: Theme.of(context).textTheme.labelSmall,
-                                        children: const <TextSpan> [
+                                        children: <TextSpan> [
                                           TextSpan(
-                                              text: '600 NGN // GBP',
+                                              text: '${item?.rate} ${item?.debitedCurrency} // ${item?.creditedCurrency}',
                                               style: TextStyle(color: TColors.primary)
                                           )
                                         ]
@@ -254,7 +261,9 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: TSizes.spaceBtwSections),
-                          TElevatedButton(onTap: (){Get.to(() =>const CreateOfferSuccessPage());}, buttonText: 'Pay 100 GBP'),
+                          TElevatedButton(onTap: (){
+                            Get.to(() => const AcceptOfferSuccessPage());},
+                              buttonText: 'Pay 100 GBP'),
                           const SizedBox(height: TSizes.spaceBtwSections ),
                         ],
                       ),

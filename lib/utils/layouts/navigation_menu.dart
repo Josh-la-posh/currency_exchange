@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:swappr/features/transaction_history/screens/history.dart';
+import 'package:swappr/features/transaction/screens/history.dart';
 import 'package:swappr/features/home/screens/home.dart';
 import 'package:swappr/features/profile/screens/profile.dart';
 import 'package:swappr/features/subscription/screens/subscribe.dart';

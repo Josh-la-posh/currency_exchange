@@ -15,7 +15,7 @@ void showErrorAlertHelper(
             Icon(Icons.error, color: Colors.red),
             SizedBox(width: 8),
             Text('Error',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ],
         ),
         content: Column(

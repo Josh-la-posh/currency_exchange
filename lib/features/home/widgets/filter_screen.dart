@@ -1,10 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/features/home/apis/api.dart';
 import 'package:swappr/features/home/widgets/currency_screen.dart';
 import 'package:swappr/data/provider/currency_provider.dart';
+import 'package:swappr/features/home/widgets/date_screen.dart';
 import 'package:swappr/utils/constants/colors.dart';
+import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/layouts/bottom_sheet_widget.dart';
 
@@ -15,24 +20,30 @@ class FilterScreen extends StatelessWidget {
 
   const FilterScreen({super.key});
 
-  // String updatedCurrency = '';
   @override
   Widget build(BuildContext context) {
-    final currencyProvider = Provider.of<CurrencyProvider>(context);
-    final selectedCurrency = currencyProvider.selectedCurrencyProvider.selectedCurrency;
+    final provider = Provider.of<OfferProvider>(context);
+    final selectedCurrency = provider.selectedCurrency;
+    final selectedDate = provider.selectedDate;
     return ChangeNotifierProvider(
       create: (context) => CurrencyProvider(),
       child: HalfBottomSheetWidget(
           title: 'Filter',
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('All', style: Theme.of(context).textTheme.labelMedium,),
-                  Icon(Icons.check)
-                ],
+              GestureDetector(
+                onTap: () => provider.setFilterAll(!provider.filterAll),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('All', style: Theme.of(context).textTheme.labelMedium,),
+                    if (provider.filterAll == true)
+                    Icon(Icons.check),
+                    if (provider.filterAll == false)
+                      Icon(Icons.circle, color: TColors.secondaryBorder, )
+                  ],
+                ),
               ),
               const SizedBox(height: TSizes.spaceBtwItems,),
               Row(
@@ -42,20 +53,20 @@ class FilterScreen extends StatelessWidget {
                   Text('Date', style: Theme.of(context).textTheme.labelMedium,),
                   InkWell(
                     onTap: (){
-                      // showModalBottomSheet(
-                      //     backgroundColor: TColors.white,
-                      //     isDismissible: false,
-                      //     isScrollControlled: true,
-                      //     enableDrag: false,
-                      //     context: context,
-                      //     builder: (cdx) => CurrencyList(updateData)
-                      // );
+                      showModalBottomSheet(
+                          backgroundColor: TColors.white,
+                          // isDismissible: false,
+                          isScrollControlled: true,
+                          // enableDrag: false,
+                          context: context,
+                          builder: (cdx) => DateList()
+                      );
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('Date', style: Theme.of(context).textTheme.labelSmall,),
+                        Text('${getDateValue(provider.selectedDate)} days', style: Theme.of(context).textTheme.labelSmall,),
                         Icon(Icons.chevron_right, color: TColors.textPrimary.withOpacity(0.5),)
                       ],
                     ),
@@ -83,7 +94,7 @@ class FilterScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(selectedCurrency?.name ?? '', style: Theme.of(context).textTheme.labelSmall,),
+                        Text(getCurrencyName(selectedCurrency) ?? '', style: Theme.of(context).textTheme.labelSmall,),
                         Icon(Icons.chevron_right, color: TColors.textPrimary.withOpacity(0.5),)
                       ],
                     ),
@@ -92,9 +103,21 @@ class FilterScreen extends StatelessWidget {
               ),
               const SizedBox(height: TSizes.spaceBtwSections,),
               TElevatedButton(onTap: (){
-                // updateData(updatedCurrency);
-                // widget.callback(updatedCurrency);
-                Get.back();
+                if (provider.filterAll == true) {
+                  OfferService.instance.getAllOffers(
+                      offerProvider: provider,
+                      currency: '',
+                      date: ''
+                  );
+                  Get.back();
+                } else {
+                  OfferService.instance.getAllOffers(
+                      offerProvider: provider,
+                      currency: selectedCurrency == Currency.Select ? '' : getCurrencyName(selectedCurrency),
+                      date: selectedDate == Date.Select ? '' : getDateValue(selectedDate)
+                  );
+                  Get.back();
+                }
                 }, buttonText: 'Apply')
             ],
           )

@@ -9,7 +9,7 @@ import '../../../data/modules/app_navigator.dart';
 class ErrorBoundary extends StatelessWidget {
   final Widget app;
 
-  const ErrorBoundary({required this.app});
+  const ErrorBoundary({super.key, required this.app});
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +19,13 @@ class ErrorBoundary extends StatelessWidget {
       return Scaffold(
         backgroundColor: Colors.white,
         body: Container(
-          padding: EdgeInsets.all(40),
+          padding: const EdgeInsets.all(40),
           alignment: Alignment.center,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              const SizedBox(
                 width: double.infinity,
                 child: Icon(
                   Icons.error,
@@ -35,7 +35,7 @@ class ErrorBoundary extends StatelessWidget {
               const SizedBox(
                 height: 14,
               ),
-              Container(
+              const SizedBox(
                 width: double.infinity,
                 child: Text(
                   'An error occurred',

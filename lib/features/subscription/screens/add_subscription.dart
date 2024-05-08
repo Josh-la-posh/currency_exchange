@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/currencyWidget.dart';
-import 'package:swappr/features/profile/widgets/layout.dart';
 import 'package:swappr/features/subscription/screens/layout.dart';
 import 'package:swappr/features/subscription/widgets/subscription_form.dart';
-import 'package:swappr/features/transaction_history/widgets/layout.dart';
 
+import '../../../data/provider/subscription_provider.dart';
 import '../../../utils/constants/sizes.dart';
 
 class AddSubscriptionScreen extends StatelessWidget {

@@ -15,7 +15,7 @@ class DashboardScreenLayout extends StatelessWidget {
     return AppLayout(
         currentRoute: RouteType.Home,
         childWidget: Container(
-          padding: TSpacingStyle.dashboardPadding,
+          padding: TSpacingStyle.homePadding,
           child: childWidget,
         ),
       floatingActionButton: floatingActionButton,

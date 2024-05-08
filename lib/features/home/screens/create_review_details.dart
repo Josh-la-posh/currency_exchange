@@ -8,14 +8,12 @@ import 'package:swappr/common/widgets/buttons/elevated_button.dart';
 import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
 import 'package:swappr/common/widgets/divider.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/features/home/apis/api.dart';
 import 'package:swappr/features/home/icons/svg.dart';
-import 'package:swappr/features/home/screens/create_offer_success_screen.dart';
-import 'package:swappr/features/home/screens/home.dart';
 import 'package:swappr/utils/constants/colors.dart';
+import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
 import 'package:swappr/utils/helpers/pricing_calculator.dart';
-import 'package:swappr/utils/http/http_client.dart';
 
 class CreateReviewDetailsScreen extends StatelessWidget {
   const CreateReviewDetailsScreen({super.key});
@@ -24,10 +22,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final offerDetail = Provider.of<OfferProvider>(context);
     final data = offerDetail.createOfferEntity;
-
-    // DateTime now = DateTime.now();
-    // DateTime expiryTime = DateTime.now().add(Duration(hours: int.parse(data.expireHour)));
-    // Duration difference = expiryTime.difference(now);
     return Scaffold(
       body: Padding(
         padding: TSpacingStyle.homePadding,
@@ -55,14 +49,14 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: data.hasAmount,
+                                        text: '${data.amount} ${getCurrencyName(data.debitedCurrency)}',
                                         style: const TextStyle(fontWeight: TSizes.fontWeightLg)
                                     ),
                                     const TextSpan(
                                         text: ' for '
                                     ),
                                     TextSpan(
-                                        text: '${THelperFunctions.getStringMultiplication(data.hasAmount, data.minimumRate)} ${data.neededCurrency}',
+                                        text: '${(data.amount * data.rate)} ${getCurrencyName(data.creditedCurrency)}',
                                         style: const TextStyle(fontWeight: TSizes.fontWeightLg)
                                     ),
                                   ]
@@ -114,7 +108,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         style: Theme.of(context).textTheme.labelSmall,
                                         children: <TextSpan> [
                                           TextSpan(
-                                              text: '${data.hasAmount} ${data.selectedCurrency}',
+                                              text: '${data.amount} ${getCurrencyName(data.debitedCurrency)}',
                                               style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                           )
                                         ]
@@ -145,7 +139,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         style: Theme.of(context).textTheme.labelSmall,
                                         children: <TextSpan> [
                                           TextSpan(
-                                              text: data.neededCurrency,
+                                              text: getCurrencyName(data.creditedCurrency),
                                               style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                           )
                                         ]
@@ -165,7 +159,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         style: Theme.of(context).textTheme.labelSmall,
                                         children: const <TextSpan> [
                                           TextSpan(
-                                              text: 'Preferred Rate',
+                                              text: 'Rate',
                                               style: TextStyle(fontSize: TSizes.fontSize13)
                                           )
                                         ]
@@ -178,7 +172,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                             style: Theme.of(context).textTheme.labelSmall,
                                             children: <TextSpan> [
                                               TextSpan(
-                                                  text: '${data.preferredRate} ${data.selectedCurrency}',
+                                                  text: '${data.rate} ${getCurrencyName(data.debitedCurrency)}',
                                                   style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                               )
                                             ]
@@ -192,7 +186,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                             style: Theme.of(context).textTheme.labelSmall,
                                             children: <TextSpan> [
                                               TextSpan(
-                                                  text: '${THelperFunctions.getStringMultiplication(data.preferredRate, data.hasAmount)} ${data.neededCurrency}',
+                                                  text: '${data.rate + data.amount} ${getCurrencyName(data.creditedCurrency)}',
                                                   style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                               )
                                             ]
@@ -204,55 +198,55 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           const DividerWidget(),
-                          SizedBox(
-                            height: TSizes.textReviewHeight,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                RichText(
-                                    text: TextSpan(
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                        children: const <TextSpan> [
-                                          TextSpan(
-                                              text: 'Minimum Rate',
-                                              style: TextStyle(fontSize: TSizes.fontSize13)
-                                          )
-                                        ]
-                                    )
-                                ),
-                                Row(
-                                  children: [
-                                    RichText(
-                                        text: TextSpan(
-                                            style: Theme.of(context).textTheme.labelSmall,
-                                            children: <TextSpan> [
-                                              TextSpan(
-                                                  text: '${data.minimumRate} ${data.selectedCurrency}',
-                                                  style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
-                                              )
-                                            ]
-                                        )
-                                    ),
-                                    const SizedBox(width: TSizes.sm,),
-                                    AppoxIcon(),
-                                    const SizedBox(width: TSizes.sm,),
-                                    RichText(
-                                        text: TextSpan(
-                                            style: Theme.of(context).textTheme.labelSmall,
-                                            children: <TextSpan> [
-                                              TextSpan(
-                                                  text: '${THelperFunctions.getStringMultiplication(data.minimumRate, data.hasAmount)} ${data.neededCurrency}',
-                                                  style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
-                                              )
-                                            ]
-                                        )
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          const DividerWidget(),
+                          // SizedBox(
+                          //   height: TSizes.textReviewHeight,
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       RichText(
+                          //           text: TextSpan(
+                          //               style: Theme.of(context).textTheme.labelMedium,
+                          //               children: const <TextSpan> [
+                          //                 TextSpan(
+                          //                     text: 'Minimum Rate',
+                          //                     style: TextStyle(fontSize: TSizes.fontSize13)
+                          //                 )
+                          //               ]
+                          //           )
+                          //       ),
+                          //       Row(
+                          //         children: [
+                          //           RichText(
+                          //               text: TextSpan(
+                          //                   style: Theme.of(context).textTheme.labelSmall,
+                          //                   children: <TextSpan> [
+                          //                     TextSpan(
+                          //                         text: '${data.minimumRate} ${data.selectedCurrency}',
+                          //                         style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                          //                     )
+                          //                   ]
+                          //               )
+                          //           ),
+                          //           const SizedBox(width: TSizes.sm,),
+                          //           AppoxIcon(),
+                          //           const SizedBox(width: TSizes.sm,),
+                          //           RichText(
+                          //               text: TextSpan(
+                          //                   style: Theme.of(context).textTheme.labelSmall,
+                          //                   children: <TextSpan> [
+                          //                     TextSpan(
+                          //                         text: '${THelperFunctions.getStringMultiplication(data.minimumRate, data.hasAmount)} ${data.neededCurrency}',
+                          //                         style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                          //                     )
+                          //                   ]
+                          //               )
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          // const DividerWidget(),
                           SizedBox(
                             height: TSizes.textReviewHeight,
                             child: Row(
@@ -274,7 +268,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         style: Theme.of(context).textTheme.labelSmall,
                                         children: <TextSpan> [
                                           TextSpan(
-                                              text: '${data.expireHour} hour',
+                                              text: '${data.expireIn} hour',
                                               // text: '${difference.inHours}h ${difference.inMinutes % 60}m hour',
                                               style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                           )
@@ -293,9 +287,9 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: Theme.of(context).textTheme.labelSmall,
-                                        children: const <TextSpan> [
+                                        children: <TextSpan> [
                                           TextSpan(
-                                              text: 'You will be debited from',
+                                              text: 'You will be debited from ${getCurrencyName(data.debitedCurrency)} wallet',
                                               style: TextStyle(fontSize: TSizes.fontSize13)
                                           )
                                         ]
@@ -313,9 +307,9 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                 RichText(
                                     text: TextSpan(
                                         style: Theme.of(context).textTheme.labelSmall,
-                                        children: const <TextSpan> [
+                                        children: <TextSpan> [
                                           TextSpan(
-                                              text: 'You will be credited to',
+                                              text: 'You will be credited to ${getCurrencyName(data.creditedCurrency)} wallet',
                                               style: TextStyle(fontSize: TSizes.fontSize13)
                                           )
                                         ]
@@ -342,6 +336,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                               )
                                             ]
                                         )
+
                                     ),
                                     const SizedBox(width: TSizes.md),
                                     NotiIcon(),
@@ -352,7 +347,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         style: Theme.of(context).textTheme.labelSmall,
                                         children: <TextSpan> [
                                           TextSpan(
-                                              text: '${TPriceCalculator.calculateFee(data.selectedCurrency)} ${data.selectedCurrency}',
+                                              text: '${TPriceCalculator.calculateFee(getCurrencyName(data.debitedCurrency))} ${getCurrencyName(data.debitedCurrency)}',
                                               style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                           )
                                         ]
@@ -362,7 +357,19 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: TSizes.spaceBtwSections),
-                          TElevatedButton(onTap: (){Get.to(()=> const CreateOfferSuccessPage());}, buttonText: 'Pay ${TPriceCalculator.calculateTotalPrice(data.hasAmount ?? '0', data.selectedCurrency)} ${data.selectedCurrency}'),
+                          TElevatedButton(
+                              onTap: (){
+                                OfferService.instance
+                                    .createOffer(
+                                    offerProvider: offerDetail,
+                                    debitedCurrency: getCurrencyName(data.debitedCurrency),
+                                    creditedCurrency: getCurrencyName(data.creditedCurrency),
+                                    amount: data.amount,
+                                    rate: data.rate,
+                                    expireIn: data.expireIn
+                                );
+                                },
+                              buttonText: 'Pay ${TPriceCalculator.calculateTotalPrice('${data.amount}', getCurrencyName(data.debitedCurrency))} ${getCurrencyName(data.debitedCurrency)}'),
                           const SizedBox(height: TSizes.spaceBtwElements),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

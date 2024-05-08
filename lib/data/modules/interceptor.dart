@@ -37,14 +37,15 @@ class AppInterceptor extends Interceptor {
             String? token = await UserSession.instance.getAccessToken();
             requestOptions.headers['Authorization'] = 'Bearer $token';
 
-            if (EnvConfigurationModule.instance.getEnvType() == 'DEV') {
-              THelperFunctions.showDebugMessageInConsole([
-                'api path logger ${requestOptions.path} \n api data ${requestOptions.data}',
-              ]);
-            }
+            // if (EnvConfigurationModule.instance.getEnvType() == 'DEV') {
+            //   THelperFunctions.showDebugMessageInConsole([
+            //     'api path logger ${requestOptions.path} \n api data ${requestOptions.data}',
+            //   ]);
+            // }
 
             handler.next(requestOptions);
           } else {
+            handleHideLoader();
             showErrorAlertHelper(
                 errorMessage: 'Please connect to the internet');
           }

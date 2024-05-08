@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:swappr/data/provider/subscription_provider.dart';
 import 'package:swappr/features/subscription/widgets/no_subscription.dart';
 import 'package:swappr/features/subscription/widgets/subscription_item.dart';
 import '../../../utils/constants/sizes.dart';
@@ -11,11 +13,10 @@ class SubscriptionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    const int offer = 1;
+    final provider = Provider.of<SubscriptionProvider>(context);
 
     return SizedBox(
-      child: offer == 0
+      child: provider.subscriptions.isEmpty
           ? LayoutBuilder(builder: (context, constraints) {
         return const NoSubscriptionScreen();
       })
@@ -36,8 +37,11 @@ class SubscriptionList extends StatelessWidget {
           Column(
             children: [
               TListLayout(
-                  itemCount: 3,
-                  itemBuilder: (_, index) => const SubscriptionItem()
+                  itemCount: provider.subscriptions.length,
+                  itemBuilder: (_, index) {
+                    final item = provider.subscriptions[index];
+                    return SubscriptionItem(item: item);
+                  }
               )
             ],
           )

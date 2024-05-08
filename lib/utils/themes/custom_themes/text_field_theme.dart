@@ -6,6 +6,7 @@ class TTextFormFieldTheme {
   TTextFormFieldTheme._();
 
   static InputDecorationTheme lightInputDecorationTheme = InputDecorationTheme(
+    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
     filled: true,
     fillColor: TColors.textFieldBackground,
     errorMaxLines: 3,

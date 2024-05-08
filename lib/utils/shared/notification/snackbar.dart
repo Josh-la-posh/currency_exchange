@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
+import 'package:swappr/utils/constants/colors.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../data/modules/app_navigator.dart';
 
 handleShowCustomToast({
   required String message,
-  Color backgroundColor = const Color.fromRGBO(8, 105, 182, 1),
+  Color backgroundColor = TColors.primary,
   Color textColor = Colors.white,
   String key = 'app-snackbar',
   VoidCallback? onMessageTap,
@@ -17,10 +18,10 @@ handleShowCustomToast({
       .showSnackBar(
     SnackBar(
       key: Key(key),
-      dismissDirection: DismissDirection.endToStart,
+      dismissDirection: DismissDirection.up,
       behavior: SnackBarBehavior.floating,
-      duration: Duration(seconds: 3),
-      padding: EdgeInsets.all(10),
+      duration: const Duration(seconds: 2),
+      padding: const EdgeInsets.all(10),
       backgroundColor: backgroundColor,
       content: GestureDetector(
         onTap: () {
@@ -34,7 +35,7 @@ handleShowCustomToast({
                 color: textColor,
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                fontFamily: 'Avenir',
+                fontFamily: 'Roboto',
               )),
         ),
       ),

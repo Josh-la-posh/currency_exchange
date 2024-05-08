@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/features/authentication/screens/reset_password/reset_password_otp.dart';
+import 'package:swappr/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
 import '../../../../../utils/constants/sizes.dart';
-import '../../email_verify/email_verify.dart';
 
 class ForgetPasswordForm extends StatelessWidget {
   const ForgetPasswordForm({
@@ -13,7 +14,11 @@ class ForgetPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+    String? _email;
+
     return Form(
+      key: formKey,
         child: Column(
           children: [
             /// Email
@@ -22,18 +27,27 @@ class ForgetPasswordForm extends StatelessWidget {
               children: [
                 Text('Email', style: Theme.of(context).textTheme.labelMedium,),
                 SizedBox(
-                  height: TSizes.textInputFieldHeight,
                   child: TextFormField(
-                    decoration: const InputDecoration(
-                      // suffixIcon: Icon(Icons.)
-                    ),
+                    style: Theme.of(context).textTheme.labelMedium,
+                    onChanged: (val) => _email = val,
+                    validator: TValidator.validateEmail,
+                    onSaved: (val) {
+                      _email = val as String;
+                    },
                   ),
                 )
               ],
             ),
             const SizedBox(height: TSizes.spaceBtwSections),
 
-            TElevatedButton(onTap: (){Get.to(() => const EmailVerificationScreen());}, buttonText: 'Submit')
+            TElevatedButton(
+                onTap: (){
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    Get.to(() => ResetPasswordOtpScreen(email: _email as String,));
+                  }
+                  },
+                buttonText: 'Submit')
           ],
         )
     );

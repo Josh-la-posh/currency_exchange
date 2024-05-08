@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swappr/features/home/routes/routes.dart';
 import 'package:swappr/features/profile/routes/routes.dart';
 import 'package:swappr/features/subscription/routes/routes.dart';
-import 'package:swappr/features/transaction_history/routes/routes.dart';
+import 'package:swappr/features/transaction/routes/routes.dart';
 
 import '../../features/authentication/routes/routes.dart';
 

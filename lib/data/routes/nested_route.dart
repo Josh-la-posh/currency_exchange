@@ -4,8 +4,8 @@ import 'package:swappr/features/profile/routes/names.dart';
 import 'package:swappr/features/profile/screens/profile.dart';
 import 'package:swappr/features/subscription/routes/names.dart';
 import 'package:swappr/features/subscription/screens/subscribe.dart';
-import 'package:swappr/features/transaction_history/routes/names.dart';
-import 'package:swappr/features/transaction_history/screens/history.dart';
+import 'package:swappr/features/transaction/routes/names.dart';
+import 'package:swappr/features/transaction/screens/history.dart';
 
 import '../../features/home/routes/names.dart';
 import '../../utils/layouts/app_layout.dart';

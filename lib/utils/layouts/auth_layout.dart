@@ -23,6 +23,7 @@ class AuthLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: TColors.white,
       body: Padding(
         padding: const EdgeInsets.only(bottom: TSizes.defaultSpace),
         child: Column(

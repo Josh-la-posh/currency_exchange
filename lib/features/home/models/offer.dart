@@ -1,41 +1,75 @@
+import 'package:swappr/data/provider/currency_provider.dart';
+import 'package:swappr/utils/constants/enums.dart';
+
 import 'my_currency.dart';
 
 class OfferEntity {
   final String id;
-  final String hasAmount;
-  final String needAmount;
+  final String debitedCurrency;
+  final String creditedCurrency;
+  final String amount;
   final String rate;
+  final String expireIn;
+  int? views;
+  int? negotiatorRate;
+  int? negotiatorAmount;
+  bool? negotiationAccepted;
+  String? negotiatorId;
+  bool? isActive;
+  final String status;
+  final String createdDate;
+  final String lastModifiedDate;
 
   OfferEntity({
     required this.id,
-    required this.hasAmount,
-    required this.needAmount,
-    required this.rate
+    required this.debitedCurrency,
+    required this.creditedCurrency,
+    required this.amount,
+    required this.rate,
+    required this.expireIn,
+    this.views,
+    this.negotiatorRate,
+    this.negotiatorAmount,
+    this.negotiationAccepted,
+    this.negotiatorId,
+    this.isActive,
+    required this.status,
+    required this.createdDate,
+    required this.lastModifiedDate
   });
 
   factory OfferEntity.fromJson(Map<String, dynamic> json) => OfferEntity(
     id: json['id'] as String,
-    hasAmount: json['hasAmount'] as String,
-    needAmount: json['needAmount'] as String,
+    debitedCurrency: json['debitedCurrency'] as String,
+    creditedCurrency: json['creditedCurrency'] as String,
+    amount: json['amount'] as String,
     rate: json['rate'] as String,
+    expireIn: json['expireIn'] as String,
+    views: json['views'] as int,
+    negotiatorRate: json['negotiatorRate'] as int,
+    negotiatorAmount: json['negotiatorAmount'] as int,
+    negotiationAccepted: json['negotiationAccepted'] as bool,
+    negotiatorId: json['negotiatorId'] as String,
+    isActive: json['isActive'] as bool,
+    status: json['status'] as String,
+    createdDate: json['createdDate'] as String,
+    lastModifiedDate: json['lastModifiedDate'] as String,
   );
 }
 
 class CreateOfferEntity {
-  String hasAmount;
-  String selectedCurrency;
-  String neededCurrency;
-  String preferredRate;
-  String minimumRate;
-  String expireHour;
+  Currency debitedCurrency;
+  Currency creditedCurrency;
+  int amount;
+  int rate;
+  int expireIn;
 
   CreateOfferEntity({
-    required this.hasAmount,
-    required this.minimumRate,
-    required this.preferredRate,
-    required this.selectedCurrency,
-    required this.expireHour,
-    required this.neededCurrency
+    required this.debitedCurrency,
+    required this.creditedCurrency,
+    required this.amount,
+    required this.rate,
+    required this.expireIn,
   });
 
 }

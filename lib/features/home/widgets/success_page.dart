@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/common/widgets/currencyWidget.dart';
 import 'package:swappr/utils/constants/colors.dart';
+import 'package:swappr/utils/layouts/app_layout.dart';
 import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
+import '../../../data/modules/app_navigator.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
@@ -30,7 +33,7 @@ class SuccessScreenWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const CurrencyWidgetWithBack(),
+              const CurrencyWidget(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -44,13 +47,18 @@ class SuccessScreenWidget extends StatelessWidget {
                   Container(
                       height: THelperFunctions.screenHeight() * 0.25,
                       padding: const EdgeInsets.symmetric(vertical: TSizes.xl, horizontal: TSizes.lg),
-                      color: TColors.primaryBackground,
-                      child: child
+                      // color: TColors.primaryBackground,
+                      // child: child
                   ),
                   const SizedBox(height: TSizes.spaceBtwSections * 1.5,),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                    child: TElevatedButton(onTap: (){Get.to(() => const HomeScreen());}, buttonText: 'Done'),
+                    child: TElevatedButton(
+                        onTap: (){
+                          AppNavigator.instance
+                              .removeAllNavigateToNavHandler(HOME_INDEX_SCREEN_ROUTE);
+                          },
+                        buttonText: 'Done'),
                   )
                 ],
               )
