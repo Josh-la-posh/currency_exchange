@@ -150,7 +150,7 @@ class OfferProvider extends ChangeNotifier {
   resetState() {
     _offers = [];
     _offerDetails = null;
-    _currencies = [];
+    // _currencies = [];
     _dates = [];
     creditedCurrency = Currency.Select;
     debitedCurrency = Currency.Select;

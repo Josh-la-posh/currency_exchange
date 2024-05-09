@@ -158,10 +158,10 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (offerProvider.debitedCurrency != Currency.Select && offerProvider.rate != 0)
+                            if (offerProvider.debitedCurrency != Currency.Select && offerProvider.creditedCurrency != Currency.Select && offerProvider.rate != 0)
                             AppoxIcon(),
                             const SizedBox(width: TSizes.xl,),
-                            if (offerProvider.debitedCurrency != Currency.Select && offerProvider.rate != 0)
+                            if (offerProvider.debitedCurrency != Currency.Select && offerProvider.creditedCurrency != Currency.Select && offerProvider.rate != 0)
                             Text('${offerProvider.amount * offerProvider.rate} ${getCurrencyName(offerProvider.creditedCurrency)}', style: Theme.of(context).textTheme.bodyLarge,),
                           ],
                         ),

@@ -57,7 +57,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
       ),
       floatingActionButton: TFloatingButton(
-        onPressed: (){Get.to(() => const CreateOfferScreen());},
+        onPressed: (){
+          offerProvider.updateDebitedCurrency(Currency.Select);
+          offerProvider.updateCreditedCurrency(Currency.Select);
+          offerProvider.updateAmount('0');
+          offerProvider.updateRate('0');
+          Get.to(() => const CreateOfferScreen());
+          },
       ),
 
     );

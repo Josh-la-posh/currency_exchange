@@ -37,7 +37,7 @@ class WalletProvider extends ChangeNotifier {
 
   resetState() {
     _wallets = [];
-    _currencies = [];
+    // _currencies = [];
     _selectedCurrency = Currency.Select;
   }
 }
