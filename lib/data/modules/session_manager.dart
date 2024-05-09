@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
 import 'package:swappr/data/modules/background_task.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/data/provider/subscription_provider.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/features/authentication/models/user_model.dart';
 import 'package:swappr/features/authentication/routes/names.dart';
@@ -40,7 +42,9 @@ class UserSession {
   routeUserToHomeIfLoggedIn(
       AuthProvider authProvider,
       WalletProvider walletProvider,
-      TransactionProvider transactionProvider
+      TransactionProvider transactionProvider,
+      OfferProvider offerProvider,
+      SubscriptionProvider subscriptionProvider
       ) async {
     final userJson = _storage.getString(USER_DATA);
     var isLogin = await UserSession.instance.isLoginBool();
@@ -50,7 +54,9 @@ class UserSession {
           user: UserModel.fromJson(json.decode(userJson)),
           authProvider: authProvider,
           walletProvider: walletProvider,
-          transactionProvider: transactionProvider
+          transactionProvider: transactionProvider,
+          offerProvider: offerProvider,
+          subscriptionProvider: subscriptionProvider
       );
       AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
     }

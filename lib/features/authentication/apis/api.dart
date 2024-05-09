@@ -4,6 +4,8 @@ import 'package:swappr/data/modules/background_task.dart';
 import 'package:swappr/data/modules/dio.dart';
 import 'package:swappr/data/modules/session_manager.dart';
 import 'package:swappr/data/provider/auth_provider.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/data/provider/subscription_provider.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/data/provider/wallet_provider.dart';
 import 'package:swappr/features/authentication/models/user_model.dart';
@@ -124,6 +126,8 @@ class AuthService {
     required AuthProvider authProvider,
     required WalletProvider walletProvider,
     required TransactionProvider transactionProvider,
+    required OfferProvider offerProvider,
+    required SubscriptionProvider subscriptionProvider,
     required bool rememberMe,
     required VoidCallback handleEmailNotVerified
   }) async {
@@ -176,7 +180,9 @@ class AuthService {
           user: user,
           authProvider: authProvider,
           walletProvider: walletProvider,
-            transactionProvider: transactionProvider
+          transactionProvider: transactionProvider,
+          subscriptionProvider: subscriptionProvider,
+          offerProvider: offerProvider
         );
         handleShowCustomToast(message: 'Authenticated successfully');
       }
@@ -247,6 +253,8 @@ class AuthService {
     required AuthProvider authProvider,
     required WalletProvider walletProvider,
     required TransactionProvider transactionProvider,
+    required OfferProvider offerProvider,
+    required SubscriptionProvider subscriptionProvider,
     required bool rememberMe,
     required VoidCallback handleEmailNotVerified
   }) async {
@@ -264,6 +272,8 @@ class AuthService {
             authProvider: authProvider,
             walletProvider: walletProvider,
             transactionProvider: transactionProvider,
+            offerProvider: offerProvider,
+            subscriptionProvider: subscriptionProvider,
             rememberMe: rememberMe,
             handleEmailNotVerified: handleEmailNotVerified
         );

@@ -24,7 +24,7 @@ class CurrencyWidgetWithBack extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back_ios_rounded)
             ),
           ),
-          const SizedBox(width: TSizes.spaceBtwElements,),
+          // const SizedBox(width: TSizes.spaceBtwElements,),
           const Expanded(child: CurrencyWidget()),
         ],
       ),

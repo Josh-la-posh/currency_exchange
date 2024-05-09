@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/styles/spacing_styles.dart';
+import 'package:swappr/features/home/apis/api.dart';
 import 'package:swappr/features/home/models/offer.dart';
 import 'package:swappr/features/home/screens/accept_review_details.dart';
 import 'package:swappr/features/home/widgets/negotiation_screen.dart';
@@ -168,7 +169,9 @@ class OfferDetailsScreen extends StatelessWidget {
                     width: double.infinity,
                     height: TSizes.buttonHeight,
                     child: ElevatedButton(
-                      onPressed: () {Get.to(() => AcceptReviewDetailsScreen(item: item));},
+                      onPressed: () {
+                        Get.to(() => AcceptReviewDetailsScreen(item: item));
+                        },
                       child: const Text("I'm interested"),
                     ),
                   ),

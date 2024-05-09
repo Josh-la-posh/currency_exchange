@@ -15,7 +15,7 @@ class CurrencyProvider extends ChangeNotifier {
   }
 
   resetState() {
-    _currencies = [];
+    // _currencies = [];
     _selectedCurrency = Currency.Select;
   }
 }

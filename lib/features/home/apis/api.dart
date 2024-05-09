@@ -3,6 +3,7 @@ import 'package:swappr/data/modules/dio.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/features/home/models/offer_details_entity.dart';
 import 'package:swappr/features/home/routes/names.dart';
+import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/responses/error_dialog.dart';
 import 'package:swappr/utils/responses/handleApiError.dart';
 
@@ -122,8 +123,10 @@ class OfferService {
 
   // Swapping an offer
 
-  swapOffer({required String id}) {
-    _swapOffer(id: id).then((response) {
+  swapOffer({required String id, required OfferProvider offerProvider}) {
+    _swapOffer(id: id).then((response) async {
+      await getAllOffers(offerProvider: offerProvider, currency: getCurrencyName(offerProvider.selectedCurrency), date: getDateValue(offerProvider.selectedDate));
+      AppNavigator.instance.removeAllNavigateToNavHandler(ACCEPT_SUCCESS_SCREEN);
       print('create offer ${response.data}');
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));

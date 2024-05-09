@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/common/styles/spacing_styles.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
 import 'package:swappr/common/widgets/currencyWidget.dart';
 import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
 import 'package:swappr/common/widgets/divider.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/features/home/models/offer.dart';
 import 'package:swappr/features/home/screens/accept_offer_success_page.dart';
 import 'package:swappr/features/home/screens/create_offer_success_screen.dart';
@@ -15,6 +17,7 @@ import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 
 import '../../../data/provider/subscription_provider.dart';
+import '../apis/api.dart';
 import '../icons/svg.dart';
 
 class AcceptReviewDetailsScreen extends StatelessWidget {
@@ -26,6 +29,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<OfferProvider>(context);
     return Scaffold(
       body: Padding(
         padding: TSpacingStyle.homePadding,
@@ -262,7 +266,8 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: TSizes.spaceBtwSections),
                           TElevatedButton(onTap: (){
-                            Get.to(() => const AcceptOfferSuccessPage());},
+                            OfferService.instance.swapOffer(id: item!.id, offerProvider: provider);
+                            },
                               buttonText: 'Pay 100 GBP'),
                           const SizedBox(height: TSizes.spaceBtwSections ),
                         ],

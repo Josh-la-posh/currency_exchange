@@ -6,6 +6,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/data/provider/subscription_provider.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/features/authentication/apis/api.dart';
 import 'package:swappr/features/authentication/routes/names.dart';
@@ -57,6 +59,14 @@ class _LoginFormState extends State<LoginForm> {
       listen: false);
 
   var transactionProvider = Provider.of<TransactionProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var offerProvider = Provider.of<OfferProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var subscriptionProvider = Provider.of<SubscriptionProvider>(
       AppNavigator.instance.navigatorKey.currentContext as BuildContext,
       listen: false);
 
@@ -157,6 +167,8 @@ class _LoginFormState extends State<LoginForm> {
                         authProvider: authProvider,
                         walletProvider: walletProvider,
                         transactionProvider: transactionProvider,
+                        offerProvider: offerProvider,
+                        subscriptionProvider: subscriptionProvider,
                         rememberMe: _rememberMe,
                         handleEmailNotVerified: () {
                           Get.to(EmailVerificationScreen(
@@ -169,6 +181,8 @@ class _LoginFormState extends State<LoginForm> {
                                   authProvider: authProvider,
                                   walletProvider: walletProvider,
                                   transactionProvider: transactionProvider,
+                                  offerProvider: offerProvider,
+                                  subscriptionProvider: subscriptionProvider,
                                   rememberMe: _rememberMe,
                                   handleEmailNotVerified: (){}
                               );
