@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/common/widgets/currencyWidget.dart';
 import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
-import 'package:swappr/features/home/widgets/create_offer_form.dart';
 import 'package:swappr/utils/constants/sizes.dart';
+
+import '../widgets/create_offer_form.dart';
 
 class CreateOfferScreen extends StatelessWidget {
   const CreateOfferScreen({super.key});

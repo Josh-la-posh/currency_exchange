@@ -34,7 +34,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
               decoration: BoxDecoration(
                   color: TColors.textFieldBackground,
                   border: Border.all(
-                      color: TColors.secondaryBorder),
+                      color: TColors.secondaryBorder30),
                   borderRadius: const BorderRadius.all(Radius.circular(TSizes.borderRadiusSm))
               ),
               child: DropdownButtonFormField<Currency>(
@@ -93,7 +93,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
               decoration: BoxDecoration(
                   color: TColors.textFieldBackground,
                   border: Border.all(
-                      color: TColors.secondaryBorder),
+                      color: TColors.secondaryBorder30),
                   borderRadius: const BorderRadius.all(Radius.circular(TSizes.borderRadiusSm))
               ),
               child: DropdownButtonFormField<Currency>(
@@ -155,7 +155,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
                       border: Border.all(
                         width: 1,
-                        color: TColors.secondaryBorder
+                        color: TColors.secondaryBorder30
                       )
                     ),
                     child: TextFormField(
@@ -192,7 +192,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                         borderRadius: BorderRadius.circular(TSizes.buttonRadius),
                         border: Border.all(
                             width: 1,
-                            color: TColors.secondaryBorder
+                            color: TColors.secondaryBorder30
                         )
                     ),
                     child: TextFormField(

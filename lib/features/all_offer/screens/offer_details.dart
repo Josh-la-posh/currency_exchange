@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/features/home/apis/api.dart';
-import 'package:swappr/features/home/models/offer.dart';
-import 'package:swappr/features/home/screens/accept_review_details.dart';
-import 'package:swappr/features/home/widgets/negotiation_screen.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
+import '../models/offer.dart';
+import '../widgets/negotiation_screen.dart';
+import 'accept_review_details.dart';
 
 class OfferDetailsScreen extends StatelessWidget {
   final OfferEntity? item;

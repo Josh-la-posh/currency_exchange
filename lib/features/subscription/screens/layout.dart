@@ -15,7 +15,6 @@ class SubscribeScreenLayout extends StatelessWidget {
     return AppLayout(
       currentRoute: RouteType.Subscribe,
       childWidget: Container(
-        padding: TSpacingStyle.dashboardPadding,
         child: childWidget,
       ),
       floatingActionButton: floatingActionButton,

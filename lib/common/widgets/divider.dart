@@ -12,7 +12,7 @@ class DividerWidget extends StatelessWidget {
     return Container(
       height: 1,
       decoration: BoxDecoration(
-        color: TColors.secondaryBorder,
+        color: TColors.secondaryBorder30,
       ),
     );
   }

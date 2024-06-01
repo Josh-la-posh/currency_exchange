@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/features/home/apis/api.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
@@ -12,7 +9,7 @@ import 'package:swappr/utils/layouts/bottom_sheet_widget.dart';
 import 'package:swappr/utils/validators/validation.dart';
 
 import '../../../data/provider/offer_provider.dart';
-import '../screens/accept_review_details.dart';
+import '../apis/api.dart';
 
 class NegotiationScreen extends StatelessWidget {
   final String id;

@@ -20,15 +20,19 @@ class TColors {
 
   // Background Container Colors
   static const Color primaryBackground = Color(0xFFFDF6FF);
+  static const Color homeBackground = Color(0xFFFDF6FF);
   static const Color textFieldBackground = Color(0xFFFDFAFE);
   static Color authTransBack = const Color(0xFF111E32).withOpacity(0.2);
 
   //Button Colors
   static const Color primaryButton = TColors.primary;
+  static const Color darkPrimaryButton = Color(0xFF685582);
+  static const Color darkSecButton = Color(0xFF9287A2);
 
   // Border Colors
   static const Color primaryBorder = TColors.primary;
-  static Color secondaryBorder = const Color(0xFFD0CDE1).withOpacity(0.3);
+  static Color secondaryBorder = const Color(0xFFD0CDE1);
+  static Color secondaryBorder30 = const Color(0xFFD0CDE1).withOpacity(0.3);
   static Color timeLineBorder = const Color(0xFF303030).withOpacity(0.4);
 
   // Error and Validation Colors

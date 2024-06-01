@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/features/home/models/offer.dart';
 
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../icons/svg.dart';
+import '../models/offer.dart';
 import '../screens/offer_details.dart';
 
 class OfferItem extends StatelessWidget {

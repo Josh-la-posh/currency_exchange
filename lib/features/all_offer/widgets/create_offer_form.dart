@@ -262,7 +262,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                         color: TColors.textFieldBackground,
                         borderRadius: BorderRadius.circular(6),
                         border: Border.all(
-                            color: TColors.secondaryBorder,
+                            color: TColors.secondaryBorder30,
                             width: 1
                         )
                     ),
@@ -337,7 +337,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                       color: TColors.textFieldBackground,
                       borderRadius: BorderRadius.circular(6),
                       border: Border.all(
-                        color: TColors.secondaryBorder,
+                        color: TColors.secondaryBorder30,
                         width: 1
                       )
                     ),

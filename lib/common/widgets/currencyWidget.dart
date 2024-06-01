@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
-
-import '../../features/home/icons/svg.dart';
+import '../../features/all_offer/icons/svg.dart';
 import '../../utils/constants/sizes.dart';
 
 class CurrencyWidget extends StatelessWidget {

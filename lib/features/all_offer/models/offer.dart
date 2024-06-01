@@ -1,7 +1,4 @@
-import 'package:swappr/data/provider/currency_provider.dart';
 import 'package:swappr/utils/constants/enums.dart';
-
-import 'my_currency.dart';
 
 class OfferEntity {
   final String id;

@@ -18,15 +18,15 @@ class TTextFormFieldTheme {
     floatingLabelStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.textPrimary.withOpacity(0.8)),
     border: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder),
+      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder30),
     ),
     enabledBorder: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder),
+      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder30),
     ),
     focusedBorder: const OutlineInputBorder().copyWith(
         borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-        borderSide: BorderSide(width: 1, color: TColors.secondaryBorder)
+        borderSide: BorderSide(width: 1, color: TColors.secondaryBorder30)
     ),
     errorBorder: const OutlineInputBorder().copyWith(
         borderRadius: BorderRadius.circular(TSizes.buttonRadius),
@@ -41,7 +41,7 @@ class TTextFormFieldTheme {
 
   static InputDecorationTheme darkInputDecorationTheme = InputDecorationTheme(
     filled: true,
-    fillColor: TColors.secondaryBorder,
+    fillColor: TColors.secondaryBorder30,
     errorMaxLines: 3,
     prefixIconColor: TColors.grey,
     suffixIconColor: TColors.grey,
@@ -51,15 +51,15 @@ class TTextFormFieldTheme {
     floatingLabelStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.white.withOpacity(0.8)),
     border: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder),
+      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder30),
     ),
     enabledBorder: const OutlineInputBorder().copyWith(
       borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder),
+      borderSide: BorderSide(width: 1, color: TColors.secondaryBorder30),
     ),
     focusedBorder: const OutlineInputBorder().copyWith(
         borderRadius: BorderRadius.circular(TSizes.buttonRadius),
-        borderSide: BorderSide(width: 1, color: TColors.secondaryBorder)
+        borderSide: BorderSide(width: 1, color: TColors.secondaryBorder30)
     ),
     errorBorder: const OutlineInputBorder().copyWith(
         borderRadius: BorderRadius.circular(TSizes.buttonRadius),

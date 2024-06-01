@@ -58,6 +58,8 @@ flutter:
     - assets/icons/bottomNavIcons/
     - assets/icons/profileIcons/
     - assets/icons/countryIcons/
+    - assets/icons/homeIcons/
+    - assets/icons/verifyIcons/
     - assets/images/
 
   #-------------- LOCAL FONTS --------------------#

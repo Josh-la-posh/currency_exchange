@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/data/provider/subscription_provider.dart';
@@ -20,8 +22,10 @@ class SubscriptionItem extends StatelessWidget {
     final provider = Provider.of<SubscriptionProvider>(context);
     return Column(
       children: [
-        SizedBox(
-          height: TSizes.textReviewHeight * 1.2,
+        Container(
+          height: TSizes.textReviewHeight * 1.4,
+          color: TColors.secondaryBorder30,
+          // padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
           child: Slidable(
             key: const ValueKey(0),
             endActionPane: ActionPane(
@@ -36,14 +40,14 @@ class SubscriptionItem extends StatelessWidget {
                     backgroundColor: TColors.danger,
                     icon: Icons.delete,
                     // label: 'Delete',
-
                   ),
                 ]
             ),
             child: ListTile(
               dense: true,
-              contentPadding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 10),
+              contentPadding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5, top: 0, bottom: 0, right: TSizes.defaultSpace / 1.5),
               title: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -108,10 +112,9 @@ class SubscriptionItem extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 10,),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-          child: DividerWidget(),
+        Container(
+          height: 3,
+          color: Color(0XFFD9D9D9),
         )
       ],
     );

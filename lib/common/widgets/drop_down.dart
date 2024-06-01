@@ -21,7 +21,7 @@ class _TDropdownWidgetState extends State<TDropdownWidget> {
       decoration: BoxDecoration(
         color: TColors.textFieldBackground,
         border: Border.all(
-          color: TColors.secondaryBorder),
+          color: TColors.secondaryBorder30),
         borderRadius: const BorderRadius.all(Radius.circular(TSizes.borderRadiusSm))
       ),
       child: DropdownButton(

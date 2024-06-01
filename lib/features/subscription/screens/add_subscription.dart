@@ -4,6 +4,7 @@ import 'package:swappr/common/widgets/currencyWidget.dart';
 import 'package:swappr/features/subscription/screens/layout.dart';
 import 'package:swappr/features/subscription/widgets/subscription_form.dart';
 
+import '../../../common/styles/spacing_styles.dart';
 import '../../../data/provider/subscription_provider.dart';
 import '../../../utils/constants/sizes.dart';
 
@@ -14,17 +15,20 @@ class AddSubscriptionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SubscribeScreenLayout(
       childWidget: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CurrencyWidget(),
-            const SizedBox(height: TSizes.spaceBtwSections,),
-            Text('Subscribe', style: Theme.of(context).textTheme.titleMedium,),
-            const SizedBox(height: TSizes.sm,),
-            Text('Notify me when an offer is created that matches this criteria:', style: Theme.of(context).textTheme.labelMedium,),
-            const SizedBox(height: TSizes.spaceBtwItems,),
-            const SubscriptionForm()
-          ],
+        child: Padding(
+          padding: TSpacingStyle.dashboardPadding,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CurrencyWidget(),
+              const SizedBox(height: TSizes.spaceBtwSections,),
+              Text('Subscribe', style: Theme.of(context).textTheme.titleMedium,),
+              const SizedBox(height: TSizes.sm,),
+              Text('Notify me when an offer is created that matches this criteria:', style: Theme.of(context).textTheme.labelMedium,),
+              const SizedBox(height: TSizes.spaceBtwItems,),
+              const SubscriptionForm()
+            ],
+          ),
         ),
       ),
     );

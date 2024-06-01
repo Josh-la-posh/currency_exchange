@@ -5,13 +5,15 @@ import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/features/home/apis/api.dart';
-import 'package:swappr/features/home/widgets/currency_screen.dart';
 import 'package:swappr/data/provider/currency_provider.dart';
-import 'package:swappr/features/home/widgets/date_screen.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/layouts/bottom_sheet_widget.dart';
+
+import '../apis/api.dart';
+import 'currency_screen.dart';
+import 'date_screen.dart';
 
 class FilterScreen extends StatelessWidget {
   // final Function(String) callback;
@@ -41,7 +43,7 @@ class FilterScreen extends StatelessWidget {
                     if (provider.filterAll == true)
                     Icon(Icons.check),
                     if (provider.filterAll == false)
-                      Icon(Icons.circle, color: TColors.secondaryBorder, )
+                      Icon(Icons.circle, color: TColors.secondaryBorder30, )
                   ],
                 ),
               ),

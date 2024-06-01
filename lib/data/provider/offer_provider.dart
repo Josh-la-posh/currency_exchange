@@ -1,10 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:swappr/features/home/models/offer.dart';
-import 'package:swappr/features/home/models/offer_details_entity.dart';
 import 'package:swappr/utils/constants/enums.dart';
+
+import '../../features/all_offer/models/offer.dart';
+import '../../features/all_offer/models/offer_details_entity.dart';
 
 class OfferProvider extends ChangeNotifier {
   OfferDetailsEntity? _offerDetails;

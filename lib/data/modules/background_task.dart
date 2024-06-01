@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:swappr/data/modules/interceptor.dart';
 import 'package:swappr/data/provider/auth_provider.dart';
 import 'package:swappr/features/authentication/models/user_model.dart';
 
-import '../../features/home/models/offer.dart';
-import '../../features/home/models/offer_details_entity.dart';
+import '../../features/all_offer/models/offer.dart';
+import '../../features/all_offer/models/offer_details_entity.dart';
 import '../../features/profile/models/wallet_model.dart';
 import '../../features/subscription/models/subscribeEnity.dart';
 import '../../features/subscription/models/subscription_details.dart';

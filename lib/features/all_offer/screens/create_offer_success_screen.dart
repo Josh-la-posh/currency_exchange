@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:swappr/common/widgets/custom_time_line.dart';
-import 'package:swappr/features/home/widgets/success_page.dart';
 import 'package:swappr/utils/layouts/list_layout.dart';
 import '../../../utils/constants/colors.dart';
+import '../widgets/success_page.dart';
 
 class CreateOfferSuccessPage extends StatelessWidget {
   const CreateOfferSuccessPage({super.key});

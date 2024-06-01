@@ -4,10 +4,9 @@ import 'package:swappr/utils/layouts/app_layout.dart';
 
 class DashboardScreenLayout extends StatelessWidget {
   final Widget childWidget;
-  final Widget floatingActionButton;
   const DashboardScreenLayout({
     super.key,
-    required this.childWidget, required this.floatingActionButton
+    required this.childWidget
   });
 
   @override
@@ -18,7 +17,6 @@ class DashboardScreenLayout extends StatelessWidget {
           padding: TSpacingStyle.homePadding,
           child: childWidget,
         ),
-      floatingActionButton: floatingActionButton,
     );
   }
 }

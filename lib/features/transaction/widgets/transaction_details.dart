@@ -33,7 +33,7 @@ class TransactionDetails extends StatelessWidget {
                   height: 24,
                   width: 24,
                   decoration: BoxDecoration(
-                    color: TColors.secondaryBorder,
+                    color: TColors.secondaryBorder30,
                     borderRadius: BorderRadius.circular(50),
 
                   ),

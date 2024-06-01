@@ -18,7 +18,6 @@ class TSpacingStyle {
   );
 
   static const EdgeInsetsGeometry homePadding = EdgeInsets.only(
-    top: 35,
     bottom: TSizes.defaultSpace,
   );
 

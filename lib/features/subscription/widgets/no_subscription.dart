@@ -9,18 +9,21 @@ class NoSubscriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: THelperFunctions.screenHeight() * 0.7 - 65,
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Image(image: AssetImage(TImages.emptyScreen)),
-            const SizedBox(height: TSizes.spaceBtwItems,),
-            Text('No Subscription', style: Theme.of(context).textTheme.titleMedium,),
-            Text('You have not subscribed to any offer yet', style: Theme.of(context).textTheme.labelMedium,),
-          ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5),
+      child: SizedBox(
+        height: THelperFunctions.screenHeight() * 0.7 - 65,
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Image(image: AssetImage(TImages.emptyScreen)),
+              const SizedBox(height: TSizes.spaceBtwItems,),
+              Text('No Subscription', style: Theme.of(context).textTheme.titleMedium,),
+              Text('You have not subscribed to any offer yet', style: Theme.of(context).textTheme.labelMedium,),
+            ],
+          ),
         ),
       ),
     );

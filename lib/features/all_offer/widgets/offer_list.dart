@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/home/widgets/offer_item.dart';
 import 'package:swappr/utils/constants/enums.dart';
-import '../../../data/provider/currency_provider.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/list_layout.dart';
 import '../icons/svg.dart';
-import '../models/offer.dart';
 import 'filter_screen.dart';
 import 'no_offer.dart';
+import 'offer_item.dart';
 
 class OfferList extends StatelessWidget {
   const OfferList({
@@ -73,7 +71,7 @@ class OfferList extends StatelessWidget {
                         width: 82,
                         height: 31,
                         decoration: BoxDecoration(
-                            color: TColors.secondaryBorder,
+                            color: TColors.secondaryBorder30,
                             borderRadius: BorderRadius.circular(30)
                         ),
                         child: Row(

@@ -22,12 +22,7 @@ const PROFILE_INDEX_SCREEN_ROUTE = PROFILE_SCREEN_ROUTE;
 class AppLayout extends StatefulWidget {
   final RouteType currentRoute;
   final String? currentRoutePathname;
-  // final bool showTopBar;
-  // final Widget topBarLeftWidget;
-  // final Widget topBarCenterWidget;
-  // final List<Widget> topBarRightWidget;
   final Widget childWidget;
-  // final Color? topBarColor;
   final Color? layoutBodyColor;
   final GlobalKey<NavigatorState>? navKey;
   final Widget? floatingActionButton;
@@ -36,11 +31,6 @@ class AppLayout extends StatefulWidget {
     super.key,
     required this.currentRoute,
     this.currentRoutePathname,
-    // this.showTopBar = true,
-    // this.topBarLeftWidget = const SizedBox.shrink(),
-    // this.topBarRightWidget = const [SizedBox.shrink()],
-    // this.topBarCenterWidget = const SizedBox.shrink(),
-    // this.topBarColor = Colors.white,
     this.layoutBodyColor = Colors.white,
     required this.childWidget,
     this.navKey,
@@ -53,7 +43,6 @@ class AppLayout extends StatefulWidget {
 
 class _AppLayoutState extends State<AppLayout>
     with SingleTickerProviderStateMixin {
-  // double _appBarTopPadding = 16; // Initial top padding value
   final ScrollController _scrollController = ScrollController();
   bool _isBottomBarVisible = true;
 
@@ -62,42 +51,16 @@ class _AppLayoutState extends State<AppLayout>
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_handleScroll);
+    // _scrollController.addListener(_handleScroll);
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_handleScroll);
+    // _scrollController.removeListener(_handleScroll);
     _scrollController.dispose();
 
     super.dispose();
   }
-
-  void _handleScroll() {
-    // final direction = _scrollController.position.userScrollDirection;
-    // if (direction == ScrollDirection.reverse && _isBottomBarVisible) {
-    //   setState(() {
-    //     _isBottomBarVisible = false;
-    //   });
-    // } else if (direction == ScrollDirection.forward && !_isBottomBarVisible) {
-    //   setState(() {
-    //     _isBottomBarVisible = true;
-    //   });
-    // }
-
-    // if (_scrollController.offset <= 100) {
-    //   setState(() {
-    //     _appBarTopPadding = 16;
-    //   });
-    // } else {
-    //   setState(() {
-    //     _appBarTopPadding = 0;
-    //   });
-    // }
-  }
-
-  // var appDrawerProvider = Provider.of<AppDrawerProvider>(
-  //     AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
   @override
   Widget build(BuildContext context) {
@@ -186,33 +149,33 @@ class _AppLayoutState extends State<AppLayout>
           }
         },
         items: [
-          BottomNavigationBarItem(
+          BottomNavigationBarItem(backgroundColor: TColors.danger,
             tooltip: 'Home',
             icon: Image(image: AssetImage(widget.currentRoute == RouteType.Home
                 ? TImages.homeActive
                 : TImages.home)),
-            label: '',
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             tooltip: 'Subscriptions',
             icon: Image(image: AssetImage(widget.currentRoute == RouteType.Subscribe
                 ? TImages.subscribeActive
                 : TImages.subscribe)),
-            label: '',
+            label: 'Subscriptions',
           ),
           BottomNavigationBarItem(
             tooltip: 'Transactions',
             icon: Image(image: AssetImage(widget.currentRoute == RouteType.History
                 ? TImages.historyActive
                 : TImages.history)),
-            label: '',
+            label: 'Transactions',
           ),
           BottomNavigationBarItem(
             tooltip: 'Profile',
             icon: Image(image: AssetImage(widget.currentRoute == RouteType.Profile
                 ? TImages.profileActive
                 : TImages.profile)),
-            label: '',
+            label: 'Profile',
           ),
         ],
       ),

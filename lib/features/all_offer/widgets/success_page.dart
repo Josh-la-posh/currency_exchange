@@ -11,7 +11,7 @@ import '../../../data/modules/app_navigator.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
-import '../screens/home.dart';
+import '../screens/all_offer.dart';
 
 
 class SuccessScreenWidget extends StatelessWidget {
