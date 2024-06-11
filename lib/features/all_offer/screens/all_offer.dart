@@ -6,8 +6,10 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
 import 'package:swappr/utils/constants/enums.dart';
+import 'package:swappr/utils/shared/notification/snackbar.dart';
 import '../../../common/widgets/buttons/floating_button.dart';
 import '../../../common/widgets/currencyWidget.dart';
+import '../../../data/provider/auth_provider.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../apis/api.dart';
 import '../widgets/layout.dart';
@@ -25,6 +27,10 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
   OfferProvider offerProvider = Provider.of<OfferProvider>(
     AppNavigator.instance.navigatorKey.currentContext as BuildContext,
     listen: false
+  );
+  AuthProvider authProvider = Provider.of<AuthProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
   );
 
 
@@ -58,11 +64,15 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
       ),
       floatingActionButton: TFloatingButton(
         onPressed: (){
-          offerProvider.updateDebitedCurrency(Currency.Select);
-          offerProvider.updateCreditedCurrency(Currency.Select);
-          offerProvider.updateAmount('0');
-          offerProvider.updateRate('0');
-          Get.to(() => const CreateOfferScreen());
+          if (authProvider.user?.isVerified == true) {
+            handleShowCustomToast(message: "Please verify your account");
+          } else {
+            offerProvider.updateDebitedCurrency(Currency.Select);
+            offerProvider.updateCreditedCurrency(Currency.Select);
+            offerProvider.updateAmount('0');
+            offerProvider.updateRate('0');
+            Get.to(() => const CreateOfferScreen());
+          }
           },
       ),
 

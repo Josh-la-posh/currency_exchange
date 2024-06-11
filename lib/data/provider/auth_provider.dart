@@ -89,6 +89,7 @@ class AuthProvider extends ChangeNotifier {
   CreateAccountModel? get createAccountFormDetails => _createAccountFormDetails;
   bool get createAccountCanVerifyEmail => _createAccountCanVerifyEmail;
   String? get createAccountOtpId => _createAccountOtpId;
+  bool isVerifiedDisplay = true;
 
   handleCreateUserEmailConfirmation(
       {required CreateAccountModel formDetails, required String otpId}) {
@@ -117,6 +118,11 @@ class AuthProvider extends ChangeNotifier {
 
   clearResetPasswordDetails() {
     _resetPasswordDetails = null;
+    notifyListeners();
+  }
+
+  setIsVerifiedDisplay(val) {
+    isVerifiedDisplay = val;
     notifyListeners();
   }
 

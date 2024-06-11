@@ -27,7 +27,20 @@ class TImages {
   static const String ngnIcon = "assets/icons/countryIcons/NgnIcon.png";
   static const String gbpIcon = "assets/icons/countryIcons/GbpIcon.png";
 
-  // Other Icon
+  // Other Icons
   static const String success = "assets/logos/success-icon.png";
   static const String emptyScreen = "assets/logos/empty-screen-icon.png";
+
+  // Deposit Icons
+  static const String flutterwaveIcon = "assets/icons/depositIcons/flutterwave_logo.png";
+  static const String transferFile = "assets/icons/depositIcons/transfer_file.png";
+  static const String PaystackIcon = "assets/icons/depositIcons/paystack_logo.png";
+  static const String flutterwave = "assets/icons/depositIcons/flutterwave.png";
+  static const String paystack = "assets/icons/depositIcons/paystack.png";
+  static const String bankAccount = "assets/icons/depositIcons/bank_account.png";
+  static const String ussd = "assets/icons/depositIcons/ussd.png";
+  static const String internetBanking = "assets/icons/depositIcons/internet_banking.png";
+  static const String bankTransfer = "assets/icons/depositIcons/bank_transfer.png";
+  static const String bankTransferLogo = "assets/icons/depositIcons/bank_transfer_logo.png";
+  static const String withdrawIcon = "assets/icons/depositIcons/withdraw.png";
 }

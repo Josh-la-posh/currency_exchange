@@ -29,6 +29,7 @@ class SubscriptionProvider extends ChangeNotifier {
   }
   void saveSubscriptions(List<SubscriptionEntity> val) {
     _subscriptions = val;
+    print('get calue ${val}');
     notifyListeners();
   }
 

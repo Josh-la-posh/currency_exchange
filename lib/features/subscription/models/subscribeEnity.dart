@@ -4,22 +4,31 @@ import 'package:swappr/utils/constants/enums.dart';
 
 class SubscriptionEntity{
   String id;
-  String currency;
+  String debitedCurrency;
+  String creditedCurrency;
+  String createdDate;
   int minRate;
   int maxRate;
+  String lastModifiedDate;
 
   SubscriptionEntity({
     required this.id,
-    required this.currency,
+    required this.debitedCurrency,
+    required this.creditedCurrency,
+    required this.createdDate,
     required this.minRate,
-    required this.maxRate
+    required this.maxRate,
+    required this.lastModifiedDate
   });
 
   factory SubscriptionEntity.fromJson(Map<String, dynamic> json) => SubscriptionEntity(
     id: json['id'] as String,
-    currency: json['currency'] as String,
+    debitedCurrency: json['debitedCurrency'] as String,
+    creditedCurrency: json['creditedCurrency'] as String,
+    createdDate: json['createdDate'] as String,
     minRate: json['minRate'] as int,
     maxRate: json['maxRate'] as int,
+    lastModifiedDate: json['lastModifiedDate'] as String,
   );
 }
 

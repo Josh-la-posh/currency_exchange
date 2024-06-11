@@ -2,22 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:swappr/common/styles/spacing_styles.dart';
 import 'package:swappr/utils/layouts/app_layout.dart';
 
-class SubscribeScreenLayout extends StatelessWidget {
+class WalletScreenLayout extends StatelessWidget {
   final Widget childWidget;
-  final Widget? floatingActionButton;
-  const SubscribeScreenLayout({
+  const WalletScreenLayout({
     super.key,
-    required this.childWidget, this.floatingActionButton
+    required this.childWidget,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppLayout(
-      currentRoute: RouteType.Subscribe,
+      currentRoute: RouteType.Wallet,
       childWidget: Container(
         child: childWidget,
       ),
-      floatingActionButton: floatingActionButton,
     );
   }
 }

@@ -33,16 +33,22 @@ class SubscriptionService {
 
   createSubscription({
     required SubscriptionProvider subscriptionProvider,
-    required String currency,
+    required String debitedCurrency,
+    required String creditedCurrency,
     required int minRate,
     required int maxRate
   }) {
     _createSubscription({
-      'currency': currency,
+      'debitedCurrency': debitedCurrency,
+      'creditedCurrency': creditedCurrency,
       'minRate': minRate,
       'maxRate': maxRate
     }).then((response) async {
-      await getSubscriptions(provider: subscriptionProvider, currency: currency);
+      await getSubscriptions(
+          provider: subscriptionProvider,
+          currency : '',
+      );
+      handleShowCustomToast(message: 'Subscription created successfully');
       Get.back();
       print(response);
     }).catchError((error) {
@@ -60,13 +66,13 @@ class SubscriptionService {
           var data = response.data;
 
           SubscriptionDetailsEntity subscriptionDetails = SubscriptionDetailsEntity(
-              currentPage: data['currentPage'],
-              skippedRecords: data['skippedRecords'],
-              totalPages: data['totalPages'],
-              hasNext: data['hasNext'],
-              content: data['content'],
-              payloadSize: data['payloadSize'],
-              totalRecords: data['totalRecords']
+            totalPages: data['totalPages'],
+            payloadSize: data['payloadSize'],
+            hasNext: data['hasNext'],
+            content: data['content'],
+            currentPage: data['currentPage'],
+            skippedRecords: data['skippedRecords'],
+            totalRecords: data['totalRecords'],
           );
           provider.saveSubscriptionDetails(subscriptionDetails);
 
@@ -74,13 +80,16 @@ class SubscriptionService {
 
           for (var item in content) {
             subscriptions.add(SubscriptionEntity(
-                id: item['id'],
-                currency: item['currency'],
-                minRate: item['minRate'],
-                maxRate: item['maxRate']
+              id: item['id'],
+              debitedCurrency: item['debitedCurrency'],
+              creditedCurrency: item['creditedCurrency'],
+              createdDate: item['createdDate'],
+              minRate: item['minRate'],
+              maxRate: item['maxRate'],
+              lastModifiedDate: item['lastModifiedDate'],
             ));
+            provider.saveSubscriptions(subscriptions);
           }
-          provider.saveSubscriptions(subscriptions);
     });
   }
 

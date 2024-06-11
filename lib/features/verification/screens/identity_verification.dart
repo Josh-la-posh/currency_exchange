@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/features/verification/screens/verification_in_progress.dart';
 import 'package:swappr/features/verification/screens/verify_success.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 
@@ -127,7 +128,7 @@ class IdentityVerificationScreen extends StatelessWidget {
                         iconSize: MaterialStatePropertyAll(47),
                     ),
                     onPressed: (){
-                      Get.to(() => const VerificationSuccessScreen());
+                      Get.to(() => const VerificationInProgressScreen());
                     },
                     child: Text(
                       'Submit',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swappr/features/all_offer/screens/negotiation_offer.dart';
 import '../../../data/routes/guard_route.dart';
 import '../../home/routes/names.dart';
 import '../screens/accept_review_details.dart';
@@ -28,5 +29,8 @@ Map<String, WidgetBuilder> offerRoute = {
   ),
   CREATE_SUCCESS_SCREEN: (context) => const AuthGuard(
     widget: CreateOfferSuccessPage(),
+  ),
+  NEGOTIATION_OFFER_SCREEN: (context) => const AuthGuard(
+    widget: NegotiationOfferScreen(),
   ),
 };

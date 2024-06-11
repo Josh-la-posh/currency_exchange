@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/currencyWidget.dart';
-import 'package:swappr/features/subscription/screens/layout.dart';
+import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
 import 'package:swappr/features/subscription/widgets/subscription_form.dart';
-
 import '../../../common/styles/spacing_styles.dart';
-import '../../../data/provider/subscription_provider.dart';
 import '../../../utils/constants/sizes.dart';
 
 class AddSubscriptionScreen extends StatelessWidget {
@@ -13,14 +10,14 @@ class AddSubscriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SubscribeScreenLayout(
-      childWidget: SingleChildScrollView(
+    return Scaffold(
+      body: SingleChildScrollView(
         child: Padding(
           padding: TSpacingStyle.dashboardPadding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CurrencyWidget(),
+              const CurrencyWidgetWithBack(),
               const SizedBox(height: TSizes.spaceBtwSections,),
               Text('Subscribe', style: Theme.of(context).textTheme.titleMedium,),
               const SizedBox(height: TSizes.sm,),

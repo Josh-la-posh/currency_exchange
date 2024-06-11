@@ -4,13 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
 import 'package:swappr/data/provider/subscription_provider.dart';
 import 'package:swappr/features/subscription/apis/api.dart';
 import 'package:swappr/features/subscription/screens/add_subscription.dart';
-import 'package:swappr/features/subscription/screens/layout.dart';
 import 'package:swappr/features/subscription/widgets/subscription_list.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/floating_button.dart';
 import '../../../common/widgets/currencyWidget.dart';
 import '../../../data/modules/app_navigator.dart';
@@ -40,12 +38,13 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return SubscribeScreenLayout(
-      childWidget:const SingleChildScrollView(
+    return Scaffold(
+      body: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(top: 20),
           child: Column(
             children: [
+              CurrencyWidgetWithBack(),
               Column(
                 children: [
                   SubscriptionList(),
@@ -58,7 +57,6 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
       floatingActionButton: TFloatingButton(
         onPressed: (){Get.to(() => const AddSubscriptionScreen());},
       ),
-
     );
   }
 }

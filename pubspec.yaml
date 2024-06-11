@@ -30,8 +30,6 @@ dependencies:
   flutter_dotenv: ^5.1.0
   timeline_tile: ^2.0.0
   timelines: ^0.1.0
-
-
   get: ^4.6.6
   get_storage: ^2.1.1
   iconsax: ^0.0.8
@@ -55,10 +53,12 @@ flutter:
   assets:
     - .env
     - assets/logos/
+    - assets/icons/
     - assets/icons/bottomNavIcons/
     - assets/icons/profileIcons/
     - assets/icons/countryIcons/
     - assets/icons/homeIcons/
+    - assets/icons/depositIcons/
     - assets/icons/verifyIcons/
     - assets/images/
 

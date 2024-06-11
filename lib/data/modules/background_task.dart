@@ -160,8 +160,8 @@ getAllOffers({
           createdDate: item['createdDate'],
           lastModifiedDate: item['lastModifiedDate']
       ));
+      offerProvider.saveOffers(offers);
     }
-    offerProvider.saveOffers(offers);
 
   });
 }
@@ -174,7 +174,7 @@ getSubscriptions({
   Future _getSubscriptions(String currency) {
     return apiService.get(
         '/subscription',
-        queryParameters: {'currenry': currency}
+        queryParameters: {'currency': currency}
     );
   }
   List<SubscriptionEntity> subscriptions = [];
@@ -183,13 +183,13 @@ getSubscriptions({
     var data = response.data;
 
     SubscriptionDetailsEntity subscriptionDetails = SubscriptionDetailsEntity(
-        currentPage: data['currentPage'],
-        skippedRecords: data['skippedRecords'],
-        totalPages: data['totalPages'],
-        hasNext: data['hasNext'],
-        content: data['content'],
-        payloadSize: data['payloadSize'],
-        totalRecords: data['totalRecords']
+      totalPages: data['totalPages'],
+      payloadSize: data['payloadSize'],
+      hasNext: data['hasNext'],
+      content: data['content'],
+      currentPage: data['currentPage'],
+      skippedRecords: data['skippedRecords'],
+      totalRecords: data['totalRecords'],
     );
     provider.saveSubscriptionDetails(subscriptionDetails);
 
@@ -197,12 +197,15 @@ getSubscriptions({
 
     for (var item in content) {
       subscriptions.add(SubscriptionEntity(
-          id: item['id'],
-          currency: item['currency'],
-          minRate: item['minRate'],
-          maxRate: item['maxRate']
+        id: item['id'],
+        debitedCurrency: item['debitedCurrency'],
+        creditedCurrency: item['creditedCurrency'],
+        createdDate: item['createdDate'],
+        minRate: item['minRate'],
+        maxRate: item['maxRate'],
+        lastModifiedDate: item['lastModifiedDate'],
       ));
+      provider.saveSubscriptions(subscriptions);
     }
-    provider.saveSubscriptions(subscriptions);
   });
 }

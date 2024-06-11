@@ -16,35 +16,86 @@ class VerificationSuccessScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: TColors.secondaryBorder,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 3),
+        padding: const EdgeInsets.all(TSizes.defaultSpace * 2),
         child: Column(
           children: [
-            SizedBox(height: THelperFunctions.screenHeight() * 0.2),
-            const Image(image: AssetImage('assets/icons/verifyIcons/success.png')),
-            const SizedBox(height: TSizes.defaultSpace),
             RichText(
-              textAlign: TextAlign.center,
-                text: const TextSpan(
-                    style: TextStyle(
-                      color: TColors.primary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Roboto',
-                      height: 1.5
-                    ),
-                    children: <TextSpan> [
+                text: TextSpan(
+                    style: Theme.of(context).textTheme.headlineLarge,
+                    children: const <TextSpan> [
                       TextSpan(
-                          text: 'Your  account has been successfully verified.',
+                          text: 'Identity Verification',
+                          style: TextStyle(fontSize: 20)
                       ),
                     ]
                 )
             ),
+            const SizedBox(height: TSizes.defaultSpace),
+            RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                    style: Theme.of(context).textTheme.bodySmall,
+                    children: const <TextSpan> [
+                      TextSpan(
+                          text: 'A 60-second timer has begun. Your photo from the chosen document will be used for comparison.',
+                          style: TextStyle(height: 1.5)
+                      ),
+                    ]
+                )
+            ),
+            SizedBox(height: THelperFunctions.screenHeight() * 0.1),
+            Container(
+              padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.defaultSpace, bottom: TSizes.defaultSpace * 2, top: 10),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF111E32).withOpacity(0.5),
+                      offset: const Offset(1.8,3.9),
+                      blurRadius: 1.94,
+                      spreadRadius: 1.08
+                    ),
+                    BoxShadow(
+                        color: TColors.secondaryBorder,
+                        offset: const Offset(1.0,0.0),
+                        blurRadius: 0,
+                        spreadRadius: 0
+                    ),
+                  ]
+              ),
+              child: Column(
+                children: [
+                  const Image(image: AssetImage('assets/icons/verifyIcons/success.png')),
+                  const SizedBox(height: TSizes.defaultSpace),
+                  RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(
+                          style: TextStyle(
+                              color: TColors.primary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Roboto',
+                              height: 1.5
+                          ),
+                          children: <TextSpan> [
+                            TextSpan(
+                              text: 'Your  account has been successfully verified.',
+                            ),
+                          ]
+                      )
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: TSizes.defaultSpace * 2),
-            TElevatedButton(
-                onTap: () {
-                  Get.to(() => const HomeScreen());
-                },
-                buttonText: 'Go To Dashboard'
+            SizedBox(
+              height: 40,
+              child: TElevatedButton(
+                  onTap: () {
+                    Get.to(() => const HomeScreen());
+                  },
+                  buttonText: 'Go To Dashboard'
+              ),
             )
           ],
         ),

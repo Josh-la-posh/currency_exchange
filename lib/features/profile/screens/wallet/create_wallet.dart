@@ -110,11 +110,6 @@ class CreateWalletScreen extends StatelessWidget {
                                   if (provider.selectedCurrency == Currency.Select) {
                                     provider.showErrorMessage();
                                   } else {
-                                    WalletServices.instance.createWallet(
-                                      walletProvider: provider,
-                                      currency: getCurrencyName(provider.selectedCurrency)
-                                    );
-                                    provider.setSelectedCurrency(Currency.Select);
                                     Get.back();
                                   }
                                 }

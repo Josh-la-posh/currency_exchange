@@ -11,11 +11,11 @@ import '../../data/provider/auth_provider.dart';
 import '../../features/profile/routes/names.dart';
 import '../constants/image_strings.dart';
 
-enum RouteType { Home, Subscribe, History, Profile }
+enum RouteType { Home, Wallet, History, Profile }
 
 // Routes Path
 const HOME_INDEX_SCREEN_ROUTE = DASHBOARD_SCREEN_ROUTE;
-const SUBSCRIPTION_INDEX_SCREEN_ROUTE = SUBSCRIPTION_SCREEN_ROUTE;
+const WALLET_INDEX_SCREEN_ROUTE = WALLET_SCREEN_ROUTE;
 const TRANSACTION_INDEX_SCREEN_ROUTE = TRANSACTION_HISTORY_SCREEN_ROUTE;
 const PROFILE_INDEX_SCREEN_ROUTE = PROFILE_SCREEN_ROUTE;
 
@@ -73,17 +73,17 @@ class _AppLayoutState extends State<AppLayout>
           : BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         useLegacyColorScheme: false,
-        currentIndex: widget.currentRoute == RouteType.Subscribe
+        currentIndex: widget.currentRoute == RouteType.Wallet
             ? 1
             : widget.currentRoute == RouteType.History
             ? 2
             : widget.currentRoute == RouteType.Profile
             ? 3
             : 0,
-        selectedFontSize: 12,
+        selectedFontSize: 11,
         selectedIconTheme: const IconThemeData(size: 24.0),
         unselectedIconTheme: const IconThemeData(size: 24.0),
-        unselectedFontSize: 12,
+        unselectedFontSize: 11,
         selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
         unselectedLabelStyle: const TextStyle(
@@ -97,13 +97,13 @@ class _AppLayoutState extends State<AppLayout>
             // Get.to(const SubscribeScreen());
 
             if (widget.navKey != null) {
-              if (widget.currentRoute != RouteType.Subscribe) {
+              if (widget.currentRoute != RouteType.Wallet) {
                 widget.navKey!.currentState!
-                    .pushNamed(SUBSCRIPTION_INDEX_SCREEN_ROUTE);
+                    .pushNamed(WALLET_INDEX_SCREEN_ROUTE);
               }
             } else {
               AppNavigator.instance.navigateToHandler(
-                SUBSCRIPTION_INDEX_SCREEN_ROUTE
+                WALLET_INDEX_SCREEN_ROUTE
               );
             }
           } else if (index == 2) {
@@ -123,7 +123,7 @@ class _AppLayoutState extends State<AppLayout>
             // Get.to(const ProfileScreen());
 
             if (widget.navKey != null) {
-              if (widget.currentRoute != RouteType.Subscribe) {
+              if (widget.currentRoute != RouteType.Profile) {
                 widget.navKey!.currentState!
                     .pushNamed(PROFILE_INDEX_SCREEN_ROUTE);
               }
@@ -149,32 +149,40 @@ class _AppLayoutState extends State<AppLayout>
           }
         },
         items: [
-          BottomNavigationBarItem(backgroundColor: TColors.danger,
-            tooltip: 'Home',
-            icon: Image(image: AssetImage(widget.currentRoute == RouteType.Home
-                ? TImages.homeActive
-                : TImages.home)),
+          BottomNavigationBarItem(
+            icon: SizedBox(
+              height: 30,
+              child: Image(image: AssetImage(widget.currentRoute == RouteType.Home
+                  ? TImages.homeActive
+                  : TImages.home)),
+            ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            tooltip: 'Subscriptions',
-            icon: Image(image: AssetImage(widget.currentRoute == RouteType.Subscribe
-                ? TImages.subscribeActive
-                : TImages.subscribe)),
-            label: 'Subscriptions',
+            icon: SizedBox(
+              height: 30,
+              child: Image(image: AssetImage(widget.currentRoute == RouteType.Wallet
+                  ? TImages.subscribeActive
+                  : TImages.subscribe)),
+            ),
+            label: 'Wallet',
           ),
           BottomNavigationBarItem(
-            tooltip: 'Transactions',
-            icon: Image(image: AssetImage(widget.currentRoute == RouteType.History
-                ? TImages.historyActive
-                : TImages.history)),
+            icon: SizedBox(
+              height: 30,
+              child: Image(image: AssetImage(widget.currentRoute == RouteType.History
+                  ? TImages.historyActive
+                  : TImages.history)),
+            ),
             label: 'Transactions',
           ),
           BottomNavigationBarItem(
-            tooltip: 'Profile',
-            icon: Image(image: AssetImage(widget.currentRoute == RouteType.Profile
-                ? TImages.profileActive
-                : TImages.profile)),
+            icon: SizedBox(
+              height: 30,
+              child: Image(image: AssetImage(widget.currentRoute == RouteType.Profile
+                  ? TImages.profileActive
+                  : TImages.profile)),
+            ),
             label: 'Profile',
           ),
         ],

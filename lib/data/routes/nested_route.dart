@@ -30,8 +30,8 @@ class _NestedNavigatorState extends State<NestedNavigator> {
   void initState() {
     super.initState();
 
-    if (widget.initialRoutePath == SUBSCRIPTION_SCREEN_ROUTE) {
-      currentRoute = RouteType.Subscribe;
+    if (widget.initialRoutePath == WALLET_SCREEN_ROUTE) {
+      currentRoute = RouteType.Wallet;
     } else if (widget.initialRoutePath == TRANSACTION_HISTORY_SCREEN_ROUTE) {
       currentRoute = RouteType.History;
     } else if (widget.initialRoutePath == PROFILE_SCREEN_ROUTE) {
@@ -130,10 +130,10 @@ class _NestedNavigatorState extends State<NestedNavigator> {
                   transitionsBuilder: TransitionRouteViaSlide,
                 );
 
-              case SUBSCRIPTION_SCREEN_ROUTE:
-                if (currentRoute != RouteType.Subscribe) {
+              case WALLET_SCREEN_ROUTE:
+                if (currentRoute != RouteType.Wallet) {
                   setState(() {
-                    currentRoute = RouteType.Subscribe;
+                    currentRoute = RouteType.Wallet;
                     currentRoutePathName = settings.name;
                   });
                 }

@@ -176,8 +176,8 @@ class OfferService {
               createdDate: item['createdDate'],
               lastModifiedDate: item['lastModifiedDate']
           ));
+          offerProvider.saveOffers(offers);
         }
-        offerProvider.saveOffers(offers);
 
     });
   }

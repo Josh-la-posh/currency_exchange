@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:swappr/features/verification/routes/names.dart';
 import 'package:swappr/features/verification/screens/country_select.dart';
 import 'package:swappr/features/verification/screens/identity_verification_type.dart';
+import 'package:swappr/features/verification/screens/verification_in_progress.dart';
 import 'package:swappr/features/verification/screens/verification_process.dart';
 import 'package:swappr/features/verification/screens/verify_page.dart';
 import 'package:swappr/features/verification/screens/verify_success.dart';
@@ -15,5 +16,6 @@ Map<String, WidgetBuilder> verifyRoute = {
   COUNTRY_SELECTION_SCREEN: (context) => const CountrySelectionPage(),
   IDENTITY_VERIFICATION_TYPE_SCREEN: (context) => const IdentityVerificationTypeScreen(),
   IDENTITY_VERIFICATION_SCREEN: (context) => IdentityVerificationScreen(),
-  VERIFICATION_SUCCESS_SCREEN: (context) => const VerificationSuccessScreen()
+  VERIFICATION_SUCCESS_SCREEN: (context) => const VerificationSuccessScreen(),
+  VERIFICATION_IN_PROGRESS_SCREEN: (context) => const VerificationInProgressScreen()
 };

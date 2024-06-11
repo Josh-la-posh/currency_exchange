@@ -5,7 +5,7 @@ import '../../../data/modules/app_navigator.dart';
 
 handleShowCustomToast({
   required String message,
-  Color backgroundColor = TColors.primary,
+  Color? backgroundColor,
   Color textColor = Colors.white,
   String key = 'app-snackbar',
   VoidCallback? onMessageTap,
@@ -20,9 +20,10 @@ handleShowCustomToast({
       key: Key(key),
       dismissDirection: DismissDirection.up,
       behavior: SnackBarBehavior.floating,
+      // margin: EdgeInsets.only(bottom: THelperFunctions.screenHeight() - 100),
       duration: const Duration(seconds: 2),
       padding: const EdgeInsets.all(10),
-      backgroundColor: backgroundColor,
+      backgroundColor: TColors.primary.withOpacity(0.7),
       content: GestureDetector(
         onTap: () {
           if (onMessageTap != null) {

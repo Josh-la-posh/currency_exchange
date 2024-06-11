@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -12,15 +11,8 @@ import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/features/authentication/apis/api.dart';
 import 'package:swappr/features/authentication/routes/names.dart';
 import 'package:swappr/features/authentication/screens/email_verify/email_verify.dart';
-import 'package:swappr/features/authentication/screens/reset_password/forgot_password.dart';
-import 'package:swappr/features/home/routes/names.dart';
-import 'package:swappr/features/home/screens/home.dart';
-import 'package:swappr/utils/layouts/navigation_menu.dart';
 import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/texts.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
 import 'package:swappr/utils/validators/validation.dart';
-
 import '../../../../../data/provider/auth_provider.dart';
 import '../../../../../data/provider/wallet_provider.dart';
 import '../../../../../utils/constants/sizes.dart';

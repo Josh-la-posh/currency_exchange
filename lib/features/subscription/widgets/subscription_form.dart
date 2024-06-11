@@ -230,7 +230,8 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                     _formkey.currentState!.save();
                       SubscriptionService.instance.createSubscription(
                         subscriptionProvider: provider,
-                        currency: getCurrencyName(provider.createSubscription!.debitedCurrency),
+                        debitedCurrency: getCurrencyName(provider.createSubscription!.debitedCurrency),
+                        creditedCurrency: getCurrencyName(provider.createSubscription!.creditedCurrency),
                         minRate: provider.createSubscription!.minRate,
                         maxRate: provider.createSubscription!.maxRate,
                       );

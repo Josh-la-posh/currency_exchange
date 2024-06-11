@@ -7,7 +7,6 @@ import 'package:swappr/features/profile/models/wallet_model.dart';
 import 'package:swappr/features/transaction/apis/api.dart';
 import 'package:swappr/utils/responses/error_dialog.dart';
 import 'package:swappr/utils/responses/handleApiError.dart';
-import 'package:swappr/utils/responses/success_dialog.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
 
 import '../../../data/modules/app_navigator.dart';
@@ -62,6 +61,7 @@ class WalletServices{
         .then((response) async {
           await getWallets(walletProvider: walletProvider);
           handleShowCustomToast(message: 'Your wallet has been created successfully');
+          walletProvider.removeShowWalletList();
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });

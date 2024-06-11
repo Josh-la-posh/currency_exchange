@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:swappr/data/provider/subscription_provider.dart';
 import 'package:swappr/features/subscription/apis/api.dart';
 import 'package:swappr/features/subscription/models/subscribeEnity.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -55,25 +56,53 @@ class SubscriptionItem extends StatelessWidget {
                     children: [
                       RichText(
                           text: TextSpan(
-                              style: Theme.of(context).textTheme.labelMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: 'has: ${item.currency}',
-                                    style: TextStyle(fontSize: TSizes.fontSize13)
+                                    text: 'has: ${item.debitedCurrency}',
+                                    style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                 ),
                               ]
                           )
                       ),
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelMedium,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text: '${item.minRate} - ${item.maxRate} ${item.currency} // ${item.currency}',
-                                    style: TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
-                                ),
-                              ]
+                      Row(
+                        children: [
+                          RichText(
+                              text: TextSpan(
+                                  style: Theme.of(context).textTheme.labelMedium,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: '${item.maxRate} ${item.debitedCurrency} // ${item.creditedCurrency}',
+                                        style: TextStyle(fontSize: TSizes.fontSize12, color: Color(0xFF5ABFE4))
+                                    ),
+                                  ]
+                              )
+                          ),
+                          SizedBox(width: 10,),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 7,),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: TColors.black,
+                                width: 1
+                              ),
+                              color: Color(0xFFA2C8D6)
+                            ),
+                            child:
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.labelSmall,
+                                    children: <TextSpan> [
+                                      TextSpan(
+                                          text: 'Max',
+                                          style: TextStyle(fontSize: TSizes.fontSize10)
+                                      ),
+                                    ]
+                                )
+                            ),
                           )
+                        ],
                       ),
                     ],
                   ),
@@ -85,25 +114,69 @@ class SubscriptionItem extends StatelessWidget {
 
                       RichText(
                           text: TextSpan(
-                              style: Theme.of(context).textTheme.labelMedium,
+                              style: Theme.of(context).textTheme.bodyMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: 'needs: ${item.currency}',
-                                    style: TextStyle(fontSize: TSizes.fontSize13)
+                                    text: 'needs: ${item.creditedCurrency}',
+                                    style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                 ),
                               ]
                           )
                       ),
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text: 'June 20',
-                                    style: TextStyle(color: TColors.textPrimary.withOpacity(0.5))
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              RichText(
+                                  text: TextSpan(
+                                      style: Theme.of(context).textTheme.labelMedium,
+                                      children: <TextSpan> [
+                                        TextSpan(
+                                            text: '${item.minRate} ${item.debitedCurrency} // ${item.creditedCurrency}',
+                                            style: TextStyle(fontSize: TSizes.fontSize12, color: TColors.primary)
+                                        ),
+                                      ]
+                                  )
+                              ),
+                              SizedBox(width: 10,),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 8,),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: TColors.black,
+                                        width: 1
+                                    ),
+                                    color: TColors.secondaryBorder
                                 ),
-                              ]
-                          )
+                                child:
+                                RichText(
+                                    text: TextSpan(
+                                        style: Theme.of(context).textTheme.labelSmall,
+                                        children: <TextSpan> [
+                                          TextSpan(
+                                              text: 'Min',
+                                              style: TextStyle(fontSize: TSizes.fontSize10)
+                                          ),
+                                        ]
+                                    )
+                                ),
+                              )
+                            ],
+                          ),
+                          RichText(
+                              text: TextSpan(
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: '${THelperFunctions.getFormattedDate(item.createdDate)}  - ${THelperFunctions.getFormattedTime(item.createdDate)}',
+                                        style: TextStyle(color: TColors.primary)
+                                    ),
+                                  ]
+                              )
+                          ),
+                        ],
                       ),
                     ],
                   )

@@ -1,6 +1,29 @@
 // currencies.dart
 import 'package:swappr/data/provider/wallet_provider.dart';
 
+enum WalletCurrency {
+  NGN,
+  USD,
+  CAD,
+  GBP,
+  EUR,
+}
+
+String getWalletCurrencyName(WalletCurrency currency) {
+  switch (currency) {
+    case WalletCurrency.USD:
+      return 'USD';
+    case WalletCurrency.CAD:
+      return 'CAD';
+    case WalletCurrency.GBP:
+      return 'GBP';
+    case WalletCurrency.EUR:
+      return 'EUR';
+    default:
+      return 'NGN';
+  }
+}
+
 enum Currency {
   Select,
   NGN,
