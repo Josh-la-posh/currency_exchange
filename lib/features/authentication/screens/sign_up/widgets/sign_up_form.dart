@@ -39,6 +39,8 @@ class _SignUpFormState extends State<SignUpForm> {
   String _email = '';
   String _phoneNo = '';
   String _country = '';
+  String _address = '';
+  String _state = '';
   String _password = '';
   String _confirmPass = '';
 
@@ -219,6 +221,43 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
 
+                /// Address
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Address', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(
+                      child: TextFormField(
+                        style: Theme.of(context).textTheme.labelMedium,
+                        onChanged: (value) => _address = value,
+                        onSaved: (value) {
+                          _address = value as String;
+                        },
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: TSizes.spaceBtwInputFields),
+
+                /// State
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('State', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(
+                      child: TextFormField(
+                        style: Theme.of(context).textTheme.labelMedium,
+                        onChanged: (value) => _state = value,
+                        validator: TValidator.validateName,
+                        onSaved: (value) {
+                          _state = value as String;
+                        },
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(height: TSizes.spaceBtwInputFields),
+
                 /// Password
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -300,6 +339,8 @@ class _SignUpFormState extends State<SignUpForm> {
                         email: _email,
                         phoneNumber: _phoneNo,
                         country: _country,
+                        address: _address,
+                        state: _state,
                         password: _password,
                         onSuccess: () {
                           Get.to(() => EmailVerificationScreen(email: _email));

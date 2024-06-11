@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:swappr/features/home/routes/names.dart';
 import 'package:swappr/features/subscription/routes/names.dart';
 import 'package:swappr/features/transaction/routes/names.dart';
+import 'package:swappr/features/wallet/routes/names.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import '../../data/modules/app_navigator.dart';
 import '../../data/provider/auth_provider.dart';

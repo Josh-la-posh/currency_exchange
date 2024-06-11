@@ -1,4 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
 const PROFILE_SCREEN_ROUTE = '/profile';
-const WALLET_SCREEN_ROUTE ='/wallet';
+const BANK_ACCOUNT_SCREEN_ROUTE ='/bank-account';
+const ADD_BANK_ACCOUNT_SCREEN_ROUTE = '/add-bank-account';

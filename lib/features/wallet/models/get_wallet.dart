@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class WalletModel{
-  
+
 }
 
 class GetWalletModel {
-  String? id, currency, balance;
+  String? id, currency, balance, pendingWithdrawals;
   bool? isActive;
   String? createdDate, lastModifiedDate;
 
@@ -14,6 +14,7 @@ class GetWalletModel {
     this.currency,
     this.balance,
     this.isActive,
+    this.pendingWithdrawals,
     this.createdDate,
     this.lastModifiedDate,
   });
@@ -24,6 +25,7 @@ class GetWalletModel {
       currency: json['currency'],
       balance: json['balance'],
       isActive: json['isActive'],
+      pendingWithdrawals: json['pendingWithdrawals'],
       createdDate: json['createdDate'],
       lastModifiedDate: json['lastModifiedDate'],
     );

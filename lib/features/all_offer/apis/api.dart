@@ -127,7 +127,7 @@ class OfferService {
     _swapOffer(id: id).then((response) async {
       await getAllOffers(offerProvider: offerProvider, currency: getCurrencyName(offerProvider.selectedCurrency), date: getDateValue(offerProvider.selectedDate));
       AppNavigator.instance.removeAllNavigateToNavHandler(ACCEPT_SUCCESS_SCREEN);
-      print('create offer ${response.data}');
+      print('swap offer ${response.data}');
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });

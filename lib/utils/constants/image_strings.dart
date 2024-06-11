@@ -22,6 +22,7 @@ class TImages {
   static const String changePasswordIcon = "assets/icons/profileIcons/lock.svg";
   static const String faqIcon = "assets/icons/profileIcons/faq.svg";
   static const String supportIcon = "assets/icons/profileIcons/h&s.svg";
+  static const String trashIcon = "assets/icons/profileIcons/trash.png";
 
   // Country Icons
   static const String ngnIcon = "assets/icons/countryIcons/NgnIcon.png";
@@ -43,4 +44,5 @@ class TImages {
   static const String bankTransfer = "assets/icons/depositIcons/bank_transfer.png";
   static const String bankTransferLogo = "assets/icons/depositIcons/bank_transfer_logo.png";
   static const String withdrawIcon = "assets/icons/depositIcons/withdraw.png";
+  static const String withdrawSuccess = "assets/icons/depositIcons/withdrawal_success.png";
 }

@@ -5,11 +5,11 @@ import 'package:swappr/features/authentication/models/user_model.dart';
 
 import '../../features/all_offer/models/offer.dart';
 import '../../features/all_offer/models/offer_details_entity.dart';
-import '../../features/profile/models/wallet_model.dart';
 import '../../features/subscription/models/subscribeEnity.dart';
 import '../../features/subscription/models/subscription_details.dart';
 import '../../features/transaction/models/transaction_details_entity.dart';
 import '../../features/transaction/models/transaction_entity.dart';
+import '../../features/wallet/models/get_wallet.dart';
 import '../provider/offer_provider.dart';
 import '../provider/subscription_provider.dart';
 import '../provider/transaction_provider.dart';
@@ -59,6 +59,7 @@ getWallets(WalletProvider walletProvider) {
           currency: item['currency'],
           balance: item['balance'],
           isActive: item['isActive'],
+          pendingWithdrawals: item['pendingWithdrawals'],
           createdDate: item['createdDate'],
           lastModifiedDate: item['lastModifiedDate']
       ));

@@ -6,7 +6,7 @@ import 'package:swappr/utils/constants/texts.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
-import '../../profile/apis/wallet_api.dart';
+import '../apis/api.dart';
 
 class WalletList extends StatelessWidget {
   const WalletList({

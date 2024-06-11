@@ -6,7 +6,6 @@ import 'package:swappr/data/provider/wallet_provider.dart';
 import 'package:swappr/utils/layouts/bottom_sheet_widget.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/enums.dart';
-import '../../apis/wallet_api.dart';
 
 class CreateWalletScreen extends StatelessWidget {
   const CreateWalletScreen({super.key});

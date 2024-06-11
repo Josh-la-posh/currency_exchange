@@ -9,7 +9,9 @@ import 'package:swappr/features/subscription/models/subscribeEnity.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../../utils/constants/texts.dart';
 
 class SubscriptionItem extends StatelessWidget {
   final SubscriptionEntity item;
@@ -34,14 +36,54 @@ class SubscriptionItem extends StatelessWidget {
                 motion: const ScrollMotion(),
                 // dismissible: DismissiblePane(onDismissed: (){}),
                 children: [
-                  SlidableAction(
-                    onPressed: ((context){
-                      SubscriptionService.instance.deleteSubscription(id: item.id, subscriptionProvider: provider);
-                    }),
-                    backgroundColor: TColors.danger,
-                    icon: Icons.delete,
-                    // label: 'Delete',
+                  Builder(
+                      builder: (cont) {
+                        return SizedBox(
+                          height: 68,
+                          width: 60,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              SubscriptionService.instance.deleteSubscription(id: item.id, subscriptionProvider: provider);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                backgroundColor: TColors.danger,
+                                padding: EdgeInsets.all(0)
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: Image(image: AssetImage(TImages.trashIcon))
+                                ),
+                                Text(
+                                  'Delete',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: TTexts.fontFamily,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }
                   ),
+                  // SlidableAction(
+                  //   onPressed: ((context){
+                  //     SubscriptionService.instance.deleteSubscription(id: item.id, subscriptionProvider: provider);
+                  //   }),
+                  //   backgroundColor: TColors.danger,
+                  //   icon: Icons.delete,
+                  //   // label: 'Delete',
+                  // ),
                 ]
             ),
             child: ListTile(

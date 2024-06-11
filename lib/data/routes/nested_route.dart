@@ -8,9 +8,9 @@ import 'package:swappr/features/transaction/routes/names.dart';
 import 'package:swappr/features/transaction/screens/history.dart';
 
 import '../../features/home/routes/names.dart';
+import '../../features/wallet/routes/names.dart';
 import '../../utils/layouts/app_layout.dart';
 import 'animate_route.dart';
-import 'guard_route.dart';
 
 class NestedNavigator extends StatefulWidget {
   final String? initialRoutePath;

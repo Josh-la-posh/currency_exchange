@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/profile/routes/names.dart';
 import '../../../data/routes/guard_route.dart';
 import '../screens/wallet.dart';
+import 'names.dart';
 
 
 Map<String, WidgetBuilder> walletRoute = {

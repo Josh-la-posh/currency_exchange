@@ -73,6 +73,8 @@ class AuthService {
         required String email,
         required String phoneNumber,
         required String country,
+        required String address,
+        required String state,
         required String password,
         required VoidCallback onSuccess}) async {
     _createAccount({
@@ -81,16 +83,11 @@ class AuthService {
       'email': email,
       'phoneNumber': phoneNumber,
       'country': country,
+      'address': address,
+      'state': state,
       'password': password,
     }).then((responseData) {
       print(responseData.data);
-
-      // UserSession.instance.setRememberMeHandler(
-      //   email: email,
-      //   password: password,
-      //   enabled: true,
-      // );
-
       onSuccess();
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -143,6 +140,8 @@ class AuthService {
           isVerified: responseData['isVerified'],
           nin: responseData['nin'],
           country: responseData['country'],
+          address: responseData['address'],
+          state: responseData['state'],
           status: responseData['status'],
           phoneNumber: responseData['phoneNumber'],
           otp: responseData['otp'],
@@ -197,7 +196,6 @@ class AuthService {
   confirmVerification() async {
     _confirmVerification()
         .then((responseData) async {
-
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });

@@ -68,6 +68,8 @@ class UserModel {
   final bool isVerified;
   final String? nin;
   final String country;
+  final String address;
+  final String state;
   final String status;
   final String phoneNumber;
   final int? otp;
@@ -87,6 +89,8 @@ class UserModel {
     required this.isVerified,
     required this.nin,
     required this.country,
+    required this.address,
+    required this.state,
     required this.status,
     required this.phoneNumber,
     required this.otp,
@@ -108,6 +112,8 @@ class UserModel {
       'isVerified': isVerified,
       'nin': nin,
       'country': country,
+      'address': address,
+      'state': state,
       'status': status,
       'phoneNumber': phoneNumber,
       'otp': otp,
@@ -130,6 +136,8 @@ class UserModel {
       isVerified: json['isVerified'],
       nin: json['nin'],
       country: json['country'],
+      address: json['address'],
+      state: json['state'],
       status: json['status'],
       phoneNumber: json['phoneNumber'],
       otp: json['otp'],

@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-const WALLET_DASHBOARD_SCREEN = '/wallet';
+const WALLET_SCREEN_ROUTE = '/wallet';
 const ACCEPT_REVIEW_DETAILS_SCREEN = '/accept-review-offer';
 const ACCEPT_SUCCESS_SCREEN = '/accept-success-screen';
 const CREATE_OFFER_SCREEN = '/create-offer';

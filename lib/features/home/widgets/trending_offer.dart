@@ -75,7 +75,6 @@ class TrendingOffer extends StatelessWidget {
         const SizedBox(height: TSizes.lg,),
         offerProvider.offers.isEmpty
             ? const SizedBox(
-          height: 80,
           width: double.infinity,
           // color: Colors.white,
         )
