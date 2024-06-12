@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/features/negotiation_offer/screen/negotiation_offer.dart';
 import 'package:swappr/features/payment_method/screens/payment_options.dart';
 import 'package:swappr/features/withdrawals/screens/withdrawal.dart';
 import '../../../utils/constants/colors.dart';
@@ -205,7 +206,7 @@ class LinkSectionWidget extends StatelessWidget {
                 const SizedBox(height: TSizes.xl),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const TransactionHistoryScreen());
+                    Get.to(() => const NegotiationOfferScreen());
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -225,7 +226,7 @@ class LinkSectionWidget extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text:'Transaction \n history',
+                                    text:'Negotiation \n offers',
                                     style: TextStyle(fontWeight: TSizes.fontWeightMd, color: TColors.textPrimary.withOpacity(0.5), height: 1.4)
                                 ),
                               ]

@@ -1,15 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
+import '../../../data/modules/app_navigator.dart';
+import '../../../data/provider/auth_provider.dart';
+import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
+import '../../wallet/routes/names.dart';
 
 class PaystackPaymentScreen extends StatelessWidget {
-  const PaystackPaymentScreen({super.key});
+  String? amount;
+  PaystackPaymentScreen({super.key, this.amount});
 
   @override
   Widget build(BuildContext context) {
+    var authProvider = Provider.of<AuthProvider>(
+        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+    var walletProvider = Provider.of<WalletProvider>(
+        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+
     final darkMode = THelperFunctions.isDarkMode(context);
+
+    final item = walletProvider.paystackModel;
+
     return Scaffold(
       backgroundColor: darkMode ? TColors.black : const Color(0xFFE9D9FF).withOpacity(0.12),
       appBar: AppBar(
@@ -36,9 +51,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                 fontSize: 14,
                                 fontFamily: 'Roboto'
                               ),
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                    text: 'Joshua@yahoo.com',
+                                    text: '${authProvider.user?.email}',
                                 )
                               ]
                           )
@@ -52,9 +67,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                   fontSize: 16,
                                   fontFamily: 'Roboto'
                               ),
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                  text: 'Pay NGN 125,250',
+                                  text: 'Pay NGN ${amount}',
                                 )
                               ]
                           )
@@ -74,12 +89,12 @@ class PaystackPaymentScreen extends StatelessWidget {
                               fontSize: 20,
                               fontFamily: 'Roboto'
                           ),
-                          children: const <TextSpan> [
+                          children: <TextSpan> [
                             TextSpan(
                               text: 'Transfer ',
                             ),
                             TextSpan(
-                              text: ' NGN 125,250 ',
+                              text: 'NGN ${amount} ',
                               style: TextStyle(color: Color(0xFFA17DD0))
                             ),
                             TextSpan(
@@ -143,15 +158,16 @@ class PaystackPaymentScreen extends StatelessWidget {
                                       fontSize: 22,
                                       fontFamily: 'Roboto'
                                   ),
-                                  children: const <TextSpan> [
+                                  children: <TextSpan> [
                                     TextSpan(
-                                      text: 'Access Bank',
+                                      text: '${item?.bank['name']}',
                                     ),
                                   ]
                               )
                           ),
                           const SizedBox(height: TSizes.defaultSpace,),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               RichText(
                                   text: TextSpan(
@@ -161,9 +177,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                           fontSize: 32,
                                           fontFamily: 'Roboto'
                                       ),
-                                      children: const <TextSpan> [
+                                      children: <TextSpan> [
                                         TextSpan(
-                                          text: '32455779929',
+                                          text: '${item?.account_number}',
                                         ),
                                       ]
                                   )
@@ -181,9 +197,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                       fontSize: 12,
                                       fontFamily: 'Roboto'
                                   ),
-                                  children: const <TextSpan> [
+                                  children: <TextSpan> [
                                     TextSpan(
-                                      text: 'Use this account for this transaction only',
+                                      text: '${item?.display_text}',
                                     ),
                                   ]
                               )
@@ -197,9 +213,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                       fontSize: 16,
                                       fontFamily: 'Roboto'
                                   ),
-                                  children: const <TextSpan> [
+                                  children: <TextSpan> [
                                     TextSpan(
-                                      text: 'Expire in 30 minutes',
+                                      text: 'Expires in ${THelperFunctions.getTimeDifference(item!.account_expires_at)}',
                                     ),
                                   ]
                               )
@@ -208,49 +224,54 @@ class PaystackPaymentScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(height: TSizes.defaultSpace * 2),
-                  Container(
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: TColors.black.withOpacity(0.3),
-                            offset: const Offset(2.3,3.87),
-                            // blurRadius: 1.94,
-                            // spreadRadius: 1.94
-                          ),
-                          BoxShadow(
-                              color: const Color(0xFFA58DC4).withOpacity(0.3),
-                              offset: const Offset(0.0,0.0),
-                              blurRadius: 0,
-                              spreadRadius: 0
-                          ),
-                          BoxShadow(
-                              color: Colors.white.withOpacity(0.8),
-                              offset: const Offset(0.0,0.0),
-                              blurRadius: 0,
-                              spreadRadius: 0
-                          ),
-                        ]
-                    ),
-                    child:
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                                color: darkMode ? Colors.white : Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                                fontFamily: 'Roboto'
+                  const SizedBox(height: TSizes.defaultSpace * 4),
+                  GestureDetector(
+                    onTap: () {
+                      AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: TColors.black.withOpacity(0.3),
+                              offset: const Offset(2.3,3.87),
+                              // blurRadius: 1.94,
+                              // spreadRadius: 1.94
                             ),
-                            children: const <TextSpan> [
-                              TextSpan(
-                                text: 'I\'ve sent the money',
+                            BoxShadow(
+                                color: const Color(0xFFA58DC4).withOpacity(0.3),
+                                offset: const Offset(0.0,0.0),
+                                blurRadius: 0,
+                                spreadRadius: 0
+                            ),
+                            BoxShadow(
+                                color: Colors.white.withOpacity(0.8),
+                                offset: const Offset(0.0,0.0),
+                                blurRadius: 0,
+                                spreadRadius: 0
+                            ),
+                          ]
+                      ),
+                      child:
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: darkMode ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  fontFamily: 'Roboto'
                               ),
-                            ]
-                        )
+                              children: const <TextSpan> [
+                                TextSpan(
+                                  text: 'I\'ve sent the money',
+                                ),
+                              ]
+                          )
+                      ),
                     ),
                   )
                 ],

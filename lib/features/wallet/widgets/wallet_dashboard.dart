@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/features/payment_method/screens/payment_options.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 
 import '../../../data/provider/wallet_provider.dart';
@@ -163,7 +165,7 @@ class WalletDashboard extends StatelessWidget {
                             height: 40,
                             // width: 130,
                             child: OutlinedButton(
-                              onPressed: (){},
+                              onPressed: (){Get.to(() => const PaymentOptionScreen());},
                               style: ButtonStyle(
                                 backgroundColor: const MaterialStatePropertyAll(
                                     Colors.transparent

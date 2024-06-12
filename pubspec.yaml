@@ -34,7 +34,9 @@ dependencies:
   get_storage: ^2.1.1
   iconsax: ^0.0.8
   flutter_svg: ^2.0.10+1
-
+  csc_picker: ^0.2.7
+  country_state_picker: ^0.0.5
+  country_state_city_pro: ^0.0.6
 
 
   #------------------- ./ PACKAGES END ---------------#

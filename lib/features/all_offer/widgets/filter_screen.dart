@@ -16,9 +16,6 @@ import 'currency_screen.dart';
 import 'date_screen.dart';
 
 class FilterScreen extends StatelessWidget {
-  // final Function(String) callback;
-  // const FilterScreen(this.callback);
-
 
   const FilterScreen({super.key});
 
@@ -33,9 +30,11 @@ class FilterScreen extends StatelessWidget {
           title: 'Filter',
           child: Column(
             children: [
-              GestureDetector(
+              ListTile(
                 onTap: () => provider.setFilterAll(!provider.filterAll),
-                child: Row(
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                // hoverColor: Colors.transparent,
+                title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -47,24 +46,24 @@ class FilterScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: TSizes.spaceBtwItems,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Date', style: Theme.of(context).textTheme.labelMedium,),
-                  InkWell(
-                    onTap: (){
-                      showModalBottomSheet(
-                          backgroundColor: TColors.white,
-                          // isDismissible: false,
-                          isScrollControlled: true,
-                          // enableDrag: false,
-                          context: context,
-                          builder: (cdx) => DateList()
-                      );
-                    },
-                    child: Row(
+              ListTile(
+                onTap: (){
+                  showModalBottomSheet(
+                      backgroundColor: TColors.white,
+                      // isDismissible: false,
+                      isScrollControlled: true,
+                      // enableDrag: false,
+                      context: context,
+                      builder: (cdx) => DateList()
+                  );
+                },
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Date', style: Theme.of(context).textTheme.labelMedium,),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -72,27 +71,27 @@ class FilterScreen extends StatelessWidget {
                         Icon(Icons.chevron_right, color: TColors.textPrimary.withOpacity(0.5),)
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: TSizes.spaceBtwItems,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text('Currency', style: Theme.of(context).textTheme.labelMedium,),
-                  InkWell(
-                    onTap: (){
-                      showModalBottomSheet(
-                          backgroundColor: TColors.white,
-                          // isDismissible: false,
-                          isScrollControlled: true,
-                          // enableDrag: false,
-                          context: context,
-                          builder: (cdx) => const CurrencyList()
-                      );
-                    },
-                    child: Row(
+              ListTile(
+                onTap: (){
+                  showModalBottomSheet(
+                      backgroundColor: TColors.white,
+                      // isDismissible: false,
+                      isScrollControlled: true,
+                      // enableDrag: false,
+                      context: context,
+                      builder: (cdx) => const CurrencyList()
+                  );
+                },
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Currency', style: Theme.of(context).textTheme.labelMedium,),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -100,10 +99,10 @@ class FilterScreen extends StatelessWidget {
                         Icon(Icons.chevron_right, color: TColors.textPrimary.withOpacity(0.5),)
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const SizedBox(height: TSizes.spaceBtwSections,),
+              const SizedBox(height: TSizes.spaceBtwSections / 2),
               TElevatedButton(onTap: (){
                 if (provider.filterAll == true) {
                   OfferService.instance.getAllOffers(

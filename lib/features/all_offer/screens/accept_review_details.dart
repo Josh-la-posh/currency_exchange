@@ -373,7 +373,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                           child: TElevatedButton(onTap: (){
                             OfferService.instance.swapOffer(id: item!.id, offerProvider: provider);
                             },
-                              buttonText: 'Pay 100 GBP'),
+                              buttonText: 'Pay ${item?.amount} ${item?.debitedCurrency}'),
                         ),
                         const SizedBox(height: TSizes.spaceBtwSections ),
                       ],

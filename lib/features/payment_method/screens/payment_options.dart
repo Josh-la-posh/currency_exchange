@@ -1,19 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/features/payment_method/screens/bank_transfer.dart';
 import 'package:swappr/features/payment_method/screens/flutterwave_payment.dart';
 import 'package:swappr/features/payment_method/screens/paystack_payment.dart';
+import 'package:swappr/features/payment_method/screens/ussd_funding.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 
-class PaymentOptionScreen extends StatelessWidget {
+import '../../../common/widgets/buttons/elevated_button.dart';
+import '../../../data/modules/app_navigator.dart';
+import '../../../data/provider/wallet_provider.dart';
+import '../../../utils/constants/colors.dart';
+import '../../../utils/validators/validation.dart';
+import '../../wallet/apis/api.dart';
+
+class PaymentOptionScreen extends StatefulWidget {
   const PaymentOptionScreen({super.key});
 
   @override
+  State<PaymentOptionScreen> createState() => _PaymentOptionScreenState();
+}
+
+class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
+
+  var walletProvider = Provider.of<WalletProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+
+  @override
+  void initState() {
+    if (walletProvider.bankList.isEmpty) {
+      WalletServices.instance.getBankList(
+          walletProvider: walletProvider);
+    }
+    super.initState();
+  }
+
+  String _amount = '';
+
+  @override
   Widget build(BuildContext context) {
+    var walletProvider = Provider.of<WalletProvider>(
+        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(),
+        leading: const BackButton(),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -35,19 +67,24 @@ class PaymentOptionScreen extends StatelessWidget {
                     )
                 ),
               ),
-              SizedBox(height: TSizes.defaultSpace,),
+              const SizedBox(height: TSizes.defaultSpace,),
               Column(
                 children: [
                   ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
+                    onTap: () {
+                      setState(() {
+                        walletProvider.setShowBankTransferOption(!walletProvider.showBankTransferOption);
+                      });
+                    },
+                    contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 10),
                     title: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           // height: 30,
                           child: Image(image: AssetImage(TImages.bankTransfer)),
                         ),
-                        SizedBox(width: 15,),
+                        const SizedBox(width: 15,),
                         RichText(
                             text: TextSpan(
                                 style: Theme.of(context).textTheme.labelSmall,
@@ -60,74 +97,305 @@ class PaymentOptionScreen extends StatelessWidget {
                             )
                         ),
                         SizedBox(
-                            child: Icon(Icons.keyboard_arrow_down_outlined)
+                            child: walletProvider.showBankTransferOption == true
+                                ? const Icon(Icons.keyboard_arrow_up_outlined)
+                                : const Icon(Icons.keyboard_arrow_down_outlined)
                         )
                       ],
                     ),
                   ),
+                  if (walletProvider.showBankTransferOption == true)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2),
                     child: Column(
                       children: [
                         ListTile(
                           onTap: () {
-                            Get.to(() => const FlutterwavePeymentScreen());
+                            showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    content: Container(
+                                    height: 240,
+                                      width: 200,
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: [
+                                          RichText(
+                                              textAlign: TextAlign.center,
+                                              text: TextSpan(
+                                                  style: Theme.of(context).textTheme.titleLarge,
+                                                  children:  const <TextSpan> [
+                                                    TextSpan(
+                                                        text: 'Enter Amount',
+                                                        style: TextStyle(fontSize: 16)
+                                                    )
+                                                  ]
+                                              )
+                                          ),
+                                          const SizedBox(height: TSizes.defaultSpace * 1.4,),
+                                          TextFormField(
+                                            textAlign: TextAlign.center,
+                                            validator: TValidator.numValidator,
+                                            style: Theme.of(context).textTheme.titleLarge,
+                                            onChanged: (val) => _amount = val,
+                                            onSaved: (val) {
+                                              setState(() {
+                                                _amount = val as String;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: TSizes.sm,),
+                                          Visibility(
+                                            visible: walletProvider.showErrorText,
+                                            child: RichText(
+                                                textAlign: TextAlign.center,
+                                                text: TextSpan(
+                                                  style: Theme.of(context).textTheme.labelSmall,
+                                                    children:  const <TextSpan> [
+                                                      TextSpan(
+                                                        text: 'Please, enter an amount',
+                                                        style: TextStyle(fontSize: 10, color: TColors.danger)
+                                                    )
+                                                  ]
+                                              )
+                                          ),
+                                          ),
+                                          const SizedBox(height: TSizes.defaultSpace * 1.4,),
+                                          SizedBox(
+                                            height: 40,
+                                            width: 140,
+                                            child: TElevatedButton(
+                                              onTap: () {
+                                                if (_amount == '') {
+                                                  walletProvider.showErrorMessage();
+                                                } else {
+                                                  WalletServices.instance.fundWalletNairaTransfer(
+                                                    amount: int.parse(_amount),
+                                                    walletProvider: walletProvider
+                                                  );
+                                                }
+                                              },
+                                              buttonText: 'Continue',
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            );
+                            // showModalBottomSheet(
+                            //     backgroundColor: TColors.white,
+                            //     context: context,
+                            //     builder: (cdx) => Container(
+                            //       width: double.infinity,
+                            //       padding: EdgeInsets.all(TSizes.defaultSpace),
+                            //       child: Column(
+                            //         children: [
+                            //           RichText(
+                            //               textAlign: TextAlign.center,
+                            //               text: TextSpan(
+                            //                   style: Theme.of(context).textTheme.titleLarge,
+                            //                   children:  <TextSpan> [
+                            //                     const TextSpan(
+                            //                         text: 'Enter Amount',
+                            //                         style: TextStyle(fontSize: 16)
+                            //                     )
+                            //                   ]
+                            //               )
+                            //           ),
+                            //           const SizedBox(height: TSizes.defaultSpace,),
+                            //           SizedBox(
+                            //             width: 200,
+                            //             child: TextFormField(
+                            //               textAlign: TextAlign.center,
+                            //               validator: TValidator.numValidator,
+                            //               style: Theme.of(context).textTheme.bodyMedium,
+                            //               onChanged: (val) => _amount = val,
+                            //               onSaved: (val) {
+                            //                 setState(() {
+                            //                   _amount = val as String;
+                            //                 });
+                            //               },
+                            //
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     )
+                            // );
+
+
                           },
-                          contentPadding: EdgeInsets.only(left: 25),
+                          contentPadding: const EdgeInsets.only(left: 25),
                           title: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 // height: 30,
                                 child: Image(image: AssetImage(TImages.flutterwave)),
                               ),
-                              SizedBox(width: 15,),
+                              const SizedBox(width: 15,),
                               RichText(
                                   text: TextSpan(
                                       style: Theme.of(context).textTheme.labelSmall,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'Flutterwave',
-                                            style: TextStyle(fontSize: 8.63)
+                                            style: TextStyle(fontSize: 11)
                                         )
                                       ]
                                   )
                               ),
-                              Spacer(),
-                              SizedBox(
-                                  child: Image(image: AssetImage('assets/icons/wallet_check.png'))
-                              )
                             ],
                           ),
                         ),
                         ListTile(
-                          contentPadding: EdgeInsets.only(left: 25),
                           onTap: () {
-                            Get.to(() => const PaystackPaymentScreen());
+                            showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    content: Container(
+                                      height: 240,
+                                      width: 200,
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: [
+                                          RichText(
+                                              textAlign: TextAlign.center,
+                                              text: TextSpan(
+                                                  style: Theme.of(context).textTheme.titleLarge,
+                                                  children:  const <TextSpan> [
+                                                    TextSpan(
+                                                        text: 'Enter Amount',
+                                                        style: TextStyle(fontSize: 16)
+                                                    )
+                                                  ]
+                                              )
+                                          ),
+                                          const SizedBox(height: TSizes.defaultSpace * 1.4,),
+                                          TextFormField(
+                                            textAlign: TextAlign.center,
+                                            validator: TValidator.numValidator,
+                                            style: Theme.of(context).textTheme.titleLarge,
+                                            onChanged: (val) => _amount = val,
+                                            onSaved: (val) {
+                                              setState(() {
+                                                _amount = val as String;
+                                              });
+                                            },
+                                          ),
+                                          const SizedBox(height: TSizes.sm,),
+                                          Visibility(
+                                            visible: walletProvider.showErrorText,
+                                            child: RichText(
+                                                textAlign: TextAlign.center,
+                                                text: TextSpan(
+                                                    style: Theme.of(context).textTheme.labelSmall,
+                                                    children:  const <TextSpan> [
+                                                      TextSpan(
+                                                          text: 'Please, enter an amount',
+                                                          style: TextStyle(fontSize: 10, color: TColors.danger)
+                                                      )
+                                                    ]
+                                                )
+                                            ),
+                                          ),
+                                          const SizedBox(height: TSizes.defaultSpace * 1.4,),
+                                          SizedBox(
+                                            height: 40,
+                                            width: 140,
+                                            child: TElevatedButton(
+                                              onTap: () {
+                                                if (_amount == '') {
+                                                  walletProvider.showErrorMessage();
+                                                } else {
+                                                  WalletServices.instance.fundWalletNairaPaystack(
+                                                      amount: int.parse(_amount),
+                                                      walletProvider: walletProvider
+                                                  );
+                                                }
+                                              },
+                                              buttonText: 'Continue',
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            );
+                            // showModalBottomSheet(
+                            //     backgroundColor: TColors.white,
+                            //     context: context,
+                            //     builder: (cdx) => Container(
+                            //       width: double.infinity,
+                            //       padding: EdgeInsets.all(TSizes.defaultSpace),
+                            //       child: Column(
+                            //         children: [
+                            //           RichText(
+                            //               textAlign: TextAlign.center,
+                            //               text: TextSpan(
+                            //                   style: Theme.of(context).textTheme.titleLarge,
+                            //                   children:  <TextSpan> [
+                            //                     const TextSpan(
+                            //                         text: 'Enter Amount',
+                            //                         style: TextStyle(fontSize: 16)
+                            //                     )
+                            //                   ]
+                            //               )
+                            //           ),
+                            //           const SizedBox(height: TSizes.defaultSpace,),
+                            //           SizedBox(
+                            //             width: 200,
+                            //             child: TextFormField(
+                            //               textAlign: TextAlign.center,
+                            //               validator: TValidator.numValidator,
+                            //               style: Theme.of(context).textTheme.bodyMedium,
+                            //               onChanged: (val) => _amount = val,
+                            //               onSaved: (val) {
+                            //                 setState(() {
+                            //                   _amount = val as String;
+                            //                 });
+                            //               },
+                            //
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     )
+                            // );
+
+
                           },
+                          contentPadding: const EdgeInsets.only(left: 25),
                           title: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 // height: 30,
                                 child: Image(image: AssetImage(TImages.paystack)),
                               ),
-                              SizedBox(width: 15,),
+                              const SizedBox(width: 15,),
                               RichText(
                                   text: TextSpan(
                                       style: Theme.of(context).textTheme.labelSmall,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'Paystack',
-                                            style: TextStyle(fontSize: 8.63)
+                                            style: TextStyle(fontSize: 11)
                                         )
                                       ]
                                   )
                               ),
-                              Spacer(),
-                              SizedBox(
-                                  child: Image(image: AssetImage('assets/icons/wallet_check.png'))
-                              )
                             ],
                           ),
                         ),
@@ -142,15 +410,18 @@ class PaymentOptionScreen extends StatelessWidget {
                 color: Colors.black.withOpacity(0.08),
               ),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
+                onTap: () {
+                  Get.to(() => const UssdFundingScreen());
+                },
+                contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       // height: 30,
                       child: Image(image: AssetImage(TImages.ussd)),
                     ),
-                    SizedBox(width: 15,),
+                    const SizedBox(width: 15,),
                     RichText(
                         text: TextSpan(
                             style: Theme.of(context).textTheme.labelSmall,
@@ -171,21 +442,21 @@ class PaymentOptionScreen extends StatelessWidget {
                 color: Colors.black.withOpacity(0.08),
               ),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
+                contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       // height: 30,
                       child: Image(image: AssetImage(TImages.internetBanking)),
                     ),
-                    SizedBox(width: 15,),
+                    const SizedBox(width: 15,),
                     RichText(
                         text: TextSpan(
                             style: Theme.of(context).textTheme.labelSmall,
                             children: const <TextSpan> [
                               TextSpan(
-                                  text: 'Internet Banking',
+                                  text: 'Direct Deposit',
                                   style: TextStyle(fontWeight: TSizes.fontWeightLg)
                               )
                             ]
@@ -200,18 +471,18 @@ class PaymentOptionScreen extends StatelessWidget {
                 color: Colors.black.withOpacity(0.08),
               ),
               ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
+                contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
                 onTap: () {
-                  Get.to(() => BankTransferScreen());
+                  Get.to(() => const BankTransferScreen());
                 },
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       // height: 30,
                       child: Image(image: AssetImage(TImages.bankAccount)),
                     ),
-                    SizedBox(width: 15,),
+                    const SizedBox(width: 15,),
                     RichText(
                         text: TextSpan(
                             style: Theme.of(context).textTheme.labelSmall,

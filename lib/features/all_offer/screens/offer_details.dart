@@ -96,9 +96,9 @@ class OfferDetailsScreen extends StatelessWidget {
                                 RichText(
                                   text: TextSpan(
                                     style: Theme.of(context).textTheme.labelSmall,
-                                    children: const <TextSpan> [
+                                    children: <TextSpan> [
                                       TextSpan(
-                                          text: 'Created at 40 secs ago',
+                                          text: 'Created ${THelperFunctions.getTimeDifference(item!.createdDate)} ago',
                                       ),
                                     ]
                                   )
@@ -135,7 +135,7 @@ class OfferDetailsScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: TSizes.md,),
                                 Text(
-                                  'This offer expires in ${item?.createdDate == null ? '' : THelperFunctions.getFormattedTime(item!.createdDate) ?? ''}',
+                                  'This offer expires in ${item?.createdDate == null ? '' : THelperFunctions.millisecondConversion(item!.expireIn) ?? ''}',
                                   style: Theme.of(context).textTheme.labelSmall,
                                 )
                               ],

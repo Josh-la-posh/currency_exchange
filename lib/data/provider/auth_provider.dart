@@ -9,6 +9,8 @@ import 'package:swappr/features/authentication/models/user_model.dart';
 import 'package:swappr/utils/constants/app.dart';
 import 'package:swappr/utils/local_storage/local_storage.dart';
 
+import '../../utils/constants/colors.dart';
+
 class AuthProvider extends ChangeNotifier {
 
   final SharedPreferences _storage = LocalStorage.instance.storage;

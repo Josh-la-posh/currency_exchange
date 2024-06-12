@@ -72,7 +72,7 @@ class OfferList extends StatelessWidget {
                         height: 31,
                         decoration: BoxDecoration(
                             color: TColors.secondaryBorder30,
-                            borderRadius: BorderRadius.circular(30)
+                            borderRadius: BorderRadius.circular(12)
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

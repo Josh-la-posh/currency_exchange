@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
@@ -98,7 +99,7 @@ class OfferItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '40 secs ago',
+                                    text: '${THelperFunctions.getTimeDifference(item!.createdDate)} ago',
                                     style: TextStyle(
                                       color: TColors.textPrimary.withOpacity(0.5),
                                     )

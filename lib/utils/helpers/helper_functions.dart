@@ -68,6 +68,72 @@ class THelperFunctions {
     return DateFormat(format).format(dateTime);
   }
 
+  static String getTimeDifference(String date, {String format = 'h:mm a'}) {
+    final dateTime = DateTime.parse(date);
+    final now = DateTime.now();
+    final difference = dateTime.difference(now);
+
+    int seconds = difference.inSeconds;
+    String timeDifference;
+    print(seconds);
+    if (seconds < 60) {
+      timeDifference = "$seconds seconds";
+    } else if (seconds >= 60 && seconds < 3600) {
+      int minutes = seconds ~/ 60;
+      timeDifference = "$minutes ninutes";
+    } else  if ( seconds >= 3600 && seconds < 86400){
+      int hours = seconds ~/ (60 * 60);
+      timeDifference = "$hours hours";
+    } else {
+      int days = seconds ~/ (60 * 60 * 24);
+      timeDifference = "$days days ago";
+    }
+    return timeDifference;
+  }
+
+  static String millisecondConversion(String milliSecondString) {
+    String time;
+    int milliseconds = int.parse(milliSecondString);
+    int seconds = milliseconds ~/ 1000;
+    int remainingMilliseconds = milliseconds % 1000;
+
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+
+    int hours = minutes ~/ 60;
+    int remainingMinute = minutes % 60;
+
+    int days = hours ~/ 24;
+    int remainingHours = days % 24;
+
+    // if (secondsToInt < 60) {
+    //   return time = "$secondsToInt seconds";
+    // } else if (secondsToInt < 3600) {
+    //   int minutes = secondsToInt ~/ 60;
+    //   return time = "$minutes minutes";
+    // } else {
+    //   int days = secondsToInt ~/ 86400;
+    //   int hours = (secondsToInt % 86400) ~/ 3600;
+    //   if (days > 0) {
+    //     return time = "$days days $hours hours";
+    //   } else {
+    //     return time = '$hours hours';
+    //   }
+    // }
+
+    if (days > 0) {
+      time = "$days days $remainingHours hours $remainingMinute minutes $remainingSeconds seconds";
+    } else if (hours > 0 && days == 0) {
+      time = "$remainingHours hours $remainingMinute minutes $remainingSeconds seconds";
+    } else if (days == 0 && hours == 0 && minutes > 0) {
+      time = "$remainingMinute minutes $remainingSeconds seconds";
+    } else {
+      time = "$remainingSeconds seconds";
+    }
+
+    return time;
+  }
+
   static List<T> removeDuplicates<T>(List<T> list) {
     return list.toSet().toList();
   }

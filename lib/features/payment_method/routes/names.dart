@@ -5,5 +5,5 @@ const PAYSTACK_PAYMENT_SCREEN = '/paystack-payment';
 const FLUTTER_WAVE_PAYMENT_SCREEN = '/flutterwave-payment';
 const BANK_TRANSFER_PAYMENT_SCREEN = '/bank-transfer-payment';
 const DIRECT_BANK_PAYMENT_SCREEN = '/direct-bank-payment';
-const USSD_PAYMENT_SCREEN = '/ussd-payment';
 const BANK_PAYMENT_SCREEN = '/bank-payment';
+const USSD_FUNDING_SCREEN = 'ussd-funding';

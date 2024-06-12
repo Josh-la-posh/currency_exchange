@@ -1,22 +1,22 @@
 class BankListModel {
   final int id;
-  final String name, slug, code, longCode, gateway, country, currency, type, createdAt, updatedAt ;
-  final bool pay_with_bank, support_transfer, active, is_deleted;
+  String? name, slug, code, longCode, gateway, country, currency, type, createdAt, updatedAt ;
+  final bool pay_with_bank, supports_transfer, active, is_deleted;
   
-  const BankListModel({
+  BankListModel({
     required this.id,
     required this.name,
     required this.slug,
     required this.code,
     required this.longCode,
-    required this.gateway,
+    this.gateway,
     required this.country,
     required this.currency,
     required this.type,
     required this.createdAt,
     required this.updatedAt,
     required this.pay_with_bank,
-    required this.support_transfer,
+    required this.supports_transfer,
     required this.active, 
     required this.is_deleted, 
   });
@@ -27,9 +27,9 @@ class BankListModel {
     slug: json['slug'] as String,
     code: json['code'] as String,
     longCode: json['longCode'] as String,
-    gateway: json['gateway'] as String,
+    gateway: json['gateway'],
     pay_with_bank: json['pay_with_bank'] as bool,
-    support_transfer: json['support_transfer'] as bool,
+    supports_transfer: json['supports_transfer'] as bool,
     active: json['active'] as bool,
     country: json['country'] as String,
     currency: json['currency'] as String,

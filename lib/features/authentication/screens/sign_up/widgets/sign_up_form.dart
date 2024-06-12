@@ -1,23 +1,23 @@
-// import 'package:fl_country_code_picker/fl_country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:intl_phone_field/phone_number.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
-import 'package:swappr/features/authentication/apis/api.dart';
 import 'package:swappr/features/authentication/routes/names.dart';
-import 'package:swappr/features/authentication/screens/email_verify/email_verify.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 import 'package:swappr/utils/validators/validation.dart';
-
+import '../../../../../common/widgets/country_picker/country_picker.dart';
+import '../../../../../data/provider/auth_provider.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
-import '../../login/login.dart';
+import '../../../apis/api.dart';
+import '../../email_verify/email_verify.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({
@@ -29,6 +29,11 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+
+  var authProvider = Provider.of<AuthProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
   final formKey = GlobalKey<FormState>();
   bool _obscurePasswordText = true;
   bool _obscureConPasswordText = true;
@@ -119,6 +124,10 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
+  final TextEditingController countryCont = TextEditingController();
+  final TextEditingController stateCont = TextEditingController();
+  final TextEditingController cityCont = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -132,6 +141,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('First Name', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -151,6 +161,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Last Name', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -170,6 +181,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Email', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -189,9 +201,16 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Phone Number', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(height: TSizes.sm,),
                     IntlPhoneField(
                       initialCountryCode: 'NG',
                       style: Theme.of(context).textTheme.labelMedium,
+                      pickerDialogStyle: PickerDialogStyle(
+                        backgroundColor: TColors.secondaryBorder,
+                        countryNameStyle: Theme.of(context).textTheme.titleSmall,
+                        width: THelperFunctions.screenWidth(),
+                        padding: EdgeInsets.symmetric(horizontal: TSizes.md, vertical: TSizes.defaultSpace * 2),
+                      ),
                       onChanged: (value) => _phoneNo = value.completeNumber,
                       onSaved: (value) {
                         // print('I get $_phoneNo');
@@ -202,22 +221,19 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
 
-                /// Country
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Country', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(
-                      height: TSizes.textInputFieldHeight,
-                      child: TextFormField(
-                        style: Theme.of(context).textTheme.labelMedium,
-                        onChanged: (val) => _country = val,
-                        onSaved: (val) {
-                          _country = val as String;
-                        },
-                      ),
-                    )
-                  ],
+                CountryStateCityPicker(
+                  country: countryCont,
+                  state: stateCont,
+                  city: cityCont,
+                  dialogColor: TColors.secondaryBorder,
+                  textFieldDecoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(15),
+                    fillColor: TColors.textFieldBackground,
+                    hintStyle: Theme.of(context).textTheme.labelMedium,
+                    suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
+                    suffixIconColor: TColors.textPrimary.withOpacity(0.8),
+                    // isDense: true,
+                  ),
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
 
@@ -226,31 +242,14 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Address', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
+                        validator: TValidator.emptyFieldValidator,
                         style: Theme.of(context).textTheme.labelMedium,
                         onChanged: (value) => _address = value,
                         onSaved: (value) {
                           _address = value as String;
-                        },
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                /// State
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('State', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(
-                      child: TextFormField(
-                        style: Theme.of(context).textTheme.labelMedium,
-                        onChanged: (value) => _state = value,
-                        validator: TValidator.validateName,
-                        onSaved: (value) {
-                          _state = value as String;
                         },
                       ),
                     )
@@ -263,6 +262,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Password', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -292,6 +292,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Confirm Password', style: Theme.of(context).textTheme.labelMedium,),
+                    SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -330,6 +331,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 const SizedBox(height: TSizes.spaceBtwElements),
 
                 TElevatedButton(onTap: (){
+                  print('${countryCont.text} ${stateCont.text} ${cityCont.text}');
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
 
@@ -338,9 +340,9 @@ class _SignUpFormState extends State<SignUpForm> {
                         lastName: _lastName,
                         email: _email,
                         phoneNumber: _phoneNo,
-                        country: _country,
+                        country: countryCont.text,
                         address: _address,
-                        state: _state,
+                        state: stateCont.text,
                         password: _password,
                         onSuccess: () {
                           Get.to(() => EmailVerificationScreen(email: _email));

@@ -3,15 +3,24 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/data/modules/dio.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/data/provider/wallet_provider.dart';
+import 'package:swappr/features/payment_method/screens/flutterwave_payment.dart';
+import 'package:swappr/features/payment_method/screens/paystack_payment.dart';
 import 'package:swappr/features/profile/models/bank_model.dart';
 import 'package:swappr/features/transaction/apis/api.dart';
 import 'package:swappr/features/wallet/models/bank_list.dart';
+import 'package:swappr/features/wallet/models/bank_list_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_model.dart';
+import 'package:swappr/features/wallet/models/flutterwaveEntity.dart';
+import 'package:swappr/features/wallet/models/flutterwave_model.dart';
+import 'package:swappr/features/wallet/models/paystack_entity.dart';
+import 'package:swappr/features/wallet/models/paystack_model.dart';
 import 'package:swappr/utils/responses/error_dialog.dart';
 import 'package:swappr/utils/responses/handleApiError.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
 
+import '../../../data/modules/app_navigator.dart';
+import '../../all_offer/routes/names.dart';
 import '../models/get_wallet.dart';
 
 class WalletServices{
@@ -134,13 +143,37 @@ class WalletServices{
     });
   }
 
-  fundWalletNairaTransfer({required int amount, required WalletProvider walletProvider, required TransactionProvider transactionProvider, required String currency}) {
+  fundWalletNairaTransfer({
+    required int amount,
+    required WalletProvider walletProvider
+  }) {
     _fundWalletNairaTransfer({'amount': amount})
         .then((response) async {
-      await getWallets(walletProvider: walletProvider, currency: currency);
-      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
-      Get.back();
-      handleShowCustomToast(message: 'In progress ...');
+          var result = response.data;
+
+          FlutterwaveEntity flutterwaveEntity = FlutterwaveEntity(
+              status: result['status'],
+              message: result['message'],
+              meta: result['meta']
+          );
+
+          // print('gggggg ${flutterwaveEntity.meta['authorization']}');
+
+          var item = flutterwaveEntity.meta['authorization'];
+
+            FlutterwaveModel flutterwaveModel = FlutterwaveModel(
+                transfer_reference: item['transfer_reference'],
+                transfer_account: item['transfer_account'],
+                transfer_bank: item['transfer_bank'],
+                account_expiration: item['account_expiration'],
+                transfer_note: item['transfer_note'],
+                transfer_amount: item['transfer_amount'],
+                mode: item['mode']
+            );
+
+            walletProvider.saveFlutterwaveDetails(flutterwaveModel);
+            Get.to(() => FlutterwavePeymentScreen());
+
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
@@ -162,17 +195,33 @@ class WalletServices{
 
   fundWalletNairaPaystack({
     required WalletProvider walletProvider,
-    required TransactionProvider transactionProvider,
     required int amount,
-    required String currency
   }) {
     _fundWalletNairaPaystack({
       'amount': amount
     }).then((response) async {
-      await getWallets(walletProvider: walletProvider, currency: currency);
-      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
-      // Get.back();
-      handleShowCustomToast(message: 'In progress ...');
+      var result = response.data;
+
+      PaystackEntity paystackEntity = PaystackEntity(
+          status: result['status'],
+          message: result['message'],
+          data: result['data']
+      );
+
+      var item = paystackEntity.data;
+
+      PaystackModel paystackModel = PaystackModel(
+          reference: item['reference'],
+          status: item['status'],
+          display_text: item['display_text'],
+          account_name: item['account_name'],
+          account_number: item['account_number'],
+          bank: item['bank'],
+          account_expires_at: item['account_expires_at']
+      );
+
+      walletProvider.savePaystackDetails(paystackModel);
+      Get.to(() => PaystackPaymentScreen(amount: amount.toString()));
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
@@ -229,7 +278,7 @@ class WalletServices{
     }).then((response) async {
       await getWallets(walletProvider: walletProvider, currency: currency);
       await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
-      // Get.back();
+      // AppNavigator.instance.removeAllNavigateToNavHandler(ACCEPT_SUCCESS_SCREEN);
       handleShowCustomToast(message: 'In progress ...');
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -345,7 +394,15 @@ class WalletServices{
   getBankList({required WalletProvider walletProvider}) {
     List<BankListModel> bankList = [];
     _getBankList().then((response) {
-      var data = response.data;
+      var result = response.data;
+
+      BankListEntity bankListModel = BankListEntity(
+        status: result['status'],
+        message: result['message'],
+        data: result['data'],
+      );
+
+      final data = bankListModel.data;
 
       for (var item in data) {
         bankList.add(BankListModel(
@@ -356,7 +413,7 @@ class WalletServices{
           longCode: item['longCode'],
           gateway: item['gateway'],
           pay_with_bank: item['pay_with_bank'],
-          support_transfer: item['support_transfer'],
+          supports_transfer: item['supports_transfer'],
           active: item['active'],
           country: item['country'],
           currency: item['currency'],
@@ -365,8 +422,9 @@ class WalletServices{
           createdAt: item['createdAt'],
           updatedAt: item['updatedAt'],
         ));
-        walletProvider.saveBankList(bankList);
       }
+      walletProvider.saveBankList(bankList);
+      print('bankList $bankList');
 
     });
   }

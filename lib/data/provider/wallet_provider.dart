@@ -2,14 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:swappr/features/wallet/models/bank_list.dart';
+import 'package:swappr/features/wallet/models/bank_list_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_model.dart';
+import 'package:swappr/features/wallet/models/flutterwave_model.dart';
+import 'package:swappr/features/wallet/models/paystack_model.dart';
 import '../../features/wallet/models/get_wallet.dart';
 import '../../utils/constants/enums.dart';
 
 class WalletProvider extends ChangeNotifier {
   List<GetWalletModel> _wallets = [];
   GetFcyAccountEntity? _fcyAccountDetails;
+  BankListEntity? _bankListEntity;
   List<FcyAccountModel> _fcyAccount = [];
   Currency _selectedCurrency = Currency.Select;
   WalletCurrency _selectedWalletCurrency = WalletCurrency.NGN;
@@ -17,12 +21,17 @@ class WalletProvider extends ChangeNotifier {
   List<Currency> _currencies = Currency.values;
   List<WalletCurrency> _walletCurrencies = WalletCurrency.values;
   List<BankListModel> _bankList = [];
+  BankListModel? _selectedBank;
+  FlutterwaveModel? _flutterwaveModel;
+  PaystackModel? _paystackModel;
   bool _showErrorText = false;
   bool showWalletLists = false;
+  bool showBankTransferOption = false;
 
 
   List<GetWalletModel> get wallets => _wallets;
   GetFcyAccountEntity? get fcyAccountDetails => _fcyAccountDetails;
+  BankListEntity? get bankListEntity => _bankListEntity;
   List<FcyAccountModel> get fcyAccount => _fcyAccount;
   Currency get selectedCurrency => _selectedCurrency;
   WalletCurrency get selectedWalletCurrency => _selectedWalletCurrency;
@@ -31,9 +40,37 @@ class WalletProvider extends ChangeNotifier {
   List<WalletCurrency> get walletCurrencies => _walletCurrencies;
   List<BankListModel> get bankList => _bankList;
   bool get showErrorText => _showErrorText;
+  List<BankListModel> filteredBanks = [];
+  BankListModel? get selectedBank => _selectedBank;
+  FlutterwaveModel? get flutterwaveModel => _flutterwaveModel;
+  PaystackModel? get paystackModel => _paystackModel;
+
+
+  void filterBanks(String searchText) {
+    filteredBanks = bankList.where((bank) =>
+    bank.name!.toLowerCase().contains(searchText.toLowerCase())
+    ).toList();
+    notifyListeners();
+  }
 
   void saveWallets(List<GetWalletModel> data) {
     _wallets = data;
+    notifyListeners();
+  }
+
+  void saveFlutterwaveDetails(FlutterwaveModel? val) {
+    _flutterwaveModel = val;
+    notifyListeners();
+  }
+
+  void savePaystackDetails(PaystackModel? val) {
+    _paystackModel = val;
+    notifyListeners();
+    print('get paystack ${val?.account_name}');
+  }
+
+  void saveFcyAccount(List<FcyAccountModel> val) {
+    _fcyAccount = val;
     notifyListeners();
   }
 
@@ -43,11 +80,6 @@ class WalletProvider extends ChangeNotifier {
   }
   void saveFcyAccountDetails(GetFcyAccountEntity val) {
     _fcyAccountDetails = val;
-    notifyListeners();
-  }
-  void saveFcyAccount(List<FcyAccountModel> val) {
-    _fcyAccount = val;
-    print('get calue ${val}');
     notifyListeners();
   }
 
@@ -71,6 +103,11 @@ class WalletProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setSelectedBank(BankListModel val) {
+    _selectedBank = val;
+    notifyListeners();
+  }
+
   void showErrorMessage() {
     _showErrorText = true;
     notifyListeners();
@@ -82,6 +119,11 @@ class WalletProvider extends ChangeNotifier {
 
   void saveBankList(List<BankListModel> val) {
     _bankList = val;
+    notifyListeners();
+  }
+
+  void setShowBankTransferOption(val) {
+    showBankTransferOption = val as bool;
     notifyListeners();
   }
 

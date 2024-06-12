@@ -146,4 +146,13 @@ class TValidator {
       return 'Please select a currency';
     }
   }
+  static String? emptyFieldValidator(String? value) {
+    // Check for empty field
+    if (value == null || value.isEmpty) {
+      return 'This field cannot be empty.';
+    }
+
+    return null;
+
+  }
 }

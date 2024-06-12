@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:swappr/features/all_offer/widgets/negotiation_list.dart';
-import 'package:swappr/features/transaction/widgets/layout.dart';
+import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
+import '../widget/negotiation_list.dart';
 
 class NegotiationOfferScreen extends StatefulWidget {
   const NegotiationOfferScreen({super.key});
@@ -15,10 +15,11 @@ class _NegotiationOfferScreenState extends State<NegotiationOfferScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const TransactionScreenLayout(
-      childWidget:SingleChildScrollView(
+    return const Scaffold(
+      body: SingleChildScrollView(
         child: Column(
           children: [
+            CurrencyWidgetWithBack(),
             NegotiationList(),
           ],
         ),

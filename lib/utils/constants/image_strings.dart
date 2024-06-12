@@ -45,4 +45,5 @@ class TImages {
   static const String bankTransferLogo = "assets/icons/depositIcons/bank_transfer_logo.png";
   static const String withdrawIcon = "assets/icons/depositIcons/withdraw.png";
   static const String withdrawSuccess = "assets/icons/depositIcons/withdrawal_success.png";
+  static const String walletCheck = "assets/icons/wallet_check.png";
 }
