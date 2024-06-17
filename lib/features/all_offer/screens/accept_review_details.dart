@@ -377,9 +377,13 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           child: TElevatedButton(onTap: (){
-                            OfferService.instance.swapOffer(id: item!.id, offerProvider: provider);
-                            },
-                              buttonText: 'Pay ${item?.amount} ${item?.debitedCurrency}'),
+                            OfferService.instance.swapOffer(
+                                id: item!.id,
+                                offerProvider: provider,
+                                amount: item!.amount,
+                                creditedCurrency: item!.creditedCurrency
+                            );},
+                              buttonText: 'Pay ${THelperFunctions.getStringMultiplication(item!.amount, item!.rate)} ${item?.debitedCurrency}'),
                         ),
                         const SizedBox(height: TSizes.spaceBtwSections ),
                       ],

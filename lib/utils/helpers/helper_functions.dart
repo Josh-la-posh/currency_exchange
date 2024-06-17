@@ -148,9 +148,9 @@ class THelperFunctions {
   }
 
   static String getStringMultiplication(String a, String b) {
-    int? intNum1 = int.tryParse(a);
-    int? intNum2 = int.tryParse(b);
-    int result;
+    double? intNum1 = double.tryParse(a);
+    double? intNum2 = double.tryParse(b);
+    double result;
 
     if (intNum1 != null && intNum2 != null) {
       result = intNum1 * intNum2;

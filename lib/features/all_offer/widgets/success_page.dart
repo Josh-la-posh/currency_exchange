@@ -11,6 +11,7 @@ import '../../../data/modules/app_navigator.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
+import '../routes/names.dart';
 import '../screens/all_offer.dart';
 
 
@@ -56,7 +57,7 @@ class SuccessScreenWidget extends StatelessWidget {
                     child: TElevatedButton(
                         onTap: (){
                           AppNavigator.instance
-                              .removeAllNavigateToNavHandler(HOME_INDEX_SCREEN_ROUTE);
+                              .removeAllNavigateToNavHandler(ALL_OFFER_SCREEN_ROUTE);
                           },
                         buttonText: 'Done'),
                   )

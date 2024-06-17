@@ -49,7 +49,7 @@ class TransactionDetails extends StatelessWidget {
                             style: Theme.of(context).textTheme.headlineLarge,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: item.rate == null ? '' : '${item.amount} ${item.debitedCurrency} ---',
+                                  text: item.rate == null ? '' : '${item.amount} ${item.debitedCurrency} --- ',
                                   style: TextStyle(
                                       color: darkMode ? TColors.grey : TColors.textPrimaryO80
                                   )
@@ -62,7 +62,7 @@ class TransactionDetails extends StatelessWidget {
                             style: Theme.of(context).textTheme.headlineLarge,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: item.rate == null ? '${item.amount} ${item.creditedCurrency}' : '${THelperFunctions.getStringMultiplication(item.rate as String, item.amount)} ${item.creditedCurrency}',
+                                  text: item.rate == null ? '${item.amount} ${item.creditedCurrency}' : '${THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount)} ${item.creditedCurrency}',
                                   style: TextStyle(
                                       color: darkMode ? TColors.grey : TColors.textPrimaryO80
                                   )

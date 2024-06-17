@@ -6,6 +6,7 @@ import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/features/all_offer/models/negotiate_offer_entity.dart';
 import 'package:swappr/features/all_offer/models/offer_details_entity.dart';
 import 'package:swappr/features/all_offer/routes/names.dart';
+import 'package:swappr/features/all_offer/screens/accept_offer_success_page.dart';
 import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/responses/error_dialog.dart';
 import 'package:swappr/utils/responses/handleApiError.dart';
@@ -139,10 +140,19 @@ class OfferService {
 
   // Swapping an offer
 
-  swapOffer({required String id, required OfferProvider offerProvider}) {
+  swapOffer({
+    required String id,
+    required OfferProvider offerProvider,
+    required String amount,
+    required String creditedCurrency
+
+  }) {
     _swapOffer(id: id).then((response) async {
-      await getAllOffers(offerProvider: offerProvider, currency: getCurrencyName(offerProvider.selectedCurrency), date: getDateValue(offerProvider.selectedDate));
-      AppNavigator.instance.removeAllNavigateToNavHandler(ACCEPT_SUCCESS_SCREEN);
+      await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
+      Get.to(() => AcceptOfferSuccessPage(
+        amount: amount,
+        creditedCurrency: creditedCurrency,
+      ));
       print('swap offer ${response.data}');
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));

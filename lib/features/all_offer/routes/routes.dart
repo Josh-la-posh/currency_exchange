@@ -12,6 +12,9 @@ import 'names.dart';
 
 
 Map<String, WidgetBuilder> offerRoute = {
+  ALL_OFFER_SCREEN_ROUTE: (context) => const AuthGuard(
+    widget: AllOfferScreen(),
+  ),
   OFFER_DETAILS_SCREEN: (context) => const AuthGuard(
     widget: OfferDetailsScreen(),
   ),

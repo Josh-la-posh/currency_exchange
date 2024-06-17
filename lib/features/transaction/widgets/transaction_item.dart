@@ -46,7 +46,7 @@ class TransactionItem extends StatelessWidget {
                                 children: <TextSpan> [
                                   TextSpan(
                                       // text: '400 GPB - 20,000 NGN',
-                                      text:'${item.amount} ${item.creditedCurrency}',
+                                      text:'${item!.rate == null ? '' : THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount)} ${item.rate == null ? '' : item.debitedCurrency} ${item.rate == null ? '' : '-'} ${item.amount} ${item.creditedCurrency}',
                                       style: const TextStyle(fontSize: TSizes.fontSize11, fontWeight: TSizes.fontWeightLg)
                                   ),
                                 ]
@@ -63,6 +63,8 @@ class TransactionItem extends StatelessWidget {
                                         color: status == 'in progress'
                                             ? TColors.golden
                                             : status == 'Successful'
+                                            ? TColors.primary
+                                            : status == 'successful'
                                             ? TColors.primary
                                             : TColors.danger,
 
@@ -84,7 +86,7 @@ class TransactionItem extends StatelessWidget {
                             children: <TextSpan> [
                               TextSpan(
                                   // text: '600 NGN // GBP ',
-                                  text: item.rate == null ? '' : item.rate.toString(),
+                                  text: item.rate == null ? '' : '${item.rate.toString()} ${item.debitedCurrency} // ${item.creditedCurrency}',
                                   style: const TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary)
                               ),
                             ]

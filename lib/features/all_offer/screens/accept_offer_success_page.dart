@@ -7,13 +7,15 @@ import '../../../utils/constants/colors.dart';
 import '../widgets/success_page.dart';
 
 class AcceptOfferSuccessPage extends StatelessWidget {
-  const AcceptOfferSuccessPage({super.key});
+  final String amount;
+  final String creditedCurrency;
+  const AcceptOfferSuccessPage({super.key, required this.amount, required this.creditedCurrency});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SuccessScreenWidget(
-          text: 'You have successfully swapped 57,000 NGN for 95 GBP.',
+          text: 'You have successfully being credited with ${amount} ${creditedCurrency}.',
           child: TListLayout(
               itemCount: 3,
               itemBuilder: (_, index) => MyTimeLine(
