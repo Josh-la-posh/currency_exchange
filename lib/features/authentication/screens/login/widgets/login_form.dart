@@ -140,7 +140,6 @@ class _LoginFormState extends State<LoginForm> {
                           children: const <TextSpan> [
                             TextSpan(
                                 text: 'Forgot password?',
-                                style: TextStyle(color: TColors.textPrimary)
                             )
                           ]
                       )

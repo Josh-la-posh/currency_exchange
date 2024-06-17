@@ -1,21 +1,27 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/features/payment_method/screens/payment_options.dart';
+import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
-
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
 
-class WalletDashboard extends StatelessWidget {
-  const WalletDashboard({super.key});
+class WalletDashboard extends StatefulWidget {
+  final bool darkMode;
+  const WalletDashboard({super.key, required this.darkMode});
 
+  @override
+  State<WalletDashboard> createState() => _WalletDashboardState();
+}
+
+class _WalletDashboardState extends State<WalletDashboard> {
   @override
   Widget build(BuildContext context) {
     var walletProvider = Provider.of<WalletProvider>(context);
-    final darkMode = THelperFunctions.isDarkMode(context);
     return Container(
         padding: const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 25),
         width: double.infinity,
@@ -90,11 +96,11 @@ class WalletDashboard extends StatelessWidget {
                             ),
                             IconButton(
                                 onPressed: () {},
-                                icon: const Row(
+                                icon: Row(
                                   children: [
-                                    Icon(Icons.circle, size: 8,),
-                                    Icon(Icons.circle, size: 8,),
-                                    Icon(Icons.circle, size: 8,),
+                                    Icon(Icons.circle, size: 8, color: TColors.textPrimaryO80,),
+                                    Icon(Icons.circle, size: 8, color: TColors.textPrimaryO80,),
+                                    Icon(Icons.circle, size: 8, color: TColors.textPrimaryO80,),
                                   ],
                                 )
                             )
@@ -114,25 +120,60 @@ class WalletDashboard extends StatelessWidget {
                               ),
                             ),
                             IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.remove_red_eye_outlined)
+                                onPressed: () {
+                                  setState(() {
+                                    walletProvider.setShowWalletBalance(!walletProvider.showWalletBalance);
+                                  });
+                                },
+                                icon: walletProvider.showWalletBalance == false
+                                    ? Icon(Icons.visibility_off, color: TColors.textPrimaryO80,)
+                                    : Icon(Icons.visibility, color: TColors.textPrimaryO80,)
                             )
                           ],
                         ),
-                        const Row(
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              '4000.00',
-                              style: TextStyle(
-                                  fontSize: 35,
-                                  fontWeight: FontWeight.w800,
-                                  fontFamily: 'Work Sans',
-                                  color: Color(0xFF331D50)
+                            IntrinsicWidth(
+                              // width: 120,
+                              child: TextFormField(
+                                initialValue:  walletProvider.selectedWallet == null
+                                    ? '****'
+                                    : '${walletProvider.selectedWallet?.balance}',
+                                  style: TextStyle(
+                                      fontSize: 35,
+                                      fontWeight: FontWeight.w800,
+                                      fontFamily: 'Work Sans',
+                                      color: Color(0xFF331D50)
+                                  ),
+                                enabled: false,
+                                obscureText: walletProvider.showWalletBalance == false ? true : false,
+                                obscuringCharacter: '*',
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.zero,
+                                  fillColor: Colors.transparent,
+                                  isDense: false,
+                                ),
+
                               ),
                             ),
+                            // Text(
+                            //   walletProvider.selectedWallet == null
+                            //       ? '****'
+                            //       : '${walletProvider.selectedWallet?.balance}',
+                            //   style: TextStyle(
+                            //       fontSize: 35,
+                            //       fontWeight: FontWeight.w800,
+                            //       fontFamily: 'Work Sans',
+                            //       color: Color(0xFF331D50)
+                            //   ),
+                            // ),
                             Text(
-                              ' USD',
+                              walletProvider.selectedWallet == null
+                                  ? ' '
+                                  : ' ${walletProvider.selectedWallet?.currency}',
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w800,
@@ -170,9 +211,9 @@ class WalletDashboard extends StatelessWidget {
                                 backgroundColor: const MaterialStatePropertyAll(
                                     Colors.transparent
                                 ),
-                                side: const MaterialStatePropertyAll(
+                                side: MaterialStatePropertyAll(
                                     BorderSide(
-                                        color: Colors.white
+                                        color: widget.darkMode ? TColors.primary : Colors.white
                                     )
                                 ),
                                 shape: MaterialStatePropertyAll(
@@ -182,13 +223,13 @@ class WalletDashboard extends StatelessWidget {
                                 ),
                               ),
                               child:
-                              const Text(
+                              Text(
                                 'Fund',
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
                                     fontFamily: 'Work Sans',
-                                    color: Colors.white
+                                    color: widget.darkMode ? TColors.primary : Colors.white
                                 ),
                               ),
                             ),
@@ -201,7 +242,7 @@ class WalletDashboard extends StatelessWidget {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                    color: Colors.white
+                                    color: widget.darkMode ? TColors.primary : Colors.white
                                 )
                             ),
                             child: PopupMenuButton(
@@ -213,7 +254,7 @@ class WalletDashboard extends StatelessWidget {
                                         color: TColors.primary
                                     )
                                 ),
-                                icon: const Row(
+                                icon: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -223,7 +264,7 @@ class WalletDashboard extends StatelessWidget {
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
                                           fontFamily: 'Work Sans',
-                                          color: Colors.white
+                                          color: widget.darkMode ? TColors.primary : Colors.white
                                       ),
                                     ),
                                     SizedBox(
@@ -235,11 +276,11 @@ class WalletDashboard extends StatelessWidget {
                                 itemBuilder: (_) =>  List.generate(
                                   walletProvider.wallets.length, (index) => PopupMenuItem(
                                   onTap: () {
-                                    walletProvider.setSelectedWallet(walletProvider.wallets[index].currency);
+                                    walletProvider.setSelectedWallet(walletProvider.wallets[index]);
                                   },
                                   height: 20,
                                   padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 0),
-                                  value: walletProvider.wallets[index].currency.toString(),
+                                  value: getWalletCurrencyName(walletProvider.selectedWalletCurrency),
                                   child: Row(
                                     children: [
                                       Text(
@@ -248,11 +289,11 @@ class WalletDashboard extends StatelessWidget {
                                             fontSize: 10,
                                             fontFamily: TTexts.fontFamily,
                                             fontWeight: TSizes.fontWeightNm,
-                                            color: darkMode ? TColors.black : Colors.white
+                                            color: widget.darkMode ? TColors.black : Colors.white
                                         ),
                                       ),
                                       const SizedBox(width: 30,),
-                                      if (walletProvider.wallets[index].currency == walletProvider.selectedWallet)
+                                      if (walletProvider.wallets[index].currency == walletProvider.selectedWallet?.currency)
                                       const SizedBox(
                                         width: 10,
                                         child: Image(image: AssetImage('assets/icons/wallet_check.png')),

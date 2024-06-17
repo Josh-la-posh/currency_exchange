@@ -20,7 +20,7 @@ class IdentityVerificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: TColors.secondaryBorder,
+      backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
       appBar: AppBar(
         leading: InkWell(
             onTap: () {Get.back();},
@@ -35,10 +35,13 @@ class IdentityVerificationScreen extends StatelessWidget {
               RichText(
                   text: TextSpan(
                       style: Theme.of(context).textTheme.headlineLarge,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                             text: 'Identity Verification',
-                            style: TextStyle(fontSize: 20)
+                            style: TextStyle(
+                                fontSize: 20,
+                                // color: TColors.textPrimaryO80
+                            )
                         ),
                       ]
                   )
@@ -48,10 +51,13 @@ class IdentityVerificationScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                       style: Theme.of(context).textTheme.bodySmall,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                             text: 'A 60-second timer has begun. Your photo from the chosen document will be used for comparison.',
-                            style: TextStyle(height: 1.5)
+                            style: TextStyle(
+                                height: 1.5,
+                                // color: TColors.textPrimaryO80
+                            )
                         ),
                       ]
                   )
@@ -63,7 +69,7 @@ class IdentityVerificationScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
                   height: 52,
                   decoration: BoxDecoration(
-                      color: TColors.white,
+                      color: darkMode ? TColors.white.withOpacity(0.5) : TColors.white,
                       borderRadius: BorderRadius.circular(10)
                   ),
                   child: Row(
@@ -80,6 +86,9 @@ class IdentityVerificationScreen extends StatelessWidget {
                               children: <TextSpan> [
                                 TextSpan(
                                   text: type,
+                                  style: TextStyle(
+                                    color: darkMode ? TColors.white : TColors.textPrimaryO80,
+                                  )
                                 ),
                               ]
                           )
@@ -93,10 +102,13 @@ class IdentityVerificationScreen extends StatelessWidget {
                   textAlign: TextAlign.center,
                   text: TextSpan(
                       style: Theme.of(context).textTheme.bodySmall,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                             text: 'Please upload Your Valid  Driver’s license for Verification',
-                            style: TextStyle(height: 1.5)
+                            style: TextStyle(
+                                height: 1.5,
+                                // color: TColors.textPrimaryO80
+                            )
                         ),
                       ]
                   )
@@ -133,7 +145,7 @@ class IdentityVerificationScreen extends StatelessWidget {
                     child: Text(
                       'Submit',
                       style: TextStyle(
-                          color: TColors.textPrimary,
+                          color: darkMode ? TColors.white : TColors.textPrimary,
                           fontSize: 20,
                           fontWeight: FontWeight.w400
                       ),

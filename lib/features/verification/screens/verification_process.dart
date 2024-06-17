@@ -12,7 +12,7 @@ class VerificationProcess extends StatelessWidget {
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: TColors.secondaryBorder,
+      backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
       appBar: AppBar(
         leading: InkWell(
             onTap: () {Get.back();},
@@ -28,10 +28,13 @@ class VerificationProcess extends StatelessWidget {
               RichText(
                   text: TextSpan(
                       style: Theme.of(context).textTheme.headlineLarge,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                           text: 'Verification Process',
-                          style: TextStyle(fontSize: 20)
+                          style: TextStyle(
+                              fontSize: 20,
+                              // color: TColors.textPrimaryO80
+                          )
                         ),
                       ]
                   )
@@ -46,10 +49,13 @@ class VerificationProcess extends StatelessWidget {
               RichText(
                   text: TextSpan(
                       style: Theme.of(context).textTheme.headlineLarge,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                             text: 'Choose Your County',
-                            style: TextStyle(fontSize: 18)
+                            style: TextStyle(
+                                fontSize: 18,
+                                // color: TColors.textPrimaryO80
+                            )
                         ),
                       ]
                   )
@@ -59,10 +65,14 @@ class VerificationProcess extends StatelessWidget {
                 textAlign: TextAlign.center,
                   text: TextSpan(
                       style: Theme.of(context).textTheme.headlineLarge,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                             text: 'Please Select Your Country for Verification. \n Thank You',
-                            style: TextStyle(fontSize: 11, height: 1.4)
+                            style: TextStyle(
+                                fontSize: 11,
+                                height: 1.4,
+                                // color: TColors.textPrimaryO80
+                            )
                         ),
                       ]
                   )
@@ -76,18 +86,18 @@ class VerificationProcess extends StatelessWidget {
                   onPressed: (){
                   Get.to(() => const CountrySelectionPage());
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'Select Country',
                         style: TextStyle(
-                          color: darkMode ? TColors.black : TColors.white,
+                          color: TColors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.w500
                         ),
                       ),
-                      const Icon(Icons.arrow_right_alt_sharp)
+                      Icon(Icons.arrow_right_alt_sharp)
                     ],
                   )
               )

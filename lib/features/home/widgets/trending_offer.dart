@@ -5,13 +5,15 @@ import 'package:swappr/data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
+import '../../../utils/helpers/helper_functions.dart';
 import '../../all_offer/icons/svg.dart';
 import '../../all_offer/screens/all_offer.dart';
 import '../../all_offer/screens/offer_details.dart';
 
 class TrendingOffer extends StatelessWidget {
   final OfferProvider offerProvider;
-  const TrendingOffer({super.key, required this.offerProvider});
+  final bool darkMode;
+  const TrendingOffer({super.key, required this.offerProvider, required this.darkMode});
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +30,14 @@ class TrendingOffer extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                         color: TColors.primary
-                    )
+                    ),
+                  color: darkMode ? TColors.primary : Colors.transparent
                 ),
                 child: Row(
                   children: [
-                    const Text('Trending Offer',
+                    Text('Trending Offer',
                       style: TextStyle(
-                        color: TColors.primary,
+                        color: darkMode ? TColors.white : TColors.primary,
                         fontSize: 16,
                         fontWeight: TSizes.fontWeightNm,
                         fontFamily: TTexts.fontFamily,
@@ -56,11 +59,11 @@ class TrendingOffer extends StatelessWidget {
                 onTap: () {
                   Get.to(() => const AllOfferScreen());
                 },
-                child: const Row(
+                child: Row(
                   children: [
                     Text('View All',
                       style: TextStyle(
-                          color: TColors.primary,
+                          color: darkMode ? TColors.white.withOpacity(0.5) : TColors.primary,
                           fontSize: 12,
                           fontWeight: TSizes.fontWeightNm,
                           fontFamily: TTexts.fontFamily
@@ -78,22 +81,18 @@ class TrendingOffer extends StatelessWidget {
           width: double.infinity,
           // color: Colors.white,
         )
-            : Container(
-          // height: 80,
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-          color: Colors.white,
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: offerProvider.offers.length > 3 ? 3 : offerProvider.offers.length,
-            itemBuilder: (_, index) {
-              final item = offerProvider.offers[index];
-              return
-                Column(
-                  children: [
-                    ListTile(
+            : ListView.builder(
+              shrinkWrap: true,
+              itemCount: offerProvider.offers.length > 3 ? 3 : offerProvider.offers.length,
+              itemBuilder: (_, index) {
+                final item = offerProvider.offers[index];
+                return Column(
+                children: [
+                  Container(
+                    color: darkMode ? TColors.textBlack.withOpacity(0.5) : Colors.white,
+                    child: ListTile(
                       dense: true,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: TSizes.md),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.md),
                       onTap: (){
                         Get.to(() => OfferDetailsScreen(item: item));
                       },
@@ -139,7 +138,10 @@ class TrendingOffer extends StatelessWidget {
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: '${item.rate} ${item.debitedCurrency} // ${item.creditedCurrency}',
-                                            style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
+                                            style: const TextStyle(
+                                                fontSize: TSizes.fontSize13,
+                                                color: TColors.primary
+                                            )
                                         ),
                                       ]
                                   )
@@ -156,7 +158,7 @@ class TrendingOffer extends StatelessWidget {
                                             TextSpan(
                                                 text: '${item.views}',
                                                 style: TextStyle(
-                                                  color: TColors.textPrimaryO80,
+                                                  color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimaryO80,
                                                 )
                                             ),
                                           ]
@@ -170,7 +172,7 @@ class TrendingOffer extends StatelessWidget {
                                             TextSpan(
                                                 text: '40 secs ago',
                                                 style: TextStyle(
-                                                  color: TColors.textPrimary.withOpacity(0.5),
+                                                  color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
                                                 )
                                             ),
                                           ]
@@ -183,12 +185,12 @@ class TrendingOffer extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: TSizes.md,)
-                  ],
-                );
+                  ),
+                  const SizedBox(height: TSizes.md,)
+                ],
+              );
             },
-          ),
-        ),
+            ),
       ],
     );
   }

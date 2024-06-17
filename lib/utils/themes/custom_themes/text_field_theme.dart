@@ -40,13 +40,14 @@ class TTextFormFieldTheme {
   );
 
   static InputDecorationTheme darkInputDecorationTheme = InputDecorationTheme(
+    contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
     filled: true,
-    fillColor: TColors.secondaryBorder30,
+    fillColor: TColors.timeLineBorder,
     errorMaxLines: 3,
     prefixIconColor: TColors.grey,
     suffixIconColor: TColors.grey,
-    labelStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.textSecondary),
-    hintStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.textSecondary),
+    labelStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.white),
+    hintStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.white),
     errorStyle: const TextStyle().copyWith(fontStyle: FontStyle.normal),
     floatingLabelStyle: const TextStyle().copyWith(fontSize: TSizes.fontSize14, color: TColors.white.withOpacity(0.8)),
     border: const OutlineInputBorder().copyWith(

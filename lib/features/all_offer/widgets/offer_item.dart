@@ -20,6 +20,7 @@ class OfferItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         ListTile(
@@ -78,7 +79,10 @@ class OfferItem extends StatelessWidget {
                   const SizedBox(height: TSizes.md,),
                   Row(
                     children: [
-                      OfferEyeIcon(),
+                      Icon(
+                        Icons.visibility,
+                        size: 15,
+                      ),
                       const SizedBox(width: TSizes.md,),
                       RichText(
                           text: TextSpan(
@@ -87,7 +91,7 @@ class OfferItem extends StatelessWidget {
                                 TextSpan(
                                     text: '${item.views}',
                                     style: TextStyle(
-                                      color: TColors.textPrimaryO80,
+                                      color: darkMode ? TColors.white : TColors.textPrimaryO80,
                                     )
                                 ),
                               ]
@@ -101,7 +105,7 @@ class OfferItem extends StatelessWidget {
                                 TextSpan(
                                     text: '${THelperFunctions.getTimeDifference(item!.createdDate)} ago',
                                     style: TextStyle(
-                                      color: TColors.textPrimary.withOpacity(0.5),
+                                      color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
                                     )
                                 ),
                               ]

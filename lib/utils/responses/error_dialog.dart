@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swappr/utils/constants/colors.dart';
 
 import '../../data/modules/app_navigator.dart';
 
@@ -10,12 +11,16 @@ void showErrorAlertHelper(
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: Colors.white,
-        title: const Row(
+        title: Row(
           children: [
             Icon(Icons.error, color: Colors.red),
             SizedBox(width: 8),
             Text('Error',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: TColors.textPrimaryO80
+                )),
           ],
         ),
         content: Column(
@@ -24,7 +29,10 @@ void showErrorAlertHelper(
             Text(
               errorMessage,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 14),
+              style: TextStyle(
+                  fontSize: 14,
+                  color: TColors.textPrimaryO80
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton(

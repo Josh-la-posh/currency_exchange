@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/features/payment_method/widgets/bank_list.dart';
 import 'package:swappr/features/wallet/apis/api.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
@@ -11,6 +10,7 @@ import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/transaction_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/enums.dart';
 
 class UssdFundingScreen extends StatefulWidget {
   const UssdFundingScreen({super.key});
@@ -37,39 +37,107 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
+          padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: TSizes.defaultSpace),
           child: Form(
             key: formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BankList(walletProvider: walletProvider),
-                const SizedBox(height: TSizes.defaultSpace,),
+                // BankList(walletProvider: walletProvider),
+
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            color: darkMode ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            fontFamily: 'Roboto'
+                        ),
+                        children: const <TextSpan> [
+                          TextSpan(
+                            text: 'SELECT YOUR USSD CODE PROVIDER',
+                          ),
+                        ]
+                    )
+                ),
+
+                SizedBox(height: 20,),
+
+                // Nigeria bank dropdown
+
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          color: TColors.secondaryBorder30),
+                      borderRadius: const BorderRadius.all(Radius.circular(TSizes.borderRadiusSm))
+                  ),
+                  child: DropdownButtonFormField<Bank>(
+                    validator: TValidator.bankValidator,
+                    decoration: InputDecoration(
+                      fillColor: darkMode ? TColors.timeLineBorder : TColors.textFieldBackground
+                    ),
+                    autofocus: false,
+                    isExpanded: true,
+                    value: walletProvider.selectedNigBank,
+                    // underline: const SizedBox(),
+                    icon: RotatedBox(
+                      quarterTurns: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14.8),
+                        child: Icon(
+                          Icons.arrow_back_ios_rounded,
+                          size: 15,
+                          color: darkMode ? TColors.white : TColors.textPrimary.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                    onChanged: (val) => walletProvider.setSelectedNigBank(val!),
+                    items: [
+                      for (final item in walletProvider.nigBanks)
+                        DropdownMenuItem<Bank>(
+                          value: item,
+                          child: SizedBox(
+                            child: Row(
+                              children: [
+                                Text(
+                                    getBankName(item),
+                                    style: Theme.of(context).textTheme.bodyMedium
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: TSizes.defaultSpace * 2),
                 Container(
                   width: double.infinity,
                   alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: TColors.black.withOpacity(0.1),
-                            offset: const Offset(1.32,1.87),
-                            blurRadius: 1.94,
-                            spreadRadius: 1.94
-                        ),
-                        BoxShadow(
-                            color: const Color(0xFFFDF6FF).withOpacity(0.5),
-                            offset: const Offset(0.0,0.0),
-                            blurRadius: 0,
-                            spreadRadius: 0
-                        ),
-                        BoxShadow(
-                            color: Colors.white.withOpacity(0.8),
-                            offset: const Offset(0,0.0),
-                            blurRadius: 1.8,
-                            spreadRadius: 0
-                        ),
-                      ]
+                  // padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //           color: TColors.black.withOpacity(0.1),
+                  //           offset: const Offset(1.32,1.87),
+                  //           blurRadius: 1.94,
+                  //           spreadRadius: 1.94
+                  //       ),
+                  //       BoxShadow(
+                  //           color: const Color(0xFFFDF6FF).withOpacity(0.5),
+                  //           offset: const Offset(0.0,0.0),
+                  //           blurRadius: 0,
+                  //           spreadRadius: 0
+                  //       ),
+                  //       BoxShadow(
+                  //           color: Colors.white.withOpacity(0.8),
+                  //           offset: const Offset(0,0.0),
+                  //           blurRadius: 1.8,
+                  //           spreadRadius: 0
+                  //       ),
+                  //     ]
                   ),
                   child:
                   Column(
@@ -80,7 +148,7 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                               style: TextStyle(
                                   color: darkMode ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 9,
+                                  fontSize: 12,
                                   fontFamily: 'Roboto'
                               ),
                               children: const <TextSpan> [
@@ -90,6 +158,7 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                               ]
                           )
                       ),
+                      SizedBox(height: 10,),
                       TextFormField(
                         validator: TValidator.numValidator,
                         style: Theme.of(context).textTheme.bodyMedium,
@@ -104,21 +173,24 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: TSizes.defaultSpace * 2,),
-                SizedBox(
-                    width: 200,
-                    child: TElevatedButton(onTap: (){
-                      if (formKey.currentState!.validate()) {
-                        formKey.currentState!.save();
-                        WalletServices.instance.fundWalletNairaUssd(
-                            walletProvider: walletProvider,
-                            transactionProvider: transactionProvider,
-                            amount: int.parse(_amount),
-                            currency: 'NGN',
-                            bank: walletProvider.selectedBank!.name.toString()
-                        );
-                      }
-                    }, buttonText: 'Continue')
+                const SizedBox(height: TSizes.defaultSpace * 4,),
+                Center(
+                  child: SizedBox(
+                      width: 200,
+                      child: TElevatedButton(onTap: (){
+                        // print(walletProvider.selectedNigBank);
+                        if (formKey.currentState!.validate()) {
+                          formKey.currentState!.save();
+                          WalletServices.instance.fundWalletNairaUssd(
+                              walletProvider: walletProvider,
+                              transactionProvider: transactionProvider,
+                              amount: int.parse(_amount),
+                              currency: 'NGN',
+                              bank: getBankName(walletProvider.selectedNigBank)
+                          );
+                        }
+                      }, buttonText: 'Continue')
+                  ),
                 )
               ],
             ),

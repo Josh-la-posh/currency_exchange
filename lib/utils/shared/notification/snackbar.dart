@@ -20,24 +20,29 @@ handleShowCustomToast({
       key: Key(key),
       dismissDirection: DismissDirection.up,
       behavior: SnackBarBehavior.floating,
-      // margin: EdgeInsets.only(bottom: THelperFunctions.screenHeight() - 100),
-      duration: const Duration(seconds: 2),
-      padding: const EdgeInsets.all(10),
-      backgroundColor: TColors.primary.withOpacity(0.7),
+      // margin: EdgeInsets.only(bottom: THelperFunctions.screenHeight() / 3),
+      duration: const Duration(seconds: 4),
+      padding: const EdgeInsets.all(0),
+      backgroundColor: TColors.primary.withOpacity(0.4),
       content: GestureDetector(
         onTap: () {
           if (onMessageTap != null) {
             onMessageTap();
           }
         },
-        child: Center(
-          child: Text(message,
-              style: TextStyle(
-                color: textColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Roboto',
-              )),
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(8),
+          color: TColors.primary.withOpacity(1),
+          child: Center(
+            child: Text(message,
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontFamily: 'Roboto',
+                )),
+          ),
         ),
       ),
     ),

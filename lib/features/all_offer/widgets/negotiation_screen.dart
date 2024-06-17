@@ -11,23 +11,28 @@ import 'package:swappr/utils/validators/validation.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../apis/api.dart';
 
-class NegotiationScreen extends StatelessWidget {
+class NegotiationScreen extends StatefulWidget {
   final String id;
   NegotiationScreen({
     super.key,
     required this.id,
   });
 
+  @override
+  State<NegotiationScreen> createState() => _NegotiationScreenState();
+}
 
+class _NegotiationScreenState extends State<NegotiationScreen> {
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final offerProvider = Provider.of<OfferProvider>(context);
     final provider = Provider.of<OfferProvider>(context);
     return HalfBottomSheetWidget(
         title: "I'm interested, but...",
         child: SizedBox(
-          height: THelperFunctions.screenHeight() * 0.52,
+          height: THelperFunctions.screenHeight() * 0.48,
           child: Form(
             key: formKey,
             child:
@@ -43,14 +48,9 @@ class NegotiationScreen extends StatelessWidget {
                       onSaved: (val) {
                         provider.setNegotiatorAmount(val!);
                       },
+                        keyboardType: TextInputType.number,
                         validator: TValidator.numValidator,
-                      // keyboardType: TextInputType.number,
-                      style: TextStyle(
-                        color: TColors.textPrimary.withOpacity(0.4),
-                        fontSize: 14,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.w400
-                      )
+                      style: Theme.of(context).textTheme.labelMedium
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields,),
                     Text('At', style: Theme.of(context).textTheme.labelSmall,),
@@ -61,13 +61,8 @@ class NegotiationScreen extends StatelessWidget {
                             provider.setNegotiatorRate(val!);
                           },
                           validator: TValidator.numValidator,
-                          // keyboardType: TextInputType.number,
-                          style: TextStyle(
-                              color: TColors.textPrimary.withOpacity(0.4),
-                              fontSize: 14,
-                              fontFamily: 'Roboto',
-                              fontWeight: FontWeight.w400
-                          )
+                          keyboardType: TextInputType.number,
+                          style: Theme.of(context).textTheme.labelMedium
                       ),
                     ),
                   ],
@@ -77,9 +72,10 @@ class NegotiationScreen extends StatelessWidget {
                       if (formKey.currentState!.validate()) {
                         OfferService.instance
                             .negotiateOffer(
-                            id: id,
+                            id: widget.id,
                             negotiatorRate: provider.negotiatorRate,
-                            negotiatorAmount: provider.negotiatorAmount
+                            negotiatorAmount: provider.negotiatorAmount,
+                            offerProvider: offerProvider
                         );
                       }
                     },

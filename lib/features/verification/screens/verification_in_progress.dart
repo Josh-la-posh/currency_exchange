@@ -13,8 +13,9 @@ class VerificationInProgressScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: TColors.secondaryBorder,
+      backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
       body: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace * 2),
         child: Column(
@@ -25,7 +26,10 @@ class VerificationInProgressScreen extends StatelessWidget {
                     children: const <TextSpan> [
                       TextSpan(
                           text: 'Identity Verification',
-                          style: TextStyle(fontSize: 20)
+                          style: TextStyle(
+                              fontSize: 20,
+                              // color: TColors.textPrimaryO80
+                          )
                       ),
                     ]
                 )
@@ -38,7 +42,10 @@ class VerificationInProgressScreen extends StatelessWidget {
                     children: const <TextSpan> [
                       TextSpan(
                           text: 'A 60-second timer has begun. Your photo from the chosen document will be used for comparison.',
-                          style: TextStyle(height: 1.5)
+                          style: TextStyle(
+                              height: 1.5,
+                              // color: TColors.textPrimaryO80
+                          )
                       ),
                     ]
                 )
@@ -47,13 +54,14 @@ class VerificationInProgressScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace * 2),
               decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                        color: const Color(0xFF111E32).withOpacity(0.5),
-                        offset: const Offset(1.3,2.4),
+                        color: TColors.black.withOpacity(0.3),
+                        offset: const Offset(1.72,2.24),
                         blurRadius: 1.94,
-                        spreadRadius: 1.98
+                        spreadRadius: 1.94
                     ),
                     BoxShadow(
                         color: TColors.secondaryBorder,
@@ -71,7 +79,10 @@ class VerificationInProgressScreen extends StatelessWidget {
                           children: const <TextSpan> [
                             TextSpan(
                                 text: 'Verification in progress',
-                                style: TextStyle(fontSize: 20)
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    // color: TColors.textPrimaryO80
+                                )
                             ),
                           ]
                       )
@@ -86,7 +97,8 @@ class VerificationInProgressScreen extends StatelessWidget {
                                 text: 'Your account is currently undergoing verification. If you have any questions or need assistance, feel free to contact customer support.',
                                 style: TextStyle(
                                   height: 1.5,
-                                  fontSize: 9
+                                  fontSize: 9,
+                                    // color: TColors.textPrimaryO80
                                 )
                             ),
                           ]

@@ -63,6 +63,7 @@ class AppNavigator {
       navigatorKey.currentState!.context,
       listen: false,
     );
+
     authProvider.removeUser();
     currencyProvider.resetState();
     offerProvider.resetState();

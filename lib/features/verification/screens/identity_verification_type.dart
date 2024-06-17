@@ -5,14 +5,16 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/features/verification/screens/identity_verification.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../../utils/helpers/helper_functions.dart';
 
 class IdentityVerificationTypeScreen extends StatelessWidget {
   const IdentityVerificationTypeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: TColors.secondaryBorder,
+      backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
       appBar: AppBar(
         leading: InkWell(
             onTap: () {Get.back();},
@@ -27,10 +29,13 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
               RichText(
                   text: TextSpan(
                       style: Theme.of(context).textTheme.headlineLarge,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                             text: 'Identity Verification',
-                            style: TextStyle(fontSize: 20)
+                            style: TextStyle(
+                                fontSize: 20,
+                                // color: TColors.textPrimaryO80
+                            )
                         ),
                       ]
                   )
@@ -40,10 +45,13 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
                   text: TextSpan(
                       style: Theme.of(context).textTheme.bodySmall,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                             text: 'A 60-second timer has begun. Your photo from the chosen document will be used for comparison.',
-                            style: TextStyle(height: 1.5)
+                            style: TextStyle(
+                                height: 1.5,
+                                // color: TColors.textPrimaryO80
+                            )
                         ),
                       ]
                   )
@@ -59,7 +67,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
                   height: 52,
                   decoration: BoxDecoration(
-                    color: TColors.white,
+                    color: darkMode ? TColors.white.withOpacity(0.5) : TColors.white,
                     borderRadius: BorderRadius.circular(10)
                   ),
                   child: Row(
@@ -73,9 +81,12 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.titleMedium,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
                                     text: 'Passport',
+                                    style: TextStyle(
+                                        color: darkMode ? TColors.white : TColors.textPrimaryO80
+                                    )
                                 ),
                               ]
                           )
@@ -93,7 +104,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
                   height: 52,
                   decoration: BoxDecoration(
-                      color: TColors.white,
+                      color: darkMode ? TColors.white.withOpacity(0.5) : TColors.white,
                       borderRadius: BorderRadius.circular(10)
                   ),
                   child: Row(
@@ -107,9 +118,12 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.titleMedium,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
                                   text: 'Driver\'s License',
+                                    style: TextStyle(
+                                        color: darkMode ? TColors.white : TColors.textPrimaryO80
+                                    )
                                 ),
                               ]
                           )
@@ -127,7 +141,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
                   height: 52,
                   decoration: BoxDecoration(
-                      color: TColors.white,
+                      color: darkMode ? TColors.white.withOpacity(0.5) : TColors.white,
                       borderRadius: BorderRadius.circular(10)
                   ),
                   child: Row(
@@ -141,9 +155,12 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.titleMedium,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
                                   text: 'National ID Card',
+                                    style: TextStyle(
+                                        color: darkMode ? TColors.white : TColors.textPrimaryO80
+                                    )
                                 ),
                               ]
                           )
@@ -161,7 +178,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
                   height: 52,
                   decoration: BoxDecoration(
-                      color: TColors.white,
+                      color: darkMode ? TColors.white.withOpacity(0.5) : TColors.white,
                       borderRadius: BorderRadius.circular(10)
                   ),
                   child: Row(
@@ -176,8 +193,11 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                           text: TextSpan(
                               style: Theme.of(context).textTheme.titleMedium,
                               children: <TextSpan> [
-                                const TextSpan(
+                                TextSpan(
                                   text: 'BVN',
+                                    style: TextStyle(
+                                        color: darkMode ? TColors.white : TColors.textPrimaryO80
+                                    )
                                 ),
                                 const TextSpan(
                                   text: '*',

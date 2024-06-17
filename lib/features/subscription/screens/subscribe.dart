@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/common/styles/spacing_styles.dart';
 import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
 import 'package:swappr/data/provider/subscription_provider.dart';
 import 'package:swappr/features/subscription/apis/api.dart';
@@ -41,7 +42,7 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
     return Scaffold(
       body: const SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 20),
+          padding: TSpacingStyle.homePadding,
           child: Column(
             children: [
               CurrencyWidgetWithBack(),

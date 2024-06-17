@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/utils/constants/enums.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -20,6 +21,7 @@ class OfferList extends StatelessWidget {
 
     final offerProvider = Provider.of<OfferProvider>(context);
     final selectedCurrency = offerProvider.selectedCurrency;
+    final darkMode = THelperFunctions.isDarkMode(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5),
@@ -59,7 +61,6 @@ class OfferList extends StatelessWidget {
                     GestureDetector(
                       onTap: (){
                         showModalBottomSheet(
-                            backgroundColor: TColors.white,
                             // isDismissible: false,
                             isScrollControlled: true,
                             // enableDrag: false,
@@ -71,7 +72,7 @@ class OfferList extends StatelessWidget {
                         width: 82,
                         height: 31,
                         decoration: BoxDecoration(
-                            color: TColors.secondaryBorder30,
+                            color: darkMode ? TColors.primary : TColors.secondaryBorder30,
                             borderRadius: BorderRadius.circular(12)
                         ),
                         child: Row(
@@ -80,7 +81,7 @@ class OfferList extends StatelessWidget {
                           children: [
                             Text('Filter', style: Theme.of(context).textTheme.labelMedium,),
                             const SizedBox(width: TSizes.sm,),
-                            FilterIcon()
+                            FilterIcon(),
                           ],
                         ),
                       ),

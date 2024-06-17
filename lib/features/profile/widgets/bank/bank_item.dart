@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:swappr/data/provider/wallet_provider.dart';
+import 'package:swappr/features/wallet/apis/api.dart';
+import 'package:swappr/features/wallet/models/get_bank_account.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/texts.dart';
 
@@ -7,7 +10,9 @@ import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
 
 class BankAccountItem extends StatelessWidget {
-  const BankAccountItem({super.key});
+  final GetBankAccountModel item;
+  final WalletProvider provider;
+  const BankAccountItem({super.key, required this.item, required this.provider});
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +35,8 @@ class BankAccountItem extends StatelessWidget {
                           width: 60,
                           child: ElevatedButton(
                               onPressed: () {
-                                print('I am working');
                                 Slidable.of(cont)!.close();
+                                WalletServices.instance.deleteLocalAccount(id: item.id, walletProvider: provider);
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -64,11 +69,6 @@ class BankAccountItem extends StatelessWidget {
                         );
                       }
                   )
-                  // SlidableAction(
-                  //   onPressed: ((context){}),
-                  //   backgroundColor: TColors.danger,
-                  //   // label: 'Delete',
-                  // ),
                 ]
             ),
             child: ListTile(
@@ -93,7 +93,7 @@ class BankAccountItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                  text: 'Natwest Account',
+                                  text: '${item.bankName}',
                                 )
                               ]
                           )
@@ -103,7 +103,7 @@ class BankAccountItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                  text: '60-00-08 * 445347697',
+                                  text: '${item.accountNumber}',
                                 )
                               ]
                           )

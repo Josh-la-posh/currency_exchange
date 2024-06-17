@@ -6,36 +6,49 @@ import 'package:swappr/features/wallet/models/bank_list_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_model.dart';
 import 'package:swappr/features/wallet/models/flutterwave_model.dart';
+import 'package:swappr/features/wallet/models/get_bank_account.dart';
 import 'package:swappr/features/wallet/models/paystack_model.dart';
 import '../../features/wallet/models/get_wallet.dart';
+import '../../features/wallet/models/ussd_modal.dart';
+import '../../features/wallet/models/verify_bank_account_model.dart';
 import '../../utils/constants/enums.dart';
 
 class WalletProvider extends ChangeNotifier {
   List<GetWalletModel> _wallets = [];
-  GetFcyAccountEntity? _fcyAccountDetails;
+  GetWalletModel? _selectedWallet;
+  List<GetBankAccountModel> _savedBankAccounts = [];
   BankListEntity? _bankListEntity;
+  GetFcyAccountEntity? _fcyAccountDetails;
   List<FcyAccountModel> _fcyAccount = [];
   Currency _selectedCurrency = Currency.Select;
   WalletCurrency _selectedWalletCurrency = WalletCurrency.NGN;
-  String _selectedWallet = getWalletCurrencyName(WalletCurrency.NGN);
   List<Currency> _currencies = Currency.values;
   List<WalletCurrency> _walletCurrencies = WalletCurrency.values;
   List<BankListModel> _bankList = [];
   BankListModel? _selectedBank;
   FlutterwaveModel? _flutterwaveModel;
   PaystackModel? _paystackModel;
+  UssdModel? _ussdModel;
+  VerifyBankAccountModel? _bankAccountDetails;
   bool _showErrorText = false;
   bool showWalletLists = false;
   bool showBankTransferOption = false;
+  bool showWalletBalance = false;
+  Bank _selectedNigBank = Bank.GTB;
+  List<Bank> _nigBanks = Bank.values;
+
+
+
 
 
   List<GetWalletModel> get wallets => _wallets;
+  GetWalletModel? get selectedWallet => _selectedWallet;
+  List<GetBankAccountModel> get savedBankAccounts => _savedBankAccounts;
   GetFcyAccountEntity? get fcyAccountDetails => _fcyAccountDetails;
   BankListEntity? get bankListEntity => _bankListEntity;
   List<FcyAccountModel> get fcyAccount => _fcyAccount;
   Currency get selectedCurrency => _selectedCurrency;
   WalletCurrency get selectedWalletCurrency => _selectedWalletCurrency;
-  String get selectedWallet => _selectedWallet;
   List<Currency> get currencies => _currencies;
   List<WalletCurrency> get walletCurrencies => _walletCurrencies;
   List<BankListModel> get bankList => _bankList;
@@ -44,6 +57,10 @@ class WalletProvider extends ChangeNotifier {
   BankListModel? get selectedBank => _selectedBank;
   FlutterwaveModel? get flutterwaveModel => _flutterwaveModel;
   PaystackModel? get paystackModel => _paystackModel;
+  UssdModel? get ussdModel => _ussdModel;
+  VerifyBankAccountModel? get bankAccountDetails => _bankAccountDetails;
+  Bank get selectedNigBank => _selectedNigBank;
+  List<Bank> get nigBanks => _nigBanks;
 
 
   void filterBanks(String searchText) {
@@ -58,6 +75,16 @@ class WalletProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setSelectedWallet(GetWalletModel? data) {
+    _selectedWallet = data;
+    notifyListeners();
+  }
+
+  void saveBankAccounts(List<GetBankAccountModel> data) {
+    _savedBankAccounts = data;
+    notifyListeners();
+  }
+
   void saveFlutterwaveDetails(FlutterwaveModel? val) {
     _flutterwaveModel = val;
     notifyListeners();
@@ -67,6 +94,17 @@ class WalletProvider extends ChangeNotifier {
     _paystackModel = val;
     notifyListeners();
     print('get paystack ${val?.account_name}');
+  }
+
+  void saveUssdDetail(UssdModel? val) {
+    _ussdModel = val;
+    notifyListeners();
+    print('get paystack ${val?.reference}');
+  }
+
+  void saveBankAccountDetails(VerifyBankAccountModel? val) {
+    _bankAccountDetails = val;
+    notifyListeners();
   }
 
   void saveFcyAccount(List<FcyAccountModel> val) {
@@ -93,17 +131,17 @@ class WalletProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setSelectedNigBank(Bank bank) {
+    _selectedNigBank = bank;
+    notifyListeners();
+  }
+
   void setSelectedWalletCurrency(WalletCurrency currency) {
     _selectedWalletCurrency = currency;
     notifyListeners();
   }
 
-  void setSelectedWallet(String? currency) {
-    _selectedWallet = currency!;
-    notifyListeners();
-  }
-
-  void setSelectedBank(BankListModel val) {
+  void setSelectedBank(BankListModel? val) {
     _selectedBank = val;
     notifyListeners();
   }
@@ -127,11 +165,28 @@ class WalletProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setShowWalletBalance(val) {
+    showWalletBalance = val as bool;
+    notifyListeners();
+  }
+
   resetState() {
     _wallets = [];
+    _selectedWallet = null;
     _selectedCurrency = Currency.Select;
+    _selectedWalletCurrency = WalletCurrency.NGN;
     showWalletLists = false;
+    _fcyAccountDetails = null;
+    _bankListEntity = null;
     _fcyAccount = [];
+    filteredBanks = [];
     _bankList = [];
+    _selectedBank = null;
+    _flutterwaveModel = null;
+    _paystackModel = null;
+    _ussdModel = null;
+    _bankAccountDetails = null;
+    _selectedNigBank = Bank.GTB;
+
   }
 }

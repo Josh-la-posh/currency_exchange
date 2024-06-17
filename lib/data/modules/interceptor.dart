@@ -1,9 +1,10 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:swappr/data/modules/session_manager.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../utils/configs/app_config.dart';
-import '../../utils/configs/env_config.dart';
 import '../../utils/loader.dart';
 import '../../utils/responses/error_dialog.dart';
 
@@ -27,6 +28,9 @@ class AppInterceptor extends Interceptor {
             RequestInterceptorHandler handler) async {
           if (showLoader) {
             handleShowLoader();
+            Timer(Duration(seconds: 2), () {
+              handleHideLoader();
+            });
           }
           requestOptions.cancelToken = cancelToken;
           final connectivityResult = await Connectivity().checkConnectivity();
@@ -45,7 +49,6 @@ class AppInterceptor extends Interceptor {
 
             handler.next(requestOptions);
           } else {
-            handleHideLoader();
             showErrorAlertHelper(
                 errorMessage: 'Please connect to the internet');
           }
@@ -55,7 +58,7 @@ class AppInterceptor extends Interceptor {
           if (showLoader) {
             handleHideLoader();
           }
-          if (err.response?.statusCode == 401 && checkIfUserIsLogin) {
+          if (err.response?.statusCode == 400 && checkIfUserIsLogin) {
             cancelToken.cancel([
               {'message': 'Session expired, Outgoing requests terminated'}
             ]);

@@ -7,3 +7,4 @@ const BANK_TRANSFER_PAYMENT_SCREEN = '/bank-transfer-payment';
 const DIRECT_BANK_PAYMENT_SCREEN = '/direct-bank-payment';
 const BANK_PAYMENT_SCREEN = '/bank-payment';
 const USSD_FUNDING_SCREEN = 'ussd-funding';
+const USSD_FUNDING_DETAIL_SCREEN = 'ussd-funding-detail';

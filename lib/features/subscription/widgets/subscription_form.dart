@@ -223,7 +223,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                 ),
               ],
             ),
-            const SizedBox(height: TSizes.spaceBtwSections,),
+            const SizedBox(height: TSizes.spaceBtwSections * 3,),
             TElevatedButton(
                 onTap: (){
                   if (_formkey.currentState!.validate()) {

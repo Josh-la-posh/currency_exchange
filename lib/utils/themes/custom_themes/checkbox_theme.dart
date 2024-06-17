@@ -27,7 +27,7 @@ class TCheckboxTheme {
     side: BorderSide(color: TColors.secondaryBorder30,),
     checkColor: MaterialStateProperty.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {
-        return TColors.black;
+        return TColors.white;
       } else {
         return TColors.primary;
       }

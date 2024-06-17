@@ -90,7 +90,8 @@ class AuthService {
       print(responseData.data);
       onSuccess();
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -111,7 +112,8 @@ class AuthService {
       onSuccess();
       showSuccessAlertHelper(successMessage: 'Password changed successfully');
     }).catchError((error){
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -187,7 +189,8 @@ class AuthService {
       }
 
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -197,7 +200,8 @@ class AuthService {
     _confirmVerification()
         .then((responseData) async {
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -213,8 +217,8 @@ class AuthService {
       if (onFailure != null) {
         onFailure();
       }
-
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -228,7 +232,8 @@ class AuthService {
       onSuccess();
       showSuccessAlertHelper(successMessage: 'Password reset successful');
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -239,7 +244,8 @@ class AuthService {
     _confirmEmailOtp({"emailOtp": intOtp}).then((value) {
       onSuccess();
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -278,7 +284,8 @@ class AuthService {
       }
       return token;
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 

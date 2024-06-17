@@ -8,6 +8,7 @@ import 'package:swappr/features/profile/widgets/profile/profile_details.dart';
 import 'package:swappr/features/profile/widgets/profile/profile_link.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 
+import '../../../utils/helpers/helper_functions.dart';
 import 'bank_account/bank_account.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -15,11 +16,12 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return ProfileScreenLayout(
       childWidget: SingleChildScrollView(
         child: Column(
           children: [
-            const ProfileDetailsScreen(),
+            ProfileDetailsScreen(darkMode: darkMode,),
             const SizedBox(height: TSizes.spaceBtwItems,),
             ProfileLinkWidget(onPressed: () => {Get.to(() => const BankAccountScreen())}, title: 'Bank Account', icon: BankIcon(),),
             const DividerWidget(),

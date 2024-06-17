@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swappr/data/provider/wallet_provider.dart';
 import 'package:swappr/features/profile/widgets/bank/bank_item.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/sizes.dart';
@@ -6,17 +7,19 @@ import 'package:swappr/utils/constants/sizes.dart';
 import '../../../../utils/layouts/list_layout.dart';
 
 class BankAccountListScreen extends StatelessWidget {
-  const BankAccountListScreen({super.key});
+  final WalletProvider provider;
+  const BankAccountListScreen({super.key, required this.provider});
 
   @override
   Widget build(BuildContext context) {
+    final banks = provider.savedBankAccounts;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         RichText(
             text: TextSpan(
                 style: Theme.of(context).textTheme.titleLarge,
-                children: <TextSpan> [
+                children: const <TextSpan> [
                   TextSpan(
                     text: 'Bank Accounts',
                     style: TextStyle(
@@ -26,11 +29,11 @@ class BankAccountListScreen extends StatelessWidget {
                 ]
             )
         ),
-        SizedBox(height: TSizes.defaultSpace,),
+        const SizedBox(height: TSizes.defaultSpace,),
         RichText(
             text: TextSpan(
                 style: Theme.of(context).textTheme.labelMedium,
-                children: <TextSpan> [
+                children: const <TextSpan> [
                   TextSpan(
                       text: 'Here are the lists of all the bank accounts you have',
                   )
@@ -38,13 +41,16 @@ class BankAccountListScreen extends StatelessWidget {
             )
         ),
         const SizedBox(height: TSizes.defaultSpace,),
+
+        // List of saved bank accounts
+
         Column(
           children: [
             TListLayout(
-                itemCount: 4,
+                itemCount: banks.length,
                 itemBuilder: (_, index) {
-                  // final item = provider.subscriptions[index];
-                  return BankAccountItem();
+                  final item = banks[index];
+                  return BankAccountItem(item: item, provider: provider,);
                 }
             )
           ],

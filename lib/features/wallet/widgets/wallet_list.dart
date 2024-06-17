@@ -107,7 +107,7 @@ class WalletList extends StatelessWidget {
                     height: 1,
                     width: double.infinity,
                     decoration:BoxDecoration(
-                      color: Colors.black.withOpacity(0.05),
+                      color: darkMode ? TColors.white.withOpacity(0.2) : Colors.black.withOpacity(0.05),
                     ),
                   )
                 ],

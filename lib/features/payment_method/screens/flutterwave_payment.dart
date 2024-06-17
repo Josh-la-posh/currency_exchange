@@ -10,8 +10,8 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 
-class FlutterwavePeymentScreen extends StatelessWidget {
-  const FlutterwavePeymentScreen({super.key});
+class FlutterwavePaymentScreen extends StatelessWidget {
+  const FlutterwavePaymentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -280,8 +280,9 @@ class FlutterwavePeymentScreen extends StatelessWidget {
                   alignment: Alignment.center,
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [
+                    color: darkMode ? TColors.primary : Colors.transparent,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
                         BoxShadow(
                           color: TColors.black.withOpacity(0.3),
                           offset: const Offset(2.3,3.87),
@@ -300,13 +301,13 @@ class FlutterwavePeymentScreen extends StatelessWidget {
                             blurRadius: 0,
                             spreadRadius: 0
                         ),
-                      ]
+                      ],
                   ),
                   child:
                   RichText(
                       text: TextSpan(
                           style: TextStyle(
-                              color: darkMode ? Colors.white : Colors.black,
+                              color: darkMode ? TColors.white : Colors.black,
                               fontWeight: FontWeight.w600,
                               fontSize: 16,
                               fontFamily: 'Roboto'

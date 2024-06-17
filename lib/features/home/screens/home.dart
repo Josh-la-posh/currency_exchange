@@ -49,49 +49,26 @@ class _HomeScreenState extends State<HomeScreen> {
     final darkMode = THelperFunctions.isDarkMode(context);
     return DashboardScreenLayout(
       childWidget:SingleChildScrollView(
-        child: Container(
-          height: THelperFunctions.screenHeight(),
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: TColors.secondaryBorder
-          ),
-          child: Column(
-              children: [
-                const SizedBox(height: TSizes.defaultSpace,),
-                if (authProvider.isVerifiedDisplay == true)
-                 const VerifyYourAccountWidget(),
+        child: Column(
+            children: [
+              const SizedBox(height: TSizes.defaultSpace,),
+              if (authProvider.isVerifiedDisplay == true)
+                VerifyYourAccountWidget(darkMode: darkMode),
 
-
-                // Padding(
-                //   padding: const EdgeInsets.only(right: TSizes.defaultSpace * 1.5),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.end,
-                //     children: [
-                //       GestureDetector(
-                //         onTap: () {
-                //           Get.to(() => const NegotiationOfferScreen());
-                //         },
-                //           child: DrawerIcon(height: 14)
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                // SizedBox(height: TSizes.defaultSpace/2,),
-                HomeBalanceWidget(),
-                const SizedBox(height: TSizes.defaultSpace,),
-                Container(
-                  height: 2,
-                  padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5, vertical: TSizes.lg),
-                  decoration: BoxDecoration(
-                      color: TColors.white.withOpacity(0.32)
-                  ),
+              HomeBalanceWidget(darkMode: darkMode),
+              const SizedBox(height: TSizes.defaultSpace,),
+              Container(
+                height: 2,
+                padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5, vertical: TSizes.lg),
+                decoration: BoxDecoration(
+                    color: TColors.white.withOpacity(0.32)
                 ),
-                LinkSectionWidget(),
-                const SizedBox(height: TSizes.defaultSpace,),
-               TrendingOffer(offerProvider: offerProvider)
-              ],
-            ),
-        ),
+              ),
+              LinkSectionWidget(darkMode: darkMode,),
+              const SizedBox(height: TSizes.defaultSpace,),
+             TrendingOffer(offerProvider: offerProvider, darkMode: darkMode,)
+            ],
+          ),
       ),
     );
   }

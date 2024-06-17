@@ -7,6 +7,7 @@ import 'package:swappr/features/subscription/routes/names.dart';
 import 'package:swappr/features/transaction/routes/names.dart';
 import 'package:swappr/features/wallet/routes/names.dart';
 import 'package:swappr/utils/constants/colors.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../data/modules/app_navigator.dart';
 import '../../data/provider/auth_provider.dart';
 import '../../features/profile/routes/names.dart';
@@ -67,6 +68,8 @@ class _AppLayoutState extends State<AppLayout>
   Widget build(BuildContext context) {
     var authProvider = Provider.of<AuthProvider>(AppNavigator
         .instance.navigatorKey.currentState?.context as BuildContext);
+
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: widget.layoutBodyColor,
       bottomNavigationBar: _isBottomBarVisible == false
@@ -89,7 +92,7 @@ class _AppLayoutState extends State<AppLayout>
             fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
         unselectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
-        backgroundColor: Colors.white,
+        backgroundColor: darkMode ? Colors.black : Colors.white,
         selectedItemColor: TColors.primary,
         showSelectedLabels: true,
         showUnselectedLabels: true,

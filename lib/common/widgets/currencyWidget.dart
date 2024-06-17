@@ -15,7 +15,7 @@ class CurrencyWidget extends StatelessWidget {
     return Container(
       height: 82,
       decoration: const BoxDecoration(
-        color: TColors.textFieldBackground
+        // color: TColors.textFieldBackground
       ),
       child: ListView(
         scrollDirection: Axis.horizontal,

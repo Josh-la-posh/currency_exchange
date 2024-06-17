@@ -14,19 +14,26 @@ import '../../transaction/screens/history.dart';
 import '../../wallet/screens/wallet.dart';
 
 class LinkSectionWidget extends StatelessWidget {
-  const LinkSectionWidget({super.key});
+  final bool darkMode;
+  const LinkSectionWidget({super.key, required this.darkMode});
 
   @override
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: TSizes.xs),
         decoration: BoxDecoration(
-            color: TColors.secondaryBorder,
+            color: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
             boxShadow: [
               BoxShadow(
-                  color: TColors.black.withOpacity(0.25),
-                  offset: const Offset(0,4),
-                  blurRadius: 4,
+                  color: darkMode ? TColors.black.withOpacity(0.3) : TColors.black.withOpacity(0.25),
+                  offset: darkMode ? Offset(0, 1.24) : Offset(0,4),
+                  blurRadius: darkMode ? 1.94 : 4,
+                  spreadRadius: darkMode ? 1.94 : 0
+              ),
+              BoxShadow(
+                  color: TColors.secondaryBorder,
+                  offset: const Offset(0.0,0.0),
+                  blurRadius: 0,
                   spreadRadius: 0
               ),
             ]
@@ -61,7 +68,10 @@ class LinkSectionWidget extends StatelessWidget {
                               children: <TextSpan> [
                                 TextSpan(
                                     text:'All Offer',
-                                    style: TextStyle(fontWeight: TSizes.fontWeightMd, color: TColors.textPrimary.withOpacity(0.5))
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightMd,
+                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
+                                    )
                                 ),
                               ]
                           )
@@ -92,7 +102,10 @@ class LinkSectionWidget extends StatelessWidget {
                               children: <TextSpan> [
                                 TextSpan(
                                     text:'Deposit',
-                                    style: TextStyle(fontWeight: TSizes.fontWeightMd, color: TColors.textPrimary.withOpacity(0.5))
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightMd,
+                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
+                                    )
                                 ),
                               ]
                           )
@@ -128,7 +141,10 @@ class LinkSectionWidget extends StatelessWidget {
                               children: <TextSpan> [
                                 TextSpan(
                                     text:'Wallet',
-                                    style: TextStyle(fontWeight: TSizes.fontWeightMd, color: TColors.textPrimary.withOpacity(0.5))
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightMd,
+                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
+                                    )
                                 ),
                               ]
                           )
@@ -159,7 +175,10 @@ class LinkSectionWidget extends StatelessWidget {
                               children: <TextSpan> [
                                 TextSpan(
                                     text:'Withdraw',
-                                    style: TextStyle(fontWeight: TSizes.fontWeightMd, color: TColors.textPrimary.withOpacity(0.5))
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightMd,
+                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
+                                    )
                                 ),
                               ]
                           )
@@ -195,7 +214,10 @@ class LinkSectionWidget extends StatelessWidget {
                               children: <TextSpan> [
                                 TextSpan(
                                     text:'Subscribe',
-                                    style: TextStyle(fontWeight: TSizes.fontWeightMd, color: TColors.textPrimary.withOpacity(0.5))
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightMd,
+                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
+                                    )
                                 ),
                               ]
                           )
@@ -227,7 +249,10 @@ class LinkSectionWidget extends StatelessWidget {
                               children: <TextSpan> [
                                 TextSpan(
                                     text:'Negotiation \n offers',
-                                    style: TextStyle(fontWeight: TSizes.fontWeightMd, color: TColors.textPrimary.withOpacity(0.5), height: 1.4)
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightMd,
+                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
+                                        height: 1.4)
                                 ),
                               ]
                           )

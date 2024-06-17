@@ -1,18 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:swappr/features/home/routes/names.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/auth_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/sizes.dart';
+import '../../../utils/helpers/helper_functions.dart';
 import '../../wallet/routes/names.dart';
 
-class PaystackPaymentScreen extends StatelessWidget {
+class UssdFundingDetailScreen extends StatelessWidget {
   String? amount;
-  PaystackPaymentScreen({super.key, this.amount});
+  UssdFundingDetailScreen({super.key, this.amount});
 
   @override
   Widget build(BuildContext context) {
@@ -23,37 +22,69 @@ class PaystackPaymentScreen extends StatelessWidget {
 
     final darkMode = THelperFunctions.isDarkMode(context);
 
-    final item = walletProvider.paystackModel;
+    final item = walletProvider.ussdModel;
 
     return Scaffold(
-      backgroundColor: darkMode ? TColors.black : const Color(0xFFE9D9FF).withOpacity(0.9),
-      appBar: AppBar(
-        leading: const BackButton(),
-      ),
+      backgroundColor: darkMode ? TColors.black : const Color(0xFFE9D9FF).withOpacity(0.12),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(  vertical: TSizes.defaultSpace, horizontal: TSizes.defaultSpace),
+          padding: const EdgeInsets.symmetric(  vertical: TSizes.defaultSpace * 3, horizontal: TSizes.defaultSpace * 2),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Image(image: AssetImage(TImages.PaystackIcon)),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                color: darkMode ? Colors.white : Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14,
-                                fontFamily: 'Roboto'
+                                  color: darkMode ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  fontFamily: 'Roboto'
                               ),
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${authProvider.user?.email}',
+                                  text: 'Reference No:',
+                                )
+                              ]
+                          )
+                      ),
+                      const SizedBox(height: TSizes.sm,),
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: darkMode ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  fontFamily: 'Roboto'
+                              ),
+                              children: <TextSpan> [
+                                TextSpan(
+                                  text: '${item?.reference}',
+                                )
+                              ]
+                          )
+                      ),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: darkMode ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14,
+                                  fontFamily: 'Roboto'
+                              ),
+                              children: <TextSpan> [
+                                TextSpan(
+                                  text: '${authProvider.user?.email}',
                                 )
                               ]
                           )
@@ -75,7 +106,7 @@ class PaystackPaymentScreen extends StatelessWidget {
                           )
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
               SizedBox(height: THelperFunctions.screenHeight() * 0.1),
@@ -94,8 +125,8 @@ class PaystackPaymentScreen extends StatelessWidget {
                               text: 'Transfer ',
                             ),
                             TextSpan(
-                              text: 'NGN ${amount} ',
-                              style: TextStyle(color: Color(0xFFA17DD0))
+                                text: 'NGN ${amount} ',
+                                style: TextStyle(color: Color(0xFFA17DD0))
                             ),
                             TextSpan(
                               text: ' to',
@@ -127,10 +158,10 @@ class PaystackPaymentScreen extends StatelessWidget {
                         borderRadius: const BorderRadius.all(Radius.circular(10)),
                         boxShadow: [
                           BoxShadow(
-                              color: TColors.black.withOpacity(0.3),
-                              offset: const Offset(2.3,3.87),
-                              // blurRadius: 1.94,
-                              // spreadRadius: 1.94
+                            color: TColors.black.withOpacity(0.3),
+                            offset: const Offset(2.3,3.87),
+                            // blurRadius: 1.94,
+                            // spreadRadius: 1.94
                           ),
                           BoxShadow(
                               color: const Color(0xFFA58DC4).withOpacity(0.3),
@@ -150,21 +181,21 @@ class PaystackPaymentScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(left: TSizes.lg, right: TSizes.lg, top: TSizes.md, bottom: TSizes.xl),
                       child: Column(
                         children: [
-                          RichText(
-                              text: TextSpan(
-                                  style: TextStyle(
-                                      color: darkMode ? TColors.textPrimaryO80 : Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 22,
-                                      fontFamily: 'Roboto'
-                                  ),
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                      text: '${item?.bank['name']}',
-                                    ),
-                                  ]
-                              )
-                          ),
+                          // RichText(
+                          //     text: TextSpan(
+                          //         style: TextStyle(
+                          //             color: darkMode ? Colors.white : Colors.black,
+                          //             fontWeight: FontWeight.w500,
+                          //             fontSize: 22,
+                          //             fontFamily: 'Roboto'
+                          //         ),
+                          //         children: <TextSpan> [
+                          //           TextSpan(
+                          //             text: 'Please dial',
+                          //           ),
+                          //         ]
+                          //     )
+                          // ),
                           const SizedBox(height: TSizes.defaultSpace,),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -172,50 +203,33 @@ class PaystackPaymentScreen extends StatelessWidget {
                               RichText(
                                   text: TextSpan(
                                       style: TextStyle(
-                                          color: darkMode ? TColors.textPrimaryO80 : Colors.black,
+                                          color: darkMode ? Colors.white : Colors.black,
                                           fontWeight: FontWeight.w500,
                                           fontSize: 32,
                                           fontFamily: 'Roboto'
                                       ),
                                       children: <TextSpan> [
                                         TextSpan(
-                                          text: '${item?.account_number}',
+                                          text: '${item?.ussd_code}',
                                         ),
                                       ]
                                   )
                               ),
-                              const SizedBox(width: TSizes.lg),
-                              const Image(image: AssetImage(TImages.transferFile))
                             ],
                           ),
-                          const SizedBox(height: TSizes.md,),
+                          const SizedBox(height: TSizes.defaultSpace  / 1.2,),
                           RichText(
+                            textAlign: TextAlign.center,
                               text: TextSpan(
                                   style: TextStyle(
-                                      color: darkMode ? TColors.textPrimaryO80 : Colors.black,
+                                      color: darkMode ? Colors.white : Colors.black,
                                       fontWeight: FontWeight.w500,
-                                      fontSize: 12,
+                                      fontSize: 14,
                                       fontFamily: 'Roboto'
                                   ),
                                   children: <TextSpan> [
                                     TextSpan(
                                       text: '${item?.display_text}',
-                                    ),
-                                  ]
-                              )
-                          ),
-                          const SizedBox(height: TSizes.defaultSpace  / 1.2,),
-                          RichText(
-                              text: TextSpan(
-                                  style: TextStyle(
-                                      color: darkMode ? TColors.textPrimaryO80 : Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      fontFamily: 'Roboto'
-                                  ),
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                      text: 'Expires in ${THelperFunctions.getTimeDifference(item!.account_expires_at)}',
                                     ),
                                   ]
                               )
@@ -234,7 +248,6 @@ class PaystackPaymentScreen extends StatelessWidget {
                       alignment: Alignment.center,
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       decoration: BoxDecoration(
-                          color: darkMode ? TColors.primary : Colors.transparent,
                           borderRadius: const BorderRadius.all(Radius.circular(10)),
                           boxShadow: [
                             BoxShadow(
@@ -268,7 +281,57 @@ class PaystackPaymentScreen extends StatelessWidget {
                               ),
                               children: const <TextSpan> [
                                 TextSpan(
-                                  text: 'I\'ve sent the money',
+                                  text: 'Proceed to Wallet',
+                                ),
+                              ]
+                          )
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: TSizes.defaultSpace),
+                  GestureDetector(
+                    onTap: () {
+                      AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: TColors.black.withOpacity(0.3),
+                              offset: const Offset(2.3,3.87),
+                              // blurRadius: 1.94,
+                              // spreadRadius: 1.94
+                            ),
+                            BoxShadow(
+                                color: const Color(0xFFA58DC4).withOpacity(0.3),
+                                offset: const Offset(0.0,0.0),
+                                blurRadius: 0,
+                                spreadRadius: 0
+                            ),
+                            BoxShadow(
+                                color: Colors.white.withOpacity(0.8),
+                                offset: const Offset(0.0,0.0),
+                                blurRadius: 0,
+                                spreadRadius: 0
+                            ),
+                          ]
+                      ),
+                      child:
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: darkMode ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16,
+                                  fontFamily: 'Roboto'
+                              ),
+                              children: const <TextSpan> [
+                                TextSpan(
+                                  text: 'Proceed to Dashboard',
                                 ),
                               ]
                           )

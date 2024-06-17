@@ -13,17 +13,24 @@ class AddSubscriptionScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: TSpacingStyle.dashboardPadding,
+          padding: TSpacingStyle.homePadding,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const CurrencyWidgetWithBack(),
-              const SizedBox(height: TSizes.spaceBtwSections,),
-              Text('Subscribe', style: Theme.of(context).textTheme.titleMedium,),
-              const SizedBox(height: TSizes.sm,),
-              Text('Notify me when an offer is created that matches this criteria:', style: Theme.of(context).textTheme.labelMedium,),
-              const SizedBox(height: TSizes.spaceBtwItems,),
-              const SubscriptionForm()
+              Padding(
+                padding: TSpacingStyle.paddingWithAppBarHeight,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: TSizes.spaceBtwSections,),
+                    Text('Subscribe', style: Theme.of(context).textTheme.titleMedium,),
+                    const SizedBox(height: TSizes.sm,),
+                    Text('Notify me when an offer is created that matches this criteria:', style: Theme.of(context).textTheme.labelMedium,),
+                    const SizedBox(height: TSizes.spaceBtwItems,),
+                    const SubscriptionForm()
+                  ],
+                ),
+              ),
             ],
           ),
         ),

@@ -6,9 +6,11 @@ import 'package:swappr/data/provider/auth_provider.dart';
 import 'package:swappr/features/verification/screens/verify_page.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/sizes.dart';
+import '../../utils/helpers/helper_functions.dart';
 
 class VerifyYourAccountWidget extends StatefulWidget {
-  const VerifyYourAccountWidget({super.key});
+  final bool darkMode;
+  const VerifyYourAccountWidget({super.key, required this.darkMode});
 
   @override
   State<VerifyYourAccountWidget> createState() => _VerifyYourAccountWidgetState();
@@ -25,7 +27,7 @@ class _VerifyYourAccountWidgetState extends State<VerifyYourAccountWidget> {
             margin: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwElements),
             padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 30),
             decoration: BoxDecoration(
-                color: TColors.secondaryBorder,
+                color: widget.darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
@@ -51,7 +53,10 @@ class _VerifyYourAccountWidgetState extends State<VerifyYourAccountWidget> {
                         children: const <TextSpan> [
                           TextSpan(
                               text:'Verify Your Account',
-                              style: TextStyle(fontSize: 18)
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  // color: TColors.textPrimaryO80
+                              )
                           ),
                         ]
                     )
@@ -64,7 +69,10 @@ class _VerifyYourAccountWidgetState extends State<VerifyYourAccountWidget> {
                         children: const <TextSpan> [
                           TextSpan(
                               text:'To ensure the security of your account and provide you with the best possible experience, we need to verify your identity.',
-                              style: TextStyle(fontSize: 10)
+                              style: TextStyle(
+                                  fontSize: 10,
+                                  // color: TColors.textPrimaryO80
+                              )
                           ),
                         ]
                     )
@@ -73,7 +81,7 @@ class _VerifyYourAccountWidgetState extends State<VerifyYourAccountWidget> {
 
                 TElevatedButton(
                     onTap: (){
-                      Get.to(() => const VerificationPage());
+                      Get.to(() => VerificationPage());
                     },
                     buttonText: 'Verify Now'
                 )

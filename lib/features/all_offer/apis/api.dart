@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:swappr/data/modules/dio.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/features/all_offer/models/negotiate_offer_entity.dart';
 import 'package:swappr/features/all_offer/models/offer_details_entity.dart';
 import 'package:swappr/features/all_offer/routes/names.dart';
 import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/responses/error_dialog.dart';
 import 'package:swappr/utils/responses/handleApiError.dart';
+import 'package:swappr/utils/shared/notification/snackbar.dart';
 
 import '../../../data/modules/app_navigator.dart';
 import '../models/offer.dart';
@@ -53,6 +55,10 @@ class OfferService {
     return apiService.get('/offer/$id');
   }
 
+  Future _getAllNegotiatedOffers() {
+    return apiService.get('/offer/negotiate/negotiated-offers');
+  }
+
 
 
 
@@ -83,7 +89,7 @@ class OfferService {
       //
       // ));
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
     });
   }
 
@@ -98,7 +104,7 @@ class OfferService {
         data: {{'negotiationAccepted': negotiationAccepted}}).then((response) {
       print('create offer ${response.data}');
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
     });
   }
 
@@ -107,16 +113,19 @@ class OfferService {
   negotiateOffer({
     required String id,
     required int negotiatorRate,
-    required int negotiatorAmount
+    required int negotiatorAmount,
+    required OfferProvider offerProvider
   }) {
     _negotiateOffer(
         id: id,
         data: {
           'negotiatorRate': negotiatorRate,
           'negotiatorAmount': negotiatorAmount})
-    .then((response) {
+    .then((response) async {
       print('create offer ${response.data}');
+      await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
     }).catchError((error) {
+      print('create offer ${error.toString()}');
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
@@ -178,6 +187,32 @@ class OfferService {
           ));
           offerProvider.saveOffers(offers);
         }
+
+    });
+  }
+
+
+  getAllNegotiatedOOffers({
+    required OfferProvider offerProvider,
+  }) {
+    // List<OfferEntity> offers = [];
+
+    _getAllNegotiatedOffers().then((response) {
+      var data = response.data;
+
+      NegotiatedOffersEntity negotiatedOffers = NegotiatedOffersEntity(
+          totalPages: data['totalPages'],
+          payloadSize: data['payloadSize'],
+          hasNext: data['hasNext'],
+          content: data['content'],
+          currentPage: data['currentPage'],
+          skippedRecords: data['skippedRecords'],
+          totalRecords: data['totalRecords']
+      );
+
+      var content = negotiatedOffers.content;
+
+      print('negotiated offers ${content}');
 
     });
   }

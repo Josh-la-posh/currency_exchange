@@ -7,6 +7,7 @@ import 'package:swappr/features/payment_method/screens/paystack_payment.dart';
 import 'package:swappr/features/payment_method/screens/ussd_funding.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/sizes.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../data/modules/app_navigator.dart';
@@ -40,6 +41,7 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     var walletProvider = Provider.of<WalletProvider>(
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
@@ -80,8 +82,13 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
                     title: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          // height: 30,
+                        Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(40),
+                            color: darkMode ? TColors.white.withOpacity(0.3) : Colors.transparent
+                          ),
                           child: Image(image: AssetImage(TImages.bankTransfer)),
                         ),
                         const SizedBox(width: 15,),
@@ -407,7 +414,7 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
               Container(
                 width: double.infinity,
                 height: 1,
-                color: Colors.black.withOpacity(0.08),
+                color: darkMode ? TColors.white.withOpacity(0.3) : Colors.black.withOpacity(0.08),
               ),
               ListTile(
                 onTap: () {
@@ -417,8 +424,13 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      // height: 30,
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: darkMode ? TColors.white.withOpacity(0.3) : Colors.transparent
+                      ),
                       child: Image(image: AssetImage(TImages.ussd)),
                     ),
                     const SizedBox(width: 15,),
@@ -439,15 +451,20 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
               Container(
                 width: double.infinity,
                 height: 1,
-                color: Colors.black.withOpacity(0.08),
+                color: darkMode ? TColors.white.withOpacity(0.3) : Colors.black.withOpacity(0.08),
               ),
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      // height: 30,
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: darkMode ? TColors.white.withOpacity(0.3) : Colors.transparent
+                      ),
                       child: Image(image: AssetImage(TImages.internetBanking)),
                     ),
                     const SizedBox(width: 15,),
@@ -468,7 +485,7 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
               Container(
                 width: double.infinity,
                 height: 1,
-                color: Colors.black.withOpacity(0.08),
+                color: darkMode ? TColors.white.withOpacity(0.3) : Colors.black.withOpacity(0.08),
               ),
               ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
@@ -478,8 +495,13 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
                 title: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      // height: 30,
+                    Container(
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: darkMode ? TColors.white.withOpacity(0.3) : Colors.transparent
+                      ),
                       child: Image(image: AssetImage(TImages.bankAccount)),
                     ),
                     const SizedBox(width: 15,),
@@ -500,7 +522,7 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
               Container(
                 width: double.infinity,
                 height: 1,
-                color: Colors.black.withOpacity(0.08),
+                color: darkMode ? TColors.white.withOpacity(0.3) : Colors.black.withOpacity(0.08),
               ),
             ],
           ),

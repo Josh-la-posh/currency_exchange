@@ -146,6 +146,33 @@ class TValidator {
       return 'Please select a currency';
     }
   }
+
+  static String? acctNumValidator(String? val) {
+    final letterCheck = RegExp(r'[0-9]');
+    if (val == null || val.isEmpty) {
+      return 'Enter your account number';
+    }
+    if (!letterCheck.hasMatch(val)) {
+      return 'Field can only contain numbers';
+    }
+
+    final numRegExp = RegExp(r'^\d{10}$');
+
+    if (!numRegExp.hasMatch(val)) {
+      return 'Enter a correct account number (10 digits required).';
+    }
+
+
+    return null;
+  }
+
+
+  static String? bankValidator(Bank? bank) {
+    if (bank == '') {
+      return 'Please select your preferred bank';
+    }
+  }
+
   static String? emptyFieldValidator(String? value) {
     // Check for empty field
     if (value == null || value.isEmpty) {

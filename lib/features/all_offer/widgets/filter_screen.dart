@@ -42,14 +42,16 @@ class FilterScreen extends StatelessWidget {
                     if (provider.filterAll == true)
                     Icon(Icons.check),
                     if (provider.filterAll == false)
-                      Icon(Icons.circle, color: TColors.secondaryBorder30, )
+                      Icon(
+                        Icons.circle,
+                        color: TColors.secondaryBorder30,
+                      )
                   ],
                 ),
               ),
               ListTile(
                 onTap: (){
                   showModalBottomSheet(
-                      backgroundColor: TColors.white,
                       // isDismissible: false,
                       isScrollControlled: true,
                       // enableDrag: false,
@@ -67,7 +69,10 @@ class FilterScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text('${getDateValue(provider.selectedDate)} days', style: Theme.of(context).textTheme.labelSmall,),
+                        Text(
+                          '${getDateValue(provider.selectedDate)} days',
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
                         Icon(Icons.chevron_right, color: TColors.textPrimary.withOpacity(0.5),)
                       ],
                     ),
@@ -77,7 +82,6 @@ class FilterScreen extends StatelessWidget {
               ListTile(
                 onTap: (){
                   showModalBottomSheet(
-                      backgroundColor: TColors.white,
                       // isDismissible: false,
                       isScrollControlled: true,
                       // enableDrag: false,

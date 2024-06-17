@@ -73,3 +73,24 @@ String getDateValue(Date currency) {
       return 'Select';
   }
 }
+
+enum Bank {
+  GTB,
+  UBA,
+  Sterling,
+  Zenith,
+}
+
+String getBankName(Bank bank) {
+  switch (bank) {
+    case Bank.UBA:
+      return 'UBA';
+    case Bank.Sterling:
+      return 'Sterling';
+    case Bank.Zenith:
+      return 'Zenith';
+    default:
+      return 'GTB';
+
+  }
+}

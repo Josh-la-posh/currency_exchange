@@ -11,8 +11,9 @@ import '../../../verification/screens/verify_page.dart';
 
 
 class ProfileDetailsScreen extends StatelessWidget {
+  final bool darkMode;
   const ProfileDetailsScreen({
-    super.key,
+    super.key, required this.darkMode,
   });
 
   @override
@@ -31,7 +32,7 @@ class ProfileDetailsScreen extends StatelessWidget {
               width: 31,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(31),
-                color: TColors.secondaryBorder30
+                color: darkMode ? TColors.white.withOpacity(0.5) : TColors.secondaryBorder30
               ),
               child: Center(
                 child: RichText(
@@ -78,7 +79,7 @@ class ProfileDetailsScreen extends StatelessWidget {
           ],
         ),
         Container(
-          color: TColors.primaryBackground,
+          color: darkMode ? Colors.transparent : TColors.primaryBackground,
           child: TextButton(
               onPressed: (){
                 Get.to(() => const VerificationPage());

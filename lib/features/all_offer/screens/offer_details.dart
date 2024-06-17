@@ -20,7 +20,6 @@ class OfferDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final offerProvider = Provider.of<OfferProvider>(context);
 
     return Scaffold(
       body: Padding(
@@ -28,124 +27,127 @@ class OfferDetailsScreen extends StatelessWidget {
         child: Column(
           children: [
             const CurrencyWidgetWithBack(),
-            SizedBox(
-              child: Padding(
-                padding: const EdgeInsets.all(TSizes.defaultSpace),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
+            Padding(
+              padding: const EdgeInsets.all(TSizes.defaultSpace),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.titleMedium,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: 'Would you like to swap?',
+                                style: TextStyle(fontWeight: TSizes.fontWeightMd)
+                            )
+                          ]
+                      )
+                  ),
+                  const SizedBox(height: TSizes.spaceBtwElements * 2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              text: TextSpan(
+                                  style: Theme.of(context).textTheme.labelMedium,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: 'has: ${item?.amount} ${item?.debitedCurrency}',
+                                    ),
+                                  ]
+                              )
+                          ),
+                          const SizedBox(height: TSizes.md,),
+                          RichText(
+                              text: TextSpan(
+                                  style: Theme.of(context).textTheme.labelMedium,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: 'needs: ${item?.creditedCurrency}',
+                                    ),
+                                  ]
+                              )
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          RichText(
+                              text: TextSpan(
+                                  style: Theme.of(context).textTheme.labelMedium,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: '${item?.rate} ${item?.debitedCurrency} // ${item?.creditedCurrency}',
+                                        style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
+                                    ),
+                                  ]
+                              )
+                          ),
+                          const SizedBox(height: TSizes.md,),
+                          RichText(
                             text: TextSpan(
-                                style: Theme.of(context).textTheme.titleMedium,
-                                children: const <TextSpan> [
-                                  TextSpan(
-                                      text: 'Would you like to swap?',
-                                      style: TextStyle(fontWeight: TSizes.fontWeightMd)
-                                  )
-                                ]
+                              style: Theme.of(context).textTheme.labelSmall,
+                              children: <TextSpan> [
+                                TextSpan(
+                                    text: 'Created ${THelperFunctions.getTimeDifference(item!.createdDate)} ago',
+                                ),
+                              ]
                             )
-                        ),
-                        const SizedBox(height: TSizes.spaceBtwElements * 2),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                RichText(
-                                    text: TextSpan(
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                        children: <TextSpan> [
-                                          TextSpan(
-                                              text: 'has: ${item?.amount} ${item?.debitedCurrency}',
-                                          ),
-                                        ]
-                                    )
-                                ),
-                                const SizedBox(height: TSizes.md,),
-                                RichText(
-                                    text: TextSpan(
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                        children: <TextSpan> [
-                                          TextSpan(
-                                              text: 'needs: ${item?.creditedCurrency}',
-                                          ),
-                                        ]
-                                    )
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                RichText(
-                                    text: TextSpan(
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                        children: <TextSpan> [
-                                          TextSpan(
-                                              text: '${item?.rate} ${item?.debitedCurrency} // ${item?.creditedCurrency}',
-                                              style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
-                                          ),
-                                        ]
-                                    )
-                                ),
-                                const SizedBox(height: TSizes.md,),
-                                RichText(
-                                  text: TextSpan(
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                    children: <TextSpan> [
-                                      TextSpan(
-                                          text: 'Created ${THelperFunctions.getTimeDifference(item!.createdDate)} ago',
-                                      ),
-                                    ]
-                                  )
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: TSizes.spaceBtwSections),
-                        Container(
-                          width: double.infinity,
-                          height: 40,
-                          decoration: const BoxDecoration(
-                            color: TColors.primaryBackground
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: TSizes.lg),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  height: 15,
-                                  width: 15,
-                                  decoration: BoxDecoration(
-                                    color: TColors.primary,
-                                    borderRadius: BorderRadius.circular(15)
-                                  ),
-                                  child: const Center(
-                                    child: Text('!', style: TextStyle(
-                                      color: TColors.white
-                                    ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: TSizes.md,),
-                                Text(
-                                  'This offer expires in ${item?.createdDate == null ? '' : THelperFunctions.millisecondConversion(item!.expireIn) ?? ''}',
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: TSizes.spaceBtwSections),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 10),
+              decoration: const BoxDecoration(
+                  color: TColors.primaryBackground
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 15,
+                    width: 15,
+                    decoration: BoxDecoration(
+                        color: TColors.primary,
+                        borderRadius: BorderRadius.circular(15)
                     ),
-                  ],
-                ),
+                    child: const Center(
+                      child: Text('!', style: TextStyle(
+                          color: TColors.white
+                      ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: TSizes.md,),
+                  Expanded(
+                    child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                            style: Theme.of(context).textTheme.labelSmall,
+                            children: <TextSpan> [
+                              TextSpan(
+                                  text: 'This offer expires in ${item?.createdDate == null ? '' : THelperFunctions.millisecondConversion(item!.expireIn) ?? ''}',
+                                  style: TextStyle(
+                                      color: TColors.textPrimaryO80
+                                  )
+                              ),
+
+                            ]
+                        )
+                    ),
+                  ),
+                ],
               ),
             )
           ],
@@ -160,7 +162,7 @@ class OfferDetailsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              color: TColors.white,
+              // color: TColors.black.withOpacity(0.8),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                   children: [
@@ -181,7 +183,6 @@ class OfferDetailsScreen extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: () {
                     showModalBottomSheet(
-                        backgroundColor: TColors.white,
                         // isDismissible: false,
                         isScrollControlled: true,
                         // enableDrag: false,

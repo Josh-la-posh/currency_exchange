@@ -16,28 +16,30 @@ class HalfBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Padding(
-        padding: TSpacingStyle.bottomSheetPadding,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title, style: Theme.of(context).textTheme.titleMedium,),
-                InkWell(
-                  onTap: (){
-                    Get.back();
-                  },
-                  child: const Icon(Icons.close, ),
-                )
-              ],
-            ),
-            const SizedBox(height: TSizes.spaceBtwSections,),
-            child
-          ],
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: double.infinity,
+        child: Padding(
+          padding: TSpacingStyle.bottomSheetPadding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(title, style: Theme.of(context).textTheme.titleMedium,),
+                  InkWell(
+                    onTap: (){
+                      Get.back();
+                    },
+                    child: const Icon(Icons.close, ),
+                  )
+                ],
+              ),
+              const SizedBox(height: TSizes.spaceBtwSections,),
+              child
+            ],
+          ),
         ),
       ),
     );

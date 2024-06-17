@@ -5,7 +5,7 @@ import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/data/provider/wallet_provider.dart';
 import 'package:swappr/features/payment_method/screens/flutterwave_payment.dart';
 import 'package:swappr/features/payment_method/screens/paystack_payment.dart';
-import 'package:swappr/features/profile/models/bank_model.dart';
+import 'package:swappr/features/payment_method/screens/ussd_funding_detail.dart';
 import 'package:swappr/features/transaction/apis/api.dart';
 import 'package:swappr/features/wallet/models/bank_list.dart';
 import 'package:swappr/features/wallet/models/bank_list_entity.dart';
@@ -13,14 +13,16 @@ import 'package:swappr/features/wallet/models/fcy_account_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_model.dart';
 import 'package:swappr/features/wallet/models/flutterwaveEntity.dart';
 import 'package:swappr/features/wallet/models/flutterwave_model.dart';
+import 'package:swappr/features/wallet/models/get_bank_account.dart';
 import 'package:swappr/features/wallet/models/paystack_entity.dart';
 import 'package:swappr/features/wallet/models/paystack_model.dart';
+import 'package:swappr/features/wallet/models/ussd_entity.dart';
+import 'package:swappr/features/wallet/models/ussd_modal.dart';
+import 'package:swappr/features/wallet/models/verify_bank_account_entity.dart';
+import 'package:swappr/features/wallet/models/verify_bank_account_model.dart';
 import 'package:swappr/utils/responses/error_dialog.dart';
 import 'package:swappr/utils/responses/handleApiError.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
-
-import '../../../data/modules/app_navigator.dart';
-import '../../all_offer/routes/names.dart';
 import '../models/get_wallet.dart';
 
 class WalletServices{
@@ -114,7 +116,7 @@ class WalletServices{
     required String accountNumber,
     required String bankCode
   }) {
-    return apiService.get('/wallet/fcy-accounts',
+    return apiService.get('/wallet/verify-bank-account',
         queryParameters: {'accountNumber': accountNumber, 'bankCode': bankCode});
   }
 
@@ -157,8 +159,6 @@ class WalletServices{
               meta: result['meta']
           );
 
-          // print('gggggg ${flutterwaveEntity.meta['authorization']}');
-
           var item = flutterwaveEntity.meta['authorization'];
 
             FlutterwaveModel flutterwaveModel = FlutterwaveModel(
@@ -172,7 +172,7 @@ class WalletServices{
             );
 
             walletProvider.saveFlutterwaveDetails(flutterwaveModel);
-            Get.to(() => FlutterwavePeymentScreen());
+            Get.to(() => FlutterwavePaymentScreen());
 
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -231,7 +231,8 @@ class WalletServices{
     required String accountNumber,
     required String accountName,
     required String bankName,
-    required String bankCode
+    required String bankCode,
+    required WalletProvider walletProvider
   }) {
     _addLocalBank({
       "accountNumber": accountNumber,
@@ -239,7 +240,40 @@ class WalletServices{
       "bankName": bankName,
       "bankCode": bankCode
     }).then((response) async {
-      print('add local bank ${response.data}');
+      getLocalBank(walletProvider: walletProvider);
+    }).catchError((error) {
+      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+    });
+  }
+
+  verifyBankAccount({
+    required String accountNumber,
+    required String bankCode,
+    required WalletProvider walletProvider
+  }) {
+    _verifyBankAccount(
+      accountNumber: accountNumber,
+      bankCode: bankCode
+    ).then((response) async {
+
+      var data = response.data;
+
+      VerifyBankAccountEntity accountDetails = VerifyBankAccountEntity(
+          status: data["status"],
+          message: data['message'],
+          data: data['data']
+      );
+
+      var item = accountDetails.data;
+
+      VerifyBankAccountModel accountDetail = VerifyBankAccountModel(
+          account_number: item['account_number'],
+          account_name: item['account_name'],
+          bank_id: item['bank_id']
+      );
+
+      walletProvider.saveBankAccountDetails(accountDetail);
+
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
@@ -258,7 +292,6 @@ class WalletServices{
     }).then((response) async {
       await getWallets(walletProvider: walletProvider, currency: currency);
       await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
-      // Get.back();
       handleShowCustomToast(message: 'In progress ...');
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -276,10 +309,25 @@ class WalletServices{
       'amount': amount,
       'bank': bank
     }).then((response) async {
-      await getWallets(walletProvider: walletProvider, currency: currency);
-      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
-      // AppNavigator.instance.removeAllNavigateToNavHandler(ACCEPT_SUCCESS_SCREEN);
-      handleShowCustomToast(message: 'In progress ...');
+      var result = response.data;
+
+      UssdEntity ussdEntity = UssdEntity(
+          status: result['status'],
+          message: result['message'],
+          data: result['data']
+      );
+
+      var item = ussdEntity.data;
+
+      UssdModel ussdModel = UssdModel(
+          reference: item['reference'],
+          status: item['status'],
+          display_text: item['display_text'],
+          ussd_code: item['ussd_code'],
+      );
+
+      walletProvider.saveUssdDetail(ussdModel);
+      Get.to(() => UssdFundingDetailScreen(amount: amount.toString(),));
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
@@ -355,7 +403,30 @@ class WalletServices{
         ));
       }
       walletProvider.saveWallets(wallets);
-      print(wallets.last.balance);
+    });
+  }
+
+  getLocalBank({
+    required WalletProvider walletProvider
+  }) {
+    List<GetBankAccountModel> bankAccounts = [];
+    _getLocalBank().then((response) {
+      var data = response.data;
+
+      for (var item in data) {
+        bankAccounts.add(GetBankAccountModel(
+            id: item['id'],
+            accountNumber: item['accountNumber'],
+            accountName: item['accountName'],
+            bankName: item['bankName'],
+            currency: item['currency'],
+            type: item['type'],
+            bankCode: item['bankCode'],
+            recipientCode: item['recipientCode'],
+            createdDate: item['createdDate'],
+            lastModifiedDate: item['lastModifiedDate']));
+      }
+      walletProvider.saveBankAccounts(bankAccounts);
     });
   }
 
@@ -366,7 +437,6 @@ class WalletServices{
     List<FcyAccountModel> fcyAccount = [];
     _getWallet(currency: currency).then((response) {
       var data = response.data;
-
 
       GetFcyAccountEntity getFcyAccountEntity = GetFcyAccountEntity(
         totalPages: data['totalPages'],
@@ -424,8 +494,6 @@ class WalletServices{
         ));
       }
       walletProvider.saveBankList(bankList);
-      print('bankList $bankList');
-
     });
   }
 
@@ -444,6 +512,7 @@ class WalletServices{
   deleteLocalAccount({required String id, required WalletProvider walletProvider}) {
     _deleteLocalAccount(id: id).then((response) async {
       handleShowCustomToast(message: response.toString());
+      getLocalBank(walletProvider: walletProvider);
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });

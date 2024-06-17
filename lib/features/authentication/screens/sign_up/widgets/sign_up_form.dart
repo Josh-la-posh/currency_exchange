@@ -130,6 +130,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         Form(
@@ -141,7 +142,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('First Name', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(height: TSizes.sm,),
+                    const SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -150,6 +151,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         onSaved: (value) {
                           _firstName = value as String;
                         },
+                        keyboardType: TextInputType.name,
                       ),
                     ),
                   ],
@@ -161,7 +163,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Last Name', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(height: TSizes.sm,),
+                    const SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -170,6 +172,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         onSaved: (value) {
                           _lastName = value as String;
                         },
+                        keyboardType: TextInputType.name,
                       ),
                     )
                   ],
@@ -181,7 +184,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Email', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(height: TSizes.sm,),
+                    const SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -190,6 +193,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         onSaved: (email) {
                           _email = email as String;
                         },
+                        keyboardType: TextInputType.emailAddress,
                       ),
                     )
                   ],
@@ -201,7 +205,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Phone Number', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(height: TSizes.sm,),
+                    const SizedBox(height: TSizes.sm,),
                     IntlPhoneField(
                       initialCountryCode: 'NG',
                       style: Theme.of(context).textTheme.labelMedium,
@@ -209,13 +213,14 @@ class _SignUpFormState extends State<SignUpForm> {
                         backgroundColor: TColors.secondaryBorder,
                         countryNameStyle: Theme.of(context).textTheme.titleSmall,
                         width: THelperFunctions.screenWidth(),
-                        padding: EdgeInsets.symmetric(horizontal: TSizes.md, vertical: TSizes.defaultSpace * 2),
+                        padding: const EdgeInsets.symmetric(horizontal: TSizes.md, vertical: TSizes.defaultSpace * 2),
                       ),
                       onChanged: (value) => _phoneNo = value.completeNumber,
                       onSaved: (value) {
                         // print('I get $_phoneNo');
                         _phoneNo = value!.completeNumber;
                       },
+                      keyboardType: TextInputType.phone,
                     ),
                   ],
                 ),
@@ -227,11 +232,11 @@ class _SignUpFormState extends State<SignUpForm> {
                   city: cityCont,
                   dialogColor: TColors.secondaryBorder,
                   textFieldDecoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(15),
-                    fillColor: TColors.textFieldBackground,
+                    contentPadding: const EdgeInsets.all(15),
+                    fillColor: darkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
                     hintStyle: Theme.of(context).textTheme.labelMedium,
-                    suffixIcon: Icon(Icons.keyboard_arrow_down_rounded),
-                    suffixIconColor: TColors.textPrimary.withOpacity(0.8),
+                    suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
+                    suffixIconColor: darkMode ? Colors.white: TColors.textPrimary.withOpacity(0.8),
                     // isDense: true,
                   ),
                 ),
@@ -242,7 +247,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Address', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(height: TSizes.sm,),
+                    const SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         validator: TValidator.emptyFieldValidator,
@@ -262,7 +267,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Password', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(height: TSizes.sm,),
+                    const SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,
@@ -292,7 +297,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Confirm Password', style: Theme.of(context).textTheme.labelMedium,),
-                    SizedBox(height: TSizes.sm,),
+                    const SizedBox(height: TSizes.sm,),
                     SizedBox(
                       child: TextFormField(
                         style: Theme.of(context).textTheme.labelMedium,

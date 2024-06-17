@@ -6,14 +6,16 @@ import 'package:swappr/features/verification/screens/identity_verification_type.
 
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../../utils/helpers/helper_functions.dart';
 
 class CountrySelectionPage extends StatelessWidget {
   const CountrySelectionPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      backgroundColor: TColors.secondaryBorder,
+      backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
       appBar: AppBar(
         leading: InkWell(
             onTap: () {Get.back();},
@@ -29,10 +31,13 @@ class CountrySelectionPage extends StatelessWidget {
               RichText(
                   text: TextSpan(
                       style: Theme.of(context).textTheme.headlineLarge,
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
                             text: 'Select Country',
-                            style: TextStyle(fontSize: 20)
+                            style: TextStyle(
+                                fontSize: 20,
+                                // color: TColors.textPrimaryO80
+                            )
                         ),
                       ]
                   )

@@ -57,7 +57,7 @@ class _WalletDashboardScreenState extends State<WalletDashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const WalletDashboard(),
+              WalletDashboard(darkMode: darkMode),
               WalletList(darkMode: darkMode),
               if (transProvider.transactions.length > 0)
                 WalletTransactionHistory(darkMode: darkMode)

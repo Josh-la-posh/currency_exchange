@@ -26,20 +26,20 @@ class TTextTheme {
   );
 
   static TextTheme darkTextTheme = TextTheme(
-    headlineLarge: const TextStyle().copyWith(fontSize: TSizes.fontSize22, fontWeight: TSizes.fontWeightMd, color: TColors.textSecondary, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight22 / TSizes.fontSize22),
-    headlineMedium: const TextStyle().copyWith(fontSize: TSizes.fontSize22, fontWeight: TSizes.fontWeightNm, color: TColors.textSecondary, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm),
+    headlineLarge: const TextStyle().copyWith(fontSize: TSizes.fontSize22, fontWeight: TSizes.fontWeightMd, color: TColors.white, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight22 / TSizes.fontSize22),
+    headlineMedium: const TextStyle().copyWith(fontSize: TSizes.fontSize22, fontWeight: TSizes.fontWeightNm, color: TColors.white, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm),
 
     titleLarge: const TextStyle().copyWith(fontSize: TSizes.fontSize18, fontWeight: TSizes.fontWeightLg, color: TColors.white, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight24 / TSizes.fontSize22),
     titleMedium: const TextStyle().copyWith(fontSize: TSizes.fontSize16, fontWeight: TSizes.fontWeightLg, color: TColors.white, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight22 / TSizes.fontSize16),
-    titleSmall: const TextStyle().copyWith(fontSize: TSizes.fontSize16, fontWeight: TSizes.fontWeightNm, color: TColors.textSecondary, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight24 / TSizes.fontSize16),
+    titleSmall: const TextStyle().copyWith(fontSize: TSizes.fontSize16, fontWeight: TSizes.fontWeightNm, color: TColors.white, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight24 / TSizes.fontSize16),
 
-    bodyLarge: const TextStyle().copyWith(fontSize: TSizes.fontSize20, fontWeight: TSizes.fontWeightNm, color: TColors.textPrimaryO80, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm),
-    bodyMedium: const TextStyle().copyWith(fontSize: TSizes.fontSize16, fontWeight: TSizes.fontWeightNm, color: TColors.textSecondary, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm),
+    bodyLarge: const TextStyle().copyWith(fontSize: TSizes.fontSize20, fontWeight: TSizes.fontWeightNm, color: TColors.white, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm),
+    bodyMedium: const TextStyle().copyWith(fontSize: TSizes.fontSize16, fontWeight: TSizes.fontWeightNm, color: TColors.white, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm),
     bodySmall: const TextStyle().copyWith(fontSize: TSizes.fontSize10, fontWeight: TSizes.fontWeightMd, color: TColors.white, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm),
 
     // bodyText1: const TextStyle().copyWith(fontSize: TSizes.fontSize14, fontWeight: TSizes.fontWeightMd, color: TColors.textSecondary, fontFamily: TTexts.fontFamily, letterSpacing: TSizes.letterSpacingSm),
 
-    labelMedium: const TextStyle().copyWith(fontSize: TSizes.fontSize14, fontWeight: TSizes.fontWeightNm, color: TColors.textSecondary, letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight22 / TSizes.fontSize14),
-    labelSmall: const TextStyle().copyWith(fontSize: TSizes.fontSize12, fontWeight: TSizes.fontWeightNm, color: TColors.textSecondary.withOpacity(0.8), letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight22 / TSizes.fontSize12),
+    labelMedium: const TextStyle().copyWith(fontSize: TSizes.fontSize14, fontWeight: TSizes.fontWeightNm, color: TColors.white, letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight22 / TSizes.fontSize14),
+    labelSmall: const TextStyle().copyWith(fontSize: TSizes.fontSize12, fontWeight: TSizes.fontWeightNm, color: TColors.white.withOpacity(0.8), letterSpacing: TSizes.letterSpacingSm, height: TSizes.lineHeight22 / TSizes.fontSize12),
   );
 }

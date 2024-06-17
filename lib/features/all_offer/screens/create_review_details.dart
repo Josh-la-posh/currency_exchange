@@ -15,6 +15,7 @@ import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/pricing_calculator.dart';
 
+import '../../../utils/helpers/helper_functions.dart';
 import '../apis/api.dart';
 
 class CreateReviewDetailsScreen extends StatelessWidget {
@@ -22,6 +23,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     final offerDetail = Provider.of<OfferProvider>(context);
     final data = offerDetail.createOfferEntity;
     return Scaffold(
@@ -77,10 +79,14 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                       child: RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.labelSmall,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
                                     text: 'Offer Summary',
-                                    style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                    style: TextStyle(
+                                        fontSize: TSizes.fontSize13,
+                                        fontWeight: TSizes.fontWeightMd,
+                                        color: TColors.textPrimaryO80
+                                    )
                                 )
                               ]
                           )
@@ -291,7 +297,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             children: [
                               const SizedBox(height: TSizes.xs),
                               Container(
-                                padding: EdgeInsets.only(left: TSizes.defaultSpace / 2),
+                                padding: const EdgeInsets.only(left: TSizes.defaultSpace / 2),
                                 height: TSizes.textReviewHeight,
                                 decoration: BoxDecoration(
                                     color: TColors.secondaryBorder30,
@@ -308,21 +314,21 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                                   text: 'You will be debited from ',
                                                   style: TextStyle(
                                                     fontSize: TSizes.fontSize13,
-                                                    color: TColors.primary
+                                                    color: darkMode ? TColors.white : TColors.primary
                                                   )
                                               ),
                                               TextSpan(
                                                   text: ' ${getCurrencyName(data.debitedCurrency)} ',
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.w700,
-                                                      color: TColors.primary
+                                                      color: darkMode ? TColors.white : TColors.primary
                                                   )
                                               ),
                                               TextSpan(
                                                   text: ' wallet',
                                                   style: TextStyle(
                                                       fontSize: TSizes.fontSize13,
-                                                      color: TColors.primary
+                                                      color: darkMode ? TColors.white : TColors.primary
                                                   )
                                               )
                                             ]
@@ -331,9 +337,9 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(height: TSizes.defaultSpace,),
+                              const SizedBox(height: TSizes.defaultSpace,),
                               Container(
-                                padding: EdgeInsets.only(left: TSizes.defaultSpace / 2),
+                                padding: const EdgeInsets.only(left: TSizes.defaultSpace / 2),
                                 height: TSizes.textReviewHeight,
                                 decoration: BoxDecoration(
                                     color: TColors.secondaryBorder30,
@@ -350,21 +356,21 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                                   text: 'You will be credited to ',
                                                   style: TextStyle(
                                                       fontSize: TSizes.fontSize13,
-                                                      color: TColors.primary
+                                                      color: darkMode ? TColors.white : TColors.primary
                                                   )
                                               ),
                                               TextSpan(
                                                   text: ' ${getCurrencyName(data.creditedCurrency)} ',
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.w700,
-                                                      color: TColors.primary
+                                                      color: darkMode ? TColors.white : TColors.primary
                                                   )
                                               ),
                                               TextSpan(
                                                   text: ' wallet',
                                                   style: TextStyle(
                                                       fontSize: TSizes.fontSize13,
-                                                      color: TColors.primary
+                                                      color: darkMode ? TColors.white : TColors.primary
                                                   )
                                               )
                                             ]

@@ -15,7 +15,7 @@ class WithdrawalScreen extends StatelessWidget {
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButtonIcon(),
+        leading: BackButton()
       ),
       backgroundColor: darkMode ? Colors.black : const Color(0xFFD0CDE1).withOpacity(0.31),
       body: SingleChildScrollView(
