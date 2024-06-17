@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
 
             // CUSTOM THEME
 
-            themeMode: ThemeMode.system,
-            theme: TAppTheme.lightTheme,
-            darkTheme: TAppTheme.darkTheme,
+            themeMode: ThemeMode.light,
+            // theme: TAppTheme.lightTheme,
+            // darkTheme: TAppTheme.darkTheme,
             routes: routes,
             navigatorKey: AppNavigator.instance.navigatorKey,
             debugShowCheckedModeBanner: false,
