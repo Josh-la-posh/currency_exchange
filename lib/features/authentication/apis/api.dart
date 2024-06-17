@@ -100,17 +100,16 @@ class AuthService {
   changePassword({
     required String currentPassword,
     required String newPassword,
-    required VoidCallback onSuccess,
-    required AuthProvider authProvider
+    required VoidCallback onSuccess
   }) {
     _changePassword({
       'currentPassword': currentPassword,
       'newPassword': newPassword
     }).then((response) {
       print('change password $response');
-
       onSuccess();
-      showSuccessAlertHelper(successMessage: 'Password changed successfully');
+      handleShowCustomToast(message: 'Password changed successfully');
+      // showSuccessAlertHelper(successMessage: 'Password changed successfully');
     }).catchError((error){
       handleShowCustomToast(message: handleApiFormatError(error));
       // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -132,7 +131,6 @@ class AuthService {
   }) async {
     _currentUserApi()
         .then((responseData) async {
-
       UserModel user = UserModel(
           id: responseData['id'],
           firstName: responseData['firstName'],
@@ -285,7 +283,7 @@ class AuthService {
       return token;
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
-      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 

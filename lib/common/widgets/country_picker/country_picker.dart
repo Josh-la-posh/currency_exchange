@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:swappr/utils/constants/colors.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import 'package:swappr/utils/validators/validation.dart';
 import '../../../utils/constants/sizes.dart';
 import './model/city_model.dart';
@@ -182,6 +184,7 @@ class _CountryStateCityPickerState extends State<CountryStateCityPicker> {
     final TextEditingController controller = TextEditingController();
     final TextEditingController controller2 = TextEditingController();
     final TextEditingController controller3 = TextEditingController();
+    final darkMode = THelperFunctions.isDarkMode(context);
 
     showGeneralDialog(
       barrierLabel: _title,
@@ -215,6 +218,7 @@ class _CountryStateCityPickerState extends State<CountryStateCityPicker> {
 
                       ///Text Field
                       TextField(
+
                         controller: _title == 'Country'
                             ? controller
                             : _title == 'State'
@@ -243,15 +247,18 @@ class _CountryStateCityPickerState extends State<CountryStateCityPicker> {
                             }
                           });
                         },
-                        style: TextStyle(
-                            color: Colors.grey.shade800, fontSize: 16.0),
-                        decoration: const InputDecoration(
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        decoration: InputDecoration(
                             border: UnderlineInputBorder(),
                             hintText: "Search here...",
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: 15, horizontal: 5),
                             isDense: true,
-                            prefixIcon: Icon(Icons.search, size: 25,)),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: 22,
+                              color: darkMode ? TColors.white : TColors.textPrimaryO80,
+                            )),
                       ),
 
                       ///Dropdown Items
@@ -315,7 +322,11 @@ class _CountryStateCityPickerState extends State<CountryStateCityPicker> {
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.0))),
+                                  borderRadius: BorderRadius.circular(10.0)
+                              ),
+                              backgroundColor: darkMode ? TColors.primary : Colors.transparent,
+                            foregroundColor: darkMode ? Colors.white : TColors.primary,
+                          ),
                           onPressed: () {
                             if (_title == 'City' && _citySubList.isEmpty) {
                               widget.city.text = controller3.text;

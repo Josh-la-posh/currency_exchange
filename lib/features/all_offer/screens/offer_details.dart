@@ -20,8 +20,9 @@ class OfferDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
+      backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
       body: Padding(
         padding: TSpacingStyle.homePadding,
         child: Column(
@@ -132,7 +133,7 @@ class OfferDetailsScreen extends StatelessWidget {
                   const SizedBox(width: TSizes.md,),
                   Expanded(
                     child: RichText(
-                        textAlign: TextAlign.center,
+                        // textAlign: TextAlign.center,
                         text: TextSpan(
                             style: Theme.of(context).textTheme.labelSmall,
                             children: <TextSpan> [
@@ -162,11 +163,11 @@ class OfferDetailsScreen extends StatelessWidget {
             padding: const EdgeInsets.all(0),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              // color: TColors.black.withOpacity(0.8),
+              color: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                   children: [
-                  SizedBox(
+                    SizedBox(
                     width: double.infinity,
                     height: TSizes.buttonHeight,
                     child: ElevatedButton(
@@ -177,7 +178,7 @@ class OfferDetailsScreen extends StatelessWidget {
                     ),
                   ),
                     const SizedBox(height: TSizes.spaceBtwButtons,),
-              SizedBox(
+                    SizedBox(
                 width: double.infinity,
                 height: TSizes.buttonHeight,
                 child: OutlinedButton(

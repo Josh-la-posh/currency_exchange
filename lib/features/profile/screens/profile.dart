@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swappr/features/profile/icons/svg.dart';
 import 'package:swappr/common/widgets/divider.dart';
+import 'package:swappr/features/profile/screens/change_password.dart';
 import 'package:swappr/features/profile/widgets/layout.dart';
 import 'package:swappr/features/profile/widgets/profile/logout.dart';
 import 'package:swappr/features/profile/widgets/profile/profile_details.dart';
@@ -25,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwItems,),
             ProfileLinkWidget(onPressed: () => {Get.to(() => const BankAccountScreen())}, title: 'Bank Account', icon: BankIcon(),),
             const DividerWidget(),
-            ProfileLinkWidget(onPressed: (){}, title: 'Change Password', icon: PasswordIcon(),),
+            ProfileLinkWidget(onPressed: (){Get.to(() => const ChangePasswordScreen());}, title: 'Change Password', icon: PasswordIcon(),),
             const DividerWidget(),
             ProfileLinkWidget(onPressed: (){}, title: 'FAQs', icon: FaqIcon(),),
             const DividerWidget(),

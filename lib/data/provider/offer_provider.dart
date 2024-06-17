@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:swappr/utils/constants/enums.dart';
 
+import '../../features/all_offer/models/negotiate_offer_model.dart';
 import '../../features/all_offer/models/offer.dart';
 import '../../features/all_offer/models/offer_details_entity.dart';
 
 class OfferProvider extends ChangeNotifier {
   OfferDetailsEntity? _offerDetails;
   List<OfferEntity> _offers = [];
+  List<NegotiateOfferModel> _negotiationsOffers = [];
   OfferEntity? _offerDetail;
   List<Currency> _currencies = Currency.values;
   Currency _selectedCurrency = Currency.Select;
@@ -31,6 +33,7 @@ class OfferProvider extends ChangeNotifier {
 
   OfferDetailsEntity? get offerDetails => _offerDetails;
   List<OfferEntity> get offers => _offers;
+  List<NegotiateOfferModel> get negotiationsOffers => _negotiationsOffers;
   OfferEntity? get offerDetail => _offerDetail;
   OfferEntity? get selectedOffer => _selectedOffer;
   List<Currency> get currencies => _currencies;
@@ -54,6 +57,11 @@ class OfferProvider extends ChangeNotifier {
 
   void saveOffers(List<OfferEntity> data) {
     _offers = data;
+    notifyListeners();
+  }
+
+  void saveNegotiations(List<NegotiateOfferModel> data) {
+    _negotiationsOffers = data;
     notifyListeners();
   }
 

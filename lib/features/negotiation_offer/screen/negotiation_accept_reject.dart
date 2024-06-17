@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:swappr/features/all_offer/apis/api.dart';
 
 import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../common/widgets/divider.dart';
+import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../all_offer/icons/svg.dart';
 
 class NegotiationAcceptRejectScreen extends StatelessWidget {
-  const NegotiationAcceptRejectScreen({super.key});
+  final String id;
+  const NegotiationAcceptRejectScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
+    final offerProvider = Provider.of<OfferProvider>(context);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: TSizes.defaultSpace),
@@ -209,7 +214,11 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           child: TElevatedButton(onTap: (){
-
+                            OfferService.instance.acceptRejectOffer(
+                                id: id,
+                                negotiationAccepted: true,
+                                offerProvider: offerProvider
+                            );
                           },
                               buttonText: 'Accept'),
                         ),
@@ -219,7 +228,13 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                           height: 48,
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              OfferService.instance.acceptRejectOffer(
+                                  id: id,
+                                  negotiationAccepted: false,
+                                  offerProvider: offerProvider
+                              );
+                            },
                             child: const Text(
                               'Reject',
                               style: TextStyle(color: Color(0xFFEA8484)),

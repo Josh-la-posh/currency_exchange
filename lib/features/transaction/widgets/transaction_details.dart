@@ -21,6 +21,7 @@ class TransactionDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return HalfBottomSheetWidget(
         title: 'Transaction Details',
         child: Column(
@@ -33,7 +34,7 @@ class TransactionDetails extends StatelessWidget {
                   height: 24,
                   width: 24,
                   decoration: BoxDecoration(
-                    color: TColors.secondaryBorder30,
+                    color: darkMode ? TColors.grey : TColors.secondaryBorder30,
                     borderRadius: BorderRadius.circular(50),
 
                   ),
@@ -49,7 +50,9 @@ class TransactionDetails extends StatelessWidget {
                             children: <TextSpan> [
                               TextSpan(
                                   text: item.rate == null ? '' : '${item.amount} ${item.debitedCurrency} ---',
-                                  style: TextStyle(color: TColors.textPrimaryO80)
+                                  style: TextStyle(
+                                      color: darkMode ? TColors.grey : TColors.textPrimaryO80
+                                  )
                               )
                             ]
                         )
@@ -60,7 +63,9 @@ class TransactionDetails extends StatelessWidget {
                             children: <TextSpan> [
                               TextSpan(
                                   text: item.rate == null ? '${item.amount} ${item.creditedCurrency}' : '${THelperFunctions.getStringMultiplication(item.rate as String, item.amount)} ${item.creditedCurrency}',
-                                  style: TextStyle(color: TColors.textPrimaryO80)
+                                  style: TextStyle(
+                                      color: darkMode ? TColors.grey : TColors.textPrimaryO80
+                                  )
                               )
                             ]
                         )

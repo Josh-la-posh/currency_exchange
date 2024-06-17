@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/data/modules/dio.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/features/all_offer/models/negotiate_offer_entity.dart';
@@ -10,6 +12,7 @@ import 'package:swappr/utils/responses/handleApiError.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
 
 import '../../../data/modules/app_navigator.dart';
+import '../models/negotiate_offer_model.dart';
 import '../models/offer.dart';
 
 class OfferService {
@@ -97,13 +100,17 @@ class OfferService {
 
   acceptRejectOffer({
     required String id,
-    required bool negotiationAccepted
+    required bool negotiationAccepted,
+    required OfferProvider offerProvider
   }) {
     _acceptRejectOffer(
         id: id,
-        data: {{'negotiationAccepted': negotiationAccepted}}).then((response) {
-      print('create offer ${response.data}');
+        data: {'negotiationAccepted': negotiationAccepted}).then((response) async {
+      print('create offer hhh');
+      await getAllNegotiatedOOffers(offerProvider: offerProvider);
+      Get.back();
     }).catchError((error) {
+      print(error);
       handleShowCustomToast(message: handleApiFormatError(error));
     });
   }
@@ -195,7 +202,7 @@ class OfferService {
   getAllNegotiatedOOffers({
     required OfferProvider offerProvider,
   }) {
-    // List<OfferEntity> offers = [];
+    List<NegotiateOfferModel> negotiations = [];
 
     _getAllNegotiatedOffers().then((response) {
       var data = response.data;
@@ -212,7 +219,27 @@ class OfferService {
 
       var content = negotiatedOffers.content;
 
-      print('negotiated offers ${content}');
+      for (var item in content) {
+        negotiations.add(NegotiateOfferModel(
+            id: item['id'],
+            debitedCurrency: item['debitedCurrency'],
+            creditedCurrency: item['creditedCurrency'],
+            amount: item['amount'],
+            rate: item['rate'],
+            expireIn: item['expireIn'],
+            views: item['views'],
+            negotiatorRate: item['negotiatorRate'],
+            negotiatorAmount: item['negotiatorAmount'],
+            negotiationAccepted: item['negotiationAccepted'],
+            negotiatorId: item['negotiatorId'],
+            isActive: item['isActive'],
+            status: item['status'],
+            createdDate: item['createdDate'],
+            lastModifiedDate: item['lastModifiedDate']
+        ));
+        offerProvider.saveNegotiations(negotiations);
+        print('negotttt ${offerProvider.negotiationsOffers}]');
+      }
 
     });
   }

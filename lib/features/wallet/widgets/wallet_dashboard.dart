@@ -138,6 +138,9 @@ class _WalletDashboardState extends State<WalletDashboard> {
                             IntrinsicWidth(
                               // width: 120,
                               child: TextFormField(
+                                key: Key(walletProvider.selectedWallet == null
+                                    ? '****'
+                                    : '${walletProvider.selectedWallet?.balance}'),
                                 initialValue:  walletProvider.selectedWallet == null
                                     ? '****'
                                     : '${walletProvider.selectedWallet?.balance}',
@@ -276,7 +279,9 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                 itemBuilder: (_) =>  List.generate(
                                   walletProvider.wallets.length, (index) => PopupMenuItem(
                                   onTap: () {
-                                    walletProvider.setSelectedWallet(walletProvider.wallets[index]);
+                                    setState(() {
+                                      walletProvider.setSelectedWallet(walletProvider.wallets[index]);
+                                    });
                                   },
                                   height: 20,
                                   padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 0),

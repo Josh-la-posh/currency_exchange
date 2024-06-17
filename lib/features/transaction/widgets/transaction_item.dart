@@ -24,7 +24,7 @@ class TransactionItem extends StatelessWidget {
           child: ListTile(
             onTap: (){
               showModalBottomSheet(
-                  backgroundColor: TColors.white,
+                  // backgroundColor: TColors.white,
                   isScrollControlled: true,
                   context: context,
                   builder: (cdx) => TransactionDetails(item: item,)
@@ -62,7 +62,7 @@ class TransactionItem extends StatelessWidget {
                                         fontSize: TSizes.fontSize9,
                                         color: status == 'in progress'
                                             ? TColors.golden
-                                            : status == 'successful'
+                                            : status == 'Successful'
                                             ? TColors.primary
                                             : TColors.danger,
 

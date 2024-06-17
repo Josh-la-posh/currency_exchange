@@ -4,6 +4,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:swappr/features/authentication/apis/api.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import 'package:swappr/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
@@ -227,10 +228,7 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
                               );
                             }
                           }
-
-
                           // if (formKey.currentState!.validate()) {
-
                           // }
                         } else {
                           formKey.currentState!.validate();
@@ -238,7 +236,6 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
                             _canSendOtp = false;
                           });
                         }
-
                       },
                       buttonText: _canSendOtp ? 'Confirm' : 'Proceed'
                   ),
@@ -263,32 +260,35 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
             )
           ],
         )
-            : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Image(image: AssetImage(TImages.success)),
-            Container(
-              margin: const EdgeInsets.only(top: 40, bottom: 116),
-              alignment: Alignment.center,
-              child: Text(
-                'You have successfully reset your password',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall,
+            : Container(
+          height: THelperFunctions.screenHeight() * 0.7,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Image(image: AssetImage(TImages.success)),
+              Container(
+                margin: const EdgeInsets.only(top: 40, bottom: 116),
+                alignment: Alignment.center,
+                child: Text(
+                  'You have successfully reset your password',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 55,
-              child: TElevatedButton(
-                onTap: () {
-                  AppNavigator.instance
-                      .navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);
-                },
-                buttonText: 'Please, Log in ',
+              SizedBox(
+                width: double.infinity,
+                height: 55,
+                child: TElevatedButton(
+                  onTap: () {
+                    AppNavigator.instance
+                        .navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);
+                  },
+                  buttonText: 'Please, Log in ',
+                ),
               ),
-            ),
-          ],
-        )
+                        ],
+                      ),
+            )
     );
   }
 }

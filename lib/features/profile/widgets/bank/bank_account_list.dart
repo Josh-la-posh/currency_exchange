@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/data/provider/wallet_provider.dart';
 import 'package:swappr/features/profile/widgets/bank/bank_item.dart';
 import 'package:swappr/utils/constants/colors.dart';
@@ -7,11 +8,11 @@ import 'package:swappr/utils/constants/sizes.dart';
 import '../../../../utils/layouts/list_layout.dart';
 
 class BankAccountListScreen extends StatelessWidget {
-  final WalletProvider provider;
-  const BankAccountListScreen({super.key, required this.provider});
+  const BankAccountListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<WalletProvider>(context);
     final banks = provider.savedBankAccounts;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

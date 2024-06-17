@@ -6,9 +6,12 @@ import 'package:swappr/features/wallet/routes/names.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 
 import '../../../data/modules/app_navigator.dart';
+import '../../../data/provider/transaction_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../transaction/apis/api.dart';
+import '../../wallet/apis/api.dart';
 
 class FlutterwavePaymentScreen extends StatelessWidget {
   const FlutterwavePaymentScreen({super.key});
@@ -18,6 +21,8 @@ class FlutterwavePaymentScreen extends StatelessWidget {
     var authProvider = Provider.of<AuthProvider>(
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
     var walletProvider = Provider.of<WalletProvider>(
+        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+    var transactionProvider = Provider.of<TransactionProvider>(
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
     final darkMode = THelperFunctions.isDarkMode(context);
@@ -272,7 +277,9 @@ class FlutterwavePaymentScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  await WalletServices.instance.getWallets(walletProvider: walletProvider, currency: '');
+                  await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
                   AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
                 },
                 child: Container(

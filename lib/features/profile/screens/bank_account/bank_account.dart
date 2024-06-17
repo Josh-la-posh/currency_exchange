@@ -22,27 +22,18 @@ class BankAccountScreen extends StatefulWidget {
 }
 
 class _BankAccountScreenState extends State<BankAccountScreen> {
-  var walletProvider = Provider.of<WalletProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-
-  // var authProvider = Provider.of<AuthProvider>(
-  //     AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+  WalletProvider walletProvider = Provider.of<WalletProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
 
   @override
   void initState() {
-    if (walletProvider.wallets.isEmpty) {
-      WalletServices.instance.getWallets(
-          walletProvider: walletProvider,
-          currency: ''
-      );
-    }
-
     if (walletProvider.savedBankAccounts.isEmpty) {
       WalletServices.instance.getLocalBank(
           walletProvider: walletProvider,
       );
     }
-
     if (walletProvider.bankList.isEmpty) {
       WalletServices.instance.getBankList(
           walletProvider: walletProvider);
@@ -58,7 +49,7 @@ class _BankAccountScreenState extends State<BankAccountScreen> {
         children: [
           const AppBarWidget(heading: '',),
           const SizedBox(height: TSizes.lg,),
-          BankAccountListScreen(provider: walletProvider,)
+          BankAccountListScreen()
         ],
       ),
       floatingActionButton: TFloatingButton(

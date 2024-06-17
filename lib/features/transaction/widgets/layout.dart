@@ -20,7 +20,7 @@ class TransactionScreenLayout extends StatelessWidget {
       currentRoute: RouteType.History,
       layoutBodyColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
       childWidget: Container(
-        padding: TSpacingStyle.homePadding,
+        padding: TSpacingStyle.paddingWithAppBarHeight,
         child: childWidget,
       ),
     );

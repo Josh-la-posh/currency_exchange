@@ -113,7 +113,7 @@ class WalletProvider extends ChangeNotifier {
   }
 
   setShowWalletList() {
-    showWalletLists = true;
+    showWalletLists = !showWalletLists;
     notifyListeners();
   }
   void saveFcyAccountDetails(GetFcyAccountEntity val) {

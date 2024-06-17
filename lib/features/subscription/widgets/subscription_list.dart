@@ -16,7 +16,6 @@ class SubscriptionList extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<SubscriptionProvider>(context);
 
-    print('subscriptions ${provider.subscriptions.length}');
     return SizedBox(
       child: provider.subscriptions.isEmpty
           ? LayoutBuilder(builder: (context, constraints) {

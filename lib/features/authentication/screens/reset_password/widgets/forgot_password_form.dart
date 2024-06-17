@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/features/authentication/apis/api.dart';
 import 'package:swappr/features/authentication/screens/reset_password/reset_password_otp.dart';
 import 'package:swappr/utils/validators/validation.dart';
 
@@ -44,7 +45,11 @@ class ForgetPasswordForm extends StatelessWidget {
                 onTap: (){
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
-                    Get.to(() => ResetPasswordOtpScreen(email: _email as String,));
+                    AuthService.instance.generateOtp(
+                        email: _email.toString(), onSuccess: (){
+                          Get.to(() => ResetPasswordOtpScreen(email: _email as String,));
+                        }
+                        );
                   }
                   },
                 buttonText: 'Submit')

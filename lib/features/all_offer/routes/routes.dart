@@ -18,9 +18,9 @@ Map<String, WidgetBuilder> offerRoute = {
   ACCEPT_REVIEW_DETAILS_SCREEN: (context) => const AuthGuard(
     widget: AcceptReviewDetailsScreen(),
   ),
-  // ACCEPT_SUCCESS_SCREEN: (context) => const AuthGuard(
-  //   widget: AcceptReviewDetailsScreen(),
-  // ),
+  ACCEPT_SUCCESS_SCREEN: (context) => const AuthGuard(
+    widget: AcceptReviewDetailsScreen(),
+  ),
   CREATE_OFFER_SCREEN: (context) => const AuthGuard(
     widget: CreateOfferScreen(),
   ),

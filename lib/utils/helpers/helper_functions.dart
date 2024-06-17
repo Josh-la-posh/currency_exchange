@@ -122,13 +122,13 @@ class THelperFunctions {
     // }
 
     if (days > 0) {
-      time = "$days days $remainingHours hours $remainingMinute minutes $remainingSeconds seconds";
+      time = "${days}days ${remainingHours}hours ${remainingMinute}minutes ${remainingSeconds}seconds";
     } else if (hours > 0 && days == 0) {
-      time = "$remainingHours hours $remainingMinute minutes $remainingSeconds seconds";
+      time = "${remainingHours}hours ${remainingMinute}minutes ${remainingSeconds}seconds";
     } else if (days == 0 && hours == 0 && minutes > 0) {
-      time = "$remainingMinute minutes $remainingSeconds seconds";
+      time = "${remainingMinute}minutes ${remainingSeconds}seconds";
     } else {
-      time = "$remainingSeconds seconds";
+      time = "${remainingSeconds}seconds";
     }
 
     return time;

@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/data/provider/transaction_provider.dart';
+import 'package:swappr/features/transaction/apis/api.dart';
+import 'package:swappr/features/wallet/apis/api.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
@@ -19,6 +22,8 @@ class PaystackPaymentScreen extends StatelessWidget {
     var authProvider = Provider.of<AuthProvider>(
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
     var walletProvider = Provider.of<WalletProvider>(
+        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+    var transactionProvider = Provider.of<TransactionProvider>(
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
     final darkMode = THelperFunctions.isDarkMode(context);
@@ -226,7 +231,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: TSizes.defaultSpace * 4),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      await WalletServices.instance.getWallets(walletProvider: walletProvider, currency: '');
+                      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
                       AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
                     },
                     child: Container(

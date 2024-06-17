@@ -1,27 +1,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:swappr/features/all_offer/models/offer.dart';
 import 'package:swappr/features/negotiation_offer/screen/negotiation_accept_reject.dart';
 import 'package:swappr/features/negotiation_offer/widget/negotiation_list.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../all_offer/models/negotiate_offer_model.dart';
 import '../../transaction/icons/svg.dart';
 
 class NegotiationItem extends StatelessWidget {
-  // final TransactionEntity item;
+  final NegotiateOfferModel item;
   const NegotiationItem({
     super.key,
+    required this.item
   });
 
   @override
   Widget build(BuildContext context) {
-    // String? status = item.status;
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         ListTile(
           onTap: (){
-            Get.to(() => const NegotiationAcceptRejectScreen());
+            Get.to(() => NegotiationAcceptRejectScreen(id: item.id));
           },
           contentPadding: EdgeInsets.symmetric(vertical: TSizes.md, horizontal: TSizes.defaultSpace),
           title: Row(
@@ -37,9 +41,9 @@ class NegotiationItem extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.labelSmall,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                  text: '400 GPB - 20,000 NGN',
+                                  text: '${item.amount} ${item.creditedCurrency}',
                                     style: TextStyle(fontSize: TSizes.fontSize11, fontWeight: TSizes.fontWeightLg)
                                 ),
                               ]
@@ -70,9 +74,9 @@ class NegotiationItem extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                           style: Theme.of(context).textTheme.labelMedium,
-                          children: const <TextSpan> [
+                          children: <TextSpan> [
                             TextSpan(
-                              text: '600 NGN // GBP ',
+                              text: '${item.rate} ${item.debitedCurrency} // ${item.creditedCurrency} ',
                                 style: TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary)
                             ),
                           ]
@@ -83,10 +87,10 @@ class NegotiationItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelSmall,
                           children: <TextSpan> [
                             TextSpan(
-                                text: 'Jun 5, 10:00 AM',
+                                text: '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
                                 style: TextStyle(
-                                    color: TColors.textPrimary.withOpacity(0.5),
-                                    fontSize: TSizes.fontSize9
+                                    color: darkMode ? TColors.white.withOpacity(0.5) : TColors.textPrimary.withOpacity(0.5),
+                                    fontSize: TSizes.fontSize9,
                                 )
                             ),
                           ]

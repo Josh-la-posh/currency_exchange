@@ -58,7 +58,7 @@ class AppInterceptor extends Interceptor {
           if (showLoader) {
             handleHideLoader();
           }
-          if (err.response?.statusCode == 400 && checkIfUserIsLogin) {
+          if (err.response?.statusCode == 401 && checkIfUserIsLogin) {
             cancelToken.cancel([
               {'message': 'Session expired, Outgoing requests terminated'}
             ]);

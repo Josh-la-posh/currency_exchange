@@ -23,14 +23,21 @@ class WalletDashboardScreen extends StatefulWidget {
 
 class _WalletDashboardScreenState extends State<WalletDashboardScreen> {
 
-  var walletProvider = Provider.of<WalletProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
-  var authProvider = Provider.of<AuthProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+  WalletProvider walletProvider = Provider.of<WalletProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
 
-  var transProvider = Provider.of<TransactionProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+  AuthProvider authProvider = Provider.of<AuthProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
+
+  TransactionProvider transProvider = Provider.of<TransactionProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
 
   @override
   void initState() {

@@ -9,6 +9,7 @@ import 'package:swappr/common/widgets/divider.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/sizes.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../apis/api.dart';
 import '../icons/svg.dart';
 import '../models/offer.dart';
@@ -23,6 +24,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<OfferProvider>(context);
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       body: Padding(
         padding: TSpacingStyle.homePadding,
@@ -83,10 +85,14 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                       child: RichText(
                           text: TextSpan(
                               style: Theme.of(context).textTheme.labelSmall,
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
                                     text: 'Offer Summary',
-                                    style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                    style: TextStyle(
+                                        fontSize: TSizes.fontSize13,
+                                        fontWeight: TSizes.fontWeightMd,
+                                        color: TColors.textPrimaryO80
+                                    )
                                 )
                               ]
                           )
@@ -236,7 +242,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 2, vertical: TSizes.md),
                                 height: TSizes.textReviewHeight,
                                 decoration: BoxDecoration(
-                                  color: TColors.secondaryBorder30,
+                                  color: darkMode ? TColors.grey : TColors.secondaryBorder30,
                                   borderRadius: BorderRadius.circular(10)
                                 ),
                                 child: Row(
@@ -301,7 +307,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 2, vertical: TSizes.md),
                                 height: TSizes.textReviewHeight,
                                 decoration: BoxDecoration(
-                                    color: TColors.secondaryBorder30,
+                                    color: darkMode ? TColors.grey : TColors.secondaryBorder30,
                                     borderRadius: BorderRadius.circular(10)
                                 ),
                                 child: Row(

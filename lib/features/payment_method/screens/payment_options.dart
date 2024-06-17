@@ -487,43 +487,43 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
                 height: 1,
                 color: darkMode ? TColors.white.withOpacity(0.3) : Colors.black.withOpacity(0.08),
               ),
-              ListTile(
-                contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
-                onTap: () {
-                  Get.to(() => const BankTransferScreen());
-                },
-                title: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: darkMode ? TColors.white.withOpacity(0.3) : Colors.transparent
-                      ),
-                      child: Image(image: AssetImage(TImages.bankAccount)),
-                    ),
-                    const SizedBox(width: 15,),
-                    RichText(
-                        text: TextSpan(
-                            style: Theme.of(context).textTheme.labelSmall,
-                            children: const <TextSpan> [
-                              TextSpan(
-                                  text: 'Bank Account',
-                                  style: TextStyle(fontWeight: TSizes.fontWeightLg)
-                              )
-                            ]
-                        )
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                height: 1,
-                color: darkMode ? TColors.white.withOpacity(0.3) : Colors.black.withOpacity(0.08),
-              ),
+              // ListTile(
+              //   contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: 20),
+              //   onTap: () {
+              //     Get.to(() => const BankTransferScreen());
+              //   },
+              //   title: Row(
+              //     crossAxisAlignment: CrossAxisAlignment.center,
+              //     children: [
+              //       Container(
+              //         height: 40,
+              //         width: 40,
+              //         decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(40),
+              //             color: darkMode ? TColors.white.withOpacity(0.3) : Colors.transparent
+              //         ),
+              //         child: Image(image: AssetImage(TImages.bankAccount)),
+              //       ),
+              //       const SizedBox(width: 15,),
+              //       RichText(
+              //           text: TextSpan(
+              //               style: Theme.of(context).textTheme.labelSmall,
+              //               children: const <TextSpan> [
+              //                 TextSpan(
+              //                     text: 'Bank Account',
+              //                     style: TextStyle(fontWeight: TSizes.fontWeightLg)
+              //                 )
+              //               ]
+              //           )
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Container(
+              //   width: double.infinity,
+              //   height: 1,
+              //   color: darkMode ? TColors.white.withOpacity(0.3) : Colors.black.withOpacity(0.08),
+              // ),
             ],
           ),
         ),

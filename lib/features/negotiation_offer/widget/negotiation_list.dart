@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/features/negotiation_offer/widget/no_negotiation.dart';
 import 'package:swappr/features/transaction/widgets/no_transaction.dart';
+import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/list_layout.dart';
@@ -13,13 +15,13 @@ class NegotiationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int? offers = 5;
+    final offerProvider = Provider.of<OfferProvider>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(),
         const SizedBox(height: TSizes.md,),
-        offers == 0
+        offerProvider.negotiationsOffers.isEmpty
             ? LayoutBuilder(builder: (context, constraints) {
           return const NoNegotiationScreen();
         })
@@ -44,10 +46,10 @@ class NegotiationList extends StatelessWidget {
               ),
             ),
             TListLayout(
-                itemCount: offers,
+                itemCount: offerProvider.negotiationsOffers.length,
                 itemBuilder: (_, index) {
-                  // final item = provider.transactions[index];
-                  return NegotiationItem();
+                  final item = offerProvider.negotiationsOffers[index];
+                  return NegotiationItem(item: item);
                 }
             )
           ],

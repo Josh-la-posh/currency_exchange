@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/features/home/routes/names.dart';
+import 'package:swappr/features/transaction/apis/api.dart';
+import 'package:swappr/features/wallet/apis/api.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/auth_provider.dart';
+import '../../../data/provider/transaction_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -18,6 +21,8 @@ class UssdFundingDetailScreen extends StatelessWidget {
     var authProvider = Provider.of<AuthProvider>(
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
     var walletProvider = Provider.of<WalletProvider>(
+        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
+    var transactionProvider = Provider.of<TransactionProvider>(
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
     final darkMode = THelperFunctions.isDarkMode(context);
@@ -290,7 +295,9 @@ class UssdFundingDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: TSizes.defaultSpace),
                   GestureDetector(
-                    onTap: () {
+                    onTap: () async {
+                      await WalletServices.instance.getWallets(walletProvider: walletProvider, currency: '');
+                      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
                       AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                     },
                     child: Container(

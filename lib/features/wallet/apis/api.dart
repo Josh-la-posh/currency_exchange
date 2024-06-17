@@ -141,7 +141,8 @@ class WalletServices{
       await getWallets(walletProvider: walletProvider, currency: currency);
       handleShowCustomToast(message: 'Your wallet has been created successfully');
     }).catchError((error) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -240,7 +241,11 @@ class WalletServices{
       "bankName": bankName,
       "bankCode": bankCode
     }).then((response) async {
-      getLocalBank(walletProvider: walletProvider);
+      await getLocalBank(walletProvider: walletProvider);
+      handleShowCustomToast(message: 'Bank account successfully added');
+      walletProvider.saveBankAccountDetails(null);
+      walletProvider.setSelectedBank(null);
+      Get.back();
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
@@ -327,6 +332,7 @@ class WalletServices{
       );
 
       walletProvider.saveUssdDetail(ussdModel);
+
       Get.to(() => UssdFundingDetailScreen(amount: amount.toString(),));
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -412,7 +418,6 @@ class WalletServices{
     List<GetBankAccountModel> bankAccounts = [];
     _getLocalBank().then((response) {
       var data = response.data;
-
       for (var item in data) {
         bankAccounts.add(GetBankAccountModel(
             id: item['id'],
@@ -425,8 +430,8 @@ class WalletServices{
             recipientCode: item['recipientCode'],
             createdDate: item['createdDate'],
             lastModifiedDate: item['lastModifiedDate']));
+        walletProvider.saveBankAccounts(bankAccounts);
       }
-      walletProvider.saveBankAccounts(bankAccounts);
     });
   }
 
@@ -511,8 +516,9 @@ class WalletServices{
 
   deleteLocalAccount({required String id, required WalletProvider walletProvider}) {
     _deleteLocalAccount(id: id).then((response) async {
-      handleShowCustomToast(message: response.toString());
-      getLocalBank(walletProvider: walletProvider);
+      print(response);
+      await getLocalBank(walletProvider: walletProvider);
+      handleShowCustomToast(message: 'Bank account successfully deleted');
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
