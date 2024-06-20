@@ -48,6 +48,7 @@ class _SignUpFormState extends State<SignUpForm> {
   String _state = '';
   String _password = '';
   String _confirmPass = '';
+  bool _acceptTerms = false;
 
   // user password score
   int? _userPasswordScore;
@@ -324,7 +325,14 @@ class _SignUpFormState extends State<SignUpForm> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Checkbox(value: true, onChanged: (value){}),
+                      Checkbox(
+                          value: _acceptTerms,
+                          onChanged: (value){
+                            setState(() {
+                              _acceptTerms = !_acceptTerms!;
+                            });
+                          }
+                      ),
                       Text(
                         'I understand Swappr Terms of Use',
                         style: Theme.of(context).textTheme.labelMedium,
@@ -336,23 +344,25 @@ class _SignUpFormState extends State<SignUpForm> {
                 const SizedBox(height: TSizes.spaceBtwElements),
 
                 TElevatedButton(onTap: (){
-                  print('${countryCont.text} ${stateCont.text} ${cityCont.text}');
                   if (formKey.currentState!.validate()) {
                     formKey.currentState!.save();
 
-                    AuthService.instance.createAccount(
-                        firstName: _firstName,
-                        lastName: _lastName,
-                        email: _email,
-                        phoneNumber: _phoneNo,
-                        country: countryCont.text,
-                        address: _address,
-                        state: stateCont.text,
-                        password: _password,
-                        onSuccess: () {
-                          Get.to(() => EmailVerificationScreen(email: _email));
-                        });
-                    // Get.to(() => EmailVerificationScreen(email: _email));
+                    if (_acceptTerms == false) {
+                      return;
+                    } else {
+                      AuthService.instance.createAccount(
+                          firstName: _firstName,
+                          lastName: _lastName,
+                          email: _email,
+                          phoneNumber: _phoneNo,
+                          country: countryCont.text,
+                          address: _address,
+                          state: stateCont.text,
+                          password: _password,
+                          onSuccess: () {
+                            Get.to(() => EmailVerificationScreen(email: _email));
+                          });
+                    }
                   }
                 }, buttonText: 'Sign Up')
               ],

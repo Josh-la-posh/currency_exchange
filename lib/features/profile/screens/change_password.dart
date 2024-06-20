@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:swappr/common/styles/spacing_styles.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
@@ -30,7 +32,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
       appBar: AppBar(
-        leading: BackButton(),
+        leading: IconButton(
+          onPressed: (){Get.back();},
+          icon: const Icon(Icons.arrow_back_ios_sharp),
+          style: IconButton.styleFrom(
+              foregroundColor: TColors.primary,
+              iconSize: TSizes.iconBackSize
+          ),
+          hoverColor: Colors.transparent,
+        ),
         title: Text(
             'Change Password',
             style: Theme.of(context).textTheme.headlineLarge
@@ -45,6 +55,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: TSizes.lg,),
                   /// Old password
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

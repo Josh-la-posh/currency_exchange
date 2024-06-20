@@ -9,6 +9,10 @@ class TSpacingStyle {
     bottom: TSizes.defaultSpace,
     right: TSizes.defaultSpace,
   );
+  static const EdgeInsetsGeometry horizontalPadding = EdgeInsets.only(
+    left: TSizes.defaultSpace,
+    right: TSizes.defaultSpace,
+  );
 
   static const EdgeInsetsGeometry dashboardPadding = EdgeInsets.only(
     top: 50,

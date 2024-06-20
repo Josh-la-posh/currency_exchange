@@ -49,7 +49,7 @@ class WalletTransactionList extends StatelessWidget {
                                 style: Theme.of(context).textTheme.bodySmall,
                                 children: <TextSpan> [
                                   TextSpan(
-                                      text: '${item.amount} ${item.creditedCurrency}',
+                                      text:'${item!.rate == null ? '' : THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount))} ${item.rate == null ? '' : item.debitedCurrency} ${item.rate == null ? '' : '-'} ${THelperFunctions.moneyFormatter(item.amount)} ${item.creditedCurrency}',
                                       style:  TextStyle(
                                           fontSize: 10,
                                           fontWeight: TSizes.fontWeightMd,
@@ -72,28 +72,12 @@ class WalletTransactionList extends StatelessWidget {
 
                       ],
                     ),
-                    const SizedBox(width: 25,),
-                    RichText(
-                        text: TextSpan(
-                            style: Theme.of(context).textTheme.bodySmall,
-                            children: <TextSpan> [
-                              TextSpan(
-                                  text: '${item.debitedCurrency == null ? '' : item.debitedCurrency.toString()}',
-                                  style:  TextStyle(
-                                      fontSize: 10,
-                                      fontWeight: TSizes.fontWeightMd,
-                                      color: darkMode ? Colors.white : Colors.black
-                                  )
-                              ),
-                            ]
-                        )
-                    ),
                     const Spacer(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          item.rate == null ? '' : item.rate.toString(),
+                          item.rate == null ? '' : '${item.rate.toString()} ${item.debitedCurrency} // ${item.creditedCurrency}',
                           style: const TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w500,

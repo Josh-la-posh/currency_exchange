@@ -28,6 +28,7 @@ class AppLayout extends StatefulWidget {
   final Color? layoutBodyColor;
   final GlobalKey<NavigatorState>? navKey;
   final Widget? floatingActionButton;
+  final PreferredSizeWidget? appbar;
 
   const AppLayout({
     super.key,
@@ -36,7 +37,8 @@ class AppLayout extends StatefulWidget {
     this.layoutBodyColor = Colors.white,
     required this.childWidget,
     this.navKey,
-    this.floatingActionButton
+    this.floatingActionButton,
+    this.appbar
   });
 
   @override
@@ -71,6 +73,7 @@ class _AppLayoutState extends State<AppLayout>
 
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
+      appBar: widget.appbar,
       backgroundColor: widget.layoutBodyColor,
       bottomNavigationBar: _isBottomBarVisible == false
           ? const SizedBox.shrink()

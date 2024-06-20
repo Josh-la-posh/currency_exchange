@@ -6,6 +6,7 @@ import 'package:swappr/utils/shared/notification/snackbar.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../../utils/helpers/helper_functions.dart';
 
 class HomeBalanceWidget extends StatefulWidget {
   final bool darkMode;
@@ -101,7 +102,7 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                     child: TextFormField(
                       initialValue:  walletProvider.selectedWallet == null
                           ? '****'
-                          : '${walletProvider.selectedWallet?.balance}',
+                          : '${THelperFunctions.moneyFormatter(walletProvider.selectedWallet!.balance.toString())}',
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: TSizes.fontWeightXl,

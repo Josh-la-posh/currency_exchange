@@ -11,6 +11,7 @@ import 'package:swappr/features/wallet/routes/routes.dart';
 import 'package:swappr/features/withdrawals/routes/routes.dart';
 
 import '../../features/authentication/routes/routes.dart';
+import '../../features/splash/routes/routes.dart';
 
 Route _createCustomRoute(Widget page) {
   return PageRouteBuilder(
@@ -32,7 +33,7 @@ Route _createCustomRoute(Widget page) {
 }
 
 Map<String, WidgetBuilder> routes = {
-  // ...splashRoutes,
+  ...splashRoutes,
   ...authRoutes,
   ...subscriptionRoutes,
   ...transactionRoutes,

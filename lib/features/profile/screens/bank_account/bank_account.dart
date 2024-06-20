@@ -47,7 +47,6 @@ class _BankAccountScreenState extends State<BankAccountScreen> {
       childWidget: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AppBarWidget(heading: '',),
           const SizedBox(height: TSizes.lg,),
           BankAccountListScreen()
         ],

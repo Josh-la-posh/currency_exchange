@@ -251,4 +251,11 @@ class THelperFunctions {
     await Future.delayed(duration);
     overlayEntry.remove();
   }
+
+  static String moneyFormatter(String amount) {
+    final formatter = NumberFormat("#,###");
+    double money = double.parse(amount);
+    String result = formatter.format(money);
+    return result;
+  }
 }

@@ -5,4 +5,4 @@ String API_BASE_URL = EnvConfigurationModule.instance.getApiBaseUrl();
 // EnvConfigurationModule.instance.getCustomerSupportEmail();
 // String GOOGLE_PLAYSTORE_URL =
 // EnvConfigurationModule.instance.getGooglePlayStoreUrl();
-const int SPLASH_DURATION = 5;
+const int SPLASH_DURATION = 2;

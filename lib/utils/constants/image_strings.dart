@@ -3,7 +3,7 @@
 class TImages {
 
   // -- App Logo
-  static const String appLogo = "assets/logos/swappr-splash-logo.svg";
+  static const String appLogoPng = "assets/logos/swappr-splash-logo.png";
 
   // Bottom Nav Icons
   static const String home = 'assets/icons/bottomNavIcons/home.png';

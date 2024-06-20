@@ -140,10 +140,10 @@ class _WalletDashboardState extends State<WalletDashboard> {
                               child: TextFormField(
                                 key: Key(walletProvider.selectedWallet == null
                                     ? '****'
-                                    : '${walletProvider.selectedWallet?.balance}'),
+                                    : '${THelperFunctions.moneyFormatter(walletProvider.selectedWallet!.balance.toString())}'),
                                 initialValue:  walletProvider.selectedWallet == null
                                     ? '****'
-                                    : '${walletProvider.selectedWallet?.balance}',
+                                    : '${THelperFunctions.moneyFormatter(walletProvider.selectedWallet!.balance.toString())}',
                                   style: TextStyle(
                                       fontSize: 35,
                                       fontWeight: FontWeight.w800,

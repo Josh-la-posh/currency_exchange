@@ -63,7 +63,7 @@ class UserSession {
   }
 
   handleIfUserIsNotLoginAfterSplashScreen() async {
-    AppNavigator.instance.navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);
+    AppNavigator.instance.navigateToHandler(AUTH_ONBOARDING_SCREEN_ROUTE);
   }
 
   Future<bool> checkAuthOnboardingScreenStatus() async {
