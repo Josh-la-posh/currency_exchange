@@ -6,11 +6,14 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
 import 'package:swappr/utils/constants/enums.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
 import '../../../common/widgets/buttons/floating_button.dart';
 import '../../../common/widgets/currencyWidget.dart';
+import '../../../common/widgets/verify_your_account.dart';
 import '../../../data/provider/auth_provider.dart';
 import '../../../data/provider/offer_provider.dart';
+import '../../../data/provider/verification_provider.dart';
 import '../apis/api.dart';
 import '../widgets/layout.dart';
 import '../widgets/offer_list.dart';
@@ -32,6 +35,10 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
       AppNavigator.instance.navigatorKey.currentContext as BuildContext,
       listen: false
   );
+  VerificationProvider verifyProvider = Provider.of<VerificationProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
 
 
   @override
@@ -43,17 +50,32 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
           date: ''
       );
     }
+    if (authProvider.user?.isVerified == false) {
+      setState(() {
+        verifyProvider.showVerifyModal = true;
+      });
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
+    final darkMode = THelperFunctions.isDarkMode(context);
     return AllOfferScreenLayout(
-      childWidget:const SingleChildScrollView(
+      childWidget: SingleChildScrollView(
         child: Column(
             children: [
               CurrencyWidget(),
+              verifyProvider.showVerifyModal == true
+                  ? VerifyYourAccountWidget(
+                darkMode: darkMode,
+                onTap: () {
+                  setState(() {
+                    verifyProvider.showVerifyModal = !verifyProvider.showVerifyModal;
+                  });
+                },
+              )
+                  : SizedBox(height: 10),
               Column(
                 children: [
                   OfferList(),
@@ -67,8 +89,8 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
           if (authProvider.user?.isVerified == true) {
             handleShowCustomToast(message: "Please verify your account");
           } else {
-            offerProvider.updateDebitedCurrency(Currency.Select);
-            offerProvider.updateCreditedCurrency(Currency.Select);
+            offerProvider.updateDebitedCurrency(Currency.NGN);
+            offerProvider.updateCreditedCurrency(Currency.NGN);
             offerProvider.updateAmount('0');
             offerProvider.updateRate('0');
             Get.to(() => const CreateOfferScreen());

@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/common/widgets/currencyWidget.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/layouts/app_layout.dart';
 import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
-import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../routes/names.dart';
-import '../screens/all_offer.dart';
 
 
 class SuccessScreenWidget extends StatelessWidget {

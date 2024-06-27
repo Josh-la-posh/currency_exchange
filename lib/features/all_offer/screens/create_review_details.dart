@@ -209,55 +209,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           ),
                         ),
                         const DividerWidget(),
-                        // SizedBox(
-                        //   height: TSizes.textReviewHeight,
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       RichText(
-                        //           text: TextSpan(
-                        //               style: Theme.of(context).textTheme.labelMedium,
-                        //               children: const <TextSpan> [
-                        //                 TextSpan(
-                        //                     text: 'Minimum Rate',
-                        //                     style: TextStyle(fontSize: TSizes.fontSize13)
-                        //                 )
-                        //               ]
-                        //           )
-                        //       ),
-                        //       Row(
-                        //         children: [
-                        //           RichText(
-                        //               text: TextSpan(
-                        //                   style: Theme.of(context).textTheme.labelSmall,
-                        //                   children: <TextSpan> [
-                        //                     TextSpan(
-                        //                         text: '${data.minimumRate} ${data.selectedCurrency}',
-                        //                         style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
-                        //                     )
-                        //                   ]
-                        //               )
-                        //           ),
-                        //           const SizedBox(width: TSizes.sm,),
-                        //           AppoxIcon(),
-                        //           const SizedBox(width: TSizes.sm,),
-                        //           RichText(
-                        //               text: TextSpan(
-                        //                   style: Theme.of(context).textTheme.labelSmall,
-                        //                   children: <TextSpan> [
-                        //                     TextSpan(
-                        //                         text: '${THelperFunctions.getStringMultiplication(data.minimumRate, data.hasAmount)} ${data.neededCurrency}',
-                        //                         style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
-                        //                     )
-                        //                   ]
-                        //               )
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // const DividerWidget(),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           height: TSizes.textReviewHeight,

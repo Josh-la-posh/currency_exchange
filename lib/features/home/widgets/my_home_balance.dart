@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/features/wallet/apis/api.dart';
+import 'package:swappr/features/wallet/models/default_wallet_model.dart';
 import 'package:swappr/utils/constants/texts.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
+import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -17,9 +20,45 @@ class HomeBalanceWidget extends StatefulWidget {
 }
 
 class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
+  WalletProvider walletProvider = Provider.of<WalletProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
+  @override
+  void initState() {
+    if (walletProvider.defaultWallet == null) {
+      WalletServices.instance.getDefaultWallet(walletProvider: walletProvider);
+      Future.delayed(
+          Duration(seconds: 5),
+              () => fetchDefaultWallet
+      );
+    }
+    super.initState();
+  }
+
+
+  Future<void> fetchDefaultWallet()  async {
+    try {
+      if (walletProvider.defaultWallet == null) {
+        DefaultWalletModel? defaultWalletDetail = await walletProvider.defaultWallet;
+        setState(() {
+          walletProvider.defaultWalletDetail = defaultWalletDetail;
+          print('first ${defaultWalletDetail?.balance}');
+        });
+      } else {
+        DefaultWalletModel? defaultWalletDetail = await walletProvider.defaultWallet;
+        setState(() {
+          walletProvider.defaultWalletDetail = defaultWalletDetail;
+          print('second ${defaultWalletDetail?.balance}');
+        });
+      }
+    } catch (e) {
+      print('Error fetching wallet: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    var walletProvider = Provider.of<WalletProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2),
       child: Container(
@@ -46,51 +85,33 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelMedium,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text:'My Balance',
-                                    style: TextStyle(
-                                        fontWeight: TSizes.fontWeightMd,
-                                        // color: TColors.textPrimaryO80
-                                    )
-                                ),
-                              ]
-                          )
-                      ),
-                      const SizedBox(width: TSizes.md),
-                      SizedBox(
-                        // width: 15,
-                        child: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                walletProvider.setShowWalletBalance(!walletProvider.showWalletBalance);
-                              });
-                            },
-                            icon: walletProvider.showWalletBalance == false
-                                ? Icon(Icons.visibility_off,)
-                                : Icon(Icons.visibility,)
-                        ),
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelMedium,
+                          children: <TextSpan> [
+                            TextSpan(
+                                text:'My Balance',
+                                style: TextStyle(
+                                    fontWeight: TSizes.fontWeightMd,
+                                    // color: TColors.textPrimaryO80
+                                )
+                            ),
+                          ]
                       )
-                    ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      handleShowCustomToast(message: 'I am working');
-                    },
-                    child: Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: TColors.danger,
-                      ),
+                  const SizedBox(width: TSizes.md),
+                  SizedBox(
+                    // width: 15,
+                    child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            walletProvider.setShowWalletBalance(!walletProvider.showWalletBalance);
+                          });
+                        },
+                        icon: walletProvider.showWalletBalance == false
+                            ? Icon(Icons.visibility_off,)
+                            : Icon(Icons.visibility,)
                     ),
                   )
                 ],
@@ -98,33 +119,19 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  IntrinsicWidth(
-                    child: TextFormField(
-                      initialValue:  walletProvider.selectedWallet == null
-                          ? '****'
-                          : '${THelperFunctions.moneyFormatter(walletProvider.selectedWallet!.balance.toString())}',
-                      style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: TSizes.fontWeightXl,
-                          fontFamily: TTexts.fontFamily,
-                          // color: TColors.textPrimaryO80
-                      ),
-                      enabled: false,
-                      obscureText: walletProvider.showWalletBalance == false ? true : false,
-                      obscuringCharacter: '*',
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                        fillColor: Colors.transparent,
-                        isDense: false,
-                      ),
-
+                  Text(walletProvider.defaultWallet == null
+                      ? '---'
+                      : ' ${walletProvider.showWalletBalance == false ? '*****' : walletProvider.defaultWallet?.balance}',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: TSizes.fontWeightXl,
+                      fontFamily: TTexts.fontFamily,
                     ),
                   ),
                   Text(
-                    walletProvider.selectedWallet == null
+                    walletProvider.defaultWallet == null
                         ? ' '
-                        : ' ${walletProvider.selectedWallet?.currency}',
+                        : ' ${walletProvider.defaultWallet?.currency}',
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: TSizes.fontWeightXl,

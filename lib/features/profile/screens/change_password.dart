@@ -153,7 +153,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
                         TElevatedButton(
                             onTap: (){
-                              if (_password == _confirmPass) {
                                 if (formKey.currentState!.validate()) {
                                   formKey.currentState!.save();
                                   AuthService.instance.changePassword(
@@ -170,7 +169,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 }
                                 // if (formKey.currentState!.validate()) {
                                 // }
-                              }
                             },
                             buttonText: 'Proceed'
                         ),

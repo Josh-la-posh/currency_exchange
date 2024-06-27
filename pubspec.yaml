@@ -36,6 +36,7 @@ dependencies:
   csc_picker: ^0.2.7
   country_state_picker: ^0.0.5
   country_state_city_pro: ^0.0.6
+  flutter_native_splash: ^2.4.0
 
 
   #------------------- ./ PACKAGES END ---------------#
@@ -44,6 +45,10 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
+
+flutter_native_splash:
+  color: "#664C89"
+  background_image: "assets/images/background.png"
 
 flutter_launcher_icons:
   android: "launcher_icon"

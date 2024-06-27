@@ -71,7 +71,7 @@ class THelperFunctions {
   static String getTimeDifference(String date, {String format = 'h:mm a'}) {
     final dateTime = DateTime.parse(date);
     final now = DateTime.now();
-    final difference = dateTime.difference(now);
+    final difference = now.difference(dateTime);
 
     int seconds = difference.inSeconds;
     String timeDifference;
@@ -106,32 +106,32 @@ class THelperFunctions {
     int days = hours ~/ 24;
     int remainingHours = days % 24;
 
-    // if (secondsToInt < 60) {
-    //   return time = "$secondsToInt seconds";
-    // } else if (secondsToInt < 3600) {
-    //   int minutes = secondsToInt ~/ 60;
-    //   return time = "$minutes minutes";
-    // } else {
-    //   int days = secondsToInt ~/ 86400;
-    //   int hours = (secondsToInt % 86400) ~/ 3600;
-    //   if (days > 0) {
-    //     return time = "$days days $hours hours";
-    //   } else {
-    //     return time = '$hours hours';
-    //   }
-    // }
-
-    if (days > 0) {
-      time = "${days}days ${remainingHours}hours ${remainingMinute}minutes ${remainingSeconds}seconds";
-    } else if (hours > 0 && days == 0) {
-      time = "${remainingHours}hours ${remainingMinute}minutes ${remainingSeconds}seconds";
-    } else if (days == 0 && hours == 0 && minutes > 0) {
-      time = "${remainingMinute}minutes ${remainingSeconds}seconds";
+    if (seconds < 60) {
+      return time = "$seconds seconds";
+    } else if (seconds < 3600) {
+      int minutes = seconds ~/ 60;
+      return time = "$minutes minutes";
     } else {
-      time = "${remainingSeconds}seconds";
+      int days = seconds ~/ 86400;
+      int hours = (seconds % 86400) ~/ 3600;
+      if (days > 0) {
+        return time = "$days days $hours hours";
+      } else {
+        return time = '$hours hours';
+      }
     }
 
-    return time;
+    // if (days > 0) {
+    //   time = "${days}days ${remainingHours}hours ${remainingMinute}minutes ${remainingSeconds}seconds";
+    // } else if (days == 0 && hours >= 1) {
+    //   time = "${remainingHours}hours ${remainingMinute}minutes ${remainingSeconds}seconds";
+    // } else if (days == 0 && hours == 0 && seconds > 0) {
+    //   time = "${remainingMinute}minutes ${remainingSeconds}seconds";
+    // } else {
+    //   time = "${remainingSeconds}seconds";
+    // }
+    //
+    // return time;
   }
 
   static List<T> removeDuplicates<T>(List<T> list) {

@@ -43,7 +43,7 @@ class SubscriptionItem extends StatelessWidget {
                           width: 60,
                           child: ElevatedButton(
                             onPressed: () {
-                              SubscriptionService.instance.deleteSubscription(id: item.id, subscriptionProvider: provider);
+                              SubscriptionService.instance.deleteSubscription(id: item.id.toString(), subscriptionProvider: provider);
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -212,7 +212,7 @@ class SubscriptionItem extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelSmall,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${THelperFunctions.getFormattedDate(item.createdDate)}  - ${THelperFunctions.getFormattedTime(item.createdDate)}',
+                                        text: '${THelperFunctions.getFormattedDate(item.createdDate.toString())}  - ${THelperFunctions.getFormattedTime(item.createdDate.toString())}',
                                         style: TextStyle(color: TColors.primary)
                                     ),
                                   ]

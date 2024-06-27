@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:swappr/features/wallet/models/bank_list.dart';
 import 'package:swappr/features/wallet/models/bank_list_entity.dart';
+import 'package:swappr/features/wallet/models/default_wallet_model.dart';
 import 'package:swappr/features/wallet/models/fcy_account_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_model.dart';
 import 'package:swappr/features/wallet/models/flutterwave_model.dart';
@@ -20,7 +21,7 @@ class WalletProvider extends ChangeNotifier {
   BankListEntity? _bankListEntity;
   GetFcyAccountEntity? _fcyAccountDetails;
   List<FcyAccountModel> _fcyAccount = [];
-  Currency _selectedCurrency = Currency.Select;
+  Currency _selectedCurrency = Currency.NGN;
   WalletCurrency _selectedWalletCurrency = WalletCurrency.NGN;
   List<Currency> _currencies = Currency.values;
   List<WalletCurrency> _walletCurrencies = WalletCurrency.values;
@@ -36,6 +37,8 @@ class WalletProvider extends ChangeNotifier {
   bool showWalletBalance = false;
   Bank _selectedNigBank = Bank.GTB;
   List<Bank> _nigBanks = Bank.values;
+
+  DefaultWalletModel? defaultWalletDetail;
 
 
 
@@ -61,6 +64,8 @@ class WalletProvider extends ChangeNotifier {
   VerifyBankAccountModel? get bankAccountDetails => _bankAccountDetails;
   Bank get selectedNigBank => _selectedNigBank;
   List<Bank> get nigBanks => _nigBanks;
+
+  DefaultWalletModel? get defaultWallet => defaultWalletDetail;
 
 
   void filterBanks(String searchText) {
@@ -170,10 +175,16 @@ class WalletProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setDefaultWallet(DefaultWalletModel? wallet) {
+    defaultWalletDetail = wallet;
+    print('default $defaultWallet');
+    notifyListeners();
+  }
+
   resetState() {
     _wallets = [];
     _selectedWallet = null;
-    _selectedCurrency = Currency.Select;
+    _selectedCurrency = Currency.NGN;
     _selectedWalletCurrency = WalletCurrency.NGN;
     showWalletLists = false;
     _fcyAccountDetails = null;
@@ -187,6 +198,6 @@ class WalletProvider extends ChangeNotifier {
     _ussdModel = null;
     _bankAccountDetails = null;
     _selectedNigBank = Bank.GTB;
-
+    defaultWalletDetail = null;
   }
 }

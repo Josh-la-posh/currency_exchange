@@ -142,7 +142,7 @@ class TValidator {
   }
 
   static String? currencyValidator(Currency? curr) {
-    if (curr == Currency.Select) {
+    if (curr == Currency.NGN) {
       return 'Please select a currency';
     }
   }

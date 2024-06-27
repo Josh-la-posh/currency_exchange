@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import '../../utils/constants/enums.dart';
 
 class CurrencyProvider extends ChangeNotifier {
-  Currency _selectedCurrency = Currency.Select;
+  Currency _selectedCurrency = Currency.NGN;
   List<Currency> _currencies = Currency.values;
 
 
@@ -16,6 +16,6 @@ class CurrencyProvider extends ChangeNotifier {
 
   resetState() {
     // _currencies = [];
-    _selectedCurrency = Currency.Select;
+    _selectedCurrency = Currency.NGN;
   }
 }

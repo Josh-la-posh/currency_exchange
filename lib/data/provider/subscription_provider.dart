@@ -9,10 +9,10 @@ class SubscriptionProvider extends ChangeNotifier {
   List<SubscriptionEntity> _subscriptions = [];
   List<Currency> _currencies = Currency.values;
   CreateSubscription _createSubscription = CreateSubscription(
-      debitedCurrency: Currency.Select, creditedCurrency: Currency.Select, minRate: 0, maxRate: 0);
+      debitedCurrency: Currency.NGN, creditedCurrency: Currency.NGN, minRate: 0, maxRate: 0);
 
-  Currency debitedCurrency = Currency.Select;
-  Currency creditedCurrency = Currency.Select;
+  Currency debitedCurrency = Currency.NGN;
+  Currency creditedCurrency = Currency.NGN;
   final formKey = GlobalKey<FormState>();
 
 
@@ -29,7 +29,6 @@ class SubscriptionProvider extends ChangeNotifier {
   }
   void saveSubscriptions(List<SubscriptionEntity> val) {
     _subscriptions = val;
-    print('get calue ${val}');
     notifyListeners();
   }
 
@@ -56,8 +55,8 @@ class SubscriptionProvider extends ChangeNotifier {
   resetState() {
     _subscriptionDetails = null;
     _subscriptions = [];
-    _createSubscription.debitedCurrency = Currency.Select;
-    _createSubscription.creditedCurrency = Currency.Select;
+    _createSubscription.debitedCurrency = Currency.NGN;
+    _createSubscription.creditedCurrency = Currency.NGN;
     _createSubscription.minRate = 0;
     _createSubscription.maxRate = 0;
     notifyListeners();

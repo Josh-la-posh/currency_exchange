@@ -4,9 +4,10 @@ class OfferEntity {
   final String id;
   final String debitedCurrency;
   final String creditedCurrency;
-  final String amount;
+  String? amount;
   final String rate;
   final String expireIn;
+  final String expireCountDown;
   int? views;
   int? negotiatorRate;
   int? negotiatorAmount;
@@ -21,9 +22,10 @@ class OfferEntity {
     required this.id,
     required this.debitedCurrency,
     required this.creditedCurrency,
-    required this.amount,
+    this.amount,
     required this.rate,
     required this.expireIn,
+    required this.expireCountDown,
     this.views,
     this.negotiatorRate,
     this.negotiatorAmount,
@@ -42,6 +44,7 @@ class OfferEntity {
     amount: json['amount'] as String,
     rate: json['rate'] as String,
     expireIn: json['expireIn'] as String,
+    expireCountDown: json['expireCountDown'] as String,
     views: json['views'] as int,
     negotiatorRate: json['negotiatorRate'] as int,
     negotiatorAmount: json['negotiatorAmount'] as int,

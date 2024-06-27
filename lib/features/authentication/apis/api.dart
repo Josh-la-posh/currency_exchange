@@ -11,6 +11,7 @@ import 'package:swappr/data/provider/wallet_provider.dart';
 import 'package:swappr/features/authentication/models/user_model.dart';
 import 'package:swappr/features/home/routes/names.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
+import '../../../utils/loader.dart';
 import '../../../utils/responses/error_dialog.dart';
 import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/responses/success_dialog.dart';
@@ -80,7 +81,7 @@ class AuthService {
     _createAccount({
       'firstName': firstName,
       'lastName': lastName,
-      'email': email,
+      'email': email.toLowerCase(),
       'phoneNumber': phoneNumber,
       'country': country,
       'address': address,
@@ -111,6 +112,7 @@ class AuthService {
       handleShowCustomToast(message: 'Password changed successfully');
       // showSuccessAlertHelper(successMessage: 'Password changed successfully');
     }).catchError((error){
+      print(error.toString());
       handleShowCustomToast(message: handleApiFormatError(error));
       // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
@@ -174,7 +176,7 @@ class AuthService {
         authProvider.removeUser();
       } else {
         authProvider.saveUser(user);
-        AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+        // AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
         handleBackgroundAppRequest(
           user: user,
           authProvider: authProvider,
@@ -183,12 +185,19 @@ class AuthService {
           subscriptionProvider: subscriptionProvider,
           offerProvider: offerProvider
         );
-        handleShowCustomToast(message: 'Authenticated successfully');
+        handleShowLoader();
+        Future.delayed(
+            Duration(seconds: 3),
+                () {
+              AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
+              handleHideLoader();
+              handleShowCustomToast(message: 'Authenticated successfully');
+                }
+        );
       }
 
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
-      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -261,7 +270,7 @@ class AuthService {
     required VoidCallback handleEmailNotVerified
   }) async {
     _loginApi({
-      'email': email,
+      'email': email.toLowerCase(),
       'password': password,
     }).then((responseData) async {
       var token = responseData['access_token'];
@@ -283,7 +292,6 @@ class AuthService {
       return token;
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 

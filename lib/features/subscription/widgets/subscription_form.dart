@@ -165,7 +165,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                         provider.setMinRate(val!);
                       },
                       decoration: InputDecoration(
-                        label: Text('Minimum rate ${provider.createSubscription!.debitedCurrency == Currency.Select ? '' : getCurrencyName(provider.createSubscription!.debitedCurrency)}'),
+                        label: Text('Minimum rate ${provider.createSubscription!.debitedCurrency == Currency.NGN ? '' : getCurrencyName(provider.createSubscription!.debitedCurrency)}'),
                         labelStyle: TextStyle(
                           fontSize: TSizes.fontSize11,
                           color: TColors.textPrimary.withOpacity(0.7),
@@ -202,7 +202,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                         provider.setMaxRate(val!);
                       },
                       decoration: InputDecoration(
-                        label: Text('Maximum rate ${provider.createSubscription!.debitedCurrency == Currency.Select ? '' : getCurrencyName(provider.createSubscription!.debitedCurrency)}'),
+                        label: Text('Maximum rate ${provider.createSubscription!.debitedCurrency == Currency.NGN ? '' : getCurrencyName(provider.createSubscription!.debitedCurrency)}'),
                         labelStyle: TextStyle(
                           fontSize: TSizes.fontSize11,
                           color: TColors.textPrimary.withOpacity(0.7),

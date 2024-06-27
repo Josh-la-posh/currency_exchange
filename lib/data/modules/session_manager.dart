@@ -58,7 +58,14 @@ class UserSession {
           offerProvider: offerProvider,
           subscriptionProvider: subscriptionProvider
       );
-      AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
+      handleShowLoader();
+      Future.delayed(
+        Duration(seconds: 3),
+          () {
+          handleHideLoader();
+          AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
+          }
+      );
     }
   }
 

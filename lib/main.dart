@@ -9,4 +9,3 @@ Future<void> main() async {
   await dotenv.load();
   runApp(const MyApp());
 }
-

@@ -380,10 +380,10 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                             OfferService.instance.swapOffer(
                                 id: item!.id,
                                 offerProvider: provider,
-                                amount: item!.amount,
+                                amount: item!.amount.toString(),
                                 creditedCurrency: item!.creditedCurrency
                             );},
-                              buttonText: 'Pay ${THelperFunctions.getStringMultiplication(item!.amount, item!.rate)} ${item?.debitedCurrency}'),
+                              buttonText: 'Pay ${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate)} ${item?.debitedCurrency}'),
                         ),
                         const SizedBox(height: TSizes.spaceBtwSections ),
                       ],

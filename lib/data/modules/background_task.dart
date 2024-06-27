@@ -11,6 +11,7 @@ import '../../features/transaction/models/transaction_details_entity.dart';
 import '../../features/transaction/models/transaction_entity.dart';
 import '../../features/wallet/models/bank_list.dart';
 import '../../features/wallet/models/bank_list_entity.dart';
+import '../../features/wallet/models/default_wallet_model.dart';
 import '../../features/wallet/models/get_bank_account.dart';
 import '../../features/wallet/models/get_wallet.dart';
 import '../provider/offer_provider.dart';
@@ -21,11 +22,11 @@ import 'dio.dart';
 
 final _apiService = AppInterceptor(showLoader: false).dio;
 
-getUserProfileDetails(AuthProvider authProvider) {
-  Future userProfileDetails(){
-    return _apiService.get('');
-  }
-}
+// getUserProfileDetails(AuthProvider authProvider) {
+//   Future userProfileDetails(){
+//     return _apiService.get('');
+//   }
+// }
 
 handleBackgroundAppRequest({
   required UserModel user,
@@ -37,31 +38,57 @@ handleBackgroundAppRequest({
 }) async {
 
   //  user details
-  getUserProfileDetails(authProvider);
+  // await getUserProfileDetails(authProvider);
 
 
   // all offer request
 
-  getAllOffers(offerProvider: offerProvider, currency: '', date: '');
+  await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
 
 
   // wallet requests
 
-  getWallets(walletProvider);
-  getBankList(walletProvider: walletProvider);
-  getLocalBank(walletProvider: walletProvider);
+  await getWallets(walletProvider);
+  await getDefaultWallet(walletProvider: walletProvider);
+  await getBankList(walletProvider: walletProvider);
+  await getLocalBank(walletProvider: walletProvider);
 
 
   // subscription requests
 
-  getSubscriptions(provider: subscriptionProvider, currency: '');
+  await getSubscriptions(provider: subscriptionProvider, currency: '');
 
 
   // transaction requests
 
-  getTransactions(transactionProvider);
+  await getTransactions(transactionProvider);
 
 
+}
+
+// get default wallet
+
+
+getDefaultWallet({
+  required WalletProvider walletProvider,
+}) {
+  Future _getDefaultWallet() {
+    return apiService.get('/wallet/user-default-wallet');
+  }
+  _getDefaultWallet().then((response) {
+    var item = response.data;
+
+    DefaultWalletModel defaultWallet = DefaultWalletModel(
+        id: item['id'],
+        currency: item['currency'],
+        balance: item['balance'],
+        isActive: item['isActive'],
+        pendingWithdrawals: item['pendingWithdrawals'],
+        createdDate: item['createdDate'],
+        lastModifiedDate: item['lastModifiedDate']
+    );
+    walletProvider.setDefaultWallet(defaultWallet);
+  });
 }
 
 
@@ -103,6 +130,7 @@ getAllOffers({
           amount: item['amount'],
           rate: item['rate'],
           expireIn: item['expireIn'],
+          expireCountDown: item['expireCountDown'],
           views: item['views'],
           negotiatorRate: item['negotiatorRate'],
           negotiatorAmount: item['negotiatorAmount'],
@@ -123,13 +151,16 @@ getAllOffers({
 //  Wallet requests
 
 getWallets(WalletProvider walletProvider) {
+
+  Future _getWallet({required String currency}) {
+    return apiService.post('/wallet/get-wallets',
+        queryParameters: {'currency': currency});
+  }
   List<GetWalletModel> wallets = [];
 
-  Future _getWallet() {
-    return apiService.post('/wallet/get-wallets');
-  }
-  _getWallet().then((response) {
+  _getWallet(currency: '').then((response) {
     var data = response.data;
+    print(data);
 
     for (var item in data) {
 

@@ -20,7 +20,7 @@ class WalletTransactionList extends StatelessWidget {
     return Container(
       child: ListView.builder(
         shrinkWrap: true,
-        itemCount: 4,
+        itemCount: provider.transactions.length > 3 ? 3 : provider.transactions.length,
         itemBuilder: (_, index) {
           final item = provider.transactions[index];
           return Padding(

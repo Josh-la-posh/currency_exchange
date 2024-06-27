@@ -12,12 +12,12 @@ class OfferProvider extends ChangeNotifier {
   List<NegotiateOfferModel> _negotiationsOffers = [];
   OfferEntity? _offerDetail;
   List<Currency> _currencies = Currency.values;
-  Currency _selectedCurrency = Currency.Select;
+  Currency _selectedCurrency = Currency.NGN;
   List<Date> _dates = Date.values;
   Date _selectedDate = Date.Select;
   OfferEntity? _selectedOffer;
-  Currency creditedCurrency = Currency.Select;
-  Currency debitedCurrency = Currency.Select;
+  Currency creditedCurrency = Currency.NGN;
+  Currency debitedCurrency = Currency.NGN;
   int amount = 0;
   int rate = 0;
   int expireIn = 1;
@@ -28,7 +28,7 @@ class OfferProvider extends ChangeNotifier {
   bool _filterAll = false;
 
   CreateOfferEntity _createOfferEntity = CreateOfferEntity(
-      debitedCurrency: Currency.Select, creditedCurrency: Currency.Select, amount: 0, rate: 0, expireIn: 1);
+      debitedCurrency: Currency.NGN, creditedCurrency: Currency.NGN, amount: 0, rate: 0, expireIn: 1);
   CreateOfferEntity get createOfferEntity => _createOfferEntity;
 
   OfferDetailsEntity? get offerDetails => _offerDetails;
@@ -70,8 +70,8 @@ class OfferProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveOffersById(OfferEntity id) {
-    _offerDetail = id;
+  void saveOffersById(OfferEntity data) {
+    _offerDetail = data;
     notifyListeners();
   }
 
@@ -85,9 +85,9 @@ class OfferProvider extends ChangeNotifier {
   //   }
   // }
   //
-  // void updateSelectedSellingCurrencies(String newdebitedCurrency) {
-  //   if (newdebitedCurrency != creditedCurrency) {
-  //     debitedCurrency = newdebitedCurrency;
+  // void updateSelectedSellingCurrencies(String newdebittedCurrency) {
+  //   if (newdebittedCurrency != creditedCurrency) {
+  //     debitedCurrency = newdebittedCurrency;
   //     notifyListeners();
   //   } else {
   //     debitedCurrency = 'select';
@@ -154,22 +154,25 @@ class OfferProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  resetCreateOfferDetails() {
+    amount = 0;
+    debitedCurrency = Currency.NGN;
+    creditedCurrency = Currency.NGN;
+    rate = 0;
+    expireIn = 1;
+  }
+
   resetState() {
     _offers = [];
+    resetCreateOfferDetails();
     _offerDetails = null;
-    // _currencies = [];
     _dates = [];
-    creditedCurrency = Currency.Select;
-    debitedCurrency = Currency.Select;
     _selectedOffer = null;
     _createOfferEntity.amount = 0;
-    _createOfferEntity.creditedCurrency = Currency.Select;
-    _createOfferEntity.debitedCurrency = Currency.Select;
+    _createOfferEntity.creditedCurrency = Currency.NGN;
+    _createOfferEntity.debitedCurrency = Currency.NGN;
     _createOfferEntity.rate = 0;
-    amount = 0;
-    rate = 0;
-    // _createOfferEntity.minimumRate = '';
-    _createOfferEntity.expireIn = 0;
+    _createOfferEntity.expireIn = 1;
     negotiatorAmount = 0;
     negotiatorRate = 0;
   }

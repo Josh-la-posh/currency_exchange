@@ -38,7 +38,7 @@ class OfferList extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    if (selectedCurrency != Currency.Select && offerProvider.filterAll == false)
+                    if (selectedCurrency != Currency.NGN && offerProvider.filterAll == false)
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
                         decoration: BoxDecoration(
@@ -93,8 +93,8 @@ class OfferList extends StatelessWidget {
               const SizedBox(height: TSizes.md,),
             offerProvider.offers.isEmpty
                 ? LayoutBuilder(builder: (context, constraints) {
-              return const NoOfferScreen();
-            })
+                  return NoOfferScreen();
+                })
                 : Column(
                 children: [
                   TListLayout(

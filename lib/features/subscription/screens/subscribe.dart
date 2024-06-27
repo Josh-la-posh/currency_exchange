@@ -12,7 +12,11 @@ import 'package:swappr/features/subscription/screens/add_subscription.dart';
 import 'package:swappr/features/subscription/widgets/subscription_list.dart';
 import '../../../common/widgets/buttons/floating_button.dart';
 import '../../../common/widgets/currencyWidget.dart';
+import '../../../common/widgets/verify_your_account.dart';
 import '../../../data/modules/app_navigator.dart';
+import '../../../data/provider/auth_provider.dart';
+import '../../../data/provider/verification_provider.dart';
+import '../../../utils/helpers/helper_functions.dart';
 
 class SubscribeScreen extends StatefulWidget {
   const SubscribeScreen({super.key});
@@ -26,6 +30,14 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
       AppNavigator.instance.navigatorKey.currentContext as BuildContext,
       listen: false
   );
+  AuthProvider authProvider = Provider.of<AuthProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
+  VerificationProvider verifyProvider = Provider.of<VerificationProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
 
   @override
   void initState() {
@@ -33,19 +45,34 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
       SubscriptionService.instance.getSubscriptions(
           provider: provider, currency: '');
     }
+    if (authProvider.user?.isVerified == false) {
+      setState(() {
+        verifyProvider.showVerifyModal = true;
+      });
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: TSpacingStyle.homePadding,
           child: Column(
             children: [
               CurrencyWidgetWithBack(),
+              verifyProvider.showVerifyModal == true
+                  ? VerifyYourAccountWidget(
+                darkMode: darkMode,
+                onTap: () {
+                  setState(() {
+                    verifyProvider.showVerifyModal = !verifyProvider.showVerifyModal;
+                  });
+                },
+              )
+                  : SizedBox(height: 10),
               Column(
                 children: [
                   SubscriptionList(),

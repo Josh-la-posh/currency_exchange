@@ -106,7 +106,7 @@ class CreateWalletScreen extends StatelessWidget {
                               onTap: (){
                                 if (formKey.currentState!.validate()) {
                                   formKey.currentState!.save();
-                                  if (provider.selectedCurrency == Currency.Select) {
+                                  if (provider.selectedCurrency == Currency.NGN) {
                                     provider.showErrorMessage();
                                   } else {
                                     Get.back();

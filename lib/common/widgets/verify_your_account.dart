@@ -3,23 +3,20 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
 import 'package:swappr/data/provider/auth_provider.dart';
+import 'package:swappr/data/provider/verification_provider.dart';
 import 'package:swappr/features/verification/screens/verify_page.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/sizes.dart';
 import '../../utils/helpers/helper_functions.dart';
 
-class VerifyYourAccountWidget extends StatefulWidget {
+class VerifyYourAccountWidget extends StatelessWidget {
   final bool darkMode;
-  const VerifyYourAccountWidget({super.key, required this.darkMode});
+  final VoidCallback onTap;
+  const VerifyYourAccountWidget({super.key, required this.darkMode, required this.onTap});
 
-  @override
-  State<VerifyYourAccountWidget> createState() => _VerifyYourAccountWidgetState();
-}
-
-class _VerifyYourAccountWidgetState extends State<VerifyYourAccountWidget> {
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<AuthProvider>(context);
+    // var provider = Provider.of<VerificationProvider>(context);
     return Stack(
       children: [
         Container(
@@ -27,7 +24,7 @@ class _VerifyYourAccountWidgetState extends State<VerifyYourAccountWidget> {
             margin: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwElements),
             padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 30),
             decoration: BoxDecoration(
-                color: widget.darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
+                color: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
@@ -88,23 +85,18 @@ class _VerifyYourAccountWidgetState extends State<VerifyYourAccountWidget> {
               ],
             )
         ),
-        // Positioned(
-        //     top: 0,
-        //     right: 0,
-        //     child: IconButton(
-        //         onPressed: (){
-        //           print(provider.isVerifiedDisplay);
-        //           setState(() {
-        //             provider.setIsVerifiedDisplay(false);
-        //           });
-        //         },
-        //         icon: const Icon(
-        //           Icons.cancel_rounded,
-        //           color: TColors.primary,
-        //           size: 30,
-        //         )
-        //     )
-        // )
+        Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+                onPressed: onTap,
+                icon: const Icon(
+                  Icons.cancel_rounded,
+                  color: TColors.primary,
+                  size: 30,
+                )
+            )
+        )
       ],
     );
   }

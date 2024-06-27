@@ -5,6 +5,7 @@ import 'package:swappr/data/provider/currency_provider.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/data/provider/subscription_provider.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
+import 'package:swappr/data/provider/verification_provider.dart';
 import 'package:swappr/data/provider/wallet_provider.dart';
 
 class RootProvider extends StatelessWidget {
@@ -32,6 +33,9 @@ class RootProvider extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => TransactionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => VerificationProvider(),
         ),
       ],
       child: app,

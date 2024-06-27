@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/features/payment_method/screens/payment_options.dart';
+import 'package:swappr/features/wallet/apis/api.dart';
 import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../data/provider/wallet_provider.dart';
@@ -82,101 +83,23 @@ class _WalletDashboardState extends State<WalletDashboard> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Wallet Address',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Work Sans',
-                                  color: const Color(0xFF111E32).withOpacity(0.8)
-                              ),
-                            ),
-                            IconButton(
-                                onPressed: () {},
-                                icon: Row(
-                                  children: [
-                                    Icon(Icons.circle, size: 8, color: TColors.textPrimaryO80,),
-                                    Icon(Icons.circle, size: 8, color: TColors.textPrimaryO80,),
-                                    Icon(Icons.circle, size: 8, color: TColors.textPrimaryO80,),
-                                  ],
-                                )
-                            )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              '233566...3444',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'Work Sans',
-                                  color: const Color(0xFF111E32).withOpacity(0.8)
-                              ),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    walletProvider.setShowWalletBalance(!walletProvider.showWalletBalance);
-                                  });
-                                },
-                                icon: walletProvider.showWalletBalance == false
-                                    ? Icon(Icons.visibility_off, color: TColors.textPrimaryO80,)
-                                    : Icon(Icons.visibility, color: TColors.textPrimaryO80,)
-                            )
-                          ],
-                        ),
-                        Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            IntrinsicWidth(
-                              // width: 120,
-                              child: TextFormField(
-                                key: Key(walletProvider.selectedWallet == null
-                                    ? '****'
-                                    : '${THelperFunctions.moneyFormatter(walletProvider.selectedWallet!.balance.toString())}'),
-                                initialValue:  walletProvider.selectedWallet == null
-                                    ? '****'
-                                    : '${THelperFunctions.moneyFormatter(walletProvider.selectedWallet!.balance.toString())}',
-                                  style: TextStyle(
-                                      fontSize: 35,
-                                      fontWeight: FontWeight.w800,
-                                      fontFamily: 'Work Sans',
-                                      color: Color(0xFF331D50)
-                                  ),
-                                enabled: false,
-                                obscureText: walletProvider.showWalletBalance == false ? true : false,
-                                obscuringCharacter: '*',
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.zero,
-                                  fillColor: Colors.transparent,
-                                  isDense: false,
-                                ),
-
+                            Text(walletProvider.defaultWallet == null
+                                ? '---'
+                                : ' ${walletProvider.showWalletBalance == false ? '*****' : walletProvider.defaultWallet?.balance}',
+                              style: TextStyle(
+                                  fontSize: 35,
+                                  fontWeight: FontWeight.w800,
+                                  fontFamily: 'Work Sans',
+                                  color: Color(0xFF331D50)
                               ),
                             ),
-                            // Text(
-                            //   walletProvider.selectedWallet == null
-                            //       ? '****'
-                            //       : '${walletProvider.selectedWallet?.balance}',
-                            //   style: TextStyle(
-                            //       fontSize: 35,
-                            //       fontWeight: FontWeight.w800,
-                            //       fontFamily: 'Work Sans',
-                            //       color: Color(0xFF331D50)
-                            //   ),
-                            // ),
                             Text(
-                              walletProvider.selectedWallet == null
+                              walletProvider.defaultWallet == null
                                   ? ' '
-                                  : ' ${walletProvider.selectedWallet?.currency}',
+                                  : ' ${walletProvider.defaultWallet?.currency}',
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.w800,
@@ -184,6 +107,17 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                   color: Colors.black
                               ),
                             ),
+                            Spacer(),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    walletProvider.setShowWalletBalance(!walletProvider.showWalletBalance);
+                                  });
+                                },
+                                icon: walletProvider.showWalletBalance == false
+                                    ? Icon(Icons.visibility_off, color: TColors.textPrimaryO80, size: 17,)
+                                    : Icon(Icons.visibility, color: TColors.textPrimaryO80, size: 17,)
+                            )
                           ],
                         ),
                         Text(
@@ -207,7 +141,6 @@ class _WalletDashboardState extends State<WalletDashboard> {
                         Expanded(
                           child: SizedBox(
                             height: 40,
-                            // width: 130,
                             child: OutlinedButton(
                               onPressed: (){Get.to(() => const PaymentOptionScreen());},
                               style: ButtonStyle(
@@ -225,8 +158,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                     )
                                 ),
                               ),
-                              child:
-                              Text(
+                              child: Text(
                                 'Fund',
                                 style: TextStyle(
                                     fontSize: 16,
@@ -280,7 +212,8 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                   walletProvider.wallets.length, (index) => PopupMenuItem(
                                   onTap: () {
                                     setState(() {
-                                      walletProvider.setSelectedWallet(walletProvider.wallets[index]);
+                                      // walletProvider.setSelectedWallet(walletProvider.wallets[index]);
+                                      WalletServices.instance.defaultWallet(walletProvider: walletProvider ,walletId: walletProvider.wallets[index].id.toString());
                                     });
                                   },
                                   height: 20,
@@ -298,15 +231,14 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                         ),
                                       ),
                                       const SizedBox(width: 30,),
-                                      if (walletProvider.wallets[index].currency == walletProvider.selectedWallet?.currency)
+                                      if (walletProvider.wallets[index].currency == walletProvider.defaultWallet?.currency)
                                       const SizedBox(
                                         width: 10,
                                         child: Image(image: AssetImage('assets/icons/wallet_check.png')),
                                       )
                                     ],
                                   ),
-                                ),
-                                ),
+                                ),),
                             ),
                           ),
                         ),

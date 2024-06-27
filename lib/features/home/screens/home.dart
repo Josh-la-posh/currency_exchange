@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/verify_your_account.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
 import 'package:swappr/data/provider/auth_provider.dart';
+import 'package:swappr/data/provider/verification_provider.dart';
 import 'package:swappr/features/home/widgets/my_home_balance.dart';
 import 'package:swappr/features/home/widgets/sections.dart';
 import 'package:swappr/features/home/widgets/trending_offer.dart';
@@ -31,6 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
       AppNavigator.instance.navigatorKey.currentContext as BuildContext,
       listen: false
   );
+  VerificationProvider verifyProvider = Provider.of<VerificationProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
 
   @override
   void initState() {
@@ -40,6 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
           currency: '',
           date: ''
       );
+    }
+    if (authProvider.user?.isVerified == false) {
+      setState(() {
+        verifyProvider.showVerifyModal = true;
+      });
     }
     super.initState();
   }
@@ -51,10 +61,17 @@ class _HomeScreenState extends State<HomeScreen> {
       childWidget:SingleChildScrollView(
         child: Column(
             children: [
-              const SizedBox(height: TSizes.defaultSpace,),
-              if (authProvider.isVerifiedDisplay == true)
-                VerifyYourAccountWidget(darkMode: darkMode),
-
+              // const SizedBox(height: TSizes.defaultSpace / 2,),
+              verifyProvider.showVerifyModal == true
+                  ? VerifyYourAccountWidget(
+                darkMode: darkMode,
+                onTap: () {
+                  setState(() {
+                    verifyProvider.showVerifyModal = !verifyProvider.showVerifyModal;
+                  });
+                },
+              )
+                  : SizedBox(height: 10),
               HomeBalanceWidget(darkMode: darkMode),
               const SizedBox(height: TSizes.defaultSpace,),
               Container(

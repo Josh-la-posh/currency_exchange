@@ -7,6 +7,7 @@ import 'package:swappr/features/all_offer/models/negotiate_offer_entity.dart';
 import 'package:swappr/features/all_offer/models/offer_details_entity.dart';
 import 'package:swappr/features/all_offer/routes/names.dart';
 import 'package:swappr/features/all_offer/screens/accept_offer_success_page.dart';
+import 'package:swappr/features/all_offer/screens/offer_details.dart';
 import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/responses/error_dialog.dart';
 import 'package:swappr/utils/responses/handleApiError.dart';
@@ -84,8 +85,7 @@ class OfferService {
       "expireIn": expireIn
     }).then((response) async {
       await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
-      print('create offer ${response.data}');
-
+      offerProvider.resetCreateOfferDetails();
       AppNavigator.instance
           .removeAllNavigateToNavHandler(CREATE_SUCCESS_SCREEN);
 
@@ -132,6 +132,8 @@ class OfferService {
     .then((response) async {
       print('create offer ${response.data}');
       await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
+      AppNavigator.instance
+          .removeAllNavigateToNavHandler(CREATE_SUCCESS_SCREEN);
     }).catchError((error) {
       print('create offer ${error.toString()}');
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -153,6 +155,8 @@ class OfferService {
         amount: amount,
         creditedCurrency: creditedCurrency,
       ));
+      // AppNavigator.instance
+      //     .removeAllNavigateToNavHandler(ACCEPT_SUCCESS_SCREEN);
       print('swap offer ${response.data}');
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -192,6 +196,7 @@ class OfferService {
               amount: item['amount'],
               rate: item['rate'],
               expireIn: item['expireIn'],
+              expireCountDown: item['expireCountDown'],
               views: item['views'],
               negotiatorRate: item['negotiatorRate'],
               negotiatorAmount: item['negotiatorAmount'],
@@ -206,6 +211,37 @@ class OfferService {
         }
 
     });
+  }
+
+  getOfferById({
+    required OfferProvider offerProvider,
+    required String id,
+  }) async {
+    await _getOfferById(id).then((response) {
+      var item = response.data;
+
+      OfferEntity offerDetails = OfferEntity(
+          id: item['id'],
+          debitedCurrency: item['debitedCurrency'],
+          creditedCurrency: item['creditedCurrency'],
+          amount: item['amount'],
+          rate: item['rate'],
+          expireIn: item['expireIn'],
+          expireCountDown: item['expireCountDown'],
+          views: item['views'],
+          negotiatorRate: item['negotiatorRate'],
+          negotiatorAmount: item['negotiatorAmount'],
+          negotiationAccepted: item['negotiationAccepted'],
+          negotiatorId: item['negotiatorId'],
+          isActive: item['isActive'],
+          status: item['status'],
+          createdDate: item['createdDate'],
+          lastModifiedDate: item['lastModifiedDate']
+      );
+      offerProvider.saveOffersById(offerDetails);
+    });
+
+    Get.to(() => const OfferDetailsScreen());
   }
 
 

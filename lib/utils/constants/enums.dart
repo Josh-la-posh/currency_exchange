@@ -25,7 +25,6 @@ String getWalletCurrencyName(WalletCurrency currency) {
 }
 
 enum Currency {
-  Select,
   NGN,
   USD,
   CAD,
@@ -46,7 +45,7 @@ String getCurrencyName(Currency currency) {
     case Currency.EUR:
       return 'EUR';
     default:
-      return 'Select';
+      return 'NGN';
   }
 }
 

@@ -9,6 +9,7 @@ import 'package:swappr/features/payment_method/screens/ussd_funding_detail.dart'
 import 'package:swappr/features/transaction/apis/api.dart';
 import 'package:swappr/features/wallet/models/bank_list.dart';
 import 'package:swappr/features/wallet/models/bank_list_entity.dart';
+import 'package:swappr/features/wallet/models/default_wallet_model.dart';
 import 'package:swappr/features/wallet/models/fcy_account_entity.dart';
 import 'package:swappr/features/wallet/models/fcy_account_model.dart';
 import 'package:swappr/features/wallet/models/flutterwaveEntity.dart';
@@ -82,12 +83,20 @@ class WalletServices{
     return apiService.post('/wallet/confirm-otp', data: data);
   }
 
+  Future _defaultWallet(Object data) {
+    return apiService.post('/wallet/default-wallet', data: data);
+  }
+
   // Get requests
 
   Future _getWallet({required String currency}) {
     return apiService.get('/wallet/get-wallets',
         queryParameters: {'currency': currency}
     );
+  }
+
+  Future _getDefaultWallet() {
+    return apiService.get('/wallet/user-default-wallet');
   }
 
   Future _getFcyAccounts({
@@ -140,6 +149,20 @@ class WalletServices{
         .then((response) async {
       await getWallets(walletProvider: walletProvider, currency: currency);
       handleShowCustomToast(message: 'Your wallet has been created successfully');
+    }).catchError((error) {
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+    });
+  }
+
+  defaultWallet({
+    required WalletProvider walletProvider,
+    required String walletId
+  }) {
+    _defaultWallet({'walletId': walletId})
+        .then((response) async {
+          await getDefaultWallet(walletProvider: walletProvider);
+          print(response.data);
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
       // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -409,6 +432,25 @@ class WalletServices{
         ));
       }
       walletProvider.saveWallets(wallets);
+    });
+  }
+
+  getDefaultWallet({
+    required WalletProvider walletProvider,
+  }) {
+    _getDefaultWallet().then((response) {
+      var item = response.data;
+
+      DefaultWalletModel defaultWallet = DefaultWalletModel(
+          id: item['id'],
+          currency: item['currency'],
+          balance: item['balance'],
+          isActive: item['isActive'],
+          pendingWithdrawals: item['pendingWithdrawals'],
+          createdDate: item['createdDate'],
+          lastModifiedDate: item['lastModifiedDate']
+      );
+      walletProvider.setDefaultWallet(defaultWallet);
     });
   }
 

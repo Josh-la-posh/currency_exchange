@@ -151,7 +151,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Preferred rate ${offerProvider.debitedCurrency != Currency.Select ? '(per ${getCurrencyName(offerProvider.debitedCurrency)})' : ''}', style: Theme.of(context).textTheme.labelSmall,),
+                  Text('Preferred rate ${offerProvider.debitedCurrency != Currency.NGN ? '(per ${getCurrencyName(offerProvider.debitedCurrency)})' : ''}', style: Theme.of(context).textTheme.labelSmall,),
                   TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
                     validator: TValidator.numValidator,
@@ -165,10 +165,10 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (offerProvider.debitedCurrency != Currency.Select && offerProvider.creditedCurrency != Currency.Select && offerProvider.rate != 0)
+                            if (offerProvider.debitedCurrency != Currency.NGN && offerProvider.creditedCurrency != Currency.NGN && offerProvider.rate != 0)
                             AppoxIcon(),
                             const SizedBox(width: TSizes.xl,),
-                            if (offerProvider.debitedCurrency != Currency.Select && offerProvider.creditedCurrency != Currency.Select && offerProvider.rate != 0)
+                            if (offerProvider.debitedCurrency != Currency.NGN && offerProvider.creditedCurrency != Currency.NGN && offerProvider.rate != 0)
                             Text('${offerProvider.amount * offerProvider.rate} ${getCurrencyName(offerProvider.creditedCurrency)}', style: Theme.of(context).textTheme.bodyMedium,),
                           ],
                         ),
@@ -177,31 +177,6 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                   ),
                 ],
               ),
-              // const SizedBox(height: TSizes.spaceBtwInputFields,),
-              // Column(
-              //   crossAxisAlignment: CrossAxisAlignment.start,
-              //   children: [
-              //     Text('Minimum rate ${offerProvider.debitedCurrency != null ? '(per ${offerProvider.debitedCurrency})' : ''}', style: Theme.of(context).textTheme.labelSmall,),
-              //     TextFormField(
-              //       onChanged: (value) => offerProvider.updateMinimumRate(value),
-              //       decoration: InputDecoration(
-              //         suffixIcon: Padding(
-              //           padding: const EdgeInsets.only(right: 14.8),
-              //           child: Row(
-              //             mainAxisSize: MainAxisSize.min,
-              //             children: [
-              //               if (offerProvider.creditedCurrency != null && offerProvider.createOfferEntity.minimumRate != '')
-              //               AppoxIcon(),
-              //               const SizedBox(width: TSizes.xl,),
-              //               if (offerProvider.creditedCurrency != null && offerProvider.createOfferEntity.minimumRate != '')
-              //               Text('${THelperFunctions.getStringMultiplication(offerProvider.createOfferEntity.amount, offerProvider.createOfferEntity.minimumRate)} ${offerProvider.creditedCurrency}', style: Theme.of(context).textTheme.bodyLarge,),
-              //             ],
-              //           ),
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
               const SizedBox(height: TSizes.spaceBtwInputFields,),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,62 +255,10 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                         )
                     ),
                     child: Text(
-                        offerProvider.debitedCurrency == Currency.Select ? "" :'${getCurrencyName(offerProvider.debitedCurrency)} wallet',
+                        '${getCurrencyName(offerProvider.debitedCurrency)} wallet',
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   ),
-                  // TextFormField(
-                  //   decoration: InputDecoration(
-                  //     suffixIcon: DropdownButton(
-                  //       dropdownColor: Colors.white,
-                  //       focusColor: Colors.white,
-                  //       autofocus: false,
-                  //       isExpanded: true,
-                  //       value: offerProvider.creditedCurrency,
-                  //       underline: const SizedBox(),
-                  //       icon: RotatedBox(
-                  //         quarterTurns: 3,
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.symmetric(vertical: 14.8),
-                  //           child: Icon(
-                  //             Icons.arrow_back_ios_rounded,
-                  //             size: 12,
-                  //             color: TColors.textPrimary.withOpacity(0.8),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       onChanged: (newValue) {},
-                  //       items: [
-                  //         for (final item in offerProvider.currencies)
-                  //           DropdownMenuItem<Currency>(
-                  //             value: item,
-                  //             child: SizedBox(
-                  //               child: Padding(
-                  //                 padding: const EdgeInsets.only(left: 8),
-                  //                 child: Row(
-                  //                   children: [
-                  //                     SizedBox(
-                  //                         width: 30,
-                  //                         height: 30,
-                  //                         child: Image(image: AssetImage(
-                  //                             item == 'NGN'
-                  //                                 ? TImages.ngnIcon
-                  //                                 : TImages.gbpIcon
-                  //                         ))
-                  //                     ),
-                  //                     Text(
-                  //                       item.toString(),
-                  //                       style: Theme.of(context).textTheme.labelMedium,
-                  //                     ),
-                  //                   ],
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               const SizedBox(height: TSizes.spaceBtwInputFields,),
@@ -355,49 +278,10 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                       )
                     ),
                     child: Text(
-                      offerProvider.creditedCurrency == Currency.Select ? "" : '${getCurrencyName(offerProvider.creditedCurrency)} wallet',
+                      '${getCurrencyName(offerProvider.creditedCurrency)} wallet',
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   )
-                  // TextFormField(
-                  //   decoration: InputDecoration(
-                  //     suffixIcon: DropdownButton(
-                  //       dropdownColor: Colors.white,
-                  //       focusColor: Colors.white,
-                  //       autofocus: false,
-                  //       isExpanded: true,
-                  //       value: offerProvider.creditedCurrency,
-                  //       underline: const SizedBox(),
-                  //       icon: RotatedBox(
-                  //         quarterTurns: 3,
-                  //         child: Padding(
-                  //           padding: const EdgeInsets.symmetric(vertical: 14.8),
-                  //           child: Icon(
-                  //             Icons.arrow_back_ios_rounded,
-                  //             size: 12,
-                  //             color: TColors.textPrimary.withOpacity(0.8),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //       onChanged: (newValue) {},
-                  //       items: [
-                  //         for (final item in offerProvider.currencies)
-                  //           DropdownMenuItem<Currency>(
-                  //             value: item,
-                  //             child: SizedBox(
-                  //               child: Padding(
-                  //                 padding: const EdgeInsets.only(left: 8),
-                  //                 child: Text(
-                  //                   '${getCurrencyName(offerProvider.creditedCurrency)} wallet',
-                  //                   style: Theme.of(context).textTheme.labelMedium,
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
               const SizedBox(height: TSizes.spaceBtwSections,),
@@ -407,8 +291,6 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                       formKey.currentState!.save();
                       if (
                       offerProvider.amount != 0 &&
-                          offerProvider.debitedCurrency != Currency.Select &&
-                          offerProvider.creditedCurrency != Currency.Select &&
                           offerProvider.rate != 0 &&
                           offerProvider.expireIn != 0
                       ) {

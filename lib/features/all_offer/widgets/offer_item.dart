@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/features/all_offer/apis/api.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 
 import '../../../common/widgets/divider.dart';
@@ -21,13 +24,14 @@ class OfferItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
+    var provider = Provider.of<OfferProvider>(context);
     return Column(
       children: [
         ListTile(
           dense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: TSizes.md),
           onTap: (){
-            Get.to(() => OfferDetailsScreen(item: item));
+            OfferService.instance.getOfferById(offerProvider: provider, id: item.id);
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/features/all_offer/apis/api.dart';
+import 'package:swappr/features/wallet/apis/api.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
@@ -94,7 +96,8 @@ class TrendingOffer extends StatelessWidget {
                       dense: true,
                       contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.md),
                       onTap: (){
-                        Get.to(() => OfferDetailsScreen(item: item));
+                        // Get.to(() => OfferDetailsScreen(item: item));
+                        OfferService.instance.getOfferById(offerProvider: offerProvider, id: item.id);
                       },
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

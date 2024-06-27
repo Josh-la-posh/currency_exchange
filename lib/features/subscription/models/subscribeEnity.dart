@@ -3,13 +3,13 @@
 import 'package:swappr/utils/constants/enums.dart';
 
 class SubscriptionEntity{
-  String id;
-  String debitedCurrency;
-  String creditedCurrency;
-  String createdDate;
-  int minRate;
-  int maxRate;
-  String lastModifiedDate;
+  String? id;
+  String? debitedCurrency;
+  String? creditedCurrency;
+  String? createdDate;
+  int? minRate;
+  int? maxRate;
+  String? lastModifiedDate;
 
   SubscriptionEntity({
     required this.id,

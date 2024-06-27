@@ -12,15 +12,15 @@ import '../widgets/negotiation_screen.dart';
 import 'accept_review_details.dart';
 
 class OfferDetailsScreen extends StatelessWidget {
-  final OfferEntity? item;
   const OfferDetailsScreen({
     super.key,
-    this.item
   });
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
+    var provider = Provider.of<OfferProvider>(context);
+    final item = provider.offerDetail;
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
       body: Padding(
@@ -138,7 +138,7 @@ class OfferDetailsScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.labelSmall,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: 'This offer expires in ${item?.createdDate == null ? '' : THelperFunctions.millisecondConversion(item!.expireIn) ?? ''}',
+                                  text: 'This offer expires in ${item?.expireCountDown == null ? '' : THelperFunctions.millisecondConversion(item!.expireCountDown) ?? ''}',
                                   style: TextStyle(
                                       color: TColors.textPrimaryO80
                                   )
