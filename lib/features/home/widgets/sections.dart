@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/features/home/widgets/section_widget.dart';
 import 'package:swappr/features/negotiation_offer/screen/negotiation_offer.dart';
 import 'package:swappr/features/payment_method/screens/payment_options.dart';
 import 'package:swappr/features/withdrawals/screens/withdrawal.dart';
+import 'package:swappr/utils/constants/image_strings.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../all_offer/screens/all_offer.dart';
@@ -21,23 +23,7 @@ class LinkSectionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: TSizes.xs),
-        decoration: BoxDecoration(
-            color: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
-            boxShadow: [
-              BoxShadow(
-                  color: darkMode ? TColors.black.withOpacity(0.3) : TColors.black.withOpacity(0.25),
-                  offset: darkMode ? Offset(0, 1.24) : Offset(0,4),
-                  blurRadius: darkMode ? 1.94 : 4,
-                  spreadRadius: darkMode ? 1.94 : 0
-              ),
-              BoxShadow(
-                  color: TColors.secondaryBorder,
-                  offset: const Offset(0.0,0.0),
-                  blurRadius: 0,
-                  spreadRadius: 0
-              ),
-            ]
-        ),
+
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -46,72 +32,22 @@ class LinkSectionWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: TSizes.sm),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => const AllOfferScreen());
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40)
-                        ),
-                        child: const Image(image: AssetImage('assets/icons/homeIcons/all_offer.png')),
-                      ),
-                      const SizedBox(height: 7,),
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text:'All Offer',
-                                    style: TextStyle(
-                                        fontWeight: TSizes.fontWeightMd,
-                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
-                                    )
-                                ),
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                SectionWidgetContainer(
+                    onTap: () {
+                      Get.to(() => const AllOfferScreen());
+                    },
+                    darkMode: darkMode,
+                    title: 'All Offer',
+                    image: TImages.allOfferIcon
                 ),
                 const SizedBox(height: TSizes.xl),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => PaymentOptionScreen());
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40)
-                        ),
-                        child: const Image(image: AssetImage('assets/icons/homeIcons/subscribe.png')),
-                      ),
-                      const SizedBox(height: 7,),
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text:'Deposit',
-                                    style: TextStyle(
-                                        fontWeight: TSizes.fontWeightMd,
-                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
-                                    )
-                                ),
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                SectionWidgetContainer(
+                    onTap: () {
+                      Get.to(() => const PaymentOptionScreen());
+                    },
+                    darkMode: darkMode,
+                    title: 'Deposit',
+                    image: TImages.depositIcon
                 ),
               ],
             ),
@@ -119,72 +55,22 @@ class LinkSectionWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: TSizes.sm),
-                GestureDetector(
-                  onTap: (){
-                    Get.to(() => const WalletDashboardScreen());
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40)
-                        ),
-                        child: const Image(image: AssetImage('assets/icons/homeIcons/wallet.png')),
-                      ),
-                      const SizedBox(height: 7,),
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text:'Wallet',
-                                    style: TextStyle(
-                                        fontWeight: TSizes.fontWeightMd,
-                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
-                                    )
-                                ),
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                SectionWidgetContainer(
+                    onTap: () {
+                      Get.to(() => const WalletDashboardScreen());
+                    },
+                    darkMode: darkMode,
+                    title: 'Wallet',
+                    image: TImages.walletIcon
                 ),
                 const SizedBox(height: TSizes.xl),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => WithdrawalScreen());
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40)
-                        ),
-                        child: const Image(image: AssetImage('assets/icons/homeIcons/subscribe.png')),
-                      ),
-                      const SizedBox(height: 7,),
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text:'Withdraw',
-                                    style: TextStyle(
-                                        fontWeight: TSizes.fontWeightMd,
-                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
-                                    )
-                                ),
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                SectionWidgetContainer(
+                    onTap: () {
+                      Get.to(() => const WithdrawalScreen());
+                    },
+                    darkMode: darkMode,
+                    title: 'Withdraw',
+                    image: TImages.withdrawHomeIcon
                 ),
               ],
             ),
@@ -192,77 +78,25 @@ class LinkSectionWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: TSizes.sm),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => const SubscribeScreen());
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40)
-                        ),
-                        child: const Image(image: AssetImage('assets/icons/homeIcons/subscribe.png')),
-                      ),
-                      const SizedBox(height: 7,),
-                      RichText(
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text:'Subscribe',
-                                    style: TextStyle(
-                                        fontWeight: TSizes.fontWeightMd,
-                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5)
-                                    )
-                                ),
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                SectionWidgetContainer(
+                    onTap: () {
+                      Get.to(() => const SubscribeScreen());
+                    },
+                    darkMode: darkMode,
+                    title: 'Subscribe',
+                    image: TImages.subscribeIcon
                 ),
                 const SizedBox(height: TSizes.xl),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(() => const NegotiationOfferScreen());
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(40)
-                        ),
-                        child: const Image(image: AssetImage('assets/icons/homeIcons/subscribe.png')),
-                      ),
-                      const SizedBox(height: 7,),
-                      RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text:'Negotiation \n offers',
-                                    style: TextStyle(
-                                        fontWeight: TSizes.fontWeightMd,
-                                        color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
-                                        height: 1.4)
-                                ),
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
+                SectionWidgetContainer(
+                    onTap: () {
+                      Get.to(() => const NegotiationOfferScreen());
+                    },
+                    darkMode: darkMode,
+                    title: 'Negotiation \n Offers',
+                    image: TImages.negotiationOfferIcon
                 ),
-                const SizedBox(height: TSizes.sm),
               ],
-            )
+            ),
           ],
         ),
       );

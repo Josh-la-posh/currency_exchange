@@ -5,6 +5,16 @@ class TImages {
   // -- App Logo
   static const String appLogoPng = "assets/logos/swappr-splash-logo.png";
 
+  // Home icons
+  static const String allOfferIcon = 'assets/icons/homeIcons/redeem.png';
+  static const String walletIcon = 'assets/icons/homeIcons/wallet.png';
+  static const String subscribeIcon = 'assets/icons/homeIcons/unsubscribe.png';
+  static const String depositIcon = 'assets/icons/homeIcons/account_balance.png';
+  static const String withdrawHomeIcon = 'assets/icons/homeIcons/payments.png';
+  static const String negotiationOfferIcon = 'assets/icons/homeIcons/partner_exchange.png';
+  static const String trendingOfferIcon = 'assets/icons/homeIcons/trading_offer.png';
+
+
   // Bottom Nav Icons
   static const String home = 'assets/icons/bottomNavIcons/home.png';
   static const String homeActive = 'assets/icons/bottomNavIcons/homeActive.png';

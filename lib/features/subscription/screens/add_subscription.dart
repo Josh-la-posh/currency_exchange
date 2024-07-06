@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/common/widgets/currencyWidget.dart';
 import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
 import 'package:swappr/features/subscription/widgets/subscription_form.dart';
 import '../../../common/styles/spacing_styles.dart';
@@ -16,7 +15,7 @@ class AddSubscriptionScreen extends StatelessWidget {
           padding: TSpacingStyle.homePadding,
           child: Column(
             children: [
-              const CurrencyWidgetWithBack(),
+              CurrencyWidgetWithBack(),
               Padding(
                 padding: TSpacingStyle.paddingWithAppBarHeight,
                 child: Column(

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
 import 'package:swappr/data/modules/session_manager.dart';
 import 'package:swappr/data/provider/auth_provider.dart';
 import 'package:swappr/features/authentication/screens/login/widgets/login_form.dart';
+import 'package:swappr/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:swappr/utils/layouts/auth_layout.dart';
 
 import '../../../home/routes/names.dart';
@@ -56,6 +59,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return AuthLayout(
+      onTap: () {
+        Get.to(() => const OnboardingScreen());
+      },
         heading: 'Log In',
         title: 'Welcome Back!',
         child: LoginForm(

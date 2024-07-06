@@ -12,8 +12,10 @@ import '../widgets/negotiation_screen.dart';
 import 'accept_review_details.dart';
 
 class OfferDetailsScreen extends StatelessWidget {
-  const OfferDetailsScreen({
+  VoidCallback? onTap;
+  OfferDetailsScreen({
     super.key,
+    this.onTap
   });
 
   @override
@@ -27,7 +29,7 @@ class OfferDetailsScreen extends StatelessWidget {
         padding: TSpacingStyle.homePadding,
         child: Column(
           children: [
-            const CurrencyWidgetWithBack(),
+            CurrencyWidgetWithBack(onTap: onTap,),
             Padding(
               padding: const EdgeInsets.all(TSizes.defaultSpace),
               child: Column(

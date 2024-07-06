@@ -19,6 +19,7 @@ class TColors {
   static const Color textBlack = Colors.black;
 
   // Background Container Colors
+  static const Color darkPurple = Color(0xFF3F1E5B);
   static const Color primaryBackground = Color(0xFFFDF6FF);
   static const Color homeBackground = Color(0xFFFDF6FF);
   static const Color textFieldBackground = Color(0xFFFDFAFE);

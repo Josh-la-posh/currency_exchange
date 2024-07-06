@@ -6,8 +6,10 @@ import '../../../utils/constants/sizes.dart';
 import '../currencyWidget.dart';
 
 class CurrencyWidgetWithBack extends StatelessWidget {
-  const CurrencyWidgetWithBack({
+  VoidCallback? onTap;
+  CurrencyWidgetWithBack({
     super.key,
+    this.onTap
   });
 
   @override
@@ -20,7 +22,7 @@ class CurrencyWidgetWithBack extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: IconButton(
-                onPressed: (){Get.back();},
+                onPressed: onTap != null ? onTap : (){Get.back();},
                 icon: const Icon(Icons.arrow_back_ios_rounded)
             ),
           ),

@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/constants/texts.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -18,6 +20,8 @@ class WalletList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var walletProvider = Provider.of<WalletProvider>(context);
+    var transactionProvider = Provider.of<TransactionProvider>(context);
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,16 +31,18 @@ class WalletList extends StatelessWidget {
             walletProvider.setShowWalletList();
           },
           child: Container(
-            width: 120,
-            margin: const EdgeInsets.all(10),
-            padding: const EdgeInsets.all(4),
+            width: double.infinity,
+            height: 62,
+            margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 40),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: const Color(0xFFD4C6E8)
+                border: Border.all(color: Colors.black),
+                color: darkMode ? Colors.black : Color(0xFFE6E5E5).withOpacity(0.13)
             ),
             child:
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Add Wallet',
@@ -50,66 +56,83 @@ class WalletList extends StatelessWidget {
                 SizedBox(width: 5,),
                 SizedBox(
                     width: 5,
-                    child: Icon(Icons.keyboard_arrow_right_rounded, size: 20, color: TColors.black,)
+                    child: Icon(
+                      walletProvider.showWalletLists == true
+                          ? Icons.arrow_drop_up
+                          : Icons.arrow_drop_down,
+                      size: 25,
+                      color: TColors.black,)
                 )
               ],
             ),
           ),
         ),
         Container(
-          margin: EdgeInsets.only(top: walletProvider.showWalletLists == true ? 30 : 0, bottom: 25),
+          margin: EdgeInsets.only(
+              top: walletProvider.showWalletLists == true ? 20 : 0,
+              // right: walletProvider.showWalletLists == true ? 20 : 0,
+              // left: walletProvider.showWalletLists == true ? 20 : 0,
+              bottom: 25),
+          decoration: BoxDecoration(
+            // border: Border.all(
+            //   color: Color(0xFF4C6287)
+            // )
+          ),
           child: walletProvider.showWalletLists == true
               ? ListView(
             shrinkWrap: true,
             children: walletProvider.walletCurrencies.map((currency) {
               return Column(
                 children: [
-                  GestureDetector(
-                    onTap: (){
-                      walletProvider.setSelectedWalletCurrency(currency);
-                      WalletServices.instance.createWallet(
-                          walletProvider: walletProvider,
-                          currency: getWalletCurrencyName(walletProvider.selectedWalletCurrency)
-                      );
-                    },
-                    child: ListTile(
-                      // padding: const EdgeInsets.only(left: 70, right: 30, top: 20, bottom: 20),
-                      contentPadding: EdgeInsets.only(left: 70, right: 30),
-                      title: Row(
-                        children: [
-                          RichText(
-                              text: TextSpan(
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                        text: getWalletCurrencyName(currency),
-                                        style:  TextStyle(
-                                            fontSize: 10,
-                                            fontFamily: TTexts.fontFamily,
-                                            fontWeight: TSizes.fontWeightNm,
-                                            color: darkMode ? Colors.white : Colors.black
-                                        )
-                                    ),
-                                  ]
-                              )
-                          ),
-                          const Spacer(),
-                          if (currency == walletProvider.selectedWalletCurrency)
-                          SizedBox(
-                            width: 20,
-                              child: const Image(image: AssetImage('assets/icons/wallet_check.png'))
-                          )
-                        ],
+                  Container(
+                    margin: EdgeInsets.only(bottom: 8),
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    child: GestureDetector(
+                      onTap: (){
+                        walletProvider.setSelectedWalletCurrency(currency);
+                        walletProvider.setShowWalletList();
+                        WalletServices.instance.createWallet(
+                            transactionProvider: transactionProvider,
+                            walletProvider: walletProvider,
+                            currency: getWalletCurrencyName(walletProvider.selectedWalletCurrency)
+                        );
+                      },
+                      child: Container(
+                        height: 42,
+                        padding: EdgeInsets.symmetric(horizontal: 25),
+                        decoration: BoxDecoration(
+                            color: Color(0xFFF6F6F6),
+                            borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.bodySmall,
+                                    children: <TextSpan> [
+                                      TextSpan(
+                                          text: getWalletCurrencyName(currency),
+                                          style:  TextStyle(
+                                              fontSize: 10,
+                                              fontFamily: TTexts.fontFamily,
+                                              fontWeight: TSizes.fontWeightNm,
+                                              color: darkMode ? Colors.white : Colors.black
+                                          )
+                                      ),
+                                    ]
+                                )
+                            ),
+                            const Spacer(),
+                            if (currency == walletProvider.selectedWalletCurrency)
+                            SizedBox(
+                              width: 20,
+                                child: const Image(image: AssetImage('assets/icons/wallet_check.png'))
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                  Container(
-                    height: 1,
-                    width: double.infinity,
-                    decoration:BoxDecoration(
-                      color: darkMode ? TColors.white.withOpacity(0.2) : Colors.black.withOpacity(0.05),
-                    ),
-                  )
                 ],
               );
             }).toList(),

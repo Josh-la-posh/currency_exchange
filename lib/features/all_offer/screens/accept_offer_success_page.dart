@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:swappr/common/widgets/custom_time_line.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 import 'package:swappr/utils/layouts/list_layout.dart';
 import '../../../utils/constants/colors.dart';
 import '../widgets/success_page.dart';
@@ -29,7 +30,7 @@ class AcceptOfferSuccessPage extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelSmall,
                           children: <TextSpan> [
                             TextSpan(
-                                text: index == 3 ? '': '11:23',
+                                text: THelperFunctions.getFormattedTime(DateTime.now().toString()),
                                 style: TextStyle(
                                     color: TColors.textPrimary.withOpacity(0.6),
                                     height: 1.5
@@ -41,7 +42,13 @@ class AcceptOfferSuccessPage extends StatelessWidget {
                 ),
                 endChild: Container(
                     padding: const EdgeInsets.only(bottom: 17),
-                    child: Text('You accepted this offer', style: Theme.of(context).textTheme.labelMedium,)
+                    child: Text(
+                      index == 0
+                          ? 'You accepted this offer'
+                          : index == 1
+                          ? 'We received your funds'
+                          : 'Your $creditedCurrency $amount is on its way to you',
+                      style: Theme.of(context).textTheme.labelMedium,)
                 ),
               )
           ),

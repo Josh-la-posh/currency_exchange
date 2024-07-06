@@ -7,19 +7,21 @@ import '../../../utils/constants/colors.dart';
 
 
 class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({
+  AppBarWidget({
     super.key,
     required this.heading,
+    this.onTap
   });
 
   final String heading;
+  VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         IconButton(
-          onPressed: (){Get.back();},
+          onPressed: onTap != null ? onTap : (){Get.back();},
           icon: const Icon(Icons.arrow_back_ios_sharp),
           style: IconButton.styleFrom(
               foregroundColor: TColors.primary,

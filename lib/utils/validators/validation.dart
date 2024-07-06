@@ -141,11 +141,11 @@ class TValidator {
     return null;
   }
 
-  static String? currencyValidator(Currency? curr) {
-    if (curr == Currency.NGN) {
-      return 'Please select a currency';
-    }
-  }
+  // static String? currencyValidator(Currency? curr) {
+  //   if (curr == Currency.NGN) {
+  //     return 'Please select a currency';
+  //   }
+  // }
 
   static String? acctNumValidator(String? val) {
     final letterCheck = RegExp(r'[0-9]');

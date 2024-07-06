@@ -18,6 +18,7 @@ class WalletProvider extends ChangeNotifier {
   List<GetWalletModel> _wallets = [];
   GetWalletModel? _selectedWallet;
   List<GetBankAccountModel> _savedBankAccounts = [];
+  GetBankAccountModel? _selectedWithdrawalAccount;
   BankListEntity? _bankListEntity;
   GetFcyAccountEntity? _fcyAccountDetails;
   List<FcyAccountModel> _fcyAccount = [];
@@ -47,6 +48,7 @@ class WalletProvider extends ChangeNotifier {
   List<GetWalletModel> get wallets => _wallets;
   GetWalletModel? get selectedWallet => _selectedWallet;
   List<GetBankAccountModel> get savedBankAccounts => _savedBankAccounts;
+  GetBankAccountModel? get selectedWithdrawalAccount => _selectedWithdrawalAccount;
   GetFcyAccountEntity? get fcyAccountDetails => _fcyAccountDetails;
   BankListEntity? get bankListEntity => _bankListEntity;
   List<FcyAccountModel> get fcyAccount => _fcyAccount;
@@ -181,6 +183,11 @@ class WalletProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void saveWithdrawalBank(GetBankAccountModel? account) {
+    _selectedWithdrawalAccount = account;
+    notifyListeners();
+  }
+
   resetState() {
     _wallets = [];
     _selectedWallet = null;
@@ -199,5 +206,6 @@ class WalletProvider extends ChangeNotifier {
     _bankAccountDetails = null;
     _selectedNigBank = Bank.GTB;
     defaultWalletDetail = null;
+    _selectedWithdrawalAccount = null;
   }
 }

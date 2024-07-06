@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/features/authentication/apis/api.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
@@ -8,6 +9,11 @@ import 'package:swappr/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
 import '../../../../../data/modules/app_navigator.dart';
+import '../../../../../data/provider/auth_provider.dart';
+import '../../../../../data/provider/offer_provider.dart';
+import '../../../../../data/provider/subscription_provider.dart';
+import '../../../../../data/provider/transaction_provider.dart';
+import '../../../../../data/provider/wallet_provider.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/otp/otp.dart';
 import '../../../routes/names.dart';
@@ -16,11 +22,13 @@ import '../../login/login.dart';
 class EmailVerificationForm extends StatefulWidget {
   final bool sendEmailOtpOnBuild;
   final String email;
+  final String password;
   final VoidCallback? onSuccess;
   const EmailVerificationForm({
     super.key,
     this.sendEmailOtpOnBuild = false,
     required this.email,
+    required this.password,
     this.onSuccess = null
   });
 
@@ -29,6 +37,27 @@ class EmailVerificationForm extends StatefulWidget {
 }
 
 class _EmailVerificationFormState extends State<EmailVerificationForm> {
+
+
+  var authProvider = Provider.of<AuthProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var walletProvider = Provider.of<WalletProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var transactionProvider = Provider.of<TransactionProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var offerProvider = Provider.of<OfferProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var subscriptionProvider = Provider.of<SubscriptionProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
   final formKey = GlobalKey<FormState>();
   String? _otpCode;
   bool showEmailVerifiedSuccess = false;
@@ -190,8 +219,19 @@ class _EmailVerificationFormState extends State<EmailVerificationForm> {
           SizedBox(height: THelperFunctions.screenHeight() * 0.12),
           TElevatedButton(
             onTap: () {
-              AppNavigator.instance
-                  .navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);
+              AuthService.instance.login(
+                  email: widget.email,
+                  password: widget.password,
+                  authProvider: authProvider,
+                  walletProvider: walletProvider,
+                  transactionProvider: transactionProvider,
+                  offerProvider: offerProvider,
+                  subscriptionProvider: subscriptionProvider,
+                  rememberMe: true,
+                  handleEmailNotVerified: (){}
+              );
+              // AppNavigator.instance
+              //     .navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);
             },
             buttonText: 'Please, Log in ',
           ),

@@ -113,7 +113,7 @@ class _LoginFormState extends State<LoginForm> {
                               _obscurePasswordText = !_obscurePasswordText;
                             });
                           },
-                          icon: Icon(_obscurePasswordText ? Iconsax.eye : Iconsax.eye_slash)
+                          icon: Icon(_obscurePasswordText ? Iconsax.eye_slash : Iconsax.eye)
                       ),
                     ),
                   ),
@@ -163,6 +163,7 @@ class _LoginFormState extends State<LoginForm> {
                         handleEmailNotVerified: () {
                           Get.to(EmailVerificationScreen(
                             email: _email as String,
+                            password: _password as String,
                             sendEmailOtpOnBuild: true,
                             onSuccess: () {
                               AuthService.instance.login(

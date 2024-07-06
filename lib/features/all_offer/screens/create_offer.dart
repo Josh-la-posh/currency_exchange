@@ -18,7 +18,7 @@ class CreateOfferScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CurrencyWidgetWithBack(),
+            CurrencyWidgetWithBack(),
             Expanded(
               child: SingleChildScrollView(
                   child: Padding(

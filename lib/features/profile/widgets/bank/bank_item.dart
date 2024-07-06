@@ -22,7 +22,7 @@ class BankAccountItem extends StatelessWidget {
           height: TSizes.textReviewHeight * 1.4,
           // padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
           child: Slidable(
-            key: const ValueKey(0),
+            key: ValueKey(item.id),
             endActionPane: ActionPane(
                 extentRatio: 0.2,
                 motion: const ScrollMotion(),
@@ -78,11 +78,11 @@ class BankAccountItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 27,
-                    width: 27,
-                    color: Colors.black,
-                  ),
+                  // Container(
+                  //   height: 27,
+                  //   width: 27,
+                  //   color: Colors.black,
+                  // ),
                   SizedBox(width: 10,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

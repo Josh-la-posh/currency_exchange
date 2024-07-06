@@ -165,10 +165,10 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (offerProvider.debitedCurrency != Currency.NGN && offerProvider.creditedCurrency != Currency.NGN && offerProvider.rate != 0)
+                            if (offerProvider.rate != 0)
                             AppoxIcon(),
                             const SizedBox(width: TSizes.xl,),
-                            if (offerProvider.debitedCurrency != Currency.NGN && offerProvider.creditedCurrency != Currency.NGN && offerProvider.rate != 0)
+                            if (offerProvider.rate != 0)
                             Text('${offerProvider.amount * offerProvider.rate} ${getCurrencyName(offerProvider.creditedCurrency)}', style: Theme.of(context).textTheme.bodyMedium,),
                           ],
                         ),
@@ -285,19 +285,22 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                 ],
               ),
               const SizedBox(height: TSizes.spaceBtwSections,),
-              TElevatedButton(
+              offerProvider.amount == 0 ||
+                  offerProvider.rate == 0 ?
+              SizedBox(
+                height: 48,
+                width: double.infinity,
+                child: ElevatedButton(
+                    onPressed: null,
+                    child: Text('Continue')
+                ),
+              )
+                  : TElevatedButton(
                   onTap: (){
                     if (formKey.currentState!.validate()) {
                       formKey.currentState!.save();
-                      if (
-                      offerProvider.amount != 0 &&
-                          offerProvider.rate != 0 &&
-                          offerProvider.expireIn != 0
-                      ) {
-                        Get.to(() => const CreateReviewDetailsScreen());
-                      }
-                    }
-                    },
+                      Get.to(() => const CreateReviewDetailsScreen());
+                    }},
                   buttonText: 'Continue'),
               const SizedBox(height: TSizes.spaceBtwSections,),
             ],

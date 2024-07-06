@@ -24,7 +24,7 @@ class VerifyYourAccountWidget extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwElements),
             padding: const EdgeInsets.symmetric(horizontal: 27, vertical: 30),
             decoration: BoxDecoration(
-                color: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
+                color: darkMode ? TColors.black.withOpacity(0.8) : Color(0xFFF6F6F6),
                 borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(

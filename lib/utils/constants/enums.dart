@@ -51,7 +51,6 @@ String getCurrencyName(Currency currency) {
 
 
 enum Date {
-  Select,
   First,
   Second,
   Third,
@@ -69,7 +68,7 @@ String getDateValue(Date currency) {
     case Date.Forth:
       return '28';
     default:
-      return 'Select';
+      return '';
   }
 }
 

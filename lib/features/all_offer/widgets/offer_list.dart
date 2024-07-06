@@ -58,8 +58,8 @@ class OfferList extends StatelessWidget {
                         ),
                       ),
                     const SizedBox(width: TSizes.spaceBtwItems,),
-                    GestureDetector(
-                      onTap: (){
+                    IconButton(
+                      onPressed: (){
                         showModalBottomSheet(
                             // isDismissible: false,
                             isScrollControlled: true,
@@ -68,22 +68,14 @@ class OfferList extends StatelessWidget {
                             builder: (cdx) =>  const FilterScreen()
                         );
                       },
-                      child: Container(
-                        width: 82,
-                        height: 31,
+                      icon: Container(
+                        width: 15,
+                        height: 20,
                         decoration: BoxDecoration(
                             color: darkMode ? TColors.primary : TColors.secondaryBorder30,
                             borderRadius: BorderRadius.circular(12)
                         ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('Filter', style: Theme.of(context).textTheme.labelMedium,),
-                            const SizedBox(width: TSizes.sm,),
-                            FilterIcon(),
-                          ],
-                        ),
+                        child: FilterIcon(),
                       ),
                     ),
                   ],

@@ -22,9 +22,9 @@ class DateList extends StatelessWidget {
     return HalfBottomSheetWidget(
         title: "Date",
         child: TListLayout(
-            itemCount: provider.dates?.length ?? 0,
+            itemCount: provider.dates.length,
             itemBuilder: (_, index) {
-              final date = provider.dates?[index];
+              final date = provider.dates[index];
               return ListTile(
                 onTap: () {
                   provider.setSelectedDate(date);
@@ -32,7 +32,7 @@ class DateList extends StatelessWidget {
                   Get.back();
                 },
                 title: Text(
-                  '${getDateValue(date!)} days',
+                  '${getDateValue(date)} days',
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 trailing: date == provider.selectedDate

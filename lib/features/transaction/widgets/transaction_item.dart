@@ -46,7 +46,7 @@ class TransactionItem extends StatelessWidget {
                                 children: <TextSpan> [
                                   TextSpan(
                                       // text: '400 GPB - 20,000 NGN',
-                                      text:'${item!.rate == null ? '' : THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount))} ${item.rate == null ? '' : item.debitedCurrency} ${item.rate == null ? '' : '-'} ${THelperFunctions.moneyFormatter(item.amount)} ${item.creditedCurrency}',
+                                      text:item.rate == null ? '${THelperFunctions.moneyFormatter(item.amount)} ${item.creditedCurrency}' : '${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount))} ${item.debitedCurrency} - ${THelperFunctions.moneyFormatter(item.amount)} ${item.creditedCurrency}',
                                       style: const TextStyle(fontSize: TSizes.fontSize11, fontWeight: TSizes.fontWeightLg)
                                   ),
                                 ]

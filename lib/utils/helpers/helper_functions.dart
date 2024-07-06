@@ -80,7 +80,7 @@ class THelperFunctions {
       timeDifference = "$seconds seconds";
     } else if (seconds >= 60 && seconds < 3600) {
       int minutes = seconds ~/ 60;
-      timeDifference = "$minutes ninutes";
+      timeDifference = "$minutes minutes";
     } else  if ( seconds >= 3600 && seconds < 86400){
       int hours = seconds ~/ (60 * 60);
       timeDifference = "$hours hours";

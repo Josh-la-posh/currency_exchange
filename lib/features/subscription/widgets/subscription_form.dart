@@ -38,7 +38,6 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                   borderRadius: const BorderRadius.all(Radius.circular(TSizes.borderRadiusSm))
               ),
               child: DropdownButtonFormField<Currency>(
-                validator: TValidator.currencyValidator,
                 dropdownColor: Colors.white,
                 focusColor: Colors.white,
                 autofocus: false,
@@ -66,15 +65,6 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                           padding: const EdgeInsets.only(left: 0),
                           child: Row(
                             children: [
-                              // Container(
-                              //   width: 40,
-                              //     height: 40,
-                              //     child: Image(image: AssetImage(
-                              //         item == 'NGN'
-                              //             ? TImages.ngnIcon
-                              //             : TImages.gbpIcon
-                              //     ))
-                              // ),
                               Text(
                                 getCurrencyName(item),
                                 style: Theme.of(context).textTheme.bodyLarge,
@@ -97,7 +87,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                   borderRadius: const BorderRadius.all(Radius.circular(TSizes.borderRadiusSm))
               ),
               child: DropdownButtonFormField<Currency>(
-                validator: TValidator.currencyValidator,
+                // validator: TValidator.currencyValidator,
                 dropdownColor: Colors.white,
                 focusColor: Colors.white,
                 autofocus: false,
@@ -123,15 +113,6 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                       child: SizedBox(
                         child: Row(
                           children: [
-                            // SizedBox(
-                            //     width: 40,
-                            //     height: 40,
-                            //     child: Image(image: AssetImage(
-                            //         item == 'NGN'
-                            //             ? TImages.ngnIcon
-                            //             : TImages.gbpIcon
-                            //     ))
-                            // ),
                             Text(
                               getCurrencyName(item),
                               style: Theme.of(context).textTheme.bodyLarge

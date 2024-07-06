@@ -75,7 +75,7 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
                   });
                 },
               )
-                  : SizedBox(height: 10),
+                  : SizedBox(height: 0),
               Column(
                 children: [
                   OfferList(),

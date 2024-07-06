@@ -60,7 +60,7 @@ class UserSession {
       );
       handleShowLoader();
       Future.delayed(
-        Duration(seconds: 3),
+        Duration(seconds: 1),
           () {
           handleHideLoader();
           AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);

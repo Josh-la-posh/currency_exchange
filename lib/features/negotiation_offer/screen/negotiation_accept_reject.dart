@@ -1,19 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/features/all_offer/apis/api.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
 
 import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
+import '../../../common/widgets/custom_time_line.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../../utils/layouts/list_layout.dart';
 import '../../all_offer/icons/svg.dart';
+import '../../all_offer/models/negotiate_offer_model.dart';
+import '../../all_offer/widgets/success_page.dart';
 
-class NegotiationAcceptRejectScreen extends StatelessWidget {
-  final String id;
-  const NegotiationAcceptRejectScreen({super.key, required this.id});
+class NegotiationAcceptRejectScreen extends StatefulWidget {
+  final NegotiateOfferModel item;
+  const NegotiationAcceptRejectScreen({
+    super.key,
+    required this.item
+  });
+
+  @override
+  State<NegotiationAcceptRejectScreen> createState() => _NegotiationAcceptRejectScreenState();
+}
+
+class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectScreen> {
+
+  bool showAcceptOfferMsg = false;
+  bool showRejectOfferMsg = false;
+
+  void handleSuccess() {
+    setState(() {
+      showAcceptOfferMsg = true;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +48,11 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: TSizes.defaultSpace),
-        child: Column(
+        child: showAcceptOfferMsg == false && showRejectOfferMsg == false
+            ? Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CurrencyWidgetWithBack(),
+            CurrencyWidgetWithBack(),
             const SizedBox(height: TSizes.spaceBtwSections / 2,),
             Expanded(
               child: SingleChildScrollView(
@@ -73,9 +101,9 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                               RichText(
                                   text: TextSpan(
                                       style: Theme.of(context).textTheme.labelSmall,
-                                      children: const <TextSpan> [
+                                      children: <TextSpan> [
                                         TextSpan(
-                                            text: '2,000',
+                                            text: '${widget.item.amount} ${widget.item.debitedCurrency}',
                                             style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                         )
                                       ]
@@ -105,9 +133,9 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                               RichText(
                                   text: TextSpan(
                                       style: Theme.of(context).textTheme.labelSmall,
-                                      children: const <TextSpan> [
+                                      children: <TextSpan> [
                                         TextSpan(
-                                            text: 'GBP',
+                                            text: widget.item.creditedCurrency,
                                             style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                         )
                                       ]
@@ -137,9 +165,9 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                               RichText(
                                   text: TextSpan(
                                       style: Theme.of(context).textTheme.labelSmall,
-                                      children: const <TextSpan> [
+                                      children: <TextSpan> [
                                         TextSpan(
-                                            text: 'NGN // GBP',
+                                            text: '${widget.item.rate} ${widget.item.debitedCurrency} // ${widget.item.creditedCurrency}',
                                             style: TextStyle(color: TColors.primary)
                                         )
                                       ]
@@ -192,9 +220,9 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                             text: TextSpan(
                                 text: 'You are about to swap ',
                                 style: Theme.of(context).textTheme.labelMedium,
-                                children: const <TextSpan> [
+                                children: <TextSpan> [
                                   TextSpan(
-                                      text: ' 57,000 NGN',
+                                      text: ' ${THelperFunctions.getStringMultiplication(widget.item.amount, widget.item.rate)} ${widget.item.debitedCurrency}',
                                       style: TextStyle(
                                           fontWeight: TSizes.fontWeightLg,
                                           color: Color(0xFFEA8484)
@@ -204,7 +232,7 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                                       text: ' for '
                                   ),
                                   TextSpan(
-                                      text: ' 95 GBP',
+                                      text: ' ${widget.item.amount} ${widget.item.creditedCurrency}',
                                       style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                   ),
                                 ]
@@ -215,9 +243,14 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           child: TElevatedButton(onTap: (){
                             OfferService.instance.acceptRejectOffer(
-                                id: id,
+                                id: widget.item.id,
                                 negotiationAccepted: true,
-                                offerProvider: offerProvider
+                                offerProvider: offerProvider,
+                                onSuccess: (){
+                                  setState(() {
+                                    showAcceptOfferMsg = true;
+                                  });
+                                }
                             );
                           },
                               buttonText: 'Accept'),
@@ -230,9 +263,14 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () {
                               OfferService.instance.acceptRejectOffer(
-                                  id: id,
+                                  id: widget.item.id,
                                   negotiationAccepted: false,
-                                  offerProvider: offerProvider
+                                  offerProvider: offerProvider,
+                                  onSuccess: (){
+                                    setState(() {
+                                      showRejectOfferMsg = true;
+                                    });
+                                  }
                               );
                             },
                             child: const Text(
@@ -248,8 +286,53 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
+        )
+            :  showAcceptOfferMsg == true
+            ? SuccessScreenWidget(
+          onTap: () {Get.back();},
+          text: 'You have successfully swapped ${THelperFunctions.getStringMultiplication(widget.item.amount, widget.item.rate)} ${widget.item.debitedCurrency} for ${widget.item.amount} ${widget.item.creditedCurrency}.',
+          child: TListLayout(
+              itemCount: 3,
+              itemBuilder: (_, index) => MyTimeLine(
+                isFirst: index == 0 ? true : false,
+                isLast: index == 2 ? true : false,
+                isDone: index == 2 ? false : true,
+                startChild: Container(
+                  padding: const EdgeInsets.only(bottom: 17),
+                  child: RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelSmall,
+                          children: <TextSpan> [
+                            TextSpan(
+                                text: THelperFunctions.getFormattedTime(DateTime.now().toString()),
+                                style: TextStyle(
+                                    color: TColors.textPrimary.withOpacity(0.6),
+                                    height: 1.5
+                                )
+                            ),
+                          ]
+                      )
+                  ),
+                ),
+                endChild: Container(
+                    padding: const EdgeInsets.only(bottom: 17),
+                    child: Text(
+                      index == 0
+                          ? 'You accepted this offer'
+                          : index == 1
+                          ? 'We received your funds'
+                          : 'Your ${widget.item.creditedCurrency} ${widget.item.amount} is on its way to you',
+                      style: Theme.of(context).textTheme.labelMedium,)
+                ),
+              )
+          ),
+        )
+            : SuccessScreenWidget(
+          onTap: () {Get.back();},
+          text: 'You have successfully rejected this offer.',
+          child: SizedBox(height: 0,),
+        )
+      )
     );
   }
 }

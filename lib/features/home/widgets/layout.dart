@@ -17,7 +17,7 @@ class DashboardScreenLayout extends StatelessWidget {
     final darkMode = THelperFunctions.isDarkMode(context);
     return AppLayout(
         currentRoute: RouteType.Home,
-        layoutBodyColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
+        // layoutBodyColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
         childWidget: Container(
           padding: TSpacingStyle.homePadding,
           // color: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,

@@ -72,7 +72,7 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
                   });
                 },
               )
-                  : SizedBox(height: 10),
+                  : SizedBox(height: 0),
               Column(
                 children: [
                   SubscriptionList(),

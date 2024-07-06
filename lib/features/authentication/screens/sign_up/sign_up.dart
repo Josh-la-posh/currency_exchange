@@ -7,6 +7,6 @@ class CreateAccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthLayout(title: 'Welcome to Swappr!', heading: 'Sign Up', child: SignUpForm());
+    return AuthLayout(title: '', heading: 'Sign Up', child: SignUpForm());
   }
 }

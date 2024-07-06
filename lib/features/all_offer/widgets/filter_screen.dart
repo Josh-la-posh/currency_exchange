@@ -119,7 +119,7 @@ class FilterScreen extends StatelessWidget {
                   OfferService.instance.getAllOffers(
                       offerProvider: provider,
                       currency: getCurrencyName(selectedCurrency),
-                      date: selectedDate == Date.Select ? '' : getDateValue(selectedDate)
+                      date: getDateValue(selectedDate)
                   );
                   Get.back();
                 }

@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/data/modules/dio.dart';
@@ -75,7 +78,7 @@ class WalletServices{
     return apiService.post('/wallet/fund-wallet-naira-bank-direct', data: data);
   }
 
-  Future _confirmbirthday(Object data) {
+  Future _confirmBirthday(Object data) {
     return apiService.post('/wallet/confirm-birthday', data: data);
   }
 
@@ -144,10 +147,10 @@ class WalletServices{
 
   // Post requests
 
-  createWallet({required WalletProvider walletProvider, required String currency}) {
+  createWallet({required WalletProvider walletProvider, required String currency, required TransactionProvider transactionProvider}) {
     _createWallet({'currency': currency})
         .then((response) async {
-      await getWallets(walletProvider: walletProvider, currency: currency);
+      await getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: currency);
       handleShowCustomToast(message: 'Your wallet has been created successfully');
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
@@ -157,11 +160,12 @@ class WalletServices{
 
   defaultWallet({
     required WalletProvider walletProvider,
-    required String walletId
+    required String walletId,
+    required TransactionProvider transactionProvider
   }) {
     _defaultWallet({'walletId': walletId})
         .then((response) async {
-          await getDefaultWallet(walletProvider: walletProvider);
+          await getDefaultWallet(transactionProvider: transactionProvider, walletProvider: walletProvider);
           print(response.data);
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
@@ -303,6 +307,7 @@ class WalletServices{
       walletProvider.saveBankAccountDetails(accountDetail);
 
     }).catchError((error) {
+      print(error.toString());
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
@@ -313,15 +318,18 @@ class WalletServices{
     required String currency,
     required WalletProvider walletProvider,
     required TransactionProvider transactionProvider,
+    required VoidCallback onSuccess
   }) {
     _transferLocalBank({
       'bankId': bankId,
       'amount': amount
     }).then((response) async {
-      await getWallets(walletProvider: walletProvider, currency: currency);
-      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
+      print(response.data);
+      await getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: currency);
+      onSuccess();
       handleShowCustomToast(message: 'In progress ...');
     }).catchError((error) {
+      print(error.toString());
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
@@ -367,14 +375,13 @@ class WalletServices{
     required TransactionProvider transactionProvider,
     required int amount,
     required String currency,
-    required String bankId
+    required String bankId,
   }) {
     _fundWalletNairaBankDirect({
       'amount': amount,
       'bankId': bankId
     }).then((response) async {
-      await getWallets(walletProvider: walletProvider, currency: currency);
-      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
+      await getWallets(transactionProvider: transactionProvider,walletProvider: walletProvider, currency: currency);
       // Get.back();
       handleShowCustomToast(message: 'In progress ...');
     }).catchError((error) {
@@ -415,12 +422,13 @@ class WalletServices{
 
   getWallets({
     required WalletProvider walletProvider,
-    required String currency
+    required String currency,
+    required TransactionProvider transactionProvider
   }) {
     List<GetWalletModel> wallets = [];
-    _getWallet(currency: currency).then((response) {
+    _getWallet(currency: currency).then((response) async {
+      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
       var data = response.data;
-
       for (var item in data) {
         wallets.add(GetWalletModel(
             id: item['id'],
@@ -437,10 +445,11 @@ class WalletServices{
 
   getDefaultWallet({
     required WalletProvider walletProvider,
+    required TransactionProvider transactionProvider
   }) {
-    _getDefaultWallet().then((response) {
+    _getDefaultWallet().then((response) async {
+      await getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: '');
       var item = response.data;
-
       DefaultWalletModel defaultWallet = DefaultWalletModel(
           id: item['id'],
           currency: item['currency'],

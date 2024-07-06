@@ -29,7 +29,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
 
     final item = walletProvider.flutterwaveModel;
     
-    print('items ${item?.transfer_amount}}');
+    print('items ${item?.account_expiration}}');
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
@@ -257,29 +257,32 @@ class FlutterwavePaymentScreen extends StatelessWidget {
               color: Colors.black.withOpacity(0.14),
             ),
             SizedBox(height: TSizes.xl,),
-            RichText(
-              textAlign: TextAlign.center,
-                text: TextSpan(
-                    style: TextStyle(
-                        color: darkMode ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        fontFamily: 'Roboto'
-                    ),
-                    children: <TextSpan> [
-                      TextSpan(
-                        text: 'The Account Expire in ${THelperFunctions.millisecondConversion(item!.account_expiration.toString())}',
-                      )
-                    ]
-                )
+            Container(
+              width: double.infinity,
+              child: RichText(
+                textAlign: TextAlign.center,
+                  text: TextSpan(
+                      style: TextStyle(
+                          color: darkMode ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                          fontFamily: 'Roboto'
+                      ),
+                      children: <TextSpan> [
+                        TextSpan(
+                          text: 'The Account Expire in ${THelperFunctions.millisecondConversion(item!.account_expiration.toString())}',
+                        )
+                      ]
+                  )
+              ),
             ),
             SizedBox(height: TSizes.defaultSpace * 2),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
               child: GestureDetector(
                 onTap: () async {
-                  await WalletServices.instance.getWallets(walletProvider: walletProvider, currency: '');
-                  await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
+                  await WalletServices.instance.getDefaultWallet(transactionProvider: transactionProvider, walletProvider: walletProvider);
+
                   AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
                 },
                 child: Container(
@@ -328,7 +331,8 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
+            SizedBox(height: 30,)
           ],
         ),
       ),

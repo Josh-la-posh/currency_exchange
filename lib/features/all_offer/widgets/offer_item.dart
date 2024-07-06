@@ -28,6 +28,7 @@ class OfferItem extends StatelessWidget {
     return Column(
       children: [
         ListTile(
+          hoverColor: Colors.transparent,
           dense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: TSizes.md),
           onTap: (){

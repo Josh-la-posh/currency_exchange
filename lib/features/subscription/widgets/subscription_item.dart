@@ -30,7 +30,7 @@ class SubscriptionItem extends StatelessWidget {
           color: TColors.secondaryBorder30,
           // padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
           child: Slidable(
-            key: const ValueKey(0),
+            key: ValueKey(item.id),
             endActionPane: ActionPane(
                 extentRatio: 0.2,
                 motion: const ScrollMotion(),
@@ -76,14 +76,6 @@ class SubscriptionItem extends StatelessWidget {
                         );
                       }
                   ),
-                  // SlidableAction(
-                  //   onPressed: ((context){
-                  //     SubscriptionService.instance.deleteSubscription(id: item.id, subscriptionProvider: provider);
-                  //   }),
-                  //   backgroundColor: TColors.danger,
-                  //   icon: Icons.delete,
-                  //   // label: 'Delete',
-                  // ),
                 ]
             ),
             child: ListTile(

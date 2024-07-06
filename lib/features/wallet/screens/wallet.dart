@@ -43,13 +43,9 @@ class _WalletDashboardScreenState extends State<WalletDashboardScreen> {
   void initState() {
     if (walletProvider.wallets.isEmpty) {
       WalletServices.instance.getWallets(
+          transactionProvider: transProvider,
           walletProvider: walletProvider,
           currency: ''
-      );
-    }
-    if (transProvider.transactions.isEmpty) {
-      TransactionService.instance.getTransactions(
-          transactionProvider: transProvider,
       );
     }
     print(walletProvider.showWalletLists);

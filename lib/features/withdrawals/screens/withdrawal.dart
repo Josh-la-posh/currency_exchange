@@ -1,23 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
+import 'package:swappr/features/profile/screens/bank_account/add_bank_account.dart';
+import 'package:swappr/features/withdrawals/widgets/account_widget.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 
+import '../../../data/provider/wallet_provider.dart';
+import '../../../utils/layouts/list_layout.dart';
 import '../widgets/withdrawal_sheet.dart';
 
-class WithdrawalScreen extends StatelessWidget {
+class WithdrawalScreen extends StatefulWidget {
   const WithdrawalScreen({super.key});
 
   @override
+  State<WithdrawalScreen> createState() => _WithdrawalScreenState();
+}
+
+class _WithdrawalScreenState extends State<WithdrawalScreen> {
+  String amount = '';
+  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<WalletProvider>(context);
+    final banks = provider.savedBankAccounts;
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
         leading: BackButton()
       ),
-      backgroundColor: darkMode ? Colors.black : const Color(0xFFD0CDE1).withOpacity(0.31),
+      backgroundColor: darkMode ? Colors.black : Colors.white,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace * 2),
@@ -59,28 +74,46 @@ class WithdrawalScreen extends StatelessWidget {
                                 fontSize: 18,
                                 fontFamily: 'Roboto'
                             ),
-                            children: const <TextSpan> [
+                            children: <TextSpan> [
                               TextSpan(
-                                text: 'Amount',
+                                text: 'Amount ',
+                              ),
+                              TextSpan(
+                                text: '(${provider.defaultWallet!.currency})',
+                                style: TextStyle(fontSize: 12)
                               )
                             ]
                         )
                     ),
                     const SizedBox(height: 15,),
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                                color: darkMode ? Colors.white : Colors.black,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 36,
-                                fontFamily: 'Roboto'
-                            ),
-                            children: const <TextSpan> [
-                              TextSpan(
-                                text: 'N125,000.00',
-                              )
-                            ]
-                        )
+                    TextFormField(
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        hintText: 'Enter amount',
+                        hintStyle: TextStyle(
+                            color: darkMode ? Colors.white : Colors.black.withOpacity(0.3),
+                            fontWeight: FontWeight.w800,
+                            fontSize: 24,
+                            fontFamily: 'Roboto'
+                        ),
+                        fillColor: Colors.transparent,
+                        border: const OutlineInputBorder().copyWith(
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: const OutlineInputBorder().copyWith(
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: const OutlineInputBorder().copyWith(
+                            borderSide: BorderSide.none
+                        ),
+                      ),
+                      style: TextStyle(
+                          color: darkMode ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 36,
+                          fontFamily: 'Roboto'
+                      ),
+                      onChanged: (val) => amount = val
                     ),
                   ],
                 ),
@@ -94,9 +127,9 @@ class WithdrawalScreen extends StatelessWidget {
                           fontSize: 16,
                           fontFamily: 'Roboto'
                       ),
-                      children: const <TextSpan> [
+                      children: <TextSpan> [
                         TextSpan(
-                          text: 'N340,000.00',
+                          text: '${provider.defaultWallet!.currency} ${provider.defaultWallet!.balance}',
                         )
                       ]
                   )
@@ -142,122 +175,50 @@ class WithdrawalScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFD9D9D9),
-                      borderRadius: BorderRadius.circular(12)
-                    ),
-                    child: Row(
-                      children: [
-                        const SizedBox(
-                            width: 20,
-                            child: Icon(Icons.add, size: 20,)
-                        ),
-                        RichText(
-                            text: const TextSpan(
-                                style: TextStyle(
-                                    color: TColors.primary,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                    fontFamily: 'Roboto'
-                                ),
-                                children: <TextSpan> [
-                                  TextSpan(
-                                    text: 'Add Bank Account',
-                                  )
-                                ]
-                            )
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const AddBankAccountScreen());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFD9D9D9),
+                        borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: Row(
+                        children: [
+                          const SizedBox(
+                              width: 20,
+                              child: Icon(Icons.add, size: 20,)
+                          ),
+                          RichText(
+                              text: const TextSpan(
+                                  style: TextStyle(
+                                      color: TColors.primary,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                      fontFamily: 'Roboto'
+                                  ),
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                      text: 'Add Bank Account',
+                                    )
+                                  ]
+                              )
+                          ),
+                        ],
+                      ),
                     ),
                   ),],
               ),
-              const SizedBox(height: TSizes.defaultSpace * 3,),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.only(top: 12, bottom: 12, right: 20, left: TSizes.defaultSpace * 1.5),
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: TColors.black.withOpacity(0.3),
-                        offset: const Offset(2.3,3.87),
-                        // blurRadius: 1.94,
-                        // spreadRadius: 1.94
-                      ),
-                      BoxShadow(
-                          color: Colors.white.withOpacity(0.85),
-                          offset: const Offset(0.0,0.0),
-                          blurRadius: 0,
-                          spreadRadius: 0
-                      ),
-                      BoxShadow(
-                          color: const Color(0xFFD0CDE1).withOpacity(0.31),
-                          offset: const Offset(0.0,0.0),
-                          blurRadius: 0,
-                          spreadRadius: 0
-                      ),
-                    ]
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Image(image: AssetImage(TImages.withdrawIcon)),
-                        const SizedBox(width: 10,),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        color: darkMode ? Colors.white : Colors.black.withOpacity(0.43),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        fontFamily: 'Roboto'
-                                    ),
-                                    children: const <TextSpan> [
-                                      TextSpan(
-                                        text: 'Zenith Bank Account',
-                                      ),
-                                    ]
-                                )
-                            ),
-                            const SizedBox(height: TSizes.md,),
-                            RichText(
-                                text: TextSpan(
-                                    style: TextStyle(
-                                        color: darkMode ? Colors.white : Colors.black.withOpacity(0.43),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16,
-                                        fontFamily: 'Roboto'
-                                    ),
-                                    children: const <TextSpan> [
-                                      TextSpan(
-                                        text: '*** **** *****4543',
-                                      ),
-                                    ]
-                                )
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 19,
-                      width: 19,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFD9D9D9),
-                        border: Border.all(
-                          color: TColors.primary,
-                        )
-                      ),
-                    )
-                  ],
-                ),
+              const SizedBox(height: TSizes.defaultSpace * 2,),
+
+              TListLayout(
+                  itemCount: banks.length,
+                  itemBuilder: (_, index) {
+                    final item = banks[index];
+                    return AccountWidget(item: item, darkMode: darkMode);
+                  }
               ),
               const SizedBox(height: TSizes.defaultSpace * 2,),
             ],
@@ -267,13 +228,24 @@ class WithdrawalScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
         margin: EdgeInsets.only(bottom: 20, right: TSizes.defaultSpace, left: TSizes.defaultSpace),
-        child: TElevatedButton(
+        child: provider.selectedWithdrawalAccount == null || amount == ''
+            ? SizedBox(
+            height: 48,
+            width: double.infinity,
+            child: ElevatedButton(
+                onPressed: null,
+                child: Text('Continue')
+            )
+        )
+            : TElevatedButton(
             onTap: () {
               showModalBottomSheet(
                   backgroundColor: Color(0xFF4C3668),
                   // isScrollControlled: true,
                   context: context,
-                  builder: (ctx) => WithdrawalConfirmSheet()
+                  builder: (ctx) => WithdrawalConfirmSheet(
+                    amount: amount,
+                  )
               );
             },
             buttonText: 'Continue'

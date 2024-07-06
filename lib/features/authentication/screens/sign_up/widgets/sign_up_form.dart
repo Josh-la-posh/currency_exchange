@@ -50,86 +50,8 @@ class _SignUpFormState extends State<SignUpForm> {
   String _confirmPass = '';
   bool _acceptTerms = false;
 
-  // user password score
-  int? _userPasswordScore;
 
-  // form validation for password
-  bool? _passwordHasEightChars;
-  bool? _passwordHasUppercaseChar;
-  bool? _passwordHasLowercaseChar;
-  bool? _passwordHasNumberChar;
-  bool? _passwordHasSpecialChar;
 
-  // Regex patterns for each requirement
-  final lengthRegex = RegExp(r'.{8,}');
-  final uppercaseRegex = RegExp(r'[A-Z]');
-  final lowercaseRegex = RegExp(r'[a-z]');
-  final numberRegex = RegExp(r'[0-9]');
-  final specialCharRegex = RegExp(r'[!@#$%^&*(),.?":{}|<>]');
-
-  void passwordValidatorOnChanged(String password) {
-    final hasLength = lengthRegex.hasMatch(password);
-    final hasUppercase = uppercaseRegex.hasMatch(password);
-    final hasLowercase = lowercaseRegex.hasMatch(password);
-    final hasNumber = numberRegex.hasMatch(password);
-    final hasSpecialChar = specialCharRegex.hasMatch(password);
-    final userPasswordScore = THelperFunctions.addUpBooleans([
-      hasLength,
-      hasUppercase,
-      hasLowercase,
-      hasNumber,
-      hasSpecialChar,
-    ]);
-
-    setState(() {
-      _passwordHasEightChars = hasLength;
-      _passwordHasUppercaseChar = hasUppercase;
-      _passwordHasLowercaseChar = hasLowercase;
-      _passwordHasNumberChar = hasNumber;
-      _passwordHasSpecialChar = hasSpecialChar;
-      _userPasswordScore = userPasswordScore;
-    });
-  }
-
-  String? passwordValidatorOnSaved(String? password) {
-    final hasLength = lengthRegex.hasMatch(password ?? '');
-    final hasUppercase = uppercaseRegex.hasMatch(password ?? '');
-    final hasLowercase = lowercaseRegex.hasMatch(password ?? '');
-    final hasNumber = numberRegex.hasMatch(password ?? '');
-    final hasSpecialChar = specialCharRegex.hasMatch(password ?? '');
-    final userPasswordScore = THelperFunctions.addUpBooleans([
-      hasLength,
-      hasUppercase,
-      hasLowercase,
-      hasNumber,
-      hasSpecialChar,
-    ]);
-
-    setState(() {
-      _passwordHasEightChars = hasLength;
-      _passwordHasUppercaseChar = hasUppercase;
-      _passwordHasLowercaseChar = hasLowercase;
-      _passwordHasNumberChar = hasNumber;
-      _passwordHasSpecialChar = hasSpecialChar;
-      _userPasswordScore = userPasswordScore;
-    });
-
-    if (hasLength &&
-        hasUppercase &&
-        hasLowercase &&
-        hasNumber &&
-        hasSpecialChar) {
-      return null;
-    } else {
-      return '';
-    }
-  }
-
-  final TextEditingController countryCont = TextEditingController();
-  final TextEditingController stateCont = TextEditingController();
-  final TextEditingController cityCont = TextEditingController();
-
-  @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
@@ -138,44 +60,53 @@ class _SignUpFormState extends State<SignUpForm> {
           key: formKey,
             child: Column(
               children: [
-                /// First Name
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
                   children: [
-                    Text('First Name', style: Theme.of(context).textTheme.labelMedium,),
-                    const SizedBox(height: TSizes.sm,),
-                    SizedBox(
-                      child: TextFormField(
-                        style: Theme.of(context).textTheme.labelMedium,
-                        onChanged: (value) => _firstName = value,
-                        validator: TValidator.validateName,
-                        onSaved: (value) {
-                          _firstName = value as String;
-                        },
-                        keyboardType: TextInputType.name,
+
+                    /// First Name
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('First Name', style: Theme.of(context).textTheme.labelMedium,),
+                          const SizedBox(height: TSizes.sm,),
+                          SizedBox(
+                            child: TextFormField(
+                              style: Theme.of(context).textTheme.labelMedium,
+                              onChanged: (value) => _firstName = value,
+                              validator: TValidator.validateName,
+                              onSaved: (value) {
+                                _firstName = value as String;
+                              },
+                              keyboardType: TextInputType.name,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                const SizedBox(height: TSizes.spaceBtwInputFields),
+                    const SizedBox(width: TSizes.md),
 
-                /// Last Name
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Last Name', style: Theme.of(context).textTheme.labelMedium,),
-                    const SizedBox(height: TSizes.sm,),
-                    SizedBox(
-                      child: TextFormField(
-                        style: Theme.of(context).textTheme.labelMedium,
-                        onChanged: (value) => _lastName = value,
-                        validator: TValidator.validateName,
-                        onSaved: (value) {
-                          _lastName = value as String;
-                        },
-                        keyboardType: TextInputType.name,
+                    /// Last Name
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Last Name', style: Theme.of(context).textTheme.labelMedium,),
+                          const SizedBox(height: TSizes.sm,),
+                          SizedBox(
+                            child: TextFormField(
+                              style: Theme.of(context).textTheme.labelMedium,
+                              onChanged: (value) => _lastName = value,
+                              validator: TValidator.validateName,
+                              onSaved: (value) {
+                                _lastName = value as String;
+                              },
+                              keyboardType: TextInputType.name,
+                            ),
+                          )
+                        ],
                       ),
-                    )
+                    ),
                   ],
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -227,41 +158,41 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
 
-                CountryStateCityPicker(
-                  country: countryCont,
-                  state: stateCont,
-                  city: cityCont,
-                  dialogColor: TColors.secondaryBorder,
-                  textFieldDecoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(15),
-                    fillColor: darkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
-                    hintStyle: Theme.of(context).textTheme.labelMedium,
-                    suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
-                    suffixIconColor: darkMode ? Colors.white: TColors.textPrimary.withOpacity(0.8),
-                    // isDense: true,
-                  ),
-                ),
-                const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                /// Address
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Address', style: Theme.of(context).textTheme.labelMedium,),
-                    const SizedBox(height: TSizes.sm,),
-                    SizedBox(
-                      child: TextFormField(
-                        validator: TValidator.emptyFieldValidator,
-                        style: Theme.of(context).textTheme.labelMedium,
-                        onChanged: (value) => _address = value,
-                        onSaved: (value) {
-                          _address = value as String;
-                        },
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: TSizes.spaceBtwInputFields),
+                // CountryStateCityPicker(
+                //   country: countryCont,
+                //   state: stateCont,
+                //   city: cityCont,
+                //   dialogColor: TColors.secondaryBorder,
+                //   textFieldDecoration: InputDecoration(
+                //     contentPadding: const EdgeInsets.all(15),
+                //     fillColor: darkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
+                //     hintStyle: Theme.of(context).textTheme.labelMedium,
+                //     suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
+                //     suffixIconColor: darkMode ? Colors.white: TColors.textPrimary.withOpacity(0.8),
+                //     // isDense: true,
+                //   ),
+                // ),
+                // const SizedBox(height: TSizes.spaceBtwInputFields),
+                //
+                // /// Address
+                // Column(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     Text('Address', style: Theme.of(context).textTheme.labelMedium,),
+                //     const SizedBox(height: TSizes.sm,),
+                //     SizedBox(
+                //       child: TextFormField(
+                //         validator: TValidator.emptyFieldValidator,
+                //         style: Theme.of(context).textTheme.labelMedium,
+                //         onChanged: (value) => _address = value,
+                //         onSaved: (value) {
+                //           _address = value as String;
+                //         },
+                //       ),
+                //     )
+                //   ],
+                // ),
+                // const SizedBox(height: TSizes.spaceBtwInputFields),
 
                 /// Password
                 Column(
@@ -342,28 +273,31 @@ class _SignUpFormState extends State<SignUpForm> {
                 ),
 
                 const SizedBox(height: TSizes.spaceBtwElements),
-
-                TElevatedButton(onTap: (){
-                  if (formKey.currentState!.validate()) {
-                    formKey.currentState!.save();
-
-                    if (_acceptTerms == false) {
-                      return;
-                    } else {
-                      AuthService.instance.createAccount(
-                          firstName: _firstName,
-                          lastName: _lastName,
-                          email: _email,
-                          phoneNumber: _phoneNo,
-                          country: countryCont.text,
-                          address: _address,
-                          state: stateCont.text,
-                          password: _password,
-                          onSuccess: () {
-                            Get.to(() => EmailVerificationScreen(email: _email));
-                          });
-                    }
-                  }
+                _acceptTerms == false
+                    ? SizedBox(
+                  height: 48,
+                  child: ElevatedButton(
+                      onPressed: null,
+                    child: Center(child: Text('Sign Up'),),
+                  ),
+                )
+                    : TElevatedButton(
+                    onTap: () {
+                      if (formKey.currentState!.validate()) {
+                        formKey.currentState!.save();
+                        AuthService.instance.createAccount(
+                            firstName: _firstName,
+                            lastName: _lastName,
+                            email: _email,
+                            phoneNumber: _phoneNo,
+                            country: '',
+                            address: '',
+                            state: '',
+                            password: _password,
+                            onSuccess: () {
+                              Get.to(() => EmailVerificationScreen(email: _email, password: _password,));
+                            });
+                      }
                 }, buttonText: 'Sign Up')
               ],
             )

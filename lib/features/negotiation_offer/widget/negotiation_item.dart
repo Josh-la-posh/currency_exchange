@@ -25,7 +25,7 @@ class NegotiationItem extends StatelessWidget {
       children: [
         ListTile(
           onTap: (){
-            Get.to(() => NegotiationAcceptRejectScreen(id: item.id));
+            Get.to(() => NegotiationAcceptRejectScreen(item: item));
           },
           contentPadding: EdgeInsets.symmetric(vertical: TSizes.md, horizontal: TSizes.defaultSpace),
           title: Row(

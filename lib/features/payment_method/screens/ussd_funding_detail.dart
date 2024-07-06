@@ -296,8 +296,7 @@ class UssdFundingDetailScreen extends StatelessWidget {
                   const SizedBox(height: TSizes.defaultSpace),
                   GestureDetector(
                     onTap: () async {
-                      await WalletServices.instance.getWallets(walletProvider: walletProvider, currency: '');
-                      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
+                      await WalletServices.instance.getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: '');
                       AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                     },
                     child: Container(

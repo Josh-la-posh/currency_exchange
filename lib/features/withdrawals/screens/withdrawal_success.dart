@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:swappr/features/home/screens/home.dart';
+import 'package:swappr/features/wallet/routes/names.dart';
 import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/constants/texts.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
+
+import '../../../data/modules/app_navigator.dart';
 
 class WithdrawalSuccessScreen extends StatelessWidget {
   const WithdrawalSuccessScreen({super.key});
@@ -15,10 +18,7 @@ class WithdrawalSuccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(),
-      ),
-      backgroundColor: darkMode ? Colors.black : const Color(0xFFD0CDE1).withOpacity(0.31),
+      backgroundColor: darkMode ? Colors.black : Colors.white,
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
@@ -47,12 +47,13 @@ class WithdrawalSuccessScreen extends StatelessWidget {
               const SizedBox(height: TSizes.defaultSpace * 2),
               GestureDetector(
                 onTap: () {
-                  Get.to(() => const HomeScreen());
+                  AppNavigator.instance
+                      .removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
                 },
                 child: Container(
                   alignment: Alignment.center,
                   width: 208,
-                  height: 37,
+                  height: 40,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     boxShadow: [

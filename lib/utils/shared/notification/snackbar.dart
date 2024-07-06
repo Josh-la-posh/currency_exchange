@@ -21,7 +21,7 @@ handleShowCustomToast({
       dismissDirection: DismissDirection.up,
       behavior: SnackBarBehavior.floating,
       // margin: EdgeInsets.only(bottom: THelperFunctions.screenHeight() / 3),
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 6),
       padding: const EdgeInsets.all(0),
       backgroundColor: TColors.primary.withOpacity(0.4),
       content: GestureDetector(

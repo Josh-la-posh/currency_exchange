@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/data/provider/offer_provider.dart';
 import 'package:swappr/features/all_offer/apis/api.dart';
+import 'package:swappr/features/home/screens/home.dart';
 import 'package:swappr/features/wallet/apis/api.dart';
+import 'package:swappr/utils/constants/image_strings.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
@@ -13,9 +15,10 @@ import '../../all_offer/screens/all_offer.dart';
 import '../../all_offer/screens/offer_details.dart';
 
 class TrendingOffer extends StatelessWidget {
+  final bool displayOffer;
   final OfferProvider offerProvider;
   final bool darkMode;
-  const TrendingOffer({super.key, required this.offerProvider, required this.darkMode});
+  const TrendingOffer({super.key, required this.offerProvider, required this.darkMode, required this.displayOffer});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class TrendingOffer extends StatelessWidget {
                     border: Border.all(
                         color: TColors.primary
                     ),
-                  color: darkMode ? TColors.primary : Colors.transparent
+                  color: darkMode ? TColors.primary : TColors.secondaryBorder30
                 ),
                 child: Row(
                   children: [
@@ -52,16 +55,17 @@ class TrendingOffer extends StatelessWidget {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(23)
                       ),
-                      child: const Image(image: AssetImage('assets/icons/homeIcons/trading_offer.png')),
+                      child: Image(image: AssetImage(TImages.trendingOfferIcon)),
                     ),
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
+              IconButton(
+                hoverColor: Colors.transparent,
+                onPressed: () {
                   Get.to(() => const AllOfferScreen());
                 },
-                child: Row(
+                icon: Row(
                   children: [
                     Text('View All',
                       style: TextStyle(
@@ -71,6 +75,11 @@ class TrendingOffer extends StatelessWidget {
                           fontFamily: TTexts.fontFamily
                       ),
                     ),
+                    Icon(
+                      Icons.keyboard_arrow_right_outlined,
+                      size: 20,
+                      color: darkMode ? TColors.white.withOpacity(0.5) : TColors.primary
+                    )
                   ],
                 ),
               )
@@ -78,7 +87,9 @@ class TrendingOffer extends StatelessWidget {
           ),
         ),
         const SizedBox(height: TSizes.lg,),
-        offerProvider.offers.isEmpty
+        displayOffer == false
+            ? CircularProgressIndicator()
+            : offerProvider.offers.isEmpty
             ? const SizedBox(
           width: double.infinity,
           // color: Colors.white,
@@ -91,13 +102,20 @@ class TrendingOffer extends StatelessWidget {
                 return Column(
                 children: [
                   Container(
-                    color: darkMode ? TColors.textBlack.withOpacity(0.5) : Colors.white,
+                    // color: darkMode ? TColors.textBlack.withOpacity(0.5) : Colors.white,
                     child: ListTile(
+
+                      tileColor: darkMode ? Colors.black38 : Color(0xFFFDF9FE),
                       dense: true,
                       contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.md),
                       onTap: (){
                         // Get.to(() => OfferDetailsScreen(item: item));
-                        OfferService.instance.getOfferById(offerProvider: offerProvider, id: item.id);
+                        OfferService.instance.getOfferById(
+                            offerProvider: offerProvider,
+                            id: item.id,
+                            onTap: () {
+                              Get.to(() => HomeScreen());
+                            });
                       },
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -19,8 +19,8 @@ class _LoaderState extends State<Loader>
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      reverseDuration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
+      reverseDuration: const Duration(seconds: 1),
       vsync: this,
     )..repeat(reverse: true);
 

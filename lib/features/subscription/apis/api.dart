@@ -50,8 +50,8 @@ class SubscriptionService {
       );
       handleShowCustomToast(message: 'Subscription created successfully');
       Get.back();
-      print(response);
     }).catchError((error) {
+      print(error.toString());
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
@@ -96,8 +96,9 @@ class SubscriptionService {
   deleteSubscription({required String id, required SubscriptionProvider subscriptionProvider}) {
     _deleteSubscriptions(id).then((response) async {
       await getSubscriptions(provider: subscriptionProvider, currency: '');
-      handleShowCustomToast(message: response.toString());
+      handleShowCustomToast(message: response.data['message']);
     }).catchError((error) {
+      print(error.toString());
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }

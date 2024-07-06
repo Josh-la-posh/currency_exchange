@@ -32,7 +32,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CurrencyWidgetWithBack(),
+            CurrencyWidgetWithBack(),
             const SizedBox(height: TSizes.spaceBtwSections / 2,),
             Expanded(
               child: SingleChildScrollView(
@@ -197,7 +197,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                           style: Theme.of(context).textTheme.labelSmall,
                                           children: <TextSpan> [
                                             TextSpan(
-                                                text: '${data.rate + data.amount} ${getCurrencyName(data.creditedCurrency)}',
+                                                text: '${data.rate * data.amount} ${getCurrencyName(data.creditedCurrency)}',
                                                 style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
                                             )
                                           ]
@@ -388,7 +388,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     expireIn: data.expireIn
                                 );
                               },
-                              buttonText: 'Pay ${TPriceCalculator.calculateTotalPrice('${data.amount}', getCurrencyName(data.debitedCurrency))} ${getCurrencyName(data.debitedCurrency)}'),
+                              buttonText: 'Pay ${TPriceCalculator.calculateTotalPrice('${data.amount * data.rate}', getCurrencyName(data.debitedCurrency))} ${getCurrencyName(data.debitedCurrency)}'),
                         ),
                         const SizedBox(height: TSizes.spaceBtwElements),
                         Row(

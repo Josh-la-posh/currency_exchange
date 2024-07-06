@@ -7,11 +7,13 @@ import '../../../../common/widgets/buttons/app_bar.dart';
 class EmailVerificationScreen extends StatelessWidget {
   final bool sendEmailOtpOnBuild;
   final String email;
+  final String password;
   final VoidCallback? onSuccess;
   const EmailVerificationScreen({
     super.key,
     this.sendEmailOtpOnBuild = false,
     required this.email,
+    required this.password,
     this.onSuccess = null
   });
 
@@ -19,7 +21,7 @@ class EmailVerificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthLayout(
         title: '', heading: 'Email Verification',
-        child: EmailVerificationForm(email: email)
+        child: EmailVerificationForm(email: email, password: password,)
     );
   }
 }

@@ -1,17 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/buttons/elevated_button.dart';
+import 'package:swappr/data/provider/transaction_provider.dart';
+import 'package:swappr/features/wallet/apis/api.dart';
+import 'package:swappr/features/withdrawals/apis/api.dart';
 import 'package:swappr/features/withdrawals/screens/withdrawal_success.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 
+import '../../../data/provider/wallet_provider.dart';
+
 class WithdrawalConfirmSheet extends StatelessWidget {
-  const WithdrawalConfirmSheet({super.key});
+  final String amount;
+  const WithdrawalConfirmSheet({super.key, required this.amount});
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
+    final provider = Provider.of<WalletProvider>(context);
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+    final item = provider.selectedWithdrawalAccount;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: TSizes.defaultSpace * 1.5),
@@ -97,9 +107,9 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                                   fontSize: 20,
                                   fontFamily: 'Roboto'
                               ),
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                  text: '1,250,000',
+                                  text: THelperFunctions.moneyFormatter(amount),
                                 )
                               ]
                           )
@@ -114,9 +124,9 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                                     fontSize: 18,
                                     fontFamily: 'Roboto'
                                 ),
-                                children: const <TextSpan> [
+                                children: <TextSpan> [
                                   TextSpan(
-                                    text: 'NGN Account',
+                                    text: '${provider.defaultWallet!.currency} Account',
                                   )
                                 ]
                             )
@@ -163,9 +173,9 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                               fontSize: 18,
                               fontFamily: 'Roboto'
                           ),
-                          children: const <TextSpan> [
+                          children: <TextSpan> [
                             TextSpan(
-                              text: 'Josh Moore Kind',
+                              text: item?.accountName,
                             )
                           ]
                       )
@@ -184,9 +194,9 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                                   fontSize: 18,
                                   fontFamily: 'Roboto'
                               ),
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                  text: 'Access Bank',
+                                  text: item?.bankName,
                                 )
                               ]
                           )
@@ -199,9 +209,9 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                                   fontSize: 14,
                                   fontFamily: 'Roboto'
                               ),
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                  text: '2561782904',
+                                  text: item?.accountNumber,
                                 )
                               ]
                           )
@@ -263,7 +273,16 @@ class WithdrawalConfirmSheet extends StatelessWidget {
               padding: EdgeInsets.all(TSizes.defaultSpace * 0.5),
                 child: TElevatedButton(
                     onTap: (){
-                      Get.to(() => const WithdrawalSuccessScreen());
+                      WalletServices.instance.transferLocalBank(
+                          amount: int.parse(amount),
+                          currency: provider.selectedWithdrawalAccount!.currency,
+                          bankId: provider.selectedWithdrawalAccount!.id,
+                          transactionProvider: transactionProvider,
+                          walletProvider: provider,
+                          onSuccess: () {
+                            Get.to(() => const WithdrawalSuccessScreen());
+                          }
+                      );
                     },
                     buttonText: 'Confirm'
                 )

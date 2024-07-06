@@ -83,9 +83,9 @@ class AuthService {
       'lastName': lastName,
       'email': email.toLowerCase(),
       'phoneNumber': phoneNumber,
-      'country': country,
-      'address': address,
-      'state': state,
+      'country': 'Nigeria',
+      'address': 'Lagos Villa',
+      'state': 'Lagos',
       'password': password,
     }).then((responseData) {
       print(responseData.data);
@@ -187,7 +187,7 @@ class AuthService {
         );
         handleShowLoader();
         Future.delayed(
-            Duration(seconds: 3),
+            Duration(seconds: 1),
                 () {
               AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
               handleHideLoader();

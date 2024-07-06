@@ -32,7 +32,6 @@ class TransactionService {
 
     _transactions().then((response) {
       var data = response.data;
-
       TransactionsDetailsEntity transactionDetails = TransactionsDetailsEntity(
           totalPages: data['totalPages'],
           payloadSize: data['payloadSize'],
@@ -43,8 +42,6 @@ class TransactionService {
           totalRecords: data['totalRecords']
       );
       transactionProvider.saveTransactionDetails(transactionDetails);
-
-
       var content = transactionDetails.content;
         for (var item in content) {
           transactions.add(TransactionEntity(

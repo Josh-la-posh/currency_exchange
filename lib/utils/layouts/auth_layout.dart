@@ -14,11 +14,13 @@ class AuthLayout extends StatelessWidget {
     super.key,
     required this.child,
     required this.title,
-    required this.heading
+    required this.heading,
+    this.onTap
   });
   Widget child;
   String title;
   String heading;
+  VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class AuthLayout extends StatelessWidget {
                 ),
               ),
             ),
-            AppBarWidget(heading: heading),
+            AppBarWidget(heading: heading, onTap: onTap,),
             SizedBox(
               height: THelperFunctions.screenHeight() - 126 - TSizes.defaultSpace,
               child: SingleChildScrollView(
@@ -46,6 +48,7 @@ class AuthLayout extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: TSizes.defaultSpace,),
                       if (title.length > 0)
                       Text(
                         title,

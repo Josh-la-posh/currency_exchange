@@ -31,7 +31,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CurrencyWidgetWithBack(),
+            CurrencyWidgetWithBack(),
             const SizedBox(height: TSizes.spaceBtwSections / 2,),
             Expanded(
               child: SingleChildScrollView(

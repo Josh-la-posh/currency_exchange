@@ -232,8 +232,7 @@ class PaystackPaymentScreen extends StatelessWidget {
                   const SizedBox(height: TSizes.defaultSpace * 4),
                   GestureDetector(
                     onTap: () async {
-                      await WalletServices.instance.getWallets(walletProvider: walletProvider, currency: '');
-                      await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
+                      await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
                       AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
                     },
                     child: Container(

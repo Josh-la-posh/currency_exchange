@@ -6,7 +6,7 @@ class TElevatedButton extends StatelessWidget {
     required this.onTap,
     required this.buttonText,
   });
-  VoidCallback onTap;
+  VoidCallback? onTap;
   String buttonText;
 
   @override
