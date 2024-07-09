@@ -14,64 +14,61 @@ class WalletTransactionHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RichText(
-                  text: TextSpan(
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      children: <TextSpan> [
-                        TextSpan(
-                            text:'Transaction history',
-                            style:  TextStyle(
-                                fontWeight: TSizes.fontWeightMd,
-                                color: darkMode ? Colors.white : Colors.black
-                            )
-                        ),
-                      ]
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            RichText(
+                text: TextSpan(
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    children: <TextSpan> [
+                      TextSpan(
+                          text:'Transaction history',
+                          style:  TextStyle(
+                              fontWeight: TSizes.fontWeightMd,
+                              color: darkMode ? Colors.white : Colors.black
+                          )
+                      ),
+                    ]
+                )
+            ),
+            GestureDetector(
+              onTap: (){
+                Get.to(() => const TransactionHistoryScreen());
+              },
+              child: Row(
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.bodySmall,
+                          children: <TextSpan> [
+                            TextSpan(
+                                text:'View more',
+                                style:  TextStyle(
+                                    fontWeight: TSizes.fontWeightMd,
+                                    color: darkMode ? Colors.white : Colors.black
+                                )
+                            ),
+                          ]
+                      )
+                  ),
+                  SizedBox(
+                    // width: 5,
+                      child: Icon(
+                        Icons.keyboard_arrow_right_rounded,
+                        color: darkMode ? Colors.white : Colors.black,
+                        size: 20,
+                      )
                   )
+                ],
               ),
-              GestureDetector(
-                onTap: (){
-                  Get.to(() => const TransactionHistoryScreen());
-                },
-                child: Row(
-                  children: [
-                    RichText(
-                        text: TextSpan(
-                            style: Theme.of(context).textTheme.bodySmall,
-                            children: <TextSpan> [
-                              TextSpan(
-                                  text:'View more',
-                                  style:  TextStyle(
-                                      fontWeight: TSizes.fontWeightMd,
-                                      color: darkMode ? Colors.white : Colors.black
-                                  )
-                              ),
-                            ]
-                        )
-                    ),
-                    SizedBox(
-                      // width: 5,
-                        child: Icon(
-                          Icons.keyboard_arrow_right_rounded,
-                          color: darkMode ? Colors.white : Colors.black,
-                          size: 20,
-                        )
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-          const SizedBox(height: 25,),
-          WalletTransactionList(darkMode: darkMode),
-        ],
-      ),
+            )
+          ],
+        ),
+        const SizedBox(height: 25,),
+        WalletTransactionList(darkMode: darkMode),
+      ],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/data/modules/background_task.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/features/payment_method/screens/payment_options.dart';
 import 'package:swappr/features/wallet/apis/api.dart';
@@ -26,7 +27,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
     var walletProvider = Provider.of<WalletProvider>(context);
     var transactionProvider = Provider.of<TransactionProvider>(context);
     return Container(
-        padding: const EdgeInsets.only(top: 20, left: 25, right: 25, bottom: 40),
+        padding: const EdgeInsets.only(top: 10, bottom: 40),
         width: double.infinity,
         decoration: BoxDecoration(
           // color: TColors.primary.withOpacity(0.3),
@@ -39,13 +40,13 @@ class _WalletDashboardState extends State<WalletDashboard> {
               children: [
                 IconButton(
                   onPressed: (){},
-                  icon: const Icon(Icons.notifications_none, size: 30,),
+                  icon: Icon(Icons.notifications_none, size: 30, color: widget.darkMode ? Colors.white : TColors.primary,),
                 )
               ],
             ),
-            const SizedBox(height: 15,),
+            // const SizedBox(height: 15,),
             Container(
-              padding: const EdgeInsets.only(top: 40, left: 20, right: 30, bottom: 20),
+              padding: const EdgeInsets.only(top: 5, left: 20, right: 30, bottom: 20),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   boxShadow: [
@@ -69,10 +70,14 @@ class _WalletDashboardState extends State<WalletDashboard> {
                   ]
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  IconButton(
+                    onPressed: (){NoLoaderService.instance.getDefaultWallet(walletProvider: walletProvider, transactionProvider: transactionProvider);},
+                    icon: Icon(Icons.refresh, size: 20, color: widget.darkMode ? Colors.white : TColors.primary,),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20),
+                    padding: const EdgeInsets.only(left: 20, top:  20),
                     child: Row(
                       children: [
                         Column(
@@ -94,7 +99,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                 ),
                                 Text(
                                   walletProvider.defaultWallet == null
-                                      ? ' '
+                                      ? ''
                                       : ' ${walletProvider.defaultWallet?.currency}',
                                   style: TextStyle(
                                       fontSize: 20,
@@ -138,7 +143,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                       children: [
                         Expanded(
                           child: Container(
-                            height: 30,
+                            height: 40,
                             child: OutlinedButton(
                               onPressed: (){Get.to(() => const PaymentOptionScreen());},
                               style: ButtonStyle(
@@ -157,7 +162,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                 ),
                               ),
                               child: Text(
-                                'Fund wallet',
+                                'Deposit',
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w400,
@@ -171,7 +176,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                         const SizedBox(width: 30,),
                         Expanded(
                           child: Container(
-                            height: 30,
+                            height: 40,
                             decoration: BoxDecoration(
                               color: Color(0xFF2D1B1D),
                                 borderRadius: BorderRadius.circular(12),
@@ -194,7 +199,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Digital purse',
+                                      'Wallets',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w400,
@@ -214,12 +219,9 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                 itemBuilder: (_) =>  List.generate(
                                   walletProvider.wallets.length, (index) => PopupMenuItem(
                                   onTap: () {
-                                    setState(() {
-                                      // walletProvider.setSelectedWallet(walletProvider.wallets[index]);
-                                      WalletServices.instance.defaultWallet(
-                                          transactionProvider: transactionProvider,
-                                          walletProvider: walletProvider ,walletId: walletProvider.wallets[index].id.toString());
-                                    });
+                                    NoLoaderService.instance.defaultWallet(
+                                        transactionProvider: transactionProvider,
+                                        walletProvider: walletProvider ,walletId: walletProvider.wallets[index].id.toString());
                                   },
                                   height: 20,
                                   padding: const EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 0),

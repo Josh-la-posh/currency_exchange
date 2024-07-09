@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:swappr/features/home/widgets/section_widget.dart';
+import 'package:swappr/features/negotiation_offer/screen/bid_and_offer.dart';
 import 'package:swappr/features/negotiation_offer/screen/negotiation_offer.dart';
 import 'package:swappr/features/payment_method/screens/payment_options.dart';
 import 'package:swappr/features/withdrawals/screens/withdrawal.dart';
@@ -57,10 +58,10 @@ class LinkSectionWidget extends StatelessWidget {
                 const SizedBox(height: TSizes.sm),
                 SectionWidgetContainer(
                     onTap: () {
-                      Get.to(() => const WalletDashboardScreen());
+                      Get.to(() => const MyBidAndOfferScreen());
                     },
                     darkMode: darkMode,
-                    title: 'Wallet',
+                    title: 'My offers',
                     image: TImages.walletIcon
                 ),
                 const SizedBox(height: TSizes.xl),

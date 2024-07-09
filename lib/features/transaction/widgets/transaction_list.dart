@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/features/transaction/widgets/no_transaction.dart';
 import 'package:swappr/features/transaction/widgets/transaction_item.dart';
+import 'package:swappr/utils/helpers/helper_functions.dart';
+import '../../../data/modules/background_task.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/list_layout.dart';
 
@@ -14,17 +17,10 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<TransactionProvider>(context);
-
     return SizedBox(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: TSizes.spaceBtwSections),
-          Text(
-            'Transaction History',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-          const SizedBox(height: TSizes.md,),
           provider.transactions.isEmpty
               ? LayoutBuilder(builder: (context, constraints) {
                 return const NoTransactionScreen();

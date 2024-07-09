@@ -9,7 +9,4 @@ Map<String, WidgetBuilder> withdrawRoute = {
   WITHDRAWAL_SCREEN_ROUTE: (context) => const AuthGuard(
     widget: WithdrawalScreen(),
   ),
-  WITHDRAWAL_SUCCESS_SCREEN_ROUTE: (context) => const AuthGuard(
-    widget: WithdrawalSuccessScreen(),
-  ),
 };

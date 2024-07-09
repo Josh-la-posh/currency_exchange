@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/data/modules/background_task.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/features/transaction/apis/api.dart';
 
@@ -21,18 +22,14 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   var transactionProvider = Provider.of<TransactionProvider>(
       AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
-  var authProvider = Provider.of<AuthProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-
   @override
   void initState() {
     if (transactionProvider.transactions.isEmpty) {
-      TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
+      NoLoaderService.instance.getTransactions(transactionProvider: transactionProvider);
     }
 
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {

@@ -78,7 +78,6 @@ class AuthProvider extends ChangeNotifier {
 
   void removeUser(){
     _user = null;
-
     _storage.remove(USER_DATA);
     handleCreateAccountCleanups();
   }

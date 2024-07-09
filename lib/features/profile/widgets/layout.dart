@@ -31,6 +31,20 @@ class ProfileScreenLayout extends StatelessWidget {
           ),
           hoverColor: Colors.transparent,
         ),
+        title: RichText(
+            text: TextSpan(
+                style: Theme.of(context).textTheme.titleLarge,
+                children: const <TextSpan> [
+                  TextSpan(
+                      text: 'Bank Accounts',
+                      style: TextStyle(
+                          fontSize: 22
+                      )
+                  )
+                ]
+            )
+        ),
+        centerTitle: true,
       ),
       currentRoute: RouteType.Profile,
       layoutBodyColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,

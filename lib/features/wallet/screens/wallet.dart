@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/data/modules/background_task.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/features/transaction/apis/api.dart';
 import 'package:swappr/features/wallet/widgets/layout.dart';
@@ -42,7 +43,7 @@ class _WalletDashboardScreenState extends State<WalletDashboardScreen> {
   @override
   void initState() {
     if (walletProvider.wallets.isEmpty) {
-      WalletServices.instance.getWallets(
+      NoLoaderService.instance.getWallets(
           transactionProvider: transProvider,
           walletProvider: walletProvider,
           currency: ''

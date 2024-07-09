@@ -166,11 +166,26 @@ class TValidator {
     return null;
   }
 
+  static String? withdrawalValidator(String? val, double val2) {
+    final letterCheck = RegExp(r'[0-9]');
+    if (val == null || val.isEmpty) {
+      return 'Enter an amount';
+    }
+    if (!letterCheck.hasMatch(val)) {
+      return 'Field can only contain numbers';
+    }
+    if (double.parse(val) > (val2)) {
+      return 'Amount can\'t be greater than available balance';
+    }
+    return null;
+  }
+
 
   static String? bankValidator(Bank? bank) {
     if (bank == '') {
       return 'Please select your preferred bank';
     }
+    return null;
   }
 
   static String? emptyFieldValidator(String? value) {

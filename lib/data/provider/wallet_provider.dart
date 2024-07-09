@@ -35,7 +35,7 @@ class WalletProvider extends ChangeNotifier {
   bool _showErrorText = false;
   bool showWalletLists = false;
   bool showBankTransferOption = false;
-  bool showWalletBalance = false;
+  bool showWalletBalance = true;
   Bank _selectedNigBank = Bank.GTB;
   List<Bank> _nigBanks = Bank.values;
 

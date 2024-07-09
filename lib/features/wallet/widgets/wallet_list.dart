@@ -33,7 +33,7 @@ class WalletList extends StatelessWidget {
           child: Container(
             width: double.infinity,
             height: 62,
-            margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+            margin: const EdgeInsets.only(bottom: 5),
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 40),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -72,11 +72,7 @@ class WalletList extends StatelessWidget {
               top: walletProvider.showWalletLists == true ? 20 : 0,
               // right: walletProvider.showWalletLists == true ? 20 : 0,
               // left: walletProvider.showWalletLists == true ? 20 : 0,
-              bottom: 25),
-          decoration: BoxDecoration(
-            // border: Border.all(
-            //   color: Color(0xFF4C6287)
-            // )
+              bottom: walletProvider.showWalletLists == true ? 35 : 10,
           ),
           child: walletProvider.showWalletLists == true
               ? ListView(
@@ -86,7 +82,7 @@ class WalletList extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.only(bottom: 8),
-                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
                       onTap: (){
                         walletProvider.setSelectedWalletCurrency(currency);

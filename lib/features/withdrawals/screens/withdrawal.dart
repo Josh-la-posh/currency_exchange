@@ -9,6 +9,7 @@ import 'package:swappr/utils/constants/colors.dart';
 import 'package:swappr/utils/constants/image_strings.dart';
 import 'package:swappr/utils/constants/sizes.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:swappr/utils/validators/validation.dart';
 
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/layouts/list_layout.dart';
@@ -22,6 +23,7 @@ class WithdrawalScreen extends StatefulWidget {
 }
 
 class _WithdrawalScreenState extends State<WithdrawalScreen> {
+  final formKey = GlobalKey<FormState>();
   String amount = '';
   @override
   Widget build(BuildContext context) {
@@ -30,205 +32,224 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton()
+        leading: BackButton(
+          onPressed: () {
+            setState(() {
+              provider.saveWithdrawalBank(null);
+            });
+            Get.back();
+        },)
       ),
       backgroundColor: darkMode ? Colors.black : Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace * 2),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          color: darkMode ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 22,
-                          fontFamily: 'Roboto'
-                      ),
-                      children: const <TextSpan> [
-                        TextSpan(
-                          text: 'Withdraw Money',
-                        )
-                      ]
-                  )
-              ),
-              SizedBox(height: THelperFunctions.screenHeight() * 0.08,),
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: TSizes.defaultSpace),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.black.withOpacity(0.09),
-                  )
-                ),
-                child: Column(
-                  children: [
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                                color: darkMode ? Colors.white : Colors.black.withOpacity(0.55),
-                                fontWeight: FontWeight.w800,
-                                fontSize: 18,
-                                fontFamily: 'Roboto'
-                            ),
-                            children: <TextSpan> [
-                              TextSpan(
-                                text: 'Amount ',
-                              ),
-                              TextSpan(
-                                text: '(${provider.defaultWallet!.currency})',
-                                style: TextStyle(fontSize: 12)
-                              )
-                            ]
-                        )
-                    ),
-                    const SizedBox(height: 15,),
-                    TextFormField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        hintText: 'Enter amount',
-                        hintStyle: TextStyle(
-                            color: darkMode ? Colors.white : Colors.black.withOpacity(0.3),
-                            fontWeight: FontWeight.w800,
-                            fontSize: 24,
+      body: Container(
+        width: THelperFunctions.screenHeight() - TSizes.appBarHeight - 68,
+        margin: EdgeInsets.only(bottom: 90),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace * 2),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            color: darkMode ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 22,
                             fontFamily: 'Roboto'
                         ),
-                        fillColor: Colors.transparent,
-                        border: const OutlineInputBorder().copyWith(
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: const OutlineInputBorder().copyWith(
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: const OutlineInputBorder().copyWith(
-                            borderSide: BorderSide.none
-                        ),
-                      ),
-                      style: TextStyle(
-                          color: darkMode ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 36,
-                          fontFamily: 'Roboto'
-                      ),
-                      onChanged: (val) => amount = val
-                    ),
-                  ],
+                        children: const <TextSpan> [
+                          TextSpan(
+                            text: 'Withdraw Money',
+                          )
+                        ]
+                    )
                 ),
-              ),
-              const SizedBox(height: TSizes.defaultSpace * 1.5,),
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          color: darkMode ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          fontFamily: 'Roboto'
-                      ),
-                      children: <TextSpan> [
-                        TextSpan(
-                          text: '${provider.defaultWallet!.currency} ${provider.defaultWallet!.balance}',
-                        )
-                      ]
-                  )
-              ),
-              const SizedBox(height: TSizes.md,),
-              RichText(
-                  text: TextSpan(
-                      style: TextStyle(
-                          color: darkMode ? Colors.white : Colors.black.withOpacity(0.35),
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
-                          fontFamily: 'Roboto'
-                      ),
-                      children: const <TextSpan> [
-                        TextSpan(
-                          text: 'Available Balance',
-                        )
-                      ]
-                  )
-              ),
-              const SizedBox(height: TSizes.defaultSpace * 2,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
+                SizedBox(height: THelperFunctions.screenHeight() * 0.08,),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: TSizes.defaultSpace),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.black.withOpacity(0.09),
+                    )
+                  ),
+                  child: Column(
                     children: [
-                      const Image(image: AssetImage(TImages.withdrawIcon)),
-                      const SizedBox(width: 5,),
                       RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: darkMode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
+                                  color: darkMode ? Colors.white : Colors.black.withOpacity(0.55),
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 18,
                                   fontFamily: 'Roboto'
                               ),
-                              children: const <TextSpan> [
+                              children: <TextSpan> [
                                 TextSpan(
-                                  text: 'Withdraw Money To',
+                                  text: 'Amount ',
+                                ),
+                                TextSpan(
+                                  text: '(${provider.defaultWallet!.currency})',
+                                  style: TextStyle(fontSize: 12)
                                 )
                               ]
                           )
                       ),
+                      const SizedBox(height: 15,),
+                      Form(
+                        key: formKey,
+                        child: TextFormField(
+                          validator: (val) => TValidator.withdrawalValidator(amount, double.parse(provider.defaultWallet!.balance.toString())),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            hintText: 'Enter amount',
+                            hintStyle: TextStyle(
+                                color: darkMode ? Colors.white : Colors.black.withOpacity(0.3),
+                                fontWeight: FontWeight.w800,
+                                fontSize: 24,
+                                fontFamily: 'Roboto'
+                            ),
+                            fillColor: Colors.transparent,
+                            border: const OutlineInputBorder().copyWith(
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: const OutlineInputBorder().copyWith(
+                              borderSide: BorderSide.none,
+                            ),
+                            focusedBorder: const OutlineInputBorder().copyWith(
+                                borderSide: BorderSide.none
+                            ),
+                          ),
+                          style: TextStyle(
+                              color: darkMode ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 36,
+                              fontFamily: 'Roboto'
+                          ),
+                          onChanged: (val) => amount = val,
+                          onSaved: (val) {
+                            setState(() {
+                              amount = val as String;
+                            });
+                          },
+                        ),
+                      ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => const AddBankAccountScreen());
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFD9D9D9),
-                        borderRadius: BorderRadius.circular(12)
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                              width: 20,
-                              child: Icon(Icons.add, size: 20,)
-                          ),
-                          RichText(
-                              text: const TextSpan(
-                                  style: TextStyle(
-                                      color: TColors.primary,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                      fontFamily: 'Roboto'
-                                  ),
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                      text: 'Add Bank Account',
-                                    )
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
+                ),
+                const SizedBox(height: TSizes.defaultSpace * 1.5,),
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            color: darkMode ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                            fontFamily: 'Roboto'
+                        ),
+                        children: <TextSpan> [
+                          TextSpan(
+                            text: '${provider.defaultWallet!.currency} ${provider.defaultWallet!.balance}',
+                          )
+                        ]
+                    )
+                ),
+                const SizedBox(height: TSizes.md,),
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            color: darkMode ? Colors.white : Colors.black.withOpacity(0.35),
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                            fontFamily: 'Roboto'
+                        ),
+                        children: const <TextSpan> [
+                          TextSpan(
+                            text: 'Available Balance',
+                          )
+                        ]
+                    )
+                ),
+                const SizedBox(height: TSizes.defaultSpace * 2,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Image(image: AssetImage(TImages.withdrawIcon)),
+                        const SizedBox(width: 5,),
+                        RichText(
+                            text: TextSpan(
+                                style: TextStyle(
+                                    color: darkMode ? Colors.white : Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    fontFamily: 'Roboto'
+                                ),
+                                children: const <TextSpan> [
+                                  TextSpan(
+                                    text: 'Withdraw Money To',
+                                  )
+                                ]
+                            )
+                        ),
+                      ],
                     ),
-                  ),],
-              ),
-              const SizedBox(height: TSizes.defaultSpace * 2,),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => const AddBankAccountScreen());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFD9D9D9),
+                          borderRadius: BorderRadius.circular(12)
+                        ),
+                        child: Row(
+                          children: [
+                            const SizedBox(
+                                width: 20,
+                                child: Icon(Icons.add, size: 20,)
+                            ),
+                            RichText(
+                                text: const TextSpan(
+                                    style: TextStyle(
+                                        color: TColors.primary,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12,
+                                        fontFamily: 'Roboto'
+                                    ),
+                                    children: <TextSpan> [
+                                      TextSpan(
+                                        text: 'Add Bank Account',
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),],
+                ),
+                const SizedBox(height: TSizes.defaultSpace * 2,),
 
-              TListLayout(
-                  itemCount: banks.length,
-                  itemBuilder: (_, index) {
-                    final item = banks[index];
-                    return AccountWidget(item: item, darkMode: darkMode);
-                  }
-              ),
-              const SizedBox(height: TSizes.defaultSpace * 2,),
-            ],
+                TListLayout(
+                    itemCount: banks.length,
+                    itemBuilder: (_, index) {
+                      final item = banks[index];
+                      return AccountWidget(item: item, darkMode: darkMode);
+                    }
+                ),
+                const SizedBox(height: TSizes.defaultSpace * 2,),
+              ],
+            ),
           ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Container(
         margin: EdgeInsets.only(bottom: 20, right: TSizes.defaultSpace, left: TSizes.defaultSpace),
-        child: provider.selectedWithdrawalAccount == null || amount == ''
+        child: provider.selectedWithdrawalAccount == null
             ? SizedBox(
             height: 48,
             width: double.infinity,
@@ -239,14 +260,17 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
         )
             : TElevatedButton(
             onTap: () {
-              showModalBottomSheet(
-                  backgroundColor: Color(0xFF4C3668),
-                  // isScrollControlled: true,
-                  context: context,
-                  builder: (ctx) => WithdrawalConfirmSheet(
-                    amount: amount,
-                  )
-              );
+              if (formKey.currentState!.validate()) {
+                formKey.currentState!.save();
+                showModalBottomSheet(
+                    backgroundColor: Color(0xFF4C3668),
+                    // isScrollControlled: true,
+                    context: context,
+                    builder: (ctx) => WithdrawalConfirmSheet(
+                      amount: amount,
+                    )
+                );
+              }
             },
             buttonText: 'Continue'
         ),

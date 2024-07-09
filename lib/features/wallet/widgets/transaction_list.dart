@@ -4,6 +4,7 @@ import 'package:swappr/utils/helpers/helper_functions.dart';
 
 import '../../../data/provider/transaction_provider.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 
 class WalletTransactionList extends StatelessWidget {
@@ -24,11 +25,11 @@ class WalletTransactionList extends StatelessWidget {
         itemBuilder: (_, index) {
           final item = provider.transactions[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: Column(
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
                       height: 30,
@@ -44,26 +45,48 @@ class WalletTransactionList extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RichText(
-                            text: TextSpan(
-                                style: Theme.of(context).textTheme.bodySmall,
-                                children: <TextSpan> [
-                                  TextSpan(
-                                      text:item.rate == null ? '${THelperFunctions.moneyFormatter(item.amount)} ${item.creditedCurrency}' : '${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount))} ${item.debitedCurrency} - ${THelperFunctions.moneyFormatter(item.amount)} ${item.creditedCurrency}',
-                                      style:  TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: TSizes.fontWeightMd,
-                                          color: darkMode ? Colors.white : Colors.black
-                                      )
-                                  ),
-                                ]
-                            )
+                        Row(
+                          children: [
+                            if (item.rate != null)
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.bodySmall,
+                                    children: <TextSpan> [
+                                      TextSpan(
+                                          text:'${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount))} ${item.debitedCurrency} ',
+                                          style:  TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: TSizes.fontWeightMd,
+                                              color: darkMode ? Colors.white : Colors.black
+                                          )
+                                      ),
+                                    ]
+                                )
+                            ),
+                            if (item.rate != null)
+                              Image(image: AssetImage(TImages.handIcon), height: 15,),
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.bodySmall,
+                                    children: <TextSpan> [
+                                      TextSpan(
+                                          text:'${THelperFunctions.moneyFormatter(item.amount)} ${item.creditedCurrency}',
+                                          style:  TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: TSizes.fontWeightMd,
+                                              color: darkMode ? Colors.white : Colors.black
+                                          )
+                                      ),
+                                    ]
+                                )
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 5,),
                         Text(
                           item.status.toString(),
                           style: const TextStyle(
-                              fontSize: 7,
+                              fontSize: 10,
                               fontWeight: FontWeight.w700,
                               color: TColors.primary,
                               fontFamily: 'Roboto'
@@ -74,12 +97,12 @@ class WalletTransactionList extends StatelessWidget {
                     ),
                     const Spacer(),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
                           item.rate == null ? '' : '${item.rate.toString()} ${item.debitedCurrency} // ${item.creditedCurrency}',
                           style: const TextStyle(
-                              fontSize: 10,
+                              fontSize: 12,
                               fontWeight: FontWeight.w500,
                               color: TColors.primary,
                               fontFamily: 'Roboto'
@@ -89,7 +112,7 @@ class WalletTransactionList extends StatelessWidget {
                         Text(
                           '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
                           style: const TextStyle(
-                              fontSize: 8.3,
+                              fontSize: 9,
                               fontWeight: FontWeight.w700,
                               color: TColors.primary,
                               fontFamily: 'Roboto'

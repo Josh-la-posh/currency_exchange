@@ -50,11 +50,10 @@ class OfferService {
     return apiService.post('/offer/swap/$id');
   }
 
-
   // get requests
 
   Future _getAllOffers(String currency, String date) {
-    return apiService.get('/offer', queryParameters: {'currency': currency, 'date': date});
+    return apiService.get('/offer', queryParameters: {'currency': currency, 'days': date});
   }
 
   Future _getOfferById(String id) {
@@ -63,6 +62,14 @@ class OfferService {
 
   Future _getAllNegotiatedOffers() {
     return apiService.get('/offer/negotiate/negotiated-offers');
+  }
+
+  Future _getMyOffers(String days, String currency) {
+    return apiService.get('/offer/me/my-offers', queryParameters: {'days': days, 'currency': currency});
+  }
+
+  Future _getMyBids(String days, String currency) {
+    return apiService.get('/offer/me/my-bids', queryParameters: {'days': days, 'currency': currency});
   }
 
   // Creating an offer
@@ -292,6 +299,7 @@ class OfferService {
             amount: item['amount'],
             rate: item['rate'],
             expireIn: item['expireIn'],
+            expireCountDown: item['expireCountDown'],
             views: item['views'],
             negotiatorRate: item['negotiatorRate'],
             negotiatorAmount: item['negotiatorAmount'],
@@ -303,6 +311,99 @@ class OfferService {
             lastModifiedDate: item['lastModifiedDate']
         ));
         offerProvider.saveNegotiations(negotiations);
+      }
+    });
+  }
+
+  getMyOffers({
+    required OfferProvider offerProvider,
+    required String days,
+    required String currency
+  }) {
+    List<NegotiateOfferModel> negotiations = [];
+
+    _getMyOffers(days, currency).then((response) {
+      var data = response.data;
+
+      NegotiatedOffersEntity negotiatedOffers = NegotiatedOffersEntity(
+          totalPages: data['totalPages'],
+          payloadSize: data['payloadSize'],
+          hasNext: data['hasNext'],
+          content: data['content'],
+          currentPage: data['currentPage'],
+          skippedRecords: data['skippedRecords'],
+          totalRecords: data['totalRecords']
+      );
+
+      var content = negotiatedOffers.content;
+
+      for (var item in content) {
+        negotiations.add(NegotiateOfferModel(
+            id: item['id'],
+            debitedCurrency: item['debitedCurrency'],
+            creditedCurrency: item['creditedCurrency'],
+            amount: item['amount'],
+            rate: item['rate'],
+            expireIn: item['expireIn'],
+            expireCountDown: item['expireCountDown'],
+            views: item['views'],
+            negotiatorRate: item['negotiatorRate'],
+            negotiatorAmount: item['negotiatorAmount'],
+            negotiationAccepted: item['negotiationAccepted'],
+            negotiatorId: item['negotiatorId'],
+            isActive: item['isActive'],
+            status: item['status'],
+            createdDate: item['createdDate'],
+            lastModifiedDate: item['lastModifiedDate']
+        ));
+        offerProvider.saveMyOffers(negotiations);
+      }
+
+    });
+  }
+
+  getMyBids({
+    required OfferProvider offerProvider,
+    required String days,
+    required String currency
+  }) {
+    List<NegotiateOfferModel> negotiations = [];
+
+    _getMyBids(days, currency).then((response) {
+      var data = response.data;
+
+      NegotiatedOffersEntity negotiatedOffers = NegotiatedOffersEntity(
+          totalPages: data['totalPages'],
+          payloadSize: data['payloadSize'],
+          hasNext: data['hasNext'],
+          content: data['content'],
+          currentPage: data['currentPage'],
+          skippedRecords: data['skippedRecords'],
+          totalRecords: data['totalRecords']
+      );
+
+      var content = negotiatedOffers.content;
+
+      for (var item in content) {
+        negotiations.add(NegotiateOfferModel(
+            id: item['id'],
+            debitedCurrency: item['debitedCurrency'],
+            creditedCurrency: item['creditedCurrency'],
+            amount: item['amount'],
+            rate: item['rate'],
+            expireIn: item['expireIn'],
+            expireCountDown: item['expireCountDown'],
+            views: item['views'],
+            negotiatorRate: item['negotiatorRate'],
+            negotiatorAmount: item['negotiatorAmount'],
+            negotiationAccepted: item['negotiationAccepted'],
+            negotiatorId: item['negotiatorId'],
+            isActive: item['isActive'],
+            status: item['status'],
+            createdDate: item['createdDate'],
+            lastModifiedDate: item['lastModifiedDate']
+        ));
+        offerProvider.saveMyOffers(negotiations);
       }
 
     });

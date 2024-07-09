@@ -290,9 +290,9 @@ class _SignUpFormState extends State<SignUpForm> {
                             lastName: _lastName,
                             email: _email,
                             phoneNumber: _phoneNo,
-                            country: '',
-                            address: '',
-                            state: '',
+                            // country: '',
+                            // address: '',
+                            // state: '',
                             password: _password,
                             onSuccess: () {
                               Get.to(() => EmailVerificationScreen(email: _email, password: _password,));

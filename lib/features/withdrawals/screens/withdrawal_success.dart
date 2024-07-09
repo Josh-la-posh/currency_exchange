@@ -12,7 +12,8 @@ import 'package:swappr/utils/helpers/helper_functions.dart';
 import '../../../data/modules/app_navigator.dart';
 
 class WithdrawalSuccessScreen extends StatelessWidget {
-  const WithdrawalSuccessScreen({super.key});
+  final String title;
+  const WithdrawalSuccessScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -22,29 +23,32 @@ class WithdrawalSuccessScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          padding: EdgeInsets.only(top: THelperFunctions.screenHeight() * 0.13),
+          padding: EdgeInsets.only(top: THelperFunctions.screenHeight() * 0.13,),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Image(image: AssetImage(TImages.withdrawSuccess)),
               const SizedBox(height: TSizes.defaultSpace,),
-              RichText(
-                  text: const TextSpan(
-                      style: TextStyle(
-                          color: TColors.primary,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 20,
-                          fontFamily: 'Roboto'
-                      ),
-                      children: <TextSpan> [
-                        TextSpan(
-                          text: 'Withdrawal Successful!',
-                        )
-                      ]
-                  )
+              SizedBox(
+                width: 310,
+                child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        children: <TextSpan> [
+                          TextSpan(
+                            text: title,
+                            style: TextStyle(
+                                color: TColors.primary,
+                              fontWeight: FontWeight.w500
+                            ),
+                          )
+                        ]
+                    )
+                ),
               ),
-              const SizedBox(height: TSizes.defaultSpace * 2),
+              const SizedBox(height: TSizes.defaultSpace * 3),
               GestureDetector(
                 onTap: () {
                   AppNavigator.instance

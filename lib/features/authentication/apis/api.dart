@@ -73,9 +73,6 @@ class AuthService {
         required String lastName,
         required String email,
         required String phoneNumber,
-        required String country,
-        required String address,
-        required String state,
         required String password,
         required VoidCallback onSuccess}) async {
     _createAccount({
@@ -83,9 +80,6 @@ class AuthService {
       'lastName': lastName,
       'email': email.toLowerCase(),
       'phoneNumber': phoneNumber,
-      'country': 'Nigeria',
-      'address': 'Lagos Villa',
-      'state': 'Lagos',
       'password': password,
     }).then((responseData) {
       print(responseData.data);
@@ -186,14 +180,7 @@ class AuthService {
           offerProvider: offerProvider
         );
         handleShowLoader();
-        Future.delayed(
-            Duration(seconds: 1),
-                () {
-              AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
-              handleHideLoader();
-              handleShowCustomToast(message: 'Authenticated successfully');
-                }
-        );
+        AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
       }
 
     }).catchError((error) {

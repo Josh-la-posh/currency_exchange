@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/common/widgets/verify_your_account.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
+import 'package:swappr/data/modules/background_task.dart';
 import 'package:swappr/data/provider/auth_provider.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/data/provider/verification_provider.dart';
@@ -61,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     if (walletProvider.defaultWallet == null) {
-      WalletServices.instance.getDefaultWallet(
+      NoLoaderService.instance.getDefaultWallet(
           walletProvider: walletProvider,
           transactionProvider: transactionProvider
       );
@@ -79,9 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-
     if (offerProvider.offers.isEmpty) {
-      OfferService.instance.getAllOffers(
+      NoLoaderService.instance.getAllOffers(
           offerProvider: offerProvider,
           currency: '',
           date: ''
@@ -107,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     super.initState();
   }
-
 
   Future<void> fetchDefaultWallet()  async {
     try {
@@ -183,11 +182,9 @@ class _HomeScreenState extends State<HomeScreen> {
               LinkSectionWidget(darkMode: darkMode,),
               const SizedBox(height: TSizes.defaultSpace,),
               Container(
-                height: 2,
-                padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5, vertical: TSizes.lg),
-                decoration: BoxDecoration(
-                    color: darkMode ? Colors.white.withOpacity(0.3) : Color(0xFFC88888).withOpacity(0.45)
-                ),
+                  height: 2,
+                  padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5, vertical: TSizes.lg),
+                  color: darkMode ? Colors.white.withOpacity(0.3) : Color(0xFFC88888).withOpacity(0.45)
               ),
               const SizedBox(height: TSizes.defaultSpace,),
               TrendingOffer(

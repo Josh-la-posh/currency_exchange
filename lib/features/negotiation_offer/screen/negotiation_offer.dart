@@ -43,7 +43,7 @@ class _NegotiationOfferScreenState extends State<NegotiationOfferScreen> {
         child: Column(
           children: [
             CurrencyWidgetWithBack(),
-            NegotiationList(),
+            NegotiationList(darkMode: darkMode),
           ],
         ),
       ),

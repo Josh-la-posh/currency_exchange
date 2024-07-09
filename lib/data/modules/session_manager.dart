@@ -59,13 +59,13 @@ class UserSession {
           subscriptionProvider: subscriptionProvider
       );
       handleShowLoader();
-      Future.delayed(
-        Duration(seconds: 1),
-          () {
-          handleHideLoader();
+      // Future.delayed(
+      //   Duration(seconds: 1),
+      //     () {
+      //     handleHideLoader();
           AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
-          }
-      );
+          // }
+      // );
     }
   }
 
@@ -87,7 +87,7 @@ class UserSession {
     AppNavigator.instance.removeAllNavigateToNavHandler(AUTH_LOGIN_SCREEN_ROUTE);
     handleShowCustomToast(
         message: logoutMessage ??
-            '''You've successfully logged out of Swappr.
+            '''You've successfully logged out of Pouch.
 We hope to see you again soon.''');
   }
 

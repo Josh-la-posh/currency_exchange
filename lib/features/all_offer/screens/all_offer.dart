@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/data/modules/app_navigator.dart';
+import 'package:swappr/data/modules/background_task.dart';
 import 'package:swappr/utils/constants/enums.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
@@ -44,7 +45,7 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
   @override
   void initState() {
     if (offerProvider.offers.isEmpty) {
-      OfferService.instance.getAllOffers(
+      NoLoaderService.instance.getAllOffers(
           offerProvider: offerProvider,
           currency: '',
           date: ''

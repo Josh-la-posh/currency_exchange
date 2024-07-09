@@ -5,12 +5,13 @@ import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 
 class NoNegotiationScreen extends StatelessWidget {
-  const NoNegotiationScreen({super.key});
+  final String title;
+  const NoNegotiationScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: THelperFunctions.screenHeight() * 0.7 - 65,
+      height: THelperFunctions.screenHeight() * 0.5,
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -18,8 +19,9 @@ class NoNegotiationScreen extends StatelessWidget {
           children: [
             const Image(image: AssetImage(TImages.emptyScreen)),
             const SizedBox(height: TSizes.spaceBtwItems,),
-            Text('No Negotiation', style: Theme.of(context).textTheme.titleMedium,),
-            Text('There are no pending negotiation yet', style: Theme.of(context).textTheme.labelMedium,),
+            Text('No $title', style: Theme.of(context).textTheme.titleMedium,),
+            SizedBox(height: THelperFunctions.screenHeight() * 0.02),
+            Text('There are no pending ${title.toLowerCase()}', style: Theme.of(context).textTheme.labelMedium,),
           ],
         ),
       ),

@@ -7,11 +7,12 @@ class NegotiateOfferModel {
   final String amount;
   final String rate;
   final String expireIn;
+  String? expireCountDown;
   final int views;
-  final String negotiatorRate;
-  final String negotiatorAmount;
+  String? negotiatorRate;
+  String? negotiatorAmount;
   bool? negotiationAccepted;
-  final String negotiatorId;
+  String? negotiatorId;
   bool? isActive;
   final String status;
   final String createdDate;
@@ -24,6 +25,7 @@ class NegotiateOfferModel {
     required this.amount,
     required this.rate,
     required this.expireIn,
+    required this.expireCountDown,
     required this.views,
     required this.negotiatorRate,
     required this.negotiatorAmount,
@@ -42,6 +44,7 @@ class NegotiateOfferModel {
     amount: json['amount'] as String,
     rate: json['rate'] as String,
     expireIn: json['expireIn'] as String,
+    expireCountDown: json['expireCountDown'] as String,
     views: json['views'] as int,
     negotiatorRate: json['negotiatorRate'] as String,
     negotiatorAmount: json['negotiatorAmount'] as String,

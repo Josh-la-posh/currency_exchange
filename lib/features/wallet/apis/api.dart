@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:swappr/data/modules/background_task.dart';
 import 'package:swappr/data/modules/dio.dart';
 import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/data/provider/wallet_provider.dart';
@@ -27,6 +28,7 @@ import 'package:swappr/features/wallet/models/verify_bank_account_model.dart';
 import 'package:swappr/utils/responses/error_dialog.dart';
 import 'package:swappr/utils/responses/handleApiError.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
+import '../../withdrawals/screens/withdrawal_success.dart';
 import '../models/get_wallet.dart';
 
 class WalletServices{
@@ -150,7 +152,7 @@ class WalletServices{
   createWallet({required WalletProvider walletProvider, required String currency, required TransactionProvider transactionProvider}) {
     _createWallet({'currency': currency})
         .then((response) async {
-      await getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: currency);
+      await getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: '');
       handleShowCustomToast(message: 'Your wallet has been created successfully');
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
@@ -287,7 +289,6 @@ class WalletServices{
       accountNumber: accountNumber,
       bankCode: bankCode
     ).then((response) async {
-
       var data = response.data;
 
       VerifyBankAccountEntity accountDetails = VerifyBankAccountEntity(
@@ -307,7 +308,6 @@ class WalletServices{
       walletProvider.saveBankAccountDetails(accountDetail);
 
     }).catchError((error) {
-      print(error.toString());
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
@@ -318,19 +318,19 @@ class WalletServices{
     required String currency,
     required WalletProvider walletProvider,
     required TransactionProvider transactionProvider,
-    required VoidCallback onSuccess
   }) {
     _transferLocalBank({
       'bankId': bankId,
       'amount': amount
     }).then((response) async {
-      print(response.data);
-      await getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: currency);
-      onSuccess();
-      handleShowCustomToast(message: 'In progress ...');
+      var title = response.data['message'];
+      NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
+      walletProvider.saveWithdrawalBank(null);
+      Get.to(() => WithdrawalSuccessScreen(title: title,));
     }).catchError((error) {
       print(error.toString());
-      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      // handleShowCustomToast(message: 'In progress ...');
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -417,7 +417,6 @@ class WalletServices{
     });
   }
 
-
   //. Get requests
 
   getWallets({
@@ -429,6 +428,7 @@ class WalletServices{
     _getWallet(currency: currency).then((response) async {
       await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
       var data = response.data;
+      print('available wallets ${response.data}');
       for (var item in data) {
         wallets.add(GetWalletModel(
             id: item['id'],

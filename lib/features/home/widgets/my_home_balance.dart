@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/data/provider/offer_provider.dart';
+import 'package:swappr/data/provider/transaction_provider.dart';
 import 'package:swappr/features/wallet/apis/api.dart';
 import 'package:swappr/features/wallet/models/default_wallet_model.dart';
 import 'package:swappr/utils/constants/texts.dart';
 import 'package:swappr/utils/shared/notification/snackbar.dart';
 import '../../../data/modules/app_navigator.dart';
+import '../../../data/modules/background_task.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -25,6 +28,8 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
   @override
   Widget build(BuildContext context) {
     final walletProvider = Provider.of<WalletProvider>(context);
+    final transactionProvider = Provider.of<TransactionProvider>(context);
+    final offerProvider = Provider.of<OfferProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
       child: Container(
@@ -81,7 +86,7 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                             ? Icon(Icons.visibility_off_outlined, color: widget.darkMode ? TColors.grey : Colors.white, size: 17,)
                             : Icon(Icons.visibility_outlined, color: widget.darkMode ? TColors.grey : Colors.white, size: 17,)
                     ),
-                  )
+                  ),
                 ],
               ),
               Row(
@@ -126,6 +131,14 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                             ),
                           ]
                       )
+                  ),
+                  Spacer(),
+                  IconButton(
+                    onPressed: (){
+                      NoLoaderService.instance.getDefaultWallet(walletProvider: walletProvider, transactionProvider: transactionProvider);
+                      NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, currency: '', date: '');
+                      },
+                    icon: Icon(Icons.refresh, size: 20, color: widget.darkMode ? Colors.white : Colors.white,),
                   ),
                 ],
               )

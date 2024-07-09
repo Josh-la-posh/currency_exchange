@@ -25,6 +25,7 @@ class _AccountWidgetState extends State<AccountWidget> {
       AppNavigator.instance.navigatorKey.currentContext as BuildContext,
       listen: false);
   bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(

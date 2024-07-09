@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:swappr/data/modules/background_task.dart';
 import 'package:swappr/features/negotiation_offer/widget/no_negotiation.dart';
 import 'package:swappr/features/transaction/widgets/no_transaction.dart';
 import '../../../data/provider/offer_provider.dart';
@@ -9,8 +10,9 @@ import '../../../utils/layouts/list_layout.dart';
 import 'negotiation_item.dart';
 
 class NegotiationList extends StatelessWidget {
+  final bool darkMode;
   const NegotiationList({
-    super.key,
+    super.key, required this.darkMode,
   });
 
   @override
@@ -21,11 +23,7 @@ class NegotiationList extends StatelessWidget {
       children: [
         Container(),
         const SizedBox(height: TSizes.md,),
-        offerProvider.negotiationsOffers.isEmpty
-            ? LayoutBuilder(builder: (context, constraints) {
-          return const NoNegotiationScreen();
-        })
-            : Column(
+        Column(
           children: [
             Container(
               alignment: Alignment.centerLeft,
@@ -33,19 +31,34 @@ class NegotiationList extends StatelessWidget {
               height: 48,
               color: TColors.primaryBackground,
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-              child: RichText(
-                  text: TextSpan(
-                      style: Theme.of(context).textTheme.labelSmall,
-                      children: const <TextSpan> [
-                        TextSpan(
-                            text: 'Negotiation Offer',
-                            style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
-                        )
-                      ]
-                  )
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelSmall,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: 'Negotiation Offer',
+                                style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                            )
+                          ]
+                      )
+                  ),
+                  IconButton(
+                    onPressed: (){
+                      NoLoaderService.instance.getAllNegotiatedOOffers(offerProvider: offerProvider);
+                    },
+                    icon: Icon(Icons.refresh, size: 18, color: darkMode ? Colors.white : TColors.textPrimary,),
+                  ),
+                ],
               ),
             ),
-            TListLayout(
+            offerProvider.negotiationsOffers.isEmpty
+                ? LayoutBuilder(builder: (context, constraints) {
+                  return const NoNegotiationScreen(title: 'Negotiation',);
+                })
+                : TListLayout(
                 itemCount: offerProvider.negotiationsOffers.length,
                 itemBuilder: (_, index) {
                   final item = offerProvider.negotiationsOffers[index];

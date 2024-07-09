@@ -13,6 +13,8 @@ class OfferProvider extends ChangeNotifier {
   List<OfferEntity> tOffers = [];
   CreateOfferResponse? _offerResponse;
   List<NegotiateOfferModel> _negotiationsOffers = [];
+  List<NegotiateOfferModel> _myOffers = [];
+  List<NegotiateOfferModel> _myBids = [];
   OfferEntity? _offerDetail;
   List<Currency> _currencies = Currency.values;
   Currency _selectedCurrency = Currency.NGN;
@@ -37,6 +39,8 @@ class OfferProvider extends ChangeNotifier {
   OfferDetailsEntity? get offerDetails => _offerDetails;
   List<OfferEntity> get offers => tOffers;
   List<NegotiateOfferModel> get negotiationsOffers => _negotiationsOffers;
+  List<NegotiateOfferModel> get myOffers => _myOffers;
+  List<NegotiateOfferModel> get myBids => _myBids;
   OfferEntity? get offerDetail => _offerDetail;
   OfferEntity? get selectedOffer => _selectedOffer;
   List<Currency> get currencies => _currencies;
@@ -66,6 +70,16 @@ class OfferProvider extends ChangeNotifier {
 
   void saveNegotiations(List<NegotiateOfferModel> data) {
     _negotiationsOffers = data;
+    notifyListeners();
+  }
+
+  void saveMyOffers(List<NegotiateOfferModel> data) {
+    _myOffers = data;
+    notifyListeners();
+  }
+
+  void saveMyBids(List<NegotiateOfferModel> data) {
+    _myBids = data;
     notifyListeners();
   }
 
@@ -184,6 +198,8 @@ class OfferProvider extends ChangeNotifier {
     negotiatorAmount = 0;
     negotiatorRate = 0;
     _offerResponse = null;
+    _myOffers = [];
+    _myBids = [];
   }
 
 }

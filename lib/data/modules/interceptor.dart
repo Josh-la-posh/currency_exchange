@@ -28,9 +28,9 @@ class AppInterceptor extends Interceptor {
             RequestInterceptorHandler handler) async {
           if (showLoader) {
             handleShowLoader();
-            Timer(Duration(seconds: 2), () {
-              handleHideLoader();
-            });
+            // Timer(Duration(seconds: 2), () {
+            //   handleHideLoader();
+            // });
           }
           requestOptions.cancelToken = cancelToken;
           final connectivityResult = await Connectivity().checkConnectivity();
@@ -60,10 +60,10 @@ class AppInterceptor extends Interceptor {
           }
           if (err.response?.statusCode == 401 && checkIfUserIsLogin) {
             cancelToken.cancel([
-              {'message': 'Session expired, Outgoing requests terminated'}
+              {'message': ''}
             ]);
             THelperFunctions.showDebugMessageInConsole(
-                ['Session expired, Outgoing requests terminated']);
+                []);
             cancelToken = CancelToken();
 
             UserSession.instance

@@ -41,6 +41,7 @@ class TImages {
   // Other Icons
   static const String success = "assets/logos/success-icon.png";
   static const String emptyScreen = "assets/logos/empty-screen-icon.png";
+  static const String handIcon = "assets/icons/Hand Up.png";
 
   // Deposit Icons
   static const String flutterwaveIcon = "assets/icons/depositIcons/flutterwave_logo.png";

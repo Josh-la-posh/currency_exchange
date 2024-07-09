@@ -4,8 +4,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:swappr/features/all_offer/apis/api.dart';
 import 'package:swappr/utils/helpers/helper_functions.dart';
-
-import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../common/widgets/custom_time_line.dart';

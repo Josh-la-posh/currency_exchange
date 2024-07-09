@@ -279,9 +279,6 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                           bankId: provider.selectedWithdrawalAccount!.id,
                           transactionProvider: transactionProvider,
                           walletProvider: provider,
-                          onSuccess: () {
-                            Get.to(() => const WithdrawalSuccessScreen());
-                          }
                       );
                     },
                     buttonText: 'Confirm'

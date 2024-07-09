@@ -23,7 +23,7 @@ class SubscriptionService {
   Future _getSubscriptions(String currency) {
     return apiService.get(
         '/subscription',
-        queryParameters: {'currenry': currency}
+        queryParameters: {'currency': currency}
     );
   }
 

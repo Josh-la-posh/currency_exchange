@@ -90,10 +90,25 @@ class TrendingOffer extends StatelessWidget {
         displayOffer == false
             ? CircularProgressIndicator()
             : offerProvider.offers.isEmpty
-            ? const SizedBox(
-          width: double.infinity,
-          // color: Colors.white,
-        )
+            ? SizedBox(
+          height: 80,
+              child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.titleMedium,
+                        children: <TextSpan> [
+                          TextSpan(
+                              text: 'No offer available',
+                              style: TextStyle(color: TColors.primary)
+                          ),
+                        ]
+                      )
+                    ),
+                ],
+              ),
+            )
             : ListView.builder(
               shrinkWrap: true,
               itemCount: offerProvider.offers.length > 3 ? 3 : offerProvider.offers.length,
