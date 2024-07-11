@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 class BankTransferScreen extends StatelessWidget {
   const BankTransferScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/transaction/routes/names.dart';
-import 'package:swappr/features/transaction/screens/history.dart';
+import 'package:pouch/features/transaction/routes/names.dart';
+import 'package:pouch/features/transaction/screens/history.dart';
 
 import '../../../data/routes/guard_route.dart';
 

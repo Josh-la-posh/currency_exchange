@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
-import 'package:swappr/utils/constants/sizes.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/common/widgets/custom_shapes/currency_widget_with_back.dart';
+import 'package:pouch/utils/constants/sizes.dart';
 
 import '../widgets/create_offer_form.dart';
 

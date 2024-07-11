@@ -1,13 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/features/home/screens/home.dart';
-import 'package:swappr/features/wallet/routes/names.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/constants/texts.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/home/screens/home.dart';
+import 'package:pouch/features/wallet/routes/names.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/constants/texts.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../data/modules/app_navigator.dart';
 

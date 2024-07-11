@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/modules/app_navigator.dart';
-import 'package:swappr/data/modules/session_manager.dart';
-import 'package:swappr/data/provider/auth_provider.dart';
-import 'package:swappr/features/authentication/screens/login/widgets/login_form.dart';
-import 'package:swappr/features/authentication/screens/onboarding/onboarding.dart';
-import 'package:swappr/utils/layouts/auth_layout.dart';
+import 'package:pouch/data/modules/app_navigator.dart';
+import 'package:pouch/data/modules/session_manager.dart';
+import 'package:pouch/data/provider/auth_provider.dart';
+import 'package:pouch/features/authentication/screens/login/widgets/login_form.dart';
+import 'package:pouch/features/authentication/screens/onboarding/onboarding.dart';
+import 'package:pouch/utils/layouts/auth_layout.dart';
 
 import '../../../home/routes/names.dart';
 

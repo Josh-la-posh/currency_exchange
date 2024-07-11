@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/validators/validation.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/validators/validation.dart';
 import '../../../utils/constants/sizes.dart';
 import './model/city_model.dart';
 import './model/country_model.dart';

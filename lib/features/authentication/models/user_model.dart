@@ -67,9 +67,10 @@ class UserModel {
   final String password;
   final bool isVerified;
   final String? nin;
-  final String country;
-  final String address;
-  final String state;
+  String? country;
+  String? address;
+  String? postCode;
+  String? state;
   final String status;
   final String phoneNumber;
   final int? otp;
@@ -90,6 +91,7 @@ class UserModel {
     required this.nin,
     required this.country,
     required this.address,
+    required this.postCode,
     required this.state,
     required this.status,
     required this.phoneNumber,
@@ -113,6 +115,7 @@ class UserModel {
       'nin': nin,
       'country': country,
       'address': address,
+      'postCode': postCode,
       'state': state,
       'status': status,
       'phoneNumber': phoneNumber,
@@ -137,6 +140,7 @@ class UserModel {
       nin: json['nin'],
       country: json['country'],
       address: json['address'],
+      postCode: json['postCode'],
       state: json['state'],
       status: json['status'],
       phoneNumber: json['phoneNumber'],

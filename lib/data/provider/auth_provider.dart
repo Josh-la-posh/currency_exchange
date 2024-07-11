@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:swappr/data/modules/session_manager.dart';
-import 'package:swappr/features/authentication/models/create_account_model.dart';
-import 'package:swappr/features/authentication/models/password_model.dart';
-import 'package:swappr/features/authentication/models/user_model.dart';
-import 'package:swappr/utils/constants/app.dart';
-import 'package:swappr/utils/local_storage/local_storage.dart';
+import 'package:pouch/data/modules/session_manager.dart';
+import 'package:pouch/features/authentication/models/create_account_model.dart';
+import 'package:pouch/features/authentication/models/password_model.dart';
+import 'package:pouch/features/authentication/models/user_model.dart';
+import 'package:pouch/utils/constants/app.dart';
+import 'package:pouch/utils/local_storage/local_storage.dart';
 
 import '../../utils/constants/colors.dart';
 

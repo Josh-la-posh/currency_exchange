@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/auth_provider.dart';
-import 'package:swappr/data/provider/currency_provider.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/data/provider/subscription_provider.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/data/provider/verification_provider.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
+import 'package:pouch/data/provider/auth_provider.dart';
+import 'package:pouch/data/provider/currency_provider.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/data/provider/subscription_provider.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/data/provider/verification_provider.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
 
 class RootProvider extends StatelessWidget {
   final Widget app;

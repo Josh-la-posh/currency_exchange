@@ -3,31 +3,31 @@ import 'dart:ui';
 
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/data/modules/background_task.dart';
-import 'package:swappr/data/modules/dio.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
-import 'package:swappr/features/payment_method/screens/flutterwave_payment.dart';
-import 'package:swappr/features/payment_method/screens/paystack_payment.dart';
-import 'package:swappr/features/payment_method/screens/ussd_funding_detail.dart';
-import 'package:swappr/features/transaction/apis/api.dart';
-import 'package:swappr/features/wallet/models/bank_list.dart';
-import 'package:swappr/features/wallet/models/bank_list_entity.dart';
-import 'package:swappr/features/wallet/models/default_wallet_model.dart';
-import 'package:swappr/features/wallet/models/fcy_account_entity.dart';
-import 'package:swappr/features/wallet/models/fcy_account_model.dart';
-import 'package:swappr/features/wallet/models/flutterwaveEntity.dart';
-import 'package:swappr/features/wallet/models/flutterwave_model.dart';
-import 'package:swappr/features/wallet/models/get_bank_account.dart';
-import 'package:swappr/features/wallet/models/paystack_entity.dart';
-import 'package:swappr/features/wallet/models/paystack_model.dart';
-import 'package:swappr/features/wallet/models/ussd_entity.dart';
-import 'package:swappr/features/wallet/models/ussd_modal.dart';
-import 'package:swappr/features/wallet/models/verify_bank_account_entity.dart';
-import 'package:swappr/features/wallet/models/verify_bank_account_model.dart';
-import 'package:swappr/utils/responses/error_dialog.dart';
-import 'package:swappr/utils/responses/handleApiError.dart';
-import 'package:swappr/utils/shared/notification/snackbar.dart';
+import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/data/modules/dio.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:pouch/features/payment_method/screens/flutterwave_payment.dart';
+import 'package:pouch/features/payment_method/screens/paystack_payment.dart';
+import 'package:pouch/features/payment_method/screens/ussd_funding_detail.dart';
+import 'package:pouch/features/transaction/apis/api.dart';
+import 'package:pouch/features/wallet/models/bank_list.dart';
+import 'package:pouch/features/wallet/models/bank_list_entity.dart';
+import 'package:pouch/features/wallet/models/default_wallet_model.dart';
+import 'package:pouch/features/wallet/models/fcy_account_entity.dart';
+import 'package:pouch/features/wallet/models/fcy_account_model.dart';
+import 'package:pouch/features/wallet/models/flutterwaveEntity.dart';
+import 'package:pouch/features/wallet/models/flutterwave_model.dart';
+import 'package:pouch/features/wallet/models/get_bank_account.dart';
+import 'package:pouch/features/wallet/models/paystack_entity.dart';
+import 'package:pouch/features/wallet/models/paystack_model.dart';
+import 'package:pouch/features/wallet/models/ussd_entity.dart';
+import 'package:pouch/features/wallet/models/ussd_modal.dart';
+import 'package:pouch/features/wallet/models/verify_bank_account_entity.dart';
+import 'package:pouch/features/wallet/models/verify_bank_account_model.dart';
+import 'package:pouch/utils/responses/error_dialog.dart';
+import 'package:pouch/utils/responses/handleApiError.dart';
+import 'package:pouch/utils/shared/notification/snackbar.dart';
 import '../../withdrawals/screens/withdrawal_success.dart';
 import '../models/get_wallet.dart';
 
@@ -168,7 +168,6 @@ class WalletServices{
     _defaultWallet({'walletId': walletId})
         .then((response) async {
           await getDefaultWallet(transactionProvider: transactionProvider, walletProvider: walletProvider);
-          print(response.data);
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
       // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -428,7 +427,6 @@ class WalletServices{
     _getWallet(currency: currency).then((response) async {
       await TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
       var data = response.data;
-      print('available wallets ${response.data}');
       for (var item in data) {
         wallets.add(GetWalletModel(
             id: item['id'],
@@ -567,7 +565,6 @@ class WalletServices{
 
   deleteLocalAccount({required String id, required WalletProvider walletProvider}) {
     _deleteLocalAccount(id: id).then((response) async {
-      print(response);
       await getLocalBank(walletProvider: walletProvider);
       handleShowCustomToast(message: 'Bank account successfully deleted');
     }).catchError((error) {

@@ -1,13 +1,13 @@
-import 'package:swappr/features/transaction/models/transaction_entity.dart';
+import 'package:pouch/features/transaction/models/transaction_entity.dart';
 
 class TransactionsDetailsEntity {
-  final int totalPages;
-  final int payloadSize;
-  final bool hasNext;
-  final List content;
-  final int currentPage;
-  final int skippedRecords;
-  final int totalRecords;
+  int? totalPages;
+  int? payloadSize;
+  bool? hasNext;
+  List content;
+  int? currentPage;
+  int? skippedRecords;
+  int? totalRecords;
 
   TransactionsDetailsEntity({
     required this.totalPages,

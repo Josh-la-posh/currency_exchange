@@ -1,14 +1,13 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:swappr/features/wallet/models/bank_list.dart';
-import 'package:swappr/features/wallet/models/bank_list_entity.dart';
-import 'package:swappr/features/wallet/models/default_wallet_model.dart';
-import 'package:swappr/features/wallet/models/fcy_account_entity.dart';
-import 'package:swappr/features/wallet/models/fcy_account_model.dart';
-import 'package:swappr/features/wallet/models/flutterwave_model.dart';
-import 'package:swappr/features/wallet/models/get_bank_account.dart';
-import 'package:swappr/features/wallet/models/paystack_model.dart';
+import 'package:pouch/features/wallet/models/bank_list.dart';
+import 'package:pouch/features/wallet/models/bank_list_entity.dart';
+import 'package:pouch/features/wallet/models/default_wallet_model.dart';
+import 'package:pouch/features/wallet/models/fcy_account_entity.dart';
+import 'package:pouch/features/wallet/models/fcy_account_model.dart';
+import 'package:pouch/features/wallet/models/flutterwave_model.dart';
+import 'package:pouch/features/wallet/models/get_bank_account.dart';
+import 'package:pouch/features/wallet/models/paystack_model.dart';
 import '../../features/wallet/models/get_wallet.dart';
 import '../../features/wallet/models/ussd_modal.dart';
 import '../../features/wallet/models/verify_bank_account_model.dart';
@@ -207,5 +206,8 @@ class WalletProvider extends ChangeNotifier {
     _selectedNigBank = Bank.GTB;
     defaultWalletDetail = null;
     _selectedWithdrawalAccount = null;
+    _savedBankAccounts = [];
+    showBankTransferOption = false;
+    showWalletBalance = true;
   }
 }

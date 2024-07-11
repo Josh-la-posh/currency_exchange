@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/layouts/app_layout.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/layouts/app_layout.dart';
 
 import '../../../utils/helpers/helper_functions.dart';
 

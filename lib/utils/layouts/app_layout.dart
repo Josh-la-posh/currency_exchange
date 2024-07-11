@@ -1,13 +1,11 @@
 // ignore_for_file: constant_identifier_names
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/home/routes/names.dart';
-import 'package:swappr/features/subscription/routes/names.dart';
-import 'package:swappr/features/transaction/routes/names.dart';
-import 'package:swappr/features/wallet/routes/names.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/home/routes/names.dart';
+import 'package:pouch/features/transaction/routes/names.dart';
+import 'package:pouch/features/wallet/routes/names.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../data/modules/app_navigator.dart';
 import '../../data/provider/auth_provider.dart';
 import '../../features/profile/routes/names.dart';
@@ -72,135 +70,138 @@ class _AppLayoutState extends State<AppLayout>
         .instance.navigatorKey.currentState?.context as BuildContext);
 
     final darkMode = THelperFunctions.isDarkMode(context);
-    return Scaffold(
-      appBar: widget.appbar,
-      backgroundColor: widget.layoutBodyColor,
-      bottomNavigationBar: _isBottomBarVisible == false
-          ? const SizedBox.shrink()
-          : BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        useLegacyColorScheme: false,
-        currentIndex: widget.currentRoute == RouteType.Wallet
-            ? 1
-            : widget.currentRoute == RouteType.History
-            ? 2
-            : widget.currentRoute == RouteType.Profile
-            ? 3
-            : 0,
-        selectedFontSize: 11,
-        selectedIconTheme: const IconThemeData(size: 24.0),
-        unselectedIconTheme: const IconThemeData(size: 24.0),
-        unselectedFontSize: 11,
-        selectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
-        unselectedLabelStyle: const TextStyle(
-            fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
-        backgroundColor: darkMode ? Colors.black : Colors.white,
-        selectedItemColor: TColors.primary,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        onTap: (index) {
-          if (index == 1) {
-            // Get.to(const SubscribeScreen());
-
-            if (widget.navKey != null) {
-              if (widget.currentRoute != RouteType.Wallet) {
-                widget.navKey!.currentState!
-                    .pushNamed(WALLET_INDEX_SCREEN_ROUTE);
-              }
-            } else {
-              AppNavigator.instance.navigateToHandler(
-                WALLET_INDEX_SCREEN_ROUTE
-              );
-            }
-          } else if (index == 2) {
-            // Get.to(const TransactionHistoryScreen());
-
-            if (widget.navKey != null) {
-              if (widget.currentRoute != RouteType.History) {
-                widget.navKey!.currentState!
-                    .pushNamed(TRANSACTION_INDEX_SCREEN_ROUTE);
-              }
-            } else {
-              AppNavigator.instance.navigateToHandler(
-                  TRANSACTION_INDEX_SCREEN_ROUTE
-              );
-            }
-          } else if (index == 3) {
-            // Get.to(const ProfileScreen());
-
-            if (widget.navKey != null) {
-              if (widget.currentRoute != RouteType.Profile) {
-                widget.navKey!.currentState!
-                    .pushNamed(PROFILE_INDEX_SCREEN_ROUTE);
-              }
-            } else {
-              AppNavigator.instance.navigateToHandler(
-                  PROFILE_INDEX_SCREEN_ROUTE
-              );
-            }
-          } else {
-            // Get.to(const HomeScreen());
-
-            if (widget.navKey != null) {
-              if (widget.currentRoute != RouteType.Home) {
-                widget.navKey!.currentState!
-                    .pushNamed(HOME_INDEX_SCREEN_ROUTE);
-              }
-            } else {
+    return SafeArea(
+      top: true,
+      child: Scaffold(
+        appBar: widget.appbar,
+        backgroundColor: widget.layoutBodyColor,
+        bottomNavigationBar: _isBottomBarVisible == false
+            ? const SizedBox.shrink()
+            : BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          useLegacyColorScheme: false,
+          currentIndex: widget.currentRoute == RouteType.Wallet
+              ? 1
+              : widget.currentRoute == RouteType.History
+              ? 2
+              : widget.currentRoute == RouteType.Profile
+              ? 3
+              : 0,
+          selectedFontSize: 11,
+          selectedIconTheme: const IconThemeData(size: 24.0),
+          unselectedIconTheme: const IconThemeData(size: 24.0),
+          unselectedFontSize: 11,
+          selectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
+          unselectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.bold, fontFamily: 'Roboto'),
+          backgroundColor: darkMode ? Colors.black : Colors.white,
+          selectedItemColor: TColors.primary,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          onTap: (index) {
+            if (index == 1) {
+              // Get.to(const SubscribeScreen());
+      
+              if (widget.navKey != null) {
+                if (widget.currentRoute != RouteType.Wallet) {
+                  widget.navKey!.currentState!
+                      .pushNamed(WALLET_INDEX_SCREEN_ROUTE);
+                }
+              } else {
                 AppNavigator.instance.navigateToHandler(
-                    HOME_INDEX_SCREEN_ROUTE
+                  WALLET_INDEX_SCREEN_ROUTE
                 );
               }
-
-          }
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: SizedBox(
-              height: 30,
-              child: Image(image: AssetImage(widget.currentRoute == RouteType.Home
-                  ? TImages.homeActive
-                  : TImages.home)),
+            } else if (index == 2) {
+              // Get.to(const TransactionHistoryScreen());
+      
+              if (widget.navKey != null) {
+                if (widget.currentRoute != RouteType.History) {
+                  widget.navKey!.currentState!
+                      .pushNamed(TRANSACTION_INDEX_SCREEN_ROUTE);
+                }
+              } else {
+                AppNavigator.instance.navigateToHandler(
+                    TRANSACTION_INDEX_SCREEN_ROUTE
+                );
+              }
+            } else if (index == 3) {
+              // Get.to(const ProfileScreen());
+      
+              if (widget.navKey != null) {
+                if (widget.currentRoute != RouteType.Profile) {
+                  widget.navKey!.currentState!
+                      .pushNamed(PROFILE_INDEX_SCREEN_ROUTE);
+                }
+              } else {
+                AppNavigator.instance.navigateToHandler(
+                    PROFILE_INDEX_SCREEN_ROUTE
+                );
+              }
+            } else {
+              // Get.to(const HomeScreen());
+      
+              if (widget.navKey != null) {
+                if (widget.currentRoute != RouteType.Home) {
+                  widget.navKey!.currentState!
+                      .pushNamed(HOME_INDEX_SCREEN_ROUTE);
+                }
+              } else {
+                  AppNavigator.instance.navigateToHandler(
+                      HOME_INDEX_SCREEN_ROUTE
+                  );
+                }
+      
+            }
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: SizedBox(
+                height: 30,
+                child: Image(image: AssetImage(widget.currentRoute == RouteType.Home
+                    ? TImages.homeActive
+                    : TImages.home)),
+              ),
+              label: 'Home',
             ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: SizedBox(
-              height: 30,
-              child: Image(image: AssetImage(widget.currentRoute == RouteType.Wallet
-                  ? TImages.subscribeActive
-                  : TImages.subscribe)),
+            BottomNavigationBarItem(
+              icon: SizedBox(
+                height: 30,
+                child: Image(image: AssetImage(widget.currentRoute == RouteType.Wallet
+                    ? TImages.subscribeActive
+                    : TImages.subscribe)),
+              ),
+              label: 'Wallet',
             ),
-            label: 'Wallet',
-          ),
-          BottomNavigationBarItem(
-            icon: SizedBox(
-              height: 30,
-              child: Image(image: AssetImage(widget.currentRoute == RouteType.History
-                  ? TImages.historyActive
-                  : TImages.history)),
+            BottomNavigationBarItem(
+              icon: SizedBox(
+                height: 30,
+                child: Image(image: AssetImage(widget.currentRoute == RouteType.History
+                    ? TImages.historyActive
+                    : TImages.history)),
+              ),
+              label: 'Transactions',
             ),
-            label: 'Transactions',
-          ),
-          BottomNavigationBarItem(
-            icon: SizedBox(
-              height: 30,
-              child: Image(image: AssetImage(widget.currentRoute == RouteType.Profile
-                  ? TImages.profileActive
-                  : TImages.profile)),
+            BottomNavigationBarItem(
+              icon: SizedBox(
+                height: 30,
+                child: Image(image: AssetImage(widget.currentRoute == RouteType.Profile
+                    ? TImages.profileActive
+                    : TImages.profile)),
+              ),
+              label: 'Profile',
             ),
-            label: 'Profile',
-          ),
-        ],
+          ],
+        ),
+        // drawer: AppDrawerWidget(),
+        body: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          controller: _scrollController,
+          child: widget.childWidget,
+        ),
+        floatingActionButton: widget.floatingActionButton,
       ),
-      // drawer: AppDrawerWidget(),
-      body: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        controller: _scrollController,
-        child: widget.childWidget,
-      ),
-      floatingActionButton: widget.floatingActionButton,
     );
   }
 }

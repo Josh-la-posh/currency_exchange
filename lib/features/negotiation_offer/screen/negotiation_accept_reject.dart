@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/all_offer/apis/api.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/all_offer/apis/api.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../common/widgets/custom_time_line.dart';
@@ -87,22 +87,23 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                             children: [
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'has',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: '${widget.item.amount} ${widget.item.debitedCurrency}',
-                                            style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            text: '${widget.item.negotiatorAmount} ${widget.item.debitedCurrency}',
+                                            style: TextStyle(
+                                                fontWeight: TSizes.fontWeightMd
+                                            )
                                         )
                                       ]
                                   )
@@ -119,22 +120,21 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                             children: [
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'needs',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: widget.item.creditedCurrency,
-                                            style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            text: '${THelperFunctions.getStringMultiplication(widget.item.negotiatorRate.toString(), widget.item.negotiatorAmount.toString())} ${widget.item.creditedCurrency}',
+                                            style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                         )
                                       ]
                                   )
@@ -151,22 +151,32 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                             children: [
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'Rate',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: '${widget.item.rate} ${widget.item.debitedCurrency} // ${widget.item.creditedCurrency}',
-                                            style: TextStyle(color: TColors.primary)
+                                            text: '${widget.item.negotiatorRate}',
+                                            style: TextStyle(
+                                                color: TColors.primary,
+                                                fontWeight: FontWeight.w500
+                                            )
+                                        ),
+                                        TextSpan(
+                                            text: ' ${widget.item.creditedCurrency} // ${widget.item.debitedCurrency}',
+                                            style: TextStyle(
+                                                color: TColors.primary,
+                                                fontSize: TSizes.fontSize12,
+                                                fontWeight: FontWeight.w500
+                                                )
                                         )
                                       ]
                                   )
@@ -220,7 +230,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                                 style: Theme.of(context).textTheme.labelMedium,
                                 children: <TextSpan> [
                                   TextSpan(
-                                      text: ' ${THelperFunctions.getStringMultiplication(widget.item.amount, widget.item.rate)} ${widget.item.debitedCurrency}',
+                                      text: ' ${THelperFunctions.getStringMultiplication(widget.item.negotiatorAmount.toString(), widget.item.negotiatorRate.toString())} ${widget.item.creditedCurrency}',
                                       style: TextStyle(
                                           fontWeight: TSizes.fontWeightLg,
                                           color: Color(0xFFEA8484)
@@ -230,7 +240,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                                       text: ' for '
                                   ),
                                   TextSpan(
-                                      text: ' ${widget.item.amount} ${widget.item.creditedCurrency}',
+                                      text: ' ${widget.item.negotiatorAmount} ${widget.item.debitedCurrency}',
                                       style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                   ),
                                 ]

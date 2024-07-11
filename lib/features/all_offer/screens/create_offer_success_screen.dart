@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/widgets/custom_time_line.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/utils/constants/enums.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/layouts/list_layout.dart';
+import 'package:pouch/common/widgets/custom_time_line.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/layouts/list_layout.dart';
 import '../../../utils/constants/colors.dart';
 import '../widgets/success_page.dart';
 

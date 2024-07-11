@@ -1,6 +1,6 @@
 
 
-import 'package:swappr/utils/constants/enums.dart';
+import 'package:pouch/utils/constants/enums.dart';
 
 class SubscriptionEntity{
   String? id;

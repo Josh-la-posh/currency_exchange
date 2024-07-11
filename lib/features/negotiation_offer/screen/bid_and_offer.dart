@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/negotiation_offer/screen/my_bid.dart';
-import 'package:swappr/features/negotiation_offer/screen/my_offer.dart';
-import 'package:swappr/utils/constants/sizes.dart';
+import 'package:pouch/features/negotiation_offer/screen/my_bid.dart';
+import 'package:pouch/features/negotiation_offer/screen/my_offer.dart';
+import 'package:pouch/utils/constants/sizes.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/modules/background_task.dart';
@@ -37,9 +37,12 @@ class _NegotiationOfferScreenState extends State<MyBidAndOfferScreen> {
 
   @override
   void initState() {
-    if (offerProvider.myOffers.isEmpty || offerProvider.myBids.isEmpty) {
-      OfferService.instance.getMyOffers(offerProvider: offerProvider, days: '', currency: '');
-      OfferService.instance.getMyBids(offerProvider: offerProvider, days: '', currency: '');
+    if (offerProvider.myBids.isEmpty) {
+      NoLoaderService.instance.getMyBids(offerProvider: offerProvider, days: '', currency: '');
+    }
+
+    if (offerProvider.myOffers.isEmpty) {
+      NoLoaderService.instance.getMyOffers(offerProvider: offerProvider, days: '', currency: '');
     }
     super.initState();
   }
@@ -47,7 +50,6 @@ class _NegotiationOfferScreenState extends State<MyBidAndOfferScreen> {
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    print(offerProvider.negotiationsOffers.length);
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
       body: SingleChildScrollView(

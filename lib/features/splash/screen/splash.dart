@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/data/provider/subscription_provider.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/data/provider/subscription_provider.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/modules/session_manager.dart';
 import '../../../data/provider/auth_provider.dart';
@@ -68,9 +68,9 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Future.delayed(Duration(seconds: 1), () {
+        // Future.delayed(Duration(seconds: 1), () {
           UserSession.instance.handleIfUserIsNotLoginAfterSplashScreen();
-        });
+        // });
       }
     });
   }

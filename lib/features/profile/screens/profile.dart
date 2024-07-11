@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/features/profile/icons/svg.dart';
-import 'package:swappr/common/widgets/divider.dart';
-import 'package:swappr/features/profile/screens/change_password.dart';
-import 'package:swappr/features/profile/widgets/layout.dart';
-import 'package:swappr/features/profile/widgets/profile/logout.dart';
-import 'package:swappr/features/profile/widgets/profile/profile_details.dart';
-import 'package:swappr/features/profile/widgets/profile/profile_link.dart';
-import 'package:swappr/utils/constants/sizes.dart';
+import 'package:pouch/features/profile/icons/svg.dart';
+import 'package:pouch/common/widgets/divider.dart';
+import 'package:pouch/features/profile/screens/change_password.dart';
+import 'package:pouch/features/profile/widgets/layout.dart';
+import 'package:pouch/features/profile/widgets/profile/logout.dart';
+import 'package:pouch/features/profile/widgets/profile/profile_details.dart';
+import 'package:pouch/features/profile/widgets/profile/profile_link.dart';
+import 'package:pouch/utils/constants/sizes.dart';
 
 import '../../../utils/helpers/helper_functions.dart';
 import 'bank_account/bank_account.dart';
@@ -22,6 +22,7 @@ class ProfileScreen extends StatelessWidget {
       childWidget: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: TSizes.spaceBtwItems * 1.5),
             ProfileDetailsScreen(darkMode: darkMode,),
             const SizedBox(height: TSizes.spaceBtwItems,),
             ProfileLinkWidget(onPressed: () => {Get.to(() => const BankAccountScreen())}, title: 'Bank Account', icon: BankIcon(),),

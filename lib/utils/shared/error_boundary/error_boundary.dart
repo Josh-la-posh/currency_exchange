@@ -1,8 +1,8 @@
 // ignore_for_file: avoid_catches_without_on_clauses
 
 import 'package:flutter/material.dart';
-import 'package:swappr/features/home/routes/names.dart';
-import 'package:swappr/utils/constants/colors.dart';
+import 'package:pouch/features/home/routes/names.dart';
+import 'package:pouch/utils/constants/colors.dart';
 
 import '../../../data/modules/app_navigator.dart';
 

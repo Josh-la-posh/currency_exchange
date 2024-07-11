@@ -1,7 +1,7 @@
 class BankListModel {
   final int id;
   String? name, slug, code, longCode, gateway, country, currency, type, createdAt, updatedAt ;
-  final bool pay_with_bank, supports_transfer, active, is_deleted;
+  bool? pay_with_bank, supports_transfer, active, is_deleted;
   
   BankListModel({
     required this.id,

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:swappr/data/modules/session_manager.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/data/modules/session_manager.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../utils/configs/app_config.dart';
 import '../../utils/loader.dart';
 import '../../utils/responses/error_dialog.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/features/verification/screens/country_select.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/verification/screens/country_select.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 

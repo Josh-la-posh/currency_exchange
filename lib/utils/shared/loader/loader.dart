@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/utils/shared/loader/svg.dart';
+import 'package:pouch/utils/shared/loader/svg.dart';
 
 class Loader extends StatefulWidget {
   const Loader({Key? key}) : super(key: key);

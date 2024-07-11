@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/features/verification/screens/verification_in_progress.dart';
-import 'package:swappr/features/verification/screens/verify_success.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/verification/screens/verification_in_progress.dart';
+import 'package:pouch/features/verification/screens/verify_success.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';

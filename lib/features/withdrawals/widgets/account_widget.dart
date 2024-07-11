@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
-import 'package:swappr/features/wallet/models/get_bank_account.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:pouch/features/wallet/models/get_bank_account.dart';
 
 import '../../../data/modules/app_navigator.dart';
 import '../../../utils/constants/colors.dart';
@@ -104,7 +104,6 @@ class _AccountWidgetState extends State<AccountWidget> {
                   value: provider.selectedWithdrawalAccount?.id == widget.item.id,
                   onChanged: (val){
                     provider.saveWithdrawalBank(widget.item);
-                    print(val);
                     if (provider.selectedWithdrawalAccount?.id == widget.item.id) {
                       setState(() {
                         isSelected = true;

@@ -1,10 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/features/all_offer/models/offer.dart';
-import 'package:swappr/features/negotiation_offer/screen/negotiation_accept_reject.dart';
-import 'package:swappr/features/negotiation_offer/widget/negotiation_list.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/all_offer/models/offer.dart';
+import 'package:pouch/features/negotiation_offer/screen/negotiation_accept_reject.dart';
+import 'package:pouch/features/negotiation_offer/widget/negotiation_list.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -40,11 +40,20 @@ class NegotiationItem extends StatelessWidget {
                     children: [
                       RichText(
                           text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
+                              style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                  text: '${item.amount} ${item.creditedCurrency}',
-                                    style: TextStyle(fontSize: TSizes.fontSize11, fontWeight: TSizes.fontWeightLg)
+                                  text: '${item.negotiatorAmount}',
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightLg
+                                    )
+                                ),
+                                TextSpan(
+                                    text: ' ${item.debitedCurrency}',
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightLg,
+                                        fontSize: 13
+                                    )
                                 ),
                               ]
                           )
@@ -56,6 +65,7 @@ class NegotiationItem extends StatelessWidget {
                                 TextSpan(
                                     text: 'Offer',
                                     style: TextStyle(
+                                      fontWeight: TSizes.fontWeightLg,
                                       fontSize: TSizes.fontSize10,
                                       color: TColors.golden,
 
@@ -76,8 +86,19 @@ class NegotiationItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                              text: '${item.rate} ${item.debitedCurrency} // ${item.creditedCurrency} ',
-                                style: TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary)
+                              text: '${item.negotiatorRate}',
+                                style: TextStyle(
+                                    color: TColors.primary,
+                                    fontWeight: FontWeight.w500
+                                )
+                            ),
+                            TextSpan(
+                                text: ' ${item.creditedCurrency} // ${item.debitedCurrency} ',
+                                style: TextStyle(
+                                    color: TColors.primary,
+                                    fontSize: TSizes.fontSize12,
+                                    fontWeight: FontWeight.w500
+                                )
                             ),
                           ]
                       )
@@ -90,7 +111,8 @@ class NegotiationItem extends StatelessWidget {
                                 text: '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
                                 style: TextStyle(
                                     color: darkMode ? TColors.white.withOpacity(0.5) : TColors.textPrimary.withOpacity(0.5),
-                                    fontSize: TSizes.fontSize9,
+                                    fontSize: TSizes.fontSize11,
+                                    fontWeight: FontWeight.w500
                                 )
                             ),
                           ]

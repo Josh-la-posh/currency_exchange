@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/constants/sizes.dart';
 
 class TSpacingStyle {
   static const EdgeInsetsGeometry paddingWithAppBarHeight = EdgeInsets.only(
-    top: TSizes.sm,
+    top: TSizes.md,
     left: TSizes.defaultSpace,
     bottom: TSizes.defaultSpace,
     right: TSizes.defaultSpace,
@@ -15,7 +14,7 @@ class TSpacingStyle {
   );
 
   static const EdgeInsetsGeometry dashboardPadding = EdgeInsets.only(
-    top: 50,
+    top: TSizes.appBarHeight,
     left: TSizes.defaultSpace / 1.5,
     bottom: 0,
     right: TSizes.defaultSpace / 1.5,
@@ -27,7 +26,7 @@ class TSpacingStyle {
   );
 
   static const EdgeInsetsGeometry bottomSheetPadding = EdgeInsets.only(
-    top: TSizes.defaultSpace * 1.5,
+    top: TSizes.appBarHeight,
     bottom: TSizes.defaultSpace * 2,
     left: TSizes.xl,
     right: TSizes.xl,

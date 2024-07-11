@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/texts.dart';
-import 'package:swappr/utils/themes/custom_themes/checkbox_theme.dart';
-import 'package:swappr/utils/themes/custom_themes/elevated_button_theme.dart';
-import 'package:swappr/utils/themes/custom_themes/floating_button_theme.dart';
-import 'package:swappr/utils/themes/custom_themes/outlined_button_theme.dart';
-import 'package:swappr/utils/themes/custom_themes/text_field_theme.dart';
-import 'package:swappr/utils/themes/custom_themes/text_theme.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/texts.dart';
+import 'package:pouch/utils/themes/custom_themes/checkbox_theme.dart';
+import 'package:pouch/utils/themes/custom_themes/elevated_button_theme.dart';
+import 'package:pouch/utils/themes/custom_themes/floating_button_theme.dart';
+import 'package:pouch/utils/themes/custom_themes/outlined_button_theme.dart';
+import 'package:pouch/utils/themes/custom_themes/text_field_theme.dart';
+import 'package:pouch/utils/themes/custom_themes/text_theme.dart';
 
 class TAppTheme {
   TAppTheme._();

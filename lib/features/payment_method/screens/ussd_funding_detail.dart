@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/home/routes/names.dart';
-import 'package:swappr/features/transaction/apis/api.dart';
-import 'package:swappr/features/wallet/apis/api.dart';
+import 'package:pouch/features/home/routes/names.dart';
+import 'package:pouch/features/transaction/apis/api.dart';
+import 'package:pouch/features/wallet/apis/api.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/auth_provider.dart';
 import '../../../data/provider/transaction_provider.dart';

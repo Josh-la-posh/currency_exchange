@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/colors.dart';
 import '../../features/authentication/routes/names.dart';
 import '../../utils/shared/error_boundary/error_boundary.dart';
 import '../../utils/shared/notification/snackbar.dart';
@@ -68,13 +68,13 @@ class _AuthGuardState extends State<AuthGuard> {
     var authProvider = Provider.of<AuthProvider>(context);
     if (authProvider.user == null ||
         UserSession.instance.isLoginBool() == false) {
-      Future.delayed(
-          const Duration(
-            seconds: 1,
-          ), () {
-        UserSession.instance
-            .logoutUser(logoutMessage: 'Session expired, Please login');
-      });
+      // Future.delayed(
+      //     const Duration(
+      //       seconds: 1,
+      //     ), () {
+      //   UserSession.instance
+      //       .logoutUser(logoutMessage: 'Session expired, Please logins');
+      // });
       return Scaffold(
         backgroundColor: Colors.white,
         body: Container(

@@ -4,11 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/modules/app_navigator.dart';
-import 'package:swappr/data/modules/background_task.dart';
-import 'package:swappr/utils/constants/enums.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/shared/notification/snackbar.dart';
+import 'package:pouch/data/modules/app_navigator.dart';
+import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/shared/notification/snackbar.dart';
 import '../../../common/widgets/buttons/floating_button.dart';
 import '../../../common/widgets/currencyWidget.dart';
 import '../../../common/widgets/verify_your_account.dart';
@@ -44,6 +44,7 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
 
   @override
   void initState() {
+    NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, currency: '', date: '');
     if (offerProvider.offers.isEmpty) {
       NoLoaderService.instance.getAllOffers(
           offerProvider: offerProvider,

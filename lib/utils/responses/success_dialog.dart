@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
 
 import '../../data/modules/app_navigator.dart';
 

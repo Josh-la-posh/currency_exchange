@@ -1,15 +1,15 @@
 class TransactionEntity {
    String id;
-   String transactionId;
-   String creditedCurrency;
+   String? transactionId;
+   String? creditedCurrency;
    String? debitedCurrency;
-   String description;
-   String amount;
-   String transactionType;
+   String? description;
+   String? amount;
+   String? transactionType;
    int? rate;
    String? creditedWallet;
    String? debitedWallet;
-   String createdDate;
+   String? createdDate;
    String? status;
    String? lastModifiedDate;
 

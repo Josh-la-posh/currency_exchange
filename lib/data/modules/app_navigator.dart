@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/currency_provider.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/data/provider/subscription_provider.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
 import '../provider/auth_provider.dart';
+import '../provider/currency_provider.dart';
+import '../provider/offer_provider.dart';
+import '../provider/subscription_provider.dart';
+import '../provider/transaction_provider.dart';
+import '../provider/wallet_provider.dart';
 
 class AppNavigator {
   static final AppNavigator _instance = AppNavigator._();

@@ -15,7 +15,6 @@ class CurrencyProvider extends ChangeNotifier {
   }
 
   resetState() {
-    // _currencies = [];
     _selectedCurrency = Currency.NGN;
   }
 }

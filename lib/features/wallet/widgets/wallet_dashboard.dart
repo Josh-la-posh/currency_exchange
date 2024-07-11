@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/modules/background_task.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/features/payment_method/screens/payment_options.dart';
-import 'package:swappr/features/wallet/apis/api.dart';
-import 'package:swappr/utils/constants/enums.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/features/payment_method/screens/payment_options.dart';
+import 'package:pouch/features/wallet/apis/api.dart';
+import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -83,32 +83,38 @@ class _WalletDashboardState extends State<WalletDashboard> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(walletProvider.defaultWallet == null
-                                    ? '---------'
-                                    : '${walletProvider.showWalletBalance == false ? '*****' : THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString())}',
-                                  style: TextStyle(
-                                      fontSize: 35,
-                                      fontWeight: FontWeight.w800,
-                                      fontFamily: 'Work Sans',
-                                      color: Color(0xFF331D50)
-                                  ),
+                            SizedBox(
+                              width: THelperFunctions.screenWidth() * 0.45,
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(walletProvider.defaultWallet == null
+                                        ? '---------'
+                                        : '${walletProvider.showWalletBalance == false ? '*****' : THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString())}',
+                                      style: TextStyle(
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.w800,
+                                          fontFamily: 'Work Sans',
+                                          color: Color(0xFF331D50)
+                                      ),
+                                    ),
+                                    Text(
+                                      walletProvider.defaultWallet == null
+                                          ? ''
+                                          : ' ${walletProvider.defaultWallet?.currency}',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w800,
+                                          fontFamily: 'Roboto',
+                                          color: Colors.black
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  walletProvider.defaultWallet == null
-                                      ? ''
-                                      : ' ${walletProvider.defaultWallet?.currency}',
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w800,
-                                      fontFamily: 'Roboto',
-                                      color: Colors.black
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                             Text(
                               'Wallet Balance',
@@ -161,19 +167,22 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                     )
                                 ),
                               ),
-                              child: Text(
-                                'Deposit',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Work Sans',
-                                    color: widget.darkMode ? TColors.primary : Colors.white
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: Text(
+                                  'Deposit',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: 'Work Sans',
+                                      color: widget.darkMode ? TColors.primary : Colors.white
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 30,),
+                        const SizedBox(width: 10,),
                         Expanded(
                           child: Container(
                             height: 40,
@@ -201,7 +210,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                     Text(
                                       'Wallets',
                                       style: TextStyle(
-                                          fontSize: 16,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.w400,
                                           fontFamily: 'Work Sans',
                                           color: widget.darkMode ? TColors.primary : Colors.white
@@ -212,6 +221,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                                       child: Icon(
                                         Icons.keyboard_arrow_down_outlined,
                                         color: Colors.white,
+                                        size: 18,
                                       ),
                                     )
                                   ],

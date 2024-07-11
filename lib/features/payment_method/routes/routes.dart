@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/payment_method/routes/names.dart';
-import 'package:swappr/features/payment_method/screens/bank_transfer.dart';
-import 'package:swappr/features/payment_method/screens/flutterwave_payment.dart';
-import 'package:swappr/features/payment_method/screens/paystack_payment.dart';
-import 'package:swappr/features/payment_method/screens/ussd_funding.dart';
-import 'package:swappr/features/payment_method/screens/ussd_funding_detail.dart';
-import 'package:swappr/features/profile/routes/names.dart';
+import 'package:pouch/features/payment_method/routes/names.dart';
+import 'package:pouch/features/payment_method/screens/bank_transfer.dart';
+import 'package:pouch/features/payment_method/screens/flutterwave_payment.dart';
+import 'package:pouch/features/payment_method/screens/paystack_payment.dart';
+import 'package:pouch/features/payment_method/screens/ussd_funding.dart';
+import 'package:pouch/features/payment_method/screens/ussd_funding_detail.dart';
+import 'package:pouch/features/profile/routes/names.dart';
 import '../../../data/routes/guard_route.dart';
 import '../screens/payment_options.dart';
 

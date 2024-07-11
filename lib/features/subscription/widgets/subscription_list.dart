@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/subscription_provider.dart';
-import 'package:swappr/features/subscription/widgets/no_subscription.dart';
-import 'package:swappr/features/subscription/widgets/subscription_item.dart';
+import 'package:pouch/data/provider/subscription_provider.dart';
+import 'package:pouch/features/subscription/widgets/no_subscription.dart';
+import 'package:pouch/features/subscription/widgets/subscription_item.dart';
 import '../../../common/styles/spacing_styles.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/list_layout.dart';
@@ -30,14 +31,35 @@ class SubscriptionList extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: TSizes.spaceBtwSections),
-                Text(
-                  'Subscribe',
-                  style: Theme.of(context).textTheme.titleLarge,
+                RichText(
+                    text: TextSpan(
+                        style: Theme.of(context).textTheme.titleLarge,
+                        children: const <TextSpan> [
+                          TextSpan(
+                              text: 'Subscribe',
+                              style: TextStyle(
+                                  fontSize: TSizes.fontSize22
+                              )
+                          )
+                        ]
+                    )
                 ),
-                const SizedBox(height: TSizes.md,),
-                Text(
-                  'Here are the list of offers you have subscribed to:',
-                  style: Theme.of(context).textTheme.labelMedium,
+                const SizedBox(height: TSizes.defaultSpace,),
+                Container(
+                  width: THelperFunctions.screenWidth() * 0.68,
+                  child: RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelMedium,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: 'Here are the list of offers you have subscribed to:',
+                                style: TextStyle(
+                                    fontSize: 15
+                                )
+                            )
+                          ]
+                      )
+                  ),
                 ),
               ],
             ),

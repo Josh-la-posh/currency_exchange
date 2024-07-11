@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/features/profile/screens/bank_account/add_bank_account.dart';
-import 'package:swappr/features/withdrawals/widgets/account_widget.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/validators/validation.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/features/profile/screens/bank_account/add_bank_account.dart';
+import 'package:pouch/features/withdrawals/widgets/account_widget.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/validators/validation.dart';
 
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/layouts/list_layout.dart';
@@ -188,7 +188,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                                 ),
                                 children: const <TextSpan> [
                                   TextSpan(
-                                    text: 'Withdraw Money To',
+                                    text: 'Withdraw To',
                                   )
                                 ]
                             )
@@ -264,7 +264,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                 formKey.currentState!.save();
                 showModalBottomSheet(
                     backgroundColor: Color(0xFF4C3668),
-                    // isScrollControlled: true,
+                    isScrollControlled: true,
                     context: context,
                     builder: (ctx) => WithdrawalConfirmSheet(
                       amount: amount,

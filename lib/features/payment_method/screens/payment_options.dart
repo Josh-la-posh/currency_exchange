@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/payment_method/screens/bank_transfer.dart';
-import 'package:swappr/features/payment_method/screens/flutterwave_payment.dart';
-import 'package:swappr/features/payment_method/screens/paystack_payment.dart';
-import 'package:swappr/features/payment_method/screens/ussd_funding.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/payment_method/screens/bank_transfer.dart';
+import 'package:pouch/features/payment_method/screens/flutterwave_payment.dart';
+import 'package:pouch/features/payment_method/screens/paystack_payment.dart';
+import 'package:pouch/features/payment_method/screens/ussd_funding.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../data/modules/app_navigator.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
-import 'package:swappr/features/wallet/apis/api.dart';
-import 'package:swappr/features/wallet/models/get_bank_account.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/texts.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:pouch/features/wallet/apis/api.dart';
+import 'package:pouch/features/wallet/models/get_bank_account.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/texts.dart';
 
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';

@@ -1,14 +1,15 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:swappr/common/widgets/custom_time_line.dart';
-import 'package:swappr/common/widgets/divider.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/layouts/bottom_sheet_widget.dart';
-import 'package:swappr/utils/layouts/list_layout.dart';
+import 'package:pouch/common/widgets/custom_time_line.dart';
+import 'package:pouch/common/widgets/divider.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/layouts/bottom_sheet_widget.dart';
+import 'package:pouch/utils/layouts/list_layout.dart';
 
 import '../../../../utils/constants/sizes.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../icons/svg.dart';
 import '../models/transaction_entity.dart';
 
@@ -49,7 +50,7 @@ class TransactionDetails extends StatelessWidget {
                             style: Theme.of(context).textTheme.headlineLarge,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: item.rate == null ? '' : '${item.amount} ${item.debitedCurrency} --- ',
+                                  text: item.rate == null ? '' : '${THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount.toString())} ${item.debitedCurrency}  ',
                                   style: TextStyle(
                                       color: darkMode ? TColors.grey : TColors.textPrimaryO80
                                   )
@@ -57,12 +58,14 @@ class TransactionDetails extends StatelessWidget {
                             ]
                         )
                     ),
+                    if (item.rate != null)
+                    Image(image: AssetImage(TImages.handIcon), height: 25, color: TColors.primary,),
                     RichText(
                         text: TextSpan(
                             style: Theme.of(context).textTheme.headlineLarge,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: item.rate == null ? '${item.amount} ${item.creditedCurrency}' : '${THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount)} ${item.creditedCurrency}',
+                                  text: item.rate == null ? '${item.amount} ${item.creditedCurrency != null ? item.creditedCurrency : item.debitedCurrency}' : ' ${item.amount} ${item.creditedCurrency}',
                                   style: TextStyle(
                                       color: darkMode ? TColors.grey : TColors.textPrimaryO80
                                   )
@@ -79,7 +82,7 @@ class TransactionDetails extends StatelessWidget {
                         children: <TextSpan> [
                           TextSpan(
                               text: item.rate == null ? '${item.status}' : '${item.rate} ${item.creditedCurrency} // ${item.debitedCurrency}',
-                              style: TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary)
+                              style: TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary, fontWeight: FontWeight.w700)
                           ),
                         ]
                     )
@@ -101,8 +104,8 @@ class TransactionDetails extends StatelessWidget {
                               TextSpan(
                                   text: 'Source',
                                   style: TextStyle(
-                                    fontSize: TSizes.fontSize13,
-                                    height: 1.39
+                                    height: 1.39,
+                                    fontSize: 13
                                   )
                               ),
                             ]
@@ -127,7 +130,11 @@ class TransactionDetails extends StatelessWidget {
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: item.debitedWallet == null ? item.description : item.debitedWallet,
-                                            style: TextStyle(height: 1.34)
+                                            style: TextStyle(
+                                                fontSize: TSizes.fontSize12,
+                                                height: 1.39,
+                                                fontWeight: FontWeight.w700
+                                            )
                                         )
                                       ]
                                   )
@@ -204,8 +211,8 @@ class TransactionDetails extends StatelessWidget {
                               TextSpan(
                                   text: 'Destination',
                                   style: TextStyle(
-                                    fontSize: TSizes.fontSize13,
-                                    height: 1.39
+                                    fontSize: TSizes.fontSize12,
+                                    height: 1.39,
                                   )
                               ),
                             ]
@@ -230,7 +237,11 @@ class TransactionDetails extends StatelessWidget {
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: item.creditedWallet,
-                                            style: TextStyle(height: 1.34)
+                                            style: TextStyle(
+                                                fontSize: TSizes.fontSize12,
+                                                height: 1.39,
+                                                fontWeight: FontWeight.w700
+                                            )
                                         )
                                       ]
                                   )

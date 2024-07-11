@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/modules/background_task.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/features/transaction/apis/api.dart';
-import 'package:swappr/features/wallet/widgets/layout.dart';
-import 'package:swappr/features/wallet/widgets/wallet_dashboard.dart';
-import 'package:swappr/features/wallet/widgets/wallet_list.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/features/transaction/apis/api.dart';
+import 'package:pouch/features/wallet/widgets/layout.dart';
+import 'package:pouch/features/wallet/widgets/wallet_dashboard.dart';
+import 'package:pouch/features/wallet/widgets/wallet_list.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/auth_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
@@ -49,7 +49,6 @@ class _WalletDashboardScreenState extends State<WalletDashboardScreen> {
           currency: ''
       );
     }
-    print(walletProvider.showWalletLists);
     super.initState();
   }
 

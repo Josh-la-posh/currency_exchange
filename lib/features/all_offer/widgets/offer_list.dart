@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/utils/constants/enums.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -24,18 +24,26 @@ class OfferList extends StatelessWidget {
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5),
+      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 1.5),
       child: SizedBox(
         child: Column(
           children: [
             const SizedBox(height: TSizes.spaceBtwSections),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'All Offers',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
+              children: [RichText(
+                  text: TextSpan(
+                      style: Theme.of(context).textTheme.titleLarge,
+                      children: <TextSpan> [
+                        TextSpan(
+                            text: 'All Offers',
+                            style: const TextStyle(
+                              fontSize: 20
+                            )
+                        )
+                      ]
+                  )
+              ),
                 Row(
                   children: [
                     if (selectedCurrency != Currency.NGN && offerProvider.filterAll == false)

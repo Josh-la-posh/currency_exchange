@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:swappr/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/colors.dart';
 
 import '../configs/env_config.dart';
 

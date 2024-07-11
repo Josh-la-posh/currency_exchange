@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/data/modules/session_manager.dart';
+import 'package:pouch/data/modules/session_manager.dart';
 
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';

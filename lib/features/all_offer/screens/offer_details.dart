@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
@@ -84,7 +84,7 @@ class OfferDetailsScreen extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${item?.rate} ${item?.debitedCurrency} // ${item?.creditedCurrency}',
+                                        text: '${item?.rate} ${item?.creditedCurrency} // ${item?.debitedCurrency}',
                                         style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
                                     ),
                                   ]
@@ -190,7 +190,7 @@ class OfferDetailsScreen extends StatelessWidget {
                         isScrollControlled: true,
                         // enableDrag: false,
                         context: context,
-                        builder: (ctx) => NegotiationScreen(id: item!.id)
+                        builder: (ctx) => NegotiationScreen(id: item.id)
                     );
                   }, // Handle button press
                   child: const Text("I'm interested, but..."),

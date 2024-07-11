@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../common/styles/spacing_styles.dart';
 import '../../common/widgets/buttons/app_bar_widget.dart';

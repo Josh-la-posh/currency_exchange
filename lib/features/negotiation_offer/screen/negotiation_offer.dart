@@ -36,7 +36,6 @@ class _NegotiationOfferScreenState extends State<NegotiationOfferScreen> {
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    print(offerProvider.negotiationsOffers.length);
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
       body: SingleChildScrollView(

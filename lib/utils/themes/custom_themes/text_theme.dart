@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/constants/texts.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/constants/texts.dart';
 
 class TTextTheme {
   TTextTheme._();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/data/modules/dio.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/features/transaction/models/transaction_details_entity.dart';
-import 'package:swappr/features/transaction/models/transaction_entity.dart';
+import 'package:pouch/data/modules/dio.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/features/transaction/models/transaction_details_entity.dart';
+import 'package:pouch/features/transaction/models/transaction_entity.dart';
 
 
 class TransactionService {

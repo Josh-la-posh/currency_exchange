@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/verification/routes/names.dart';
-import 'package:swappr/features/verification/screens/country_select.dart';
-import 'package:swappr/features/verification/screens/identity_verification_type.dart';
-import 'package:swappr/features/verification/screens/verification_in_progress.dart';
-import 'package:swappr/features/verification/screens/verification_process.dart';
-import 'package:swappr/features/verification/screens/verify_page.dart';
-import 'package:swappr/features/verification/screens/verify_success.dart';
+import 'package:pouch/features/verification/routes/names.dart';
+import 'package:pouch/features/verification/screens/country_select.dart';
+import 'package:pouch/features/verification/screens/identity_verification_type.dart';
+import 'package:pouch/features/verification/screens/verification_in_progress.dart';
+import 'package:pouch/features/verification/screens/verification_process.dart';
+import 'package:pouch/features/verification/screens/verify_page.dart';
+import 'package:pouch/features/verification/screens/verify_success.dart';
 
 import '../screens/identity_verification.dart';
 

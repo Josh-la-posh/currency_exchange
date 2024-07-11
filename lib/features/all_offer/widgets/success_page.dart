@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/common/widgets/currencyWidget.dart';
+import 'package:pouch/common/widgets/currencyWidget.dart';
 import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../data/modules/app_navigator.dart';
@@ -31,7 +31,6 @@ class SuccessScreenWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const CurrencyWidget(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

@@ -1,19 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
-import 'package:swappr/common/widgets/divider.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/features/home/apis/api.dart';
-import 'package:swappr/features/home/icons/svg.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/enums.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/pricing_calculator.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/common/widgets/custom_shapes/currency_widget_with_back.dart';
+import 'package:pouch/common/widgets/divider.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/features/home/icons/svg.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/pricing_calculator.dart';
 
 import '../../../utils/helpers/helper_functions.dart';
 import '../apis/api.dart';
@@ -45,22 +43,44 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Review Details', style: Theme.of(context).textTheme.titleMedium,),
-                          const SizedBox(height: TSizes.spaceBtwSections,),
                           RichText(
                               text: TextSpan(
-                                  text: 'You are about to swap ',
+                                  style: Theme.of(context).textTheme.titleMedium,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: 'Review Details',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: TSizes.fontWeightMd,
+                                            color: TColors.textPrimaryO80
+                                        )
+                                    )
+                                  ]
+                              )
+                          ),
+                          const SizedBox(height: TSizes.spaceBtwSections / 1.7,),
+                          RichText(
+                              text: TextSpan(
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
+                                        text: 'You are about to swap ',
+                                        style: const TextStyle(
+                                            // fontSize: 16
+                                        )
+                                    ),
+                                    TextSpan(
                                         text: '${data.amount} ${getCurrencyName(data.debitedCurrency)}',
-                                        style: const TextStyle(fontWeight: TSizes.fontWeightLg)
+                                        style: const TextStyle(
+                                            fontWeight: TSizes.fontWeightLg,
+                                            fontSize: 16
+                                        )
                                     ),
                                     const TextSpan(
                                         text: ' for '
                                     ),
                                     TextSpan(
-                                        text: '${(data.amount * data.rate)} ${getCurrencyName(data.creditedCurrency)}',
+                                        text: '${(THelperFunctions.getStringMultiplication(data.amount.toString(), data.rate))} ${getCurrencyName(data.creditedCurrency)}',
                                         style: const TextStyle(fontWeight: TSizes.fontWeightLg)
                                     ),
                                   ]
@@ -78,12 +98,12 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                       child: RichText(
                           text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
+                              style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
                                     text: 'Offer Summary',
                                     style: TextStyle(
-                                        fontSize: TSizes.fontSize13,
+                                        // fontSize: TSizes.fontSize13,
                                         fontWeight: TSizes.fontWeightMd,
                                         color: TColors.textPrimaryO80
                                     )
@@ -103,22 +123,25 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             children: [
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'I have',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
+                                            // style: TextStyle(fontSize: TSizes.fontSize13)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: '${data.amount} ${getCurrencyName(data.debitedCurrency)}',
-                                            style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            style: const TextStyle(
+                                                // fontSize: TSizes.fontSize13,
+                                                fontWeight: TSizes.fontWeightLg
+                                            )
                                         )
                                       ]
                                   )
@@ -135,22 +158,25 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             children: [
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'I need',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
+                                            // style: TextStyle(fontSize: TSizes.fontSize13)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: getCurrencyName(data.creditedCurrency),
-                                            style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            style: const TextStyle(
+                                                // fontSize: TSizes.fontSize13,
+                                                fontWeight: TSizes.fontWeightLg
+                                            )
                                         )
                                       ]
                                   )
@@ -167,11 +193,11 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             children: [
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'Rate',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
+                                            // style: TextStyle(fontSize: TSizes.fontSize13)
                                         )
                                       ]
                                   )
@@ -180,11 +206,14 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                 children: [
                                   RichText(
                                       text: TextSpan(
-                                          style: Theme.of(context).textTheme.labelSmall,
+                                          style: Theme.of(context).textTheme.labelMedium,
                                           children: <TextSpan> [
                                             TextSpan(
                                                 text: '${data.rate} ${getCurrencyName(data.debitedCurrency)}',
-                                                style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                                style: const TextStyle(
+                                                    // fontSize: TSizes.fontSize13,
+                                                    fontWeight: TSizes.fontWeightLg
+                                                )
                                             )
                                           ]
                                       )
@@ -194,11 +223,14 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                   const SizedBox(width: TSizes.sm,),
                                   RichText(
                                       text: TextSpan(
-                                          style: Theme.of(context).textTheme.labelSmall,
+                                          style: Theme.of(context).textTheme.labelMedium,
                                           children: <TextSpan> [
                                             TextSpan(
-                                                text: '${data.rate * data.amount} ${getCurrencyName(data.creditedCurrency)}',
-                                                style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                                text: '${THelperFunctions.getStringMultiplication(data.rate, data.amount.toString())} ${getCurrencyName(data.creditedCurrency)}',
+                                                style: const TextStyle(
+                                                    // fontSize: TSizes.fontSize13,
+                                                    fontWeight: TSizes.fontWeightLg
+                                                )
                                             )
                                           ]
                                       )
@@ -217,23 +249,26 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             children: [
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'Expires in',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
+                                            // style: TextStyle(fontSize: TSizes.fontSize13)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: '${data.expireIn} hour',
                                             // text: '${difference.inHours}h ${difference.inMinutes % 60}m hour',
-                                            style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            style: const TextStyle(
+                                                // fontSize: TSizes.fontSize13,
+                                                fontWeight: TSizes.fontWeightLg
+                                            )
                                         )
                                       ]
                                   )
@@ -345,11 +380,11 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                 children: [
                                   RichText(
                                       text: TextSpan(
-                                          style: Theme.of(context).textTheme.labelSmall,
+                                          style: Theme.of(context).textTheme.labelMedium,
                                           children: const <TextSpan> [
                                             TextSpan(
                                                 text: 'Fee',
-                                                style: TextStyle(fontSize: TSizes.fontSize13)
+                                                // style: TextStyle(fontSize: TSizes.fontSize13)
                                             )
                                           ]
                                       )
@@ -361,11 +396,13 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: '${TPriceCalculator.calculateFee(getCurrencyName(data.debitedCurrency))} ${getCurrencyName(data.debitedCurrency)}',
-                                            style: const TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            style: const TextStyle(
+                                                // fontSize: TSizes.fontSize13,
+                                                fontWeight: TSizes.fontWeightLg)
                                         )
                                       ]
                                   )
@@ -388,7 +425,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     expireIn: data.expireIn
                                 );
                               },
-                              buttonText: 'Pay ${TPriceCalculator.calculateTotalPrice('${data.amount * data.rate}', getCurrencyName(data.debitedCurrency))} ${getCurrencyName(data.debitedCurrency)}'),
+                              buttonText: 'Pay ${TPriceCalculator.calculateTotalPrice('${THelperFunctions.getStringMultiplication(data.amount.toString(), data.rate)}', getCurrencyName(data.debitedCurrency))} ${getCurrencyName(data.debitedCurrency)}'),
                         ),
                         const SizedBox(height: TSizes.spaceBtwElements),
                         Row(
@@ -396,16 +433,22 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           children: [
                             NotiIcon(height: 15),
                             const SizedBox(width: TSizes.sm),
-                            RichText(
-                                text: TextSpan(
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                    children: const <TextSpan> [
-                                      TextSpan(
-                                          text: 'You will be fully refunded if your offer is not matched in 1hour',
-                                          style: TextStyle(fontSize: TSizes.fontSize11)
-                                      )
-                                    ]
-                                )
+                            SizedBox(
+                              width: THelperFunctions.screenWidth() * 0.6,
+                              child: FittedBox(
+                                fit: BoxFit.fill,
+                                child: RichText(
+                                    text: TextSpan(
+                                        style: Theme.of(context).textTheme.labelSmall,
+                                        children: const <TextSpan> [
+                                          TextSpan(
+                                              text: 'You will be fully refunded if your offer is not matched in 1hour',
+                                              style: TextStyle(fontSize: TSizes.fontSize11)
+                                          )
+                                        ]
+                                    )
+                                ),
+                              ),
                             ),
                           ],
                         ),

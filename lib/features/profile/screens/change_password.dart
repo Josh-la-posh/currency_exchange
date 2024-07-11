@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../utils/constants/colors.dart';

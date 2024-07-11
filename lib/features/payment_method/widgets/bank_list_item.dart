@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
-import 'package:swappr/features/wallet/models/bank_list.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:pouch/features/wallet/models/bank_list.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/sizes.dart';
 
 import '../../../utils/helpers/helper_functions.dart';
 

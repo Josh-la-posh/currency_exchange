@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:swappr/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/colors.dart';
 import 'loader.dart';
 
 class GlobalAppLoader extends StatelessWidget {

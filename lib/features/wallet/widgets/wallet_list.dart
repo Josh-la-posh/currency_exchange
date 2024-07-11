@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/utils/constants/enums.dart';
-import 'package:swappr/utils/constants/texts.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/constants/texts.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -27,7 +27,6 @@ class WalletList extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            print(walletProvider.walletCurrencies.last);
             walletProvider.setShowWalletList();
           },
           child: Container(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/features/all_offer/apis/api.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/layouts/app_layout.dart';
-import 'package:swappr/utils/shared/refresh_indicator/refresh_indicator.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/features/all_offer/apis/api.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/layouts/app_layout.dart';
+import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 
 import '../../../data/modules/app_navigator.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:swappr/features/splash/routes/names.dart';
-import 'package:swappr/utils/shared/error_boundary/error_boundary.dart';
-import 'package:swappr/utils/shared/loader/global_loader.dart';
-import 'package:swappr/utils/themes/theme.dart';
+import 'package:pouch/features/splash/routes/names.dart';
+import 'package:pouch/utils/shared/error_boundary/error_boundary.dart';
+import 'package:pouch/utils/shared/loader/global_loader.dart';
+import 'package:pouch/utils/themes/theme.dart';
 
 import 'data/modules/app_navigator.dart';
 import 'data/provider/root_provider.dart';
@@ -22,13 +22,13 @@ class MyApp extends StatelessWidget {
       app: ErrorBoundary(
         app: RootProvider(
           app: GetMaterialApp(
-            title: 'Swappr',
+            title: 'pouch',
 
             // CUSTOM THEME
 
             themeMode: ThemeMode.system,
             theme: TAppTheme.lightTheme,
-            darkTheme: TAppTheme.darkTheme,
+            // darkTheme: TAppTheme.darkTheme,
             initialRoute: SPLASH_SCREEN_ROUTE,
             routes: routes,
             navigatorKey: AppNavigator.instance.navigatorKey,

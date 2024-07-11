@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:swappr/features/subscription/models/subscribeEnity.dart';
-import 'package:swappr/features/subscription/models/subscription_details.dart';
-import 'package:swappr/utils/constants/enums.dart';
+import 'package:pouch/features/subscription/models/subscribeEnity.dart';
+import 'package:pouch/features/subscription/models/subscription_details.dart';
+import 'package:pouch/utils/constants/enums.dart';
 
 class SubscriptionProvider extends ChangeNotifier {
   SubscriptionDetailsEntity? _subscriptionDetails;

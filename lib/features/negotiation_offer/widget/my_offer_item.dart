@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/modules/background_task.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/features/all_offer/models/offer.dart';
-import 'package:swappr/features/negotiation_offer/screen/negotiation_accept_reject.dart';
-import 'package:swappr/features/negotiation_offer/widget/negotiation_list.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/features/all_offer/models/offer.dart';
+import 'package:pouch/features/negotiation_offer/screen/negotiation_accept_reject.dart';
+import 'package:pouch/features/negotiation_offer/widget/negotiation_list.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
@@ -97,11 +97,20 @@ class MyOfferItem extends StatelessWidget {
                         children: [
                           RichText(
                               text: TextSpan(
-                                  style: Theme.of(context).textTheme.labelSmall,
+                                  style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${item.amount} ${item.creditedCurrency}',
-                                        style: TextStyle(fontWeight: TSizes.fontWeightLg)
+                                        text: '${item.amount}',
+                                        style: TextStyle(
+                                            fontWeight: TSizes.fontWeightLg,
+                                        )
+                                    ),
+                                    TextSpan(
+                                        text: ' ${item.debitedCurrency}',
+                                        style: TextStyle(
+                                            fontWeight: TSizes.fontWeightLg,
+                                            fontSize: 13
+                                        )
                                     ),
                                   ]
                               )
@@ -131,11 +140,22 @@ class MyOfferItem extends StatelessWidget {
                     children: [
                       RichText(
                           text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
+                              style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${item.rate} ${item.debitedCurrency} // ${item.creditedCurrency} ',
-                                    style: TextStyle(color: TColors.primary)
+                                    text: '${item.rate}',
+                                    style: TextStyle(
+                                        color: TColors.primary,
+                                        fontWeight: FontWeight.w500
+                                    )
+                                ),
+                                TextSpan(
+                                    text: ' ${item.creditedCurrency} // ${item.debitedCurrency} ',
+                                    style: TextStyle(
+                                        color: TColors.primary,
+                                        fontSize: TSizes.fontSize12,
+                                        fontWeight: FontWeight.w500
+                                    )
                                 ),
                               ]
                           )
@@ -147,8 +167,9 @@ class MyOfferItem extends StatelessWidget {
                                 TextSpan(
                                     text: '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
                                     style: TextStyle(
-                                      color: darkMode ? TColors.white.withOpacity(0.5) : TColors.textPrimary.withOpacity(0.5),
+                                      color: darkMode ? TColors.white.withOpacity(0.8) : TColors.textPrimary.withOpacity(0.5),
                                       fontSize: TSizes.fontSize11,
+                                      fontWeight: FontWeight.w500
                                     )
                                 ),
                               ]

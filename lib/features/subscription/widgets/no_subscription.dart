@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 class NoSubscriptionScreen extends StatelessWidget {
   const NoSubscriptionScreen({super.key});

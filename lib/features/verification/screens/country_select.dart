@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/features/verification/screens/identity_verification_type.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/features/verification/screens/identity_verification_type.dart';
 
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';

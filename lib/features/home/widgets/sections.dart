@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/features/home/widgets/section_widget.dart';
-import 'package:swappr/features/negotiation_offer/screen/bid_and_offer.dart';
-import 'package:swappr/features/negotiation_offer/screen/negotiation_offer.dart';
-import 'package:swappr/features/payment_method/screens/payment_options.dart';
-import 'package:swappr/features/withdrawals/screens/withdrawal.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
+import 'package:pouch/features/home/widgets/section_widget.dart';
+import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
+import 'package:pouch/features/negotiation_offer/screen/negotiation_offer.dart';
+import 'package:pouch/features/payment_method/screens/payment_options.dart';
+import 'package:pouch/features/withdrawals/screens/withdrawal.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../all_offer/screens/all_offer.dart';
@@ -38,7 +38,7 @@ class LinkSectionWidget extends StatelessWidget {
                       Get.to(() => const AllOfferScreen());
                     },
                     darkMode: darkMode,
-                    title: 'All Offer',
+                    title: 'All Offers',
                     image: TImages.allOfferIcon
                 ),
                 const SizedBox(height: TSizes.xl),

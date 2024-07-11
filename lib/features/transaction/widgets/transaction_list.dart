@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/features/transaction/widgets/no_transaction.dart';
-import 'package:swappr/features/transaction/widgets/transaction_item.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/features/transaction/widgets/no_transaction.dart';
+import 'package:pouch/features/transaction/widgets/transaction_item.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../data/modules/background_task.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';

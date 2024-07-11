@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/authentication/screens/reset_password/widgets/forgot_password_form.dart';
-import 'package:swappr/utils/layouts/auth_layout.dart';
+import 'package:pouch/features/authentication/screens/reset_password/widgets/forgot_password_form.dart';
+import 'package:pouch/utils/layouts/auth_layout.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});

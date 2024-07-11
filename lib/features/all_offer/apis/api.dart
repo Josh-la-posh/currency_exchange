@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/data/modules/dio.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/features/all_offer/models/create_offer_response.dart';
-import 'package:swappr/features/all_offer/models/negotiate_offer_entity.dart';
-import 'package:swappr/features/all_offer/models/offer_details_entity.dart';
-import 'package:swappr/features/all_offer/routes/names.dart';
-import 'package:swappr/features/all_offer/screens/accept_offer_success_page.dart';
-import 'package:swappr/features/all_offer/screens/offer_details.dart';
-import 'package:swappr/utils/constants/enums.dart';
-import 'package:swappr/utils/responses/error_dialog.dart';
-import 'package:swappr/utils/responses/handleApiError.dart';
-import 'package:swappr/utils/shared/notification/snackbar.dart';
+import 'package:pouch/data/modules/dio.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/features/all_offer/models/create_offer_response.dart';
+import 'package:pouch/features/all_offer/models/negotiate_offer_entity.dart';
+import 'package:pouch/features/all_offer/models/offer_details_entity.dart';
+import 'package:pouch/features/all_offer/routes/names.dart';
+import 'package:pouch/features/all_offer/screens/accept_offer_success_page.dart';
+import 'package:pouch/features/all_offer/screens/offer_details.dart';
+import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/responses/error_dialog.dart';
+import 'package:pouch/utils/responses/handleApiError.dart';
+import 'package:pouch/utils/shared/notification/snackbar.dart';
 
 import '../../../data/modules/app_navigator.dart';
 import '../models/negotiate_offer_model.dart';
@@ -79,14 +79,14 @@ class OfferService {
     required String debitedCurrency,
     required String creditedCurrency,
     required int amount,
-    required int rate,
+    required String rate,
     required int expireIn,
   }) {
     _createOffer({
       "debitedCurrency": debitedCurrency,
       "creditedCurrency": creditedCurrency,
       "amount": amount,
-      "rate": rate,
+      "rate": int.parse(rate),
       "expireIn": expireIn
     }).then((response) async {
       var item = response.data;
@@ -116,6 +116,7 @@ class OfferService {
       AppNavigator.instance
           .removeAllNavigateToNavHandler(CREATE_SUCCESS_SCREEN);
     }).catchError((error) {
+      print(' error ${error.toString()}');
       handleShowCustomToast(message: handleApiFormatError(error));
     });
   }
@@ -132,7 +133,6 @@ class OfferService {
         id: id,
         data: {'negotiationAccepted': negotiationAccepted}
     ).then((response) async {
-      print(response.data);
       await getAllNegotiatedOOffers(offerProvider: offerProvider);
       await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
       onSuccess();
@@ -148,7 +148,8 @@ class OfferService {
     required String id,
     required int negotiatorRate,
     required int negotiatorAmount,
-    required OfferProvider offerProvider
+    required OfferProvider offerProvider,
+    required VoidCallback onSuccess
   }) {
     _negotiateOffer(
         id: id,
@@ -158,8 +159,14 @@ class OfferService {
     .then((response) async {
       await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
       await getAllNegotiatedOOffers(offerProvider: offerProvider);
-      AppNavigator.instance
-          .removeAllNavigateToNavHandler(CREATE_SUCCESS_SCREEN);
+      Future.delayed(
+          Duration(seconds: 2),
+              () => onSuccess()
+      );
+      Future.delayed(
+        Duration(seconds: 3),
+          () => handleShowCustomToast(message: 'Your bid has been created successfully!!!')
+      );
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
@@ -210,7 +217,6 @@ class OfferService {
         offerProvider.saveOfferDetails(offerDetails);
 
         var content = offerDetails.content;
-
 
         for (var item in content) {
           offers.add(OfferEntity(

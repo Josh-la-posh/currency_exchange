@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../utils/constants/sizes.dart';
 import '../../icons/svg.dart';
 
 class ProfileLinkWidget extends StatelessWidget {
@@ -25,15 +26,31 @@ class ProfileLinkWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 25,
-                width: 25,
+                height: 28,
+                width: 28,
                 child: Padding(
                   padding: const EdgeInsets.all(5.5),
                   child: icon,
                 ),
               ),
               const SizedBox(width: 10,),
-              Text(title, style: Theme.of(context).textTheme.labelMedium,)
+              FittedBox(
+                fit: BoxFit.fill,
+                child: RichText(
+                    text: TextSpan(
+                        style: Theme.of(context).textTheme.labelMedium,
+                        children: <TextSpan> [
+                          TextSpan(
+                              text: title,
+                              style: TextStyle(
+                                  fontSize: TSizes.fontSize16,
+                                  // fontWeight: FontWeight.w600
+                              )
+                          )
+                        ]
+                    )
+                ),
+              ),
             ],
           ),
           SizedBox(

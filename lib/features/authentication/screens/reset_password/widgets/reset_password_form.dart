@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/authentication/apis/api.dart';
-import 'package:swappr/features/authentication/models/password_model.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/validators/validation.dart';
+import 'package:pouch/features/authentication/apis/api.dart';
+import 'package:pouch/features/authentication/models/password_model.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
 import '../../../../../data/modules/app_navigator.dart';

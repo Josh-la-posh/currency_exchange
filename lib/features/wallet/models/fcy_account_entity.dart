@@ -1,4 +1,4 @@
-import 'package:swappr/features/transaction/models/transaction_entity.dart';
+import 'package:pouch/features/transaction/models/transaction_entity.dart';
 
 class GetFcyAccountEntity {
   final int currentPage;

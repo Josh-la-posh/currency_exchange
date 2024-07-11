@@ -6,12 +6,12 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:swappr/data/modules/app_navigator.dart';
-import 'package:swappr/features/authentication/routes/names.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/validators/validation.dart';
+import 'package:pouch/data/modules/app_navigator.dart';
+import 'package:pouch/features/authentication/routes/names.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/validators/validation.dart';
 import '../../../../../common/widgets/country_picker/country_picker.dart';
 import '../../../../../data/provider/auth_provider.dart';
 import '../../../../../utils/constants/colors.dart';
@@ -265,7 +265,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           }
                       ),
                       Text(
-                        'I understand Swappr Terms of Use',
+                        'I understand pouch Terms of Use',
                         style: Theme.of(context).textTheme.labelMedium,
                       )
                     ],

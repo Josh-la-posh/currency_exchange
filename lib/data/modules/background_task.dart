@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/data/modules/interceptor.dart';
-import 'package:swappr/data/provider/auth_provider.dart';
-import 'package:swappr/features/authentication/models/user_model.dart';
+import 'package:pouch/data/modules/interceptor.dart';
+import 'package:pouch/data/provider/auth_provider.dart';
+import 'package:pouch/features/authentication/models/user_model.dart';
 
 import '../../features/all_offer/models/negotiate_offer_entity.dart';
 import '../../features/all_offer/models/negotiate_offer_model.dart';
@@ -28,12 +28,6 @@ import '../provider/wallet_provider.dart';
 import 'dio.dart';
 
 final _apiService = AppInterceptor(showLoader: false).dio;
-
-// getUserProfileDetails(AuthProvider authProvider) {
-//   Future userProfileDetails(){
-//     return _apiService.get('');
-//   }
-// }
 
 handleBackgroundAppRequest({
   required UserModel user,
@@ -80,7 +74,7 @@ class NoLoaderService {
 
   Future _deleteOffer(String id) {return _apiService.delete('/offer/$id');}
 
-  Future _deleteBid(String id) {return _apiService.delete('');}
+  Future _deleteBid(String id) {return _apiService.delete('/offer/bid/$id');}
   
   
   // subscription service

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/negotiation_offer/screen/negotiation_accept_reject.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/negotiation_offer/screen/negotiation_accept_reject.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../data/modules/background_task.dart';
 import '../../../data/provider/offer_provider.dart';
@@ -95,11 +95,18 @@ class MyBidItem extends StatelessWidget {
                         children: [
                           RichText(
                               text: TextSpan(
-                                  style: Theme.of(context).textTheme.labelSmall,
+                                  style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${item.amount} ${item.creditedCurrency}',
+                                        text: '${item.negotiatorAmount}',
                                         style: TextStyle(fontWeight: TSizes.fontWeightLg)
+                                    ),
+                                    TextSpan(
+                                        text: ' ${item.debitedCurrency}',
+                                        style: TextStyle(
+                                            fontWeight: TSizes.fontWeightLg,
+                                            fontSize: 13
+                                        )
                                     ),
                                   ]
                               )
@@ -129,11 +136,22 @@ class MyBidItem extends StatelessWidget {
                     children: [
                       RichText(
                           text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
+                              style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${item.rate} ${item.debitedCurrency} // ${item.creditedCurrency} ',
-                                    style: TextStyle(color: TColors.primary)
+                                    text: '${item.negotiatorRate}',
+                                    style: TextStyle(
+                                        color: TColors.primary,
+                                        fontWeight: FontWeight.w500
+                                    )
+                                ),
+                                TextSpan(
+                                    text: ' ${item.creditedCurrency} // ${item.debitedCurrency} ',
+                                    style: TextStyle(
+                                        color: TColors.primary,
+                                        fontSize: TSizes.fontSize12,
+                                        fontWeight: FontWeight.w500
+                                    )
                                 ),
                               ]
                           )

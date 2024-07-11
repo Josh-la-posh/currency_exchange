@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/home/screens/home.dart';
-import 'package:swappr/features/profile/routes/names.dart';
-import 'package:swappr/features/profile/screens/profile.dart';
-import 'package:swappr/features/subscription/routes/names.dart';
-import 'package:swappr/features/subscription/screens/subscribe.dart';
-import 'package:swappr/features/transaction/routes/names.dart';
-import 'package:swappr/features/transaction/screens/history.dart';
+import 'package:pouch/features/home/screens/home.dart';
+import 'package:pouch/features/profile/routes/names.dart';
+import 'package:pouch/features/profile/screens/profile.dart';
+import 'package:pouch/features/subscription/routes/names.dart';
+import 'package:pouch/features/subscription/screens/subscribe.dart';
+import 'package:pouch/features/transaction/routes/names.dart';
+import 'package:pouch/features/transaction/screens/history.dart';
 
 import '../../features/home/routes/names.dart';
 import '../../features/wallet/routes/names.dart';

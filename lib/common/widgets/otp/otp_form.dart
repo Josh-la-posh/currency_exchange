@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/sizes.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/sizes.dart';
 
 class OtpForm extends StatelessWidget {
   const OtpForm({super.key});

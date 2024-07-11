@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:provider/provider.dart';
-import 'package:swappr/features/all_offer/models/create_offer_response.dart';
-import 'package:swappr/utils/constants/enums.dart';
+import 'package:pouch/features/all_offer/models/create_offer_response.dart';
+import 'package:pouch/utils/constants/enums.dart';
 
 import '../../features/all_offer/models/negotiate_offer_model.dart';
 import '../../features/all_offer/models/offer.dart';
@@ -24,7 +23,7 @@ class OfferProvider extends ChangeNotifier {
   Currency creditedCurrency = Currency.NGN;
   Currency debitedCurrency = Currency.NGN;
   int amount = 0;
-  int rate = 0;
+  String rate = '';
   int expireIn = 1;
   int negotiatorRate = 0;
   int negotiatorAmount = 0;
@@ -33,7 +32,7 @@ class OfferProvider extends ChangeNotifier {
   bool _filterAll = false;
 
   CreateOfferEntity _createOfferEntity = CreateOfferEntity(
-      debitedCurrency: Currency.NGN, creditedCurrency: Currency.NGN, amount: 0, rate: 0, expireIn: 1);
+      debitedCurrency: Currency.NGN, creditedCurrency: Currency.NGN, amount: 0, rate: '', expireIn: 1);
   CreateOfferEntity get createOfferEntity => _createOfferEntity;
 
   OfferDetailsEntity? get offerDetails => _offerDetails;
@@ -151,8 +150,8 @@ class OfferProvider extends ChangeNotifier {
   }
 
   void updateRate(String val) {
-    _createOfferEntity.rate = int.parse(val);
-    rate = int.parse(val);
+    _createOfferEntity.rate = val;
+    rate = val;
     notifyListeners();
   }
 
@@ -181,12 +180,12 @@ class OfferProvider extends ChangeNotifier {
     amount = 0;
     debitedCurrency = Currency.NGN;
     creditedCurrency = Currency.NGN;
-    rate = 0;
+    rate = '';
     expireIn = 1;
     _createOfferEntity.amount = 0;
     _createOfferEntity.creditedCurrency = Currency.NGN;
     _createOfferEntity.debitedCurrency = Currency.NGN;
-    _createOfferEntity.rate = 0;
+    _createOfferEntity.rate = '';
     _createOfferEntity.expireIn = 1;
   }
 
@@ -200,6 +199,7 @@ class OfferProvider extends ChangeNotifier {
     _offerResponse = null;
     _myOffers = [];
     _myBids = [];
+    _negotiationsOffers = [];
   }
 
 }

@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/features/all_offer/apis/api.dart';
-import 'package:swappr/features/home/screens/home.dart';
-import 'package:swappr/features/wallet/apis/api.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/features/all_offer/apis/api.dart';
+import 'package:pouch/features/home/screens/home.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../../all_offer/icons/svg.dart';
 import '../../all_offer/screens/all_offer.dart';
-import '../../all_offer/screens/offer_details.dart';
 
 class TrendingOffer extends StatelessWidget {
   final bool displayOffer;
@@ -124,7 +122,6 @@ class TrendingOffer extends StatelessWidget {
                       dense: true,
                       contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.md),
                       onTap: (){
-                        // Get.to(() => OfferDetailsScreen(item: item));
                         OfferService.instance.getOfferById(
                             offerProvider: offerProvider,
                             id: item.id,
@@ -143,8 +140,12 @@ class TrendingOffer extends StatelessWidget {
                                       style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: 'has: ${item.amount} ${item.debitedCurrency}',
-                                            style: const TextStyle(fontSize: TSizes.fontSize13)
+                                            text: 'has: ',
+                                            style: TextStyle(fontSize: 13)
+                                        ),
+                                        TextSpan(
+                                            text: '${item.amount} ${item.debitedCurrency}',
+                                            style: TextStyle(fontWeight: FontWeight.w500)
                                         ),
                                       ]
                                   )
@@ -155,10 +156,12 @@ class TrendingOffer extends StatelessWidget {
                                       style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: 'needs: ${item.creditedCurrency}',
-                                            style: const TextStyle(
-                                              fontSize: TSizes.fontSize13,
-                                            )
+                                            text: 'needs: ',
+                                            style: TextStyle(fontSize: 13)
+                                        ),
+                                        TextSpan(
+                                            text: '${item.creditedCurrency}',
+                                            style: TextStyle(fontWeight: FontWeight.w500)
                                         ),
                                       ]
                                   )
@@ -173,11 +176,12 @@ class TrendingOffer extends StatelessWidget {
                                       style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: '${item.rate} ${item.debitedCurrency} // ${item.creditedCurrency}',
-                                            style: const TextStyle(
-                                                fontSize: TSizes.fontSize13,
-                                                color: TColors.primary
-                                            )
+                                            text: '${item.rate}',
+                                            style: TextStyle(color: TColors.primary, fontWeight: FontWeight.w500)
+                                        ),
+                                        TextSpan(
+                                            text: ' ${item.creditedCurrency} // ${item.debitedCurrency}',
+                                            style: TextStyle(fontSize: TSizes.fontSize12, color: TColors.primary, fontWeight: FontWeight.w500)
                                         ),
                                       ]
                                   )
@@ -185,7 +189,10 @@ class TrendingOffer extends StatelessWidget {
                               const SizedBox(height: TSizes.md,),
                               Row(
                                 children: [
-                                  OfferEyeIcon(),
+                                  Icon(
+                                    Icons.visibility,
+                                    size: 15,
+                                  ),
                                   const SizedBox(width: TSizes.md,),
                                   RichText(
                                       text: TextSpan(
@@ -194,7 +201,7 @@ class TrendingOffer extends StatelessWidget {
                                             TextSpan(
                                                 text: '${item.views}',
                                                 style: TextStyle(
-                                                  color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimaryO80,
+                                                  color: darkMode ? TColors.white : TColors.textPrimaryO80,
                                                 )
                                             ),
                                           ]
@@ -206,7 +213,7 @@ class TrendingOffer extends StatelessWidget {
                                           style: Theme.of(context).textTheme.labelSmall,
                                           children: <TextSpan> [
                                             TextSpan(
-                                                text: '40 secs ago',
+                                                text: '${THelperFunctions.getTimeDifference(item.createdDate)} ago',
                                                 style: TextStyle(
                                                   color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
                                                 )

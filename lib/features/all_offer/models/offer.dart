@@ -1,4 +1,4 @@
-import 'package:swappr/utils/constants/enums.dart';
+import 'package:pouch/utils/constants/enums.dart';
 
 class OfferEntity {
   final String id;
@@ -61,7 +61,7 @@ class CreateOfferEntity {
   Currency debitedCurrency;
   Currency creditedCurrency;
   int amount;
-  int rate;
+  String rate;
   int expireIn;
 
   CreateOfferEntity({

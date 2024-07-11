@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
-import 'package:swappr/utils/layouts/bottom_sheet_widget.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:pouch/utils/layouts/bottom_sheet_widget.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/enums.dart';
 

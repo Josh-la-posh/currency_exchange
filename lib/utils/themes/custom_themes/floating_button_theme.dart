@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/colors.dart';
 
 class TFloatingButtonTheme {
   TFloatingButtonTheme._();

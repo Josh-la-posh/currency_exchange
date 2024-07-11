@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/features/transaction/screens/history.dart';
-import 'package:swappr/features/home/screens/home.dart';
-import 'package:swappr/features/profile/screens/profile.dart';
-import 'package:swappr/features/subscription/screens/subscribe.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
+import 'package:pouch/features/transaction/screens/history.dart';
+import 'package:pouch/features/home/screens/home.dart';
+import 'package:pouch/features/profile/screens/profile.dart';
+import 'package:pouch/features/subscription/screens/subscribe.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/sizes.dart';
 
 class NavigationMenu extends StatelessWidget {
   const NavigationMenu({super.key});

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/common/widgets/buttons/outlined_button.dart';
-import 'package:swappr/features/authentication/screens/login/login.dart';
-import 'package:swappr/features/authentication/screens/sign_up/sign_up.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/common/widgets/buttons/outlined_button.dart';
+import 'package:pouch/features/authentication/screens/login/login.dart';
+import 'package:pouch/features/authentication/screens/sign_up/sign_up.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 class OnboardingScreen extends StatelessWidget {
   const OnboardingScreen({super.key});
@@ -17,7 +17,7 @@ class OnboardingScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         height: THelperFunctions.screenHeight(),
-        padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.defaultSpace, top: TSizes.defaultSpace, bottom: TSizes.defaultSpace * 3),
+        padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.defaultSpace, top: TSizes.defaultSpace * 3, bottom: TSizes.defaultSpace * 3),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -32,7 +32,7 @@ class OnboardingScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineMedium,
                         children: const <TextSpan> [
                           TextSpan(
-                            text: 'Welcome to Pouch!',
+                            text: 'Welcome to pouch!',
                             style: TextStyle(
                               fontWeight: TSizes.fontWeightMd
                             )

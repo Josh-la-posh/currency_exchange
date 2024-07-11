@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/auth_provider.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
-import 'package:swappr/features/wallet/routes/names.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/data/provider/auth_provider.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:pouch/features/wallet/routes/names.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/transaction_provider.dart';
@@ -28,8 +28,6 @@ class FlutterwavePaymentScreen extends StatelessWidget {
     final darkMode = THelperFunctions.isDarkMode(context);
 
     final item = walletProvider.flutterwaveModel;
-    
-    print('items ${item?.account_expiration}}');
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/features/home/screens/home.dart';
-import 'package:swappr/features/verification/icons/svg.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/features/home/screens/home.dart';
+import 'package:pouch/features/verification/icons/svg.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 class VerificationInProgressScreen extends StatelessWidget {
   const VerificationInProgressScreen({super.key});

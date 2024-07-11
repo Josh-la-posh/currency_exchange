@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:swappr/features/transaction/models/transaction_details_entity.dart';
+import 'package:pouch/features/transaction/models/transaction_details_entity.dart';
 
 import '../../features/transaction/models/transaction_entity.dart';
 

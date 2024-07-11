@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/features/subscription/apis/api.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/enums.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/features/subscription/apis/api.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
 
 import '../../../data/provider/subscription_provider.dart';
 import '../../../utils/constants/sizes.dart';

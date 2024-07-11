@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/payment_method/widgets/bank_list_item.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/features/payment_method/widgets/bank_list_item.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';

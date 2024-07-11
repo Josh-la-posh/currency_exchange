@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/features/wallet/apis/api.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/validators/validation.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/features/wallet/apis/api.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/validators/validation.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/transaction_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
@@ -178,7 +178,6 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                   child: SizedBox(
                       width: 200,
                       child: TElevatedButton(onTap: (){
-                        // print(walletProvider.selectedNigBank);
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
                           WalletServices.instance.fundWalletNairaUssd(

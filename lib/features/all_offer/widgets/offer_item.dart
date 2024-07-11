@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/features/all_offer/apis/api.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/features/all_offer/apis/api.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
@@ -45,8 +45,12 @@ class OfferItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                                text: 'has: ${item.amount} ${item.debitedCurrency}',
-                                style: TextStyle(fontSize: TSizes.fontSize13)
+                                text: 'has: ',
+                                style: TextStyle(fontSize: 13)
+                            ),
+                            TextSpan(
+                                text: '${item.amount} ${item.debitedCurrency}',
+                                style: TextStyle(fontWeight: FontWeight.w500)
                             ),
                           ]
                       )
@@ -57,10 +61,12 @@ class OfferItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                                text: 'needs: ${item.creditedCurrency}',
-                                style: TextStyle(
-                                  fontSize: TSizes.fontSize13,
-                                )
+                                text: 'needs: ',
+                                style: TextStyle(fontSize: 13)
+                            ),
+                            TextSpan(
+                                text: '${item.creditedCurrency}',
+                                style: TextStyle(fontWeight: FontWeight.w500)
                             ),
                           ]
                       )
@@ -75,8 +81,12 @@ class OfferItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                                text: '${item.rate} ${item.debitedCurrency} // ${item.creditedCurrency}',
-                                style: TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
+                                text: '${item.rate}',
+                                style: TextStyle(color: TColors.primary, fontWeight: FontWeight.w500)
+                            ),
+                            TextSpan(
+                                text: ' ${item.creditedCurrency} // ${item.debitedCurrency}',
+                                style: TextStyle(fontSize: TSizes.fontSize12, color: TColors.primary, fontWeight: FontWeight.w500)
                             ),
                           ]
                       )
@@ -108,7 +118,7 @@ class OfferItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${THelperFunctions.getTimeDifference(item!.createdDate)} ago',
+                                    text: '${THelperFunctions.getTimeDifference(item.createdDate)} ago',
                                     style: TextStyle(
                                       color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
                                     )

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/profile/routes/names.dart';
-import 'package:swappr/features/profile/screens/bank_account/add_bank_account.dart';
-import 'package:swappr/features/profile/screens/change_password.dart';
-import 'package:swappr/features/profile/screens/profile.dart';
+import 'package:pouch/features/profile/routes/names.dart';
+import 'package:pouch/features/profile/screens/bank_account/add_bank_account.dart';
+import 'package:pouch/features/profile/screens/change_password.dart';
+import 'package:pouch/features/profile/screens/profile.dart';
 import '../../../data/routes/guard_route.dart';
 import '../screens/bank_account/bank_account.dart';
 

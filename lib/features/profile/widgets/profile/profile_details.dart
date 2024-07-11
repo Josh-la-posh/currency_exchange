@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../../data/provider/auth_provider.dart';
 import '../../../../utils/constants/colors.dart';
@@ -41,7 +41,10 @@ class ProfileDetailsScreen extends StatelessWidget {
                         children: <TextSpan> [
                           TextSpan(
                               text: THelperFunctions.getInitials(authProvider.user?.lastName, authProvider.user?.firstName),
-                              style: TextStyle(color: TColors.primary)
+                              style: TextStyle(
+                                  color: TColors.primary,
+                                  fontWeight: FontWeight.w700
+                              )
                           )
                         ]
                     )
@@ -58,7 +61,10 @@ class ProfileDetailsScreen extends StatelessWidget {
                         children: <TextSpan> [
                           TextSpan(
                               text: '${authProvider.user?.lastName} ${authProvider.user?.firstName}',
-                              style: TextStyle(fontWeight: TSizes.fontWeightMd)
+                              style: TextStyle(
+                                  fontWeight: TSizes.fontWeightMd,
+                                  fontSize: 16
+                              )
                           )
                         ]
                     )
@@ -69,7 +75,10 @@ class ProfileDetailsScreen extends StatelessWidget {
                         children: <TextSpan> [
                           TextSpan(
                               text: authProvider.user?.email,
-                              style: TextStyle(fontSize: TSizes.fontSize11)
+                              style: TextStyle(
+                                  fontSize: TSizes.fontSize11,
+                                fontWeight: FontWeight.w600
+                              )
                           )
                         ]
                     )
@@ -86,7 +95,7 @@ class ProfileDetailsScreen extends StatelessWidget {
               },
               child: const Row(
                 children: [
-                  Text('Verify', style: TextStyle(fontSize: TSizes.fontSize11, fontWeight: TSizes.fontWeightNm),),
+                  Text('Verify', style: TextStyle(fontSize: TSizes.fontSize12, fontWeight: TSizes.fontWeightMd),),
                   Icon(Icons.chevron_right, size: 16,)
                 ],
               )

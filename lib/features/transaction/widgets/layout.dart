@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/features/transaction/apis/api.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/layouts/app_layout.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/features/transaction/apis/api.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/layouts/app_layout.dart';
 
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/modules/background_task.dart';
@@ -28,9 +28,19 @@ class TransactionScreenLayout extends StatelessWidget {
       appbar: AppBar(
         titleSpacing: 30,
         automaticallyImplyLeading: false,
-        title: Text(
-          'Transaction History',
-          style: Theme.of(context).textTheme.titleLarge,
+        title:
+        RichText(
+            text: TextSpan(
+                style: Theme.of(context).textTheme.titleLarge,
+                children: <TextSpan> [
+                  TextSpan(
+                      text: 'Transaction History',
+                      style: TextStyle(
+                          fontSize: TSizes.fontSize20,
+                      )
+                  )
+                ]
+            )
         ),
         leading: null,
         // centerTitle: true,

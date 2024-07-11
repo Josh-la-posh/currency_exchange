@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:swappr/data/modules/app_navigator.dart';
-import 'package:swappr/data/modules/background_task.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/data/provider/subscription_provider.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/features/authentication/models/user_model.dart';
-import 'package:swappr/features/authentication/routes/names.dart';
-import 'package:swappr/features/home/routes/names.dart';
-import 'package:swappr/utils/loader.dart';
-import 'package:swappr/utils/local_storage/local_storage.dart';
-import 'package:swappr/utils/shared/notification/snackbar.dart';
+import 'package:pouch/data/modules/app_navigator.dart';
+import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/data/provider/subscription_provider.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/features/authentication/models/user_model.dart';
+import 'package:pouch/features/authentication/routes/names.dart';
+import 'package:pouch/features/home/routes/names.dart';
+import 'package:pouch/utils/loader.dart';
+import 'package:pouch/utils/local_storage/local_storage.dart';
+import 'package:pouch/utils/shared/notification/snackbar.dart';
 
 import '../../utils/constants/app.dart';
 import '../provider/auth_provider.dart';
@@ -58,7 +58,7 @@ class UserSession {
           offerProvider: offerProvider,
           subscriptionProvider: subscriptionProvider
       );
-      handleShowLoader();
+      // handleShowLoader();
       // Future.delayed(
       //   Duration(seconds: 1),
       //     () {
@@ -87,7 +87,7 @@ class UserSession {
     AppNavigator.instance.removeAllNavigateToNavHandler(AUTH_LOGIN_SCREEN_ROUTE);
     handleShowCustomToast(
         message: logoutMessage ??
-            '''You've successfully logged out of Pouch.
+            '''You've successfully logged out of pouch.
 We hope to see you again soon.''');
   }
 

@@ -1,5 +1,5 @@
 // currencies.dart
-import 'package:swappr/data/provider/wallet_provider.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
 
 enum WalletCurrency {
   NGN,

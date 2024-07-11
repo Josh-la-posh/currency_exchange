@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../features/all_offer/icons/svg.dart';
 import '../../utils/constants/sizes.dart';
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/widgets/buttons/app_bar.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/common/widgets/buttons/outlined_button.dart';
+import 'package:pouch/common/widgets/buttons/app_bar.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/common/widgets/buttons/outlined_button.dart';
 import '../../../../data/provider/wallet_provider.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
@@ -215,9 +215,6 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
                         walletProvider.saveBankAccountDetails(null);
                         _accountNumber = '';
                         walletProvider.setSelectedBank(null);
-                        print('bank account detail ${walletProvider.bankAccountDetails}');
-                        print('account number ${_accountNumber}');
-
                       });
                     },
                     buttonText: 'Cancel'

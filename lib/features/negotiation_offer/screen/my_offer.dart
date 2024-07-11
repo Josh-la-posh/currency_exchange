@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/modules/background_task.dart';
-import 'package:swappr/features/negotiation_offer/widget/my_offer_item.dart';
-import 'package:swappr/features/negotiation_offer/widget/no_negotiation.dart';
+import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/features/negotiation_offer/widget/my_offer_item.dart';
+import 'package:pouch/features/negotiation_offer/widget/no_negotiation.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/subscription/routes/names.dart';
-import 'package:swappr/features/subscription/screens/add_subscription.dart';
-import 'package:swappr/features/subscription/screens/subscribe.dart';
+import 'package:pouch/features/subscription/routes/names.dart';
+import 'package:pouch/features/subscription/screens/add_subscription.dart';
+import 'package:pouch/features/subscription/screens/subscribe.dart';
 import '../../../data/routes/guard_route.dart';
 
 // Map<String, WidgetBuilder> subscriptionRoutes = {

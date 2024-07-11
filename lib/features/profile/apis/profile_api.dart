@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/data/modules/dio.dart';
+import 'package:pouch/data/modules/dio.dart';
 
 class ProfileService {
   static final ProfileService _instance = ProfileService._();

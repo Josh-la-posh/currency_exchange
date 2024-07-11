@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/data/modules/app_navigator.dart';
-import 'package:swappr/data/modules/background_task.dart';
-import 'package:swappr/data/modules/dio.dart';
-import 'package:swappr/data/modules/session_manager.dart';
-import 'package:swappr/data/provider/auth_provider.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/data/provider/subscription_provider.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/data/provider/wallet_provider.dart';
-import 'package:swappr/features/authentication/models/user_model.dart';
-import 'package:swappr/features/home/routes/names.dart';
-import 'package:swappr/utils/shared/notification/snackbar.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/data/modules/app_navigator.dart';
+import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/data/modules/dio.dart';
+import 'package:pouch/data/modules/session_manager.dart';
+import 'package:pouch/data/provider/auth_provider.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/data/provider/subscription_provider.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:pouch/features/authentication/models/user_model.dart';
+import 'package:pouch/features/authentication/screens/add_details/add_address_detail.dart';
+import 'package:pouch/features/home/routes/names.dart';
+import 'package:pouch/utils/shared/notification/snackbar.dart';
+import '../../../data/modules/interceptor.dart';
 import '../../../utils/loader.dart';
 import '../../../utils/responses/error_dialog.dart';
 import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/responses/success_dialog.dart';
 import '../models/create_account_model.dart';
-
+final _apiService = AppInterceptor(showLoader: false).dio;
 class AuthService {
   static final AuthService _instance = AuthService._();
 
@@ -35,7 +39,11 @@ class AuthService {
   }
 
   Future _sendEmailOtpCode(Object data) {
-    return apiService.post('/users/generate-otp', data: data);
+    return _apiService.post('/users/generate-otp', data: data);
+  }
+
+  Future _emailVerificationOtp(Object data) {
+    return _apiService.post('/users/re-email-confirmation-otp', data: data);
   }
 
   Future _resetPassword(Object data) {
@@ -43,7 +51,7 @@ class AuthService {
   }
 
   Future _confirmEmailOtp(Object data) {
-    return apiService.post('/users/email-verification', data: data);
+    return _apiService.post('/users/email-verification', data: data);
   }
 
   Future _loginApi(Object data) async {
@@ -51,18 +59,24 @@ class AuthService {
     return response.data;
   }
 
+  Future _updateAddress(Object data) async{
+    return _apiService.post('/users/update-address', data: data);
+  }
+
 
   // Get requests
 
   Future _currentUserApi() async {
-    final response = await apiService.get('/users/current-user');
+    final response = await _apiService.get('/users/current-user');
     return response.data;
   }
 
   Future _confirmVerification() async {
-    final response = await apiService.get('/users/confirm-verification');
+    final response = await _apiService.get('/users/confirm-verification');
     return response.data;
   }
+
+
 
 
 
@@ -84,6 +98,41 @@ class AuthService {
     }).then((responseData) {
       print(responseData.data);
       onSuccess();
+    }).catchError((error) {
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+    });
+  }
+
+  updateAddress({
+    required String postCode,
+    required String address,
+    required String email,
+    required String password,
+    required AuthProvider authProvider,
+    required WalletProvider walletProvider,
+    required TransactionProvider transactionProvider,
+    required OfferProvider offerProvider,
+    required SubscriptionProvider subscriptionProvider,
+    required bool rememberMe,
+    required VoidCallback handleEmailNotVerified,
+    }) async {
+    _updateAddress({
+      'postCode': postCode,
+      'address': address,
+    }).then((responseData) async{
+      print(responseData.data);
+      await currentUser(
+          email: email,
+          password: password,
+          authProvider: authProvider,
+          walletProvider: walletProvider,
+          transactionProvider: transactionProvider,
+          offerProvider: offerProvider,
+          subscriptionProvider: subscriptionProvider,
+          rememberMe: rememberMe,
+          handleEmailNotVerified: handleEmailNotVerified
+      );
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
       // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
@@ -137,6 +186,7 @@ class AuthService {
           nin: responseData['nin'],
           country: responseData['country'],
           address: responseData['address'],
+          postCode: responseData['postCode'],
           state: responseData['state'],
           status: responseData['status'],
           phoneNumber: responseData['phoneNumber'],
@@ -170,7 +220,6 @@ class AuthService {
         authProvider.removeUser();
       } else {
         authProvider.saveUser(user);
-        // AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
         handleBackgroundAppRequest(
           user: user,
           authProvider: authProvider,
@@ -179,8 +228,8 @@ class AuthService {
           subscriptionProvider: subscriptionProvider,
           offerProvider: offerProvider
         );
-        handleShowLoader();
-        AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
+        // handleShowLoader();
+        AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
       }
 
     }).catchError((error) {
@@ -201,11 +250,26 @@ class AuthService {
 
   // generate otp
 
-  generateOtp(
-      {required String email,
-        required VoidCallback onSuccess,
-        VoidCallback? onFailure}) {
+  generateOtp({
+    required String email,
+    required VoidCallback onSuccess,
+    VoidCallback? onFailure}) {
     _sendEmailOtpCode({"email": email}).then((value) {
+      onSuccess();
+    }).catchError((error) {
+      if (onFailure != null) {
+        onFailure();
+      }
+      handleShowCustomToast(message: handleApiFormatError(error));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+    });
+  }
+
+  emailVerificationOtp({
+    required String email,
+    required VoidCallback onSuccess,
+    VoidCallback? onFailure}) {
+    _emailVerificationOtp({"email": email}).then((value) {
       onSuccess();
     }).catchError((error) {
       if (onFailure != null) {
@@ -243,9 +307,10 @@ class AuthService {
     });
   }
 
+
   // login flow
 
-  Future<LoginModal?> login({
+  login({
     required String email,
     required String password,
     required AuthProvider authProvider,
@@ -281,5 +346,38 @@ class AuthService {
       handleShowCustomToast(message: handleApiFormatError(error));
     });
   }
+
+  loginAfterEmailVerified({
+  required String email,
+    required String password,
+    required AuthProvider authProvider,
+    required WalletProvider walletProvider,
+    required TransactionProvider transactionProvider,
+    required OfferProvider offerProvider,
+    required SubscriptionProvider subscriptionProvider,
+    required bool rememberMe,
+    required VoidCallback handleEmailNotVerified,
+  }) async {
+    _loginApi({
+      'email': email.toLowerCase(),
+      'password': password,
+    }).then((responseData) async {
+      var token = responseData['access_token'];
+
+      if (responseData != null && token != '') {
+        UserSession.instance.setToken(token);
+        Get.to(() => AddAddressDetail(
+            email: email,
+            password: password,
+            rememberMe: rememberMe,
+        ));
+      }
+      return token;
+    }).catchError((error) {
+      handleShowCustomToast(message: handleApiFormatError(error));
+    });
+  }
+
+
 
 }

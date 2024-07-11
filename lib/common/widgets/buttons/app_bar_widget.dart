@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:swappr/utils/constants/sizes.dart';
+import 'package:pouch/utils/constants/sizes.dart';
 
 import '../../../utils/constants/colors.dart';
 

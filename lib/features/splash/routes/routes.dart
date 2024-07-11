@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/splash/screen/splash.dart';
+import 'package:pouch/features/splash/screen/splash.dart';
 import 'names.dart';
 
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/utils/constants/enums.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/utils/constants/enums.dart';
 
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../utils/constants/colors.dart';
@@ -34,7 +34,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('I have', style: Theme.of(context).textTheme.labelSmall,),
+                  Text('I have', style: Theme.of(context).textTheme.labelMedium,),
                   SizedBox(
                     child: TextFormField(
                       style: Theme.of(context).textTheme.labelMedium,
@@ -91,7 +91,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('I need', style: Theme.of(context).textTheme.labelSmall,),
+                  Text('I need', style: Theme.of(context).textTheme.labelMedium,),
                   TextFormField(
                     decoration: InputDecoration(
                       suffixIcon: DropdownButton<Currency>(
@@ -151,7 +151,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Preferred rate ${offerProvider.debitedCurrency != Currency.NGN ? '(per ${getCurrencyName(offerProvider.debitedCurrency)})' : ''}', style: Theme.of(context).textTheme.labelSmall,),
+                  Text('Preferred rate ${offerProvider.debitedCurrency != Currency.NGN ? '(per ${getCurrencyName(offerProvider.debitedCurrency)})' : ''}', style: Theme.of(context).textTheme.labelMedium,),
                   TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
                     validator: TValidator.numValidator,
@@ -165,11 +165,11 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            if (offerProvider.rate != 0)
+                            if (offerProvider.rate != '')
                             AppoxIcon(),
                             const SizedBox(width: TSizes.xl,),
-                            if (offerProvider.rate != 0)
-                            Text('${offerProvider.amount * offerProvider.rate} ${getCurrencyName(offerProvider.creditedCurrency)}', style: Theme.of(context).textTheme.bodyMedium,),
+                            if (offerProvider.rate != '')
+                            Text('${THelperFunctions.getStringMultiplication(offerProvider.amount.toString(), offerProvider.rate)} ${getCurrencyName(offerProvider.creditedCurrency)}', style: Theme.of(context).textTheme.bodyMedium,),
                           ],
                         ),
                       ),
@@ -181,7 +181,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Expires in', style: Theme.of(context).textTheme.labelSmall,),
+                  Text('Expires in', style: Theme.of(context).textTheme.labelMedium,),
                   TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
                     decoration: InputDecoration(
@@ -242,7 +242,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('You will be debited from', style: Theme.of(context).textTheme.labelSmall,),
+                  Text('You will be debited from', style: Theme.of(context).textTheme.labelMedium,),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     width: double.infinity,
@@ -265,7 +265,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('You will be credited to', style: Theme.of(context).textTheme.labelSmall,),
+                  Text('You will be credited to', style: Theme.of(context).textTheme.labelMedium,),
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                     width: double.infinity,

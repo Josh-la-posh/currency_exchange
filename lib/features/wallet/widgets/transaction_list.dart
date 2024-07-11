@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../data/provider/transaction_provider.dart';
 import '../../../utils/constants/colors.dart';
@@ -25,7 +25,7 @@ class WalletTransactionList extends StatelessWidget {
         itemBuilder: (_, index) {
           final item = provider.transactions[index];
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
             child: Column(
               children: [
                 Row(
@@ -50,12 +50,12 @@ class WalletTransactionList extends StatelessWidget {
                             if (item.rate != null)
                             RichText(
                                 text: TextSpan(
-                                    style: Theme.of(context).textTheme.bodySmall,
+                                    style: Theme.of(context).textTheme.bodyMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text:'${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount))} ${item.debitedCurrency} ',
+                                          text:'${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount.toString()))} ${item.debitedCurrency} ',
                                           style:  TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               fontWeight: TSizes.fontWeightMd,
                                               color: darkMode ? Colors.white : Colors.black
                                           )
@@ -67,12 +67,12 @@ class WalletTransactionList extends StatelessWidget {
                               Image(image: AssetImage(TImages.handIcon), height: 15,),
                             RichText(
                                 text: TextSpan(
-                                    style: Theme.of(context).textTheme.bodySmall,
+                                    style: Theme.of(context).textTheme.bodyMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text:'${THelperFunctions.moneyFormatter(item.amount)} ${item.creditedCurrency}',
+                                          text:'${THelperFunctions.moneyFormatter(item.amount.toString())} ${item.creditedCurrency != null ? item.creditedCurrency : item.debitedCurrency}',
                                           style:  TextStyle(
-                                              fontSize: 12,
+                                              fontSize: 13,
                                               fontWeight: TSizes.fontWeightMd,
                                               color: darkMode ? Colors.white : Colors.black
                                           )
@@ -110,9 +110,9 @@ class WalletTransactionList extends StatelessWidget {
                         ),
                         const SizedBox(height: 2,),
                         Text(
-                          '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
+                          '${THelperFunctions.getFormattedDate(item.createdDate.toString())}  ${THelperFunctions.getFormattedTime(item.createdDate.toString())}',
                           style: const TextStyle(
-                              fontSize: 9,
+                              fontSize: 10,
                               fontWeight: FontWeight.w700,
                               color: TColors.primary,
                               fontFamily: 'Roboto'

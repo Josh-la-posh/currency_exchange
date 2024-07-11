@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/features/authentication/apis/api.dart';
-import 'package:swappr/utils/constants/image_strings.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
-import 'package:swappr/utils/validators/validation.dart';
+import 'package:pouch/features/authentication/apis/api.dart';
+import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
 import '../../../../../data/modules/app_navigator.dart';
@@ -68,6 +68,7 @@ class _EmailVerificationFormState extends State<EmailVerificationForm> {
     if (widget.onSuccess == null) {
       setState(() {
         showEmailVerifiedSuccess = true;
+        handleLogin();
       });
     } else {
       widget.onSuccess!();
@@ -105,7 +106,7 @@ class _EmailVerificationFormState extends State<EmailVerificationForm> {
   }
 
   void handleSendEmailVerificationOTP() {
-    AuthService.instance.generateOtp(
+    AuthService.instance.emailVerificationOtp(
         email: widget.email,
         onSuccess: () {
           _otpTimer!.startTimer();
@@ -119,6 +120,25 @@ class _EmailVerificationFormState extends State<EmailVerificationForm> {
           });
       }
     );
+  }
+
+  void handleLogin() {
+    if (showEmailVerifiedSuccess == true) {
+      Future.delayed(
+        Duration(seconds: 2),
+          () => AuthService.instance.loginAfterEmailVerified(
+            email: widget.email,
+            password: widget.password,
+            authProvider: authProvider,
+            walletProvider: walletProvider,
+            transactionProvider: transactionProvider,
+            offerProvider: offerProvider,
+            subscriptionProvider: subscriptionProvider,
+            rememberMe: true,
+            handleEmailNotVerified: (){},
+          )
+      );
+    }
   }
 
   @override
@@ -212,14 +232,15 @@ class _EmailVerificationFormState extends State<EmailVerificationForm> {
           Image(image: AssetImage(TImages.success)),
           SizedBox(height: TSizes.spaceBtwElements,),
           Text(
-            'Your email has been verified successfully',
+            'Your email has been verified successfully, you\'ll be redirected to the address page in 5s',
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.labelMedium,
           ),
-          SizedBox(height: THelperFunctions.screenHeight() * 0.12),
+          SizedBox(height: THelperFunctions.screenHeight() * 0.4),
+
           TElevatedButton(
             onTap: () {
-              AuthService.instance.login(
+              AuthService.instance.loginAfterEmailVerified(
                   email: widget.email,
                   password: widget.password,
                   authProvider: authProvider,
@@ -228,7 +249,7 @@ class _EmailVerificationFormState extends State<EmailVerificationForm> {
                   offerProvider: offerProvider,
                   subscriptionProvider: subscriptionProvider,
                   rememberMe: true,
-                  handleEmailNotVerified: (){}
+                  handleEmailNotVerified: (){},
               );
               // AppNavigator.instance
               //     .navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:swappr/features/transaction/screens/history.dart';
-import 'package:swappr/features/wallet/widgets/transaction_list.dart';
+import 'package:pouch/features/transaction/screens/history.dart';
+import 'package:pouch/features/wallet/widgets/transaction_list.dart';
 import '../../../utils/constants/sizes.dart';
 
 class WalletTransactionHistory extends StatelessWidget {

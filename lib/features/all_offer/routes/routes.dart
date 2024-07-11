@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:swappr/features/negotiation_offer/screen/negotiation_offer.dart';
+import 'package:pouch/features/negotiation_offer/screen/negotiation_offer.dart';
 import '../../../data/routes/guard_route.dart';
 import '../../home/routes/names.dart';
 import '../screens/accept_review_details.dart';

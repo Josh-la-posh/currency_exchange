@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/data/provider/transaction_provider.dart';
-import 'package:swappr/features/wallet/apis/api.dart';
-import 'package:swappr/features/withdrawals/apis/api.dart';
-import 'package:swappr/features/withdrawals/screens/withdrawal_success.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:pouch/features/wallet/apis/api.dart';
+import 'package:pouch/features/withdrawals/apis/api.dart';
+import 'package:pouch/features/withdrawals/screens/withdrawal_success.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../data/provider/wallet_provider.dart';
 
@@ -65,7 +65,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                               style: TextStyle(
                                   color: darkMode ? Colors.black : Colors.white,
                                   fontWeight: FontWeight.w400,
-                                  fontSize: 18,
+                                  fontSize: 14,
                                   fontFamily: 'Roboto'
                               ),
                               children: const <TextSpan> [
@@ -82,7 +82,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                                 style: TextStyle(
                                     color: darkMode ? Colors.black : Colors.white,
                                     fontWeight: FontWeight.w400,
-                                    fontSize: 18,
+                                    fontSize: 14,
                                     fontFamily: 'Roboto'
                                 ),
                                 children: const <TextSpan> [
@@ -103,7 +103,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                           text: TextSpan(
                               style: TextStyle(
                                   color: darkMode ? Colors.black : Colors.white,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w700,
                                   fontSize: 20,
                                   fontFamily: 'Roboto'
                               ),
@@ -120,13 +120,20 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                             text: TextSpan(
                                 style: TextStyle(
                                     color: darkMode ? Colors.black : Colors.white,
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w700,
                                     fontSize: 18,
                                     fontFamily: 'Roboto'
                                 ),
                                 children: <TextSpan> [
                                   TextSpan(
-                                    text: '${provider.defaultWallet!.currency} Account',
+                                    text: '${provider.defaultWallet!.currency}',
+                                  ),
+                                  TextSpan(
+                                    text: ' Wallet',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400
+                                    )
                                   )
                                 ]
                             )

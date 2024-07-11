@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:swappr/common/styles/spacing_styles.dart';
-import 'package:swappr/common/widgets/buttons/elevated_button.dart';
-import 'package:swappr/common/widgets/custom_shapes/currency_widget_with_back.dart';
-import 'package:swappr/common/widgets/divider.dart';
-import 'package:swappr/data/provider/offer_provider.dart';
-import 'package:swappr/utils/constants/colors.dart';
-import 'package:swappr/utils/constants/sizes.dart';
-import 'package:swappr/utils/helpers/helper_functions.dart';
+import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/common/widgets/custom_shapes/currency_widget_with_back.dart';
+import 'package:pouch/common/widgets/divider.dart';
+import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/constants/sizes.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../apis/api.dart';
 import '../icons/svg.dart';
 import '../models/offer.dart';
@@ -52,21 +52,17 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${item?.amount} ',
+                                        text: '${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate)} ${item?.creditedCurrency} ',
                                         style: TextStyle(
                                             fontWeight: TSizes.fontWeightLg,
                                             color: TColors.golden
                                         )
                                     ),
                                     TextSpan(
-                                        text: ' ${item?.debitedCurrency} ',
-                                        style: TextStyle(fontWeight: TSizes.fontWeightLg)
-                                    ),
-                                    TextSpan(
                                         text: 'for '
                                     ),
                                     TextSpan(
-                                        text: '${item?.creditedCurrency}',
+                                        text: '${item?.amount} ${item?.debitedCurrency}',
                                         style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                     ),
                                   ]
@@ -112,18 +108,18 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'has',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
+                                            style: TextStyle(fontSize: TSizes.fontSize14)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: '${item?.amount} ${item?.debitedCurrency}',
-                                            style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                         )
                                       ]
                                   )
@@ -144,18 +140,18 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'needs',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
+                                            style: TextStyle(fontSize: TSizes.fontSize14)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
                                             text: '${item?.creditedCurrency}',
-                                            style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                         )
                                       ]
                                   )
@@ -176,18 +172,18 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: 'Rate',
-                                            style: TextStyle(fontSize: TSizes.fontSize13)
+                                            style: TextStyle(fontSize: TSizes.fontSize14)
                                         )
                                       ]
                                   )
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: '${item?.rate} ${item?.debitedCurrency} // ${item?.creditedCurrency}',
-                                            style: TextStyle(color: TColors.primary)
+                                            text: '${item?.rate} ${item?.creditedCurrency} // ${item?.debitedCurrency}',
+                                            style: TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
                                         )
                                       ]
                                   )
@@ -210,7 +206,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                           children: const <TextSpan> [
                                             TextSpan(
                                                 text: 'Fee',
-                                                style: TextStyle(fontSize: TSizes.fontSize13)
+                                                style: TextStyle(fontSize: TSizes.fontSize14)
                                             )
                                           ]
                                       )
@@ -221,11 +217,11 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                               ),
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
+                                      style: Theme.of(context).textTheme.labelMedium,
                                       children: const <TextSpan> [
                                         TextSpan(
                                             text: '5 GBP',
-                                            style: TextStyle(fontSize: TSizes.fontSize13, fontWeight: TSizes.fontWeightMd)
+                                            style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                         )
                                       ]
                                   )
@@ -275,7 +271,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                                     style: Theme.of(context).textTheme.labelMedium,
                                                     children:  <TextSpan> [
                                                       TextSpan(
-                                                          text: item?.debitedCurrency,
+                                                          text: item?.creditedCurrency,
                                                           style: TextStyle(
                                                             fontWeight: FontWeight.w800,
                                                             color: TColors.primary
@@ -340,7 +336,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                                     style: Theme.of(context).textTheme.labelMedium,
                                                     children:  <TextSpan> [
                                                       TextSpan(
-                                                          text: item?.creditedCurrency,
+                                                          text: item?.debitedCurrency,
                                                           style: TextStyle(
                                                               fontWeight: FontWeight.w800,
                                                               color: TColors.primary
@@ -358,7 +354,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                             style: Theme.of(context).textTheme.labelMedium,
                                             children:  <TextSpan> [
                                               TextSpan(
-                                                  text: item?.amount,
+                                                  text: item!.amount.toString(),
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.w800,
                                                       color: TColors.primary
@@ -383,7 +379,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                 amount: item!.amount.toString(),
                                 creditedCurrency: item!.creditedCurrency
                             );},
-                              buttonText: 'Pay ${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate)} ${item?.debitedCurrency}'),
+                              buttonText: 'Pay ${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate)} ${item?.creditedCurrency}'),
                         ),
                         const SizedBox(height: TSizes.spaceBtwSections ),
                       ],
