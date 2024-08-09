@@ -10,7 +10,7 @@ class NoOfferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: THelperFunctions.screenHeight() * 0.7 - 65,
+      height: THelperFunctions.screenHeight() * 0.5 - 65,
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -3,6 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:pouch/common/widgets/currencyWidget.dart';
+import 'package:pouch/features/home/widgets/app_drawer.dart';
+import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
+import 'package:pouch/features/negotiation_offer/screen/my_bid.dart';
+import 'package:pouch/features/negotiation_offer/screen/my_offer.dart';
+import 'package:pouch/features/profile/screens/profile.dart';
+import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
+import 'package:pouch/utils/shimmer/order_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/verify_your_account.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
@@ -58,6 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool displayBalance = false;
   bool displayOffer = false;
+  bool displayMyOffer = false;
+  bool displayMyBid = false;
 
   @override
   void initState() {
@@ -66,6 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
           walletProvider: walletProvider,
           transactionProvider: transactionProvider
       );
+      setState(() {
+        displayBalance = false;
+      });
       Future.delayed(
           Duration(seconds: 5),
               () => handleShowBalance()
@@ -83,20 +97,80 @@ class _HomeScreenState extends State<HomeScreen> {
     if (offerProvider.offers.isEmpty) {
       NoLoaderService.instance.getAllOffers(
           offerProvider: offerProvider,
-          currency: '',
-          date: ''
-      );
-      Future.delayed(
-          Duration(seconds: 5),
-              () => handleShowOffer()
-      );
-      Future.delayed(
-          Duration(seconds: 3),
-              () => fetchDefaultWallet
+          onSuccess: (){
+            Future.delayed(
+                Duration(seconds: 3),
+                    () => handleShowOffer()
+            );
+            Future.delayed(
+                Duration(seconds: 2),
+                    () => fetchDefaultWallet
+            );
+          },
+          onFailure: (){
+            setState(() {
+              displayOffer = true;
+            });
+          }
       );
     } else {
       setState(() {
         displayOffer = true;
+      });
+    }
+
+    if (offerProvider.myBids.isEmpty) {
+      NoLoaderService.instance.getMyBids(
+          offerProvider: offerProvider,
+          days: '', currency: '',
+          onSuccess: () {
+            Future.delayed(
+              Duration(seconds: 2),
+                () => setState(() {
+                  displayMyBid = true;
+                })
+            );
+          },
+          onFailure: () {
+            setState(() {
+              displayMyBid = true;
+            });
+          }
+      );
+      setState(() {
+        displayMyBid = false;
+      });
+    } else {
+      setState(() {
+        displayMyBid = true;
+      });
+    }
+
+    if (offerProvider.myOffers.isEmpty) {
+      NoLoaderService.instance.getMyOffers(
+          offerProvider: offerProvider,
+          days: '',
+          currency: '',
+          onFailure: (){
+            setState(() {
+              displayMyOffer = true;
+            });
+          },
+          onSuccess: (){
+            Future.delayed(
+                Duration(seconds: 2),
+                    () => setState(() {
+                  displayMyOffer = true;
+                })
+            );
+          }
+      );
+      setState(() {
+        displayMyOffer = false;
+      });
+    } else {
+      setState(() {
+        displayMyOffer = true;
       });
     }
 
@@ -106,6 +180,69 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
     super.initState();
+  }
+
+  Future<void> _refreshPage() async {
+    await NoLoaderService.instance.getDefaultWallet(
+        walletProvider: walletProvider,
+        transactionProvider: transactionProvider
+    );
+    await NoLoaderService.instance.getAllOffers(
+        offerProvider: offerProvider,
+        onFailure: (){
+          setState(() {
+            displayOffer = true;
+          });
+          },
+        onSuccess: (){
+          Future.delayed(
+            Duration(seconds: 2),
+              () => setState(() {
+                displayOffer = true;
+              })
+          );
+        }
+    );
+    setState(() {
+      displayOffer = false;
+    });
+    await NoLoaderService.instance.getMyOffers(
+        offerProvider: offerProvider,
+        days: '',
+        currency: '',
+        onFailure: (){
+          setState(() {
+            displayMyOffer = true;
+          });
+        },
+        onSuccess: (){
+          Future.delayed(
+              Duration(seconds: 2),
+                  () => setState(() {
+                displayMyOffer = true;
+              })
+          );
+        }
+    );
+    await NoLoaderService.instance.getMyBids(
+        offerProvider: offerProvider,
+        days: '',
+        currency: '',
+        onFailure: (){
+          setState(() {
+            displayMyBid = true;
+          });
+        },
+        onSuccess: (){
+          Future.delayed(
+              Duration(seconds: 2),
+                  () => setState(() {
+                displayMyBid = true;
+              })
+          );
+        }
+    );
+    await Future.delayed(const Duration(seconds: 2));
   }
 
   Future<void> fetchDefaultWallet()  async {
@@ -163,37 +300,217 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    return DashboardScreenLayout(
-      childWidget:SingleChildScrollView(
-        child: Column(
-            children: [
-              verifyProvider.showVerifyModal == true
-                  ? VerifyYourAccountWidget(
-                darkMode: darkMode,
-                onTap: () {
-                  setState(() {
-                    verifyProvider.showVerifyModal = !verifyProvider.showVerifyModal;
-                  });
-                },
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        backgroundColor: darkMode ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.01),
+        appBar: AppBar(
+          backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
+          leading: Builder(
+              builder: (context) => Padding(
+                padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+                child: IconButton(
+                    hoverColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    onPressed: () =>
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                                pageBuilder: (_, __, ___) => AppDrawerWidget(darkMode: darkMode),
+                                transitionDuration: Duration(milliseconds: 500) ,
+                                transitionsBuilder: (_, a, __, c) {
+                                  const begin = Offset(1.0, 0.0);
+                                  const end = Offset.zero;
+                                  const curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                  return SlideTransition(position: a.drive(tween), child: c,);
+                                }
+                            )
+                        ),
+                    icon: Icon(Icons.person_pin, color: TColors.primary, size: 35,)
+                ),
               )
-                  : SizedBox(height: 10),
-              HomeBalanceWidget(darkMode: darkMode, displayBalance: displayBalance,),
-              const SizedBox(height: TSizes.defaultSpace,),
-              LinkSectionWidget(darkMode: darkMode,),
-              const SizedBox(height: TSizes.defaultSpace,),
-              Container(
-                  height: 2,
-                  padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5, vertical: TSizes.lg),
-                  color: darkMode ? Colors.white.withOpacity(0.3) : Color(0xFFC88888).withOpacity(0.45)
-              ),
-              const SizedBox(height: TSizes.defaultSpace,),
-              TrendingOffer(
-                offerProvider: offerProvider,
-                darkMode: darkMode,
-                displayOffer: displayOffer,
-              )
-            ],
           ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: TSizes.defaultSpace),
+              child: Icon(Iconsax.notification4, size: 30,),
+            )
+          ],
+        ),
+        // drawer: AppDrawerWidget(darkMode: darkMode,),
+        body: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: darkMode ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.1),
+              )
+            )
+          ),
+          child: CustomRefreshIndicator(
+            onRefresh: _refreshPage,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    color: darkMode ? TColors.textPrimaryO40 : Colors.white,
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        verifyProvider.showVerifyModal == true
+                            ? VerifyYourAccountWidget(
+                          darkMode: darkMode,
+                          onTap: () {
+                            setState(() {
+                              verifyProvider.showVerifyModal = !verifyProvider.showVerifyModal;
+                            });
+                          },
+                        )
+                            : SizedBox(height: 10),
+                        HomeBalanceWidget(darkMode: darkMode, displayBalance: displayBalance,),
+                        LinkSectionWidget(darkMode: darkMode,),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    color: darkMode ? TColors.textPrimaryO40 : Colors.white,
+                    child: CurrencyWidget()
+                  ),
+                  const SizedBox(height: 8),
+
+                  Container(
+                    padding: EdgeInsets.only(top: 10),
+                    color: darkMode ? TColors.textPrimaryO40 : Colors.white,
+                    child: TabBar(
+                        isScrollable: true,
+                        indicatorColor: TColors.primary,
+                        labelColor: darkMode ? Colors.white : Colors.black,
+                        unselectedLabelColor: Colors.grey,
+                        dividerColor: darkMode ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.1),
+                        overlayColor: MaterialStatePropertyAll(Colors.transparent),
+                        tabAlignment: TabAlignment.start,
+                        labelStyle: TextStyle(
+                            fontSize: 16,
+                            fontWeight: TSizes.fontWeightMd,
+                            fontFamily: TTexts.fontFamily
+                        ),
+                        tabs: [
+                          Tab(text: 'Trending',),
+                          Tab(text: 'My Offers',),
+                          Tab(text: 'My Bids',)
+                        ]
+                    ),
+                  ),
+                  Container(
+                    color: darkMode ? TColors.textPrimaryO40 : Colors.white,
+                    padding: const EdgeInsets.only(bottom: 30.0),
+                    height: 360,
+                    child: TabBarView(
+                        children: [
+                          TrendingOffer(
+                            offerProvider: offerProvider,
+                            darkMode: darkMode,
+                            displayOffer: displayOffer,
+                          ),
+                          Column(
+                            children: [
+                              MyOfferScreen(darkMode: darkMode, length: '3', displayMyOffer: displayMyOffer,),
+                              if (offerProvider.myOffers.isNotEmpty)
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                hoverColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                // tileColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
+                                onTap: () {
+                                  Get.to(() => const MyBidAndOfferScreen());
+                                },
+                                title: Container(
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: darkMode ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.1),
+                                      )
+                                    )
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'More',
+                                        style: TextStyle(
+                                            color: darkMode ? Colors.white : Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: TSizes.fontWeightNm
+                                        ),),
+                                      SizedBox(width: 3),
+                                      Icon(
+                                        Icons.arrow_forward,
+                                        color: darkMode ? Colors.white : Colors.grey,
+                                        size: 15,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              MyBidScreen(darkMode: darkMode, length: '3', displayMyBids: displayMyBid,),
+                              if (offerProvider.myBids.isNotEmpty)
+                              ListTile(
+                                contentPadding: EdgeInsets.zero,
+                                hoverColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                // tileColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
+                                onTap: () {
+                                  Get.to(() => const MyBidAndOfferScreen());
+                                },
+                                title: Container(
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          top: BorderSide(
+                                            color: darkMode ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.1),
+                                          )
+                                      )
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'More',
+                                        style: TextStyle(
+                                            color: darkMode ? Colors.white : Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: TSizes.fontWeightNm
+                                        ),),
+                                      SizedBox(width: 3),
+                                      Icon(
+                                        Icons.arrow_forward,
+                                        color: darkMode ? Colors.white : Colors.grey,
+                                        size: 15,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ]
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

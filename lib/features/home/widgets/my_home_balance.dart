@@ -27,6 +27,7 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     final walletProvider = Provider.of<WalletProvider>(context);
     final transactionProvider = Provider.of<TransactionProvider>(context);
     final offerProvider = Provider.of<OfferProvider>(context);
@@ -35,7 +36,7 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
-            color: TColors.darkPurple,
+            color: Color(0xFF4B0082),
             // boxShadow: [
             //   BoxShadow(
             //       color: TColors.black.withOpacity(0.12),
@@ -67,7 +68,7 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                                 text:'My Balance',
                                 style: TextStyle(
                                     fontWeight: TSizes.fontWeightMd,
-                                    color: widget.darkMode ? TColors.grey : Colors.white
+                                    color: Colors.white
                                 )
                             ),
                           ]
@@ -83,8 +84,8 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                           });
                         },
                         icon: walletProvider.showWalletBalance == false
-                            ? Icon(Icons.visibility_off_outlined, color: widget.darkMode ? TColors.grey : Colors.white, size: 17,)
-                            : Icon(Icons.visibility_outlined, color: widget.darkMode ? TColors.grey : Colors.white, size: 17,)
+                            ? Icon(Icons.visibility_off_outlined, color: Colors.white, size: 17,)
+                            : Icon(Icons.visibility_outlined, color: Colors.white, size: 17,)
                     ),
                   ),
                 ],
@@ -102,11 +103,11 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                                     ? '---'
                                     : walletProvider.defaultWallet == null
                                     ? '---'
-                                    : '${walletProvider.showWalletBalance == false ? '*****' : THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString())}',
+                                    : '${walletProvider.showWalletBalance == false ? '*****' : THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString())} ',
                               style: TextStyle(
-                                  fontSize: 28,
+                                  fontSize: width > 400 ? 28 : 20,
                                   fontWeight: TSizes.fontWeightXl,
-                                  color: widget.darkMode ? TColors.grey : Colors.white
+                                  color: Colors.white
                               ),
                             ),
                           ]
@@ -126,7 +127,7 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: TSizes.fontWeightLg,
-                                  color: widget.darkMode ? TColors.grey : Colors.white
+                                  color: Colors.white
                               ),
                             ),
                           ]
@@ -136,7 +137,7 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                   IconButton(
                     onPressed: (){
                       NoLoaderService.instance.getDefaultWallet(walletProvider: walletProvider, transactionProvider: transactionProvider);
-                      NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, currency: '', date: '');
+                      NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
                       },
                     icon: Icon(Icons.refresh, size: 20, color: widget.darkMode ? Colors.white : Colors.white,),
                   ),

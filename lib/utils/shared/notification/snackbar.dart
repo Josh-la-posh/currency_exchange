@@ -9,6 +9,7 @@ handleShowCustomToast({
   Color? backgroundColor,
   Color textColor = Colors.white,
   String key = 'app-snackbar',
+  Duration? time,
   VoidCallback? onMessageTap,
 }) {
   ScaffoldMessenger.of(
@@ -22,7 +23,7 @@ handleShowCustomToast({
       dismissDirection: DismissDirection.up,
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.only(bottom: THelperFunctions.screenHeight() * 0.7, left: TSizes.defaultSpace, right: TSizes.defaultSpace),
-      duration: const Duration(seconds: 6),
+      duration: time ?? Duration(seconds: 6),
       padding: const EdgeInsets.all(0),
       backgroundColor: TColors.white,
       content: GestureDetector(

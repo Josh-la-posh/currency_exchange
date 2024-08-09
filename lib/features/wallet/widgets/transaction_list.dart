@@ -17,10 +17,12 @@ class WalletTransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     var provider = Provider.of<TransactionProvider>(context);
     return Container(
       child: ListView.builder(
         shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: provider.transactions.length > 3 ? 3 : provider.transactions.length,
         itemBuilder: (_, index) {
           final item = provider.transactions[index];
@@ -32,11 +34,10 @@ class WalletTransactionList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      height: 30,
-                      width: 30,
+                      height: width > 400 ? 30 : 20,
+                      width: width > 400 ? 30 : 20,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        // color: Color(0xFFDBC8C8).withOpacity(0.71),
                           borderRadius: BorderRadius.circular(30)
                       ),
                       child: const Image(image: AssetImage('assets/icons/wallet_transaction.png')),
@@ -55,7 +56,7 @@ class WalletTransactionList extends StatelessWidget {
                                       TextSpan(
                                           text:'${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount.toString()))} ${item.debitedCurrency} ',
                                           style:  TextStyle(
-                                              fontSize: 13,
+                                              fontSize: width > 400 ? 13 : 10,
                                               fontWeight: TSizes.fontWeightMd,
                                               color: darkMode ? Colors.white : Colors.black
                                           )
@@ -72,7 +73,7 @@ class WalletTransactionList extends StatelessWidget {
                                       TextSpan(
                                           text:'${THelperFunctions.moneyFormatter(item.amount.toString())} ${item.creditedCurrency != null ? item.creditedCurrency : item.debitedCurrency}',
                                           style:  TextStyle(
-                                              fontSize: 13,
+                                              fontSize: width > 400 ? 13 : 10,
                                               fontWeight: TSizes.fontWeightMd,
                                               color: darkMode ? Colors.white : Colors.black
                                           )
@@ -85,8 +86,8 @@ class WalletTransactionList extends StatelessWidget {
                         const SizedBox(height: 5,),
                         Text(
                           item.status.toString(),
-                          style: const TextStyle(
-                              fontSize: 10,
+                          style: TextStyle(
+                              fontSize: width > 400 ? 10 : 9,
                               fontWeight: FontWeight.w700,
                               color: TColors.primary,
                               fontFamily: 'Roboto'
@@ -100,9 +101,9 @@ class WalletTransactionList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          item.rate == null ? '' : '${item.rate.toString()} ${item.debitedCurrency} // ${item.creditedCurrency}',
-                          style: const TextStyle(
-                              fontSize: 12,
+                          item.rate == null ? '' : '${THelperFunctions.formatRate(item.rate.toString())} ${item.debitedCurrency} // ${item.creditedCurrency}',
+                          style: TextStyle(
+                              fontSize: width > 400 ? 12 : 10,
                               fontWeight: FontWeight.w500,
                               color: TColors.primary,
                               fontFamily: 'Roboto'
@@ -111,8 +112,8 @@ class WalletTransactionList extends StatelessWidget {
                         const SizedBox(height: 2,),
                         Text(
                           '${THelperFunctions.getFormattedDate(item.createdDate.toString())}  ${THelperFunctions.getFormattedTime(item.createdDate.toString())}',
-                          style: const TextStyle(
-                              fontSize: 10,
+                          style: TextStyle(
+                              fontSize: width > 400 ? 10 : 9,
                               fontWeight: FontWeight.w700,
                               color: TColors.primary,
                               fontFamily: 'Roboto'

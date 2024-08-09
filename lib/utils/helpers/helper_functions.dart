@@ -215,7 +215,7 @@ class THelperFunctions {
   static String getInitials(firstName, lastName) {
     String firstInitial = firstName[0];
     String lastInitial = lastName[0];
-    return '$firstInitial $lastInitial';
+    return '$firstInitial$lastInitial';
   }
 
   static void showDebugMessageInConsole(List<String> message) {
@@ -253,9 +253,18 @@ class THelperFunctions {
   }
 
   static String moneyFormatter(String amount) {
-    final formatter = NumberFormat("#,###");
+    final formatter = NumberFormat("#,##0.00");
     double money = double.parse(amount);
     String result = formatter.format(money);
     return result;
+  }
+
+  static String formatRate(String rate) {
+    String formattedRate = rate.toString();
+    if (formattedRate.contains('.')) {
+      formattedRate = formattedRate.replaceAll(RegExp(r'0*$'), ''); // Remove trailing zeros
+      formattedRate = formattedRate.replaceAll(RegExp(r'\.$'), ''); // Remove the trailing dot if any
+    }
+    return formattedRate;
   }
 }

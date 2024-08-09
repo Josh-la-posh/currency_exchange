@@ -5,9 +5,9 @@ class OfferEntity {
   final String debitedCurrency;
   final String creditedCurrency;
   String? amount;
-  final String rate;
-  final String expireIn;
-  final String expireCountDown;
+  String? rate;
+  String? expireIn;
+  String? expireCountDown;
   int? views;
   int? negotiatorRate;
   int? negotiatorAmount;
@@ -23,9 +23,9 @@ class OfferEntity {
     required this.debitedCurrency,
     required this.creditedCurrency,
     this.amount,
-    required this.rate,
-    required this.expireIn,
-    required this.expireCountDown,
+    this.rate,
+    this.expireIn,
+    this.expireCountDown,
     this.views,
     this.negotiatorRate,
     this.negotiatorAmount,
@@ -62,14 +62,14 @@ class CreateOfferEntity {
   Currency creditedCurrency;
   int amount;
   String rate;
-  int expireIn;
+  String? expireIn;
 
   CreateOfferEntity({
     required this.debitedCurrency,
     required this.creditedCurrency,
     required this.amount,
     required this.rate,
-    required this.expireIn,
+    this.expireIn,
   });
 
 }

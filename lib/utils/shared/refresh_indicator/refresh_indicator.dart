@@ -2,27 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:pouch/utils/constants/colors.dart';
 
 class CustomRefreshIndicator extends StatelessWidget {
-  final Widget childWidget;
+  final Widget child;
   final Future<void> Function() onRefresh;
-  final RefreshIndicatorTriggerMode triggerMode;
   const CustomRefreshIndicator({
     super.key,
-    required this.childWidget,
+    required this.child,
     required this.onRefresh,
-    this.triggerMode = RefreshIndicatorTriggerMode.anywhere,
   });
 
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     return RefreshIndicator(
-      backgroundColor: TColors.primary,
+      // backgroundColor: TColors.primary,
       color: TColors.primary,
-      displacement: screenHeight / 3,
-      strokeWidth: 3,
-      triggerMode: triggerMode,
+      displacement: 0,
+      edgeOffset: 0,
+      triggerMode: RefreshIndicatorTriggerMode.onEdge,
       onRefresh: onRefresh,
-      child: childWidget,
+      child: child,
     );
   }
 }

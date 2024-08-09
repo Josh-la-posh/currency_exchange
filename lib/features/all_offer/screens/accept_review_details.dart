@@ -10,6 +10,8 @@ import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
+import '../../../data/provider/transaction_provider.dart';
+import '../../../data/provider/wallet_provider.dart';
 import '../apis/api.dart';
 import '../icons/svg.dart';
 import '../models/offer.dart';
@@ -24,6 +26,8 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<OfferProvider>(context);
+    var transactionProvider = Provider.of<TransactionProvider>(context);
+    var walletProvider = Provider.of<WalletProvider>(context);
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       body: Padding(
@@ -52,7 +56,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate)} ${item?.creditedCurrency} ',
+                                        text: '${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString())} ${item?.creditedCurrency} ',
                                         style: TextStyle(
                                             fontWeight: TSizes.fontWeightLg,
                                             color: TColors.golden
@@ -182,7 +186,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                       style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: '${item?.rate} ${item?.creditedCurrency} // ${item?.debitedCurrency}',
+                                            text: '${THelperFunctions.formatRate(item!.rate.toString())} ${item?.creditedCurrency} // ${item?.debitedCurrency}',
                                             style: TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
                                         )
                                       ]
@@ -377,9 +381,11 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                 id: item!.id,
                                 offerProvider: provider,
                                 amount: item!.amount.toString(),
-                                creditedCurrency: item!.creditedCurrency
+                                creditedCurrency: item!.debitedCurrency,
+                                transactionProvider: transactionProvider,
+                                walletProvider: walletProvider
                             );},
-                              buttonText: 'Pay ${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate)} ${item?.creditedCurrency}'),
+                              buttonText: 'Pay ${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString())} ${item?.creditedCurrency}'),
                         ),
                         const SizedBox(height: TSizes.spaceBtwSections ),
                       ],

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,121 @@ import 'package:pouch/features/verification/screens/verification_process.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
+
+//
+// class VerificationPage extends StatefulWidget {
+//   @override
+//   State<VerificationPage> createState() => _VerificationPageState();
+// }
+//
+// class _VerificationPageState extends State<VerificationPage> {
+//
+//   @override initState() {
+//     super.initState();
+//     initPlatformState();
+//   }
+//
+//   Future<void> initPlatformState() async {
+//     if (!mounted) return;
+//     // SmileID.initialize();
+//     // SmileID.setCallbackUrl(callbackUrl: Uri.parse("https://4e8f-102-88-84-142.ngrok-free.app/api/users/webhook/smile"));
+//     SmileID.setEnvironment(useSandbox: true);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Smile ID Verification'),
+//       ),
+//       body: Center(
+//         child: Column(
+//           children: [
+//             // enhancedKycAsyncButton(),
+//             // documentVerificationButton(context),
+//             // enhancedDocumentVerificationButton(context),
+//             // smartSelfieEnrollmentButton(context),
+//             // smartSelfieAuthenticationButton(context),
+//             biometricKycButton(context)
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget biometricKycButton(BuildContext context) {
+//     return ElevatedButton(
+//       child: const Text("Biometric KYC"),
+//       onPressed: () {
+//         Navigator.of(context).push(
+//           MaterialPageRoute<void>(
+//             builder: (BuildContext context) => Scaffold(
+//               appBar: AppBar(
+//                 title: const Text('Smile ID'),
+//               ),
+//                 body: SmileIDBiometricKYC(
+//                   country: "NG",
+//                   idType: "NATIONAL_ID",
+//                   idNumber: "M6373848",
+//                   onSuccess: (String? result) {
+//                     print('I am working');
+//                     // Your success handling logic
+//                     Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
+//                     String formattedResult = jsonEncode(jsonResult);
+//                     final snackBar = SnackBar(content: Text("Success: $formattedResult"));
+//                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+//                     Navigator.of(context).pop();
+//                   },
+//                   onError: (String errorMessage) {
+//                     print('This is the new error $errorMessage');
+//                     // Your error handling logic
+//                     final snackBar = SnackBar(content: Text("Error: $errorMessage"));
+//                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+//                     Navigator.of(context).pop();
+//                   },
+//                 )),
+//           ),
+//         );
+//       },
+//     );
+//   }
+// }
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class VerificationPage extends StatelessWidget {
   const VerificationPage({super.key});

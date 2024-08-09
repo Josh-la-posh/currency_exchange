@@ -73,7 +73,7 @@ class TSizes {
   static const double spaceBtwInputFields = 16.0;
 
   // Bottom navigation height
-  static const double bottomNavBar = 66.0;
+  static const double bottomNavBar = 55.0;
 
   // Form Input Height
   static const double textInputFieldHeight = 48.0;

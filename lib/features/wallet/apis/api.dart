@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:ui';
 
+import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/data/modules/background_task.dart';
@@ -54,6 +55,10 @@ class WalletServices{
 
   Future _createFcy(Object data) {
     return apiService.post('/wallet/create/fcy', data: data);
+  }
+
+  Future _fundFcy(Object data) {
+    return apiService.post('/wallet/fund-fcy', data: data);
   }
 
   Future _fundWalletNairaPaystack(Object data) {
@@ -222,6 +227,25 @@ class WalletServices{
     });
   }
 
+  fundFcy({
+    required String currency,
+    required String amount,
+    required WalletProvider walletProvider,
+    required TransactionProvider transactionProvider,
+    required VoidCallback onSuccess
+  }) {
+    _fundFcy({
+      'amount': amount,
+      'currency': currency,
+    }).then((response) async {
+      print('fundFcy ${response.data}');
+      await NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
+      onSuccess();
+    }).catchError((error) {
+      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+    });
+  }
+
   fundWalletNairaPaystack({
     required WalletProvider walletProvider,
     required int amount,
@@ -313,7 +337,7 @@ class WalletServices{
 
   transferLocalBank({
     required String bankId,
-    required int amount,
+    required String amount,
     required String currency,
     required WalletProvider walletProvider,
     required TransactionProvider transactionProvider,
@@ -323,13 +347,13 @@ class WalletServices{
       'amount': amount
     }).then((response) async {
       var title = response.data['message'];
-      NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
+      await NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
       walletProvider.saveWithdrawalBank(null);
       Get.to(() => WithdrawalSuccessScreen(title: title,));
     }).catchError((error) {
-      print(error.toString());
+      print('withdrrwl error $error');
       // handleShowCustomToast(message: 'In progress ...');
-      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+      showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
 
@@ -380,7 +404,7 @@ class WalletServices{
       'amount': amount,
       'bankId': bankId
     }).then((response) async {
-      await getWallets(transactionProvider: transactionProvider,walletProvider: walletProvider, currency: currency);
+      await getWallets(transactionProvider: transactionProvider,walletProvider: walletProvider, currency: '');
       // Get.back();
       handleShowCustomToast(message: 'In progress ...');
     }).catchError((error) {

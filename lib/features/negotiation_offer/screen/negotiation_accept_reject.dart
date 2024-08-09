@@ -164,7 +164,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                                       style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: '${widget.item.negotiatorRate}',
+                                            text: THelperFunctions.formatRate(widget.item.negotiatorRate.toString()),
                                             style: TextStyle(
                                                 color: TColors.primary,
                                                 fontWeight: FontWeight.w500

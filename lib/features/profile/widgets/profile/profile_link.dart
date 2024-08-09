@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../icons/svg.dart';
 
@@ -16,27 +18,32 @@ class ProfileLinkWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 64,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 28,
-                width: 28,
-                child: Padding(
-                  padding: const EdgeInsets.all(5.5),
-                  child: icon,
+    final darkMode = THelperFunctions.isDarkMode(context);
+    return ListTile(
+      tileColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
+      hoverColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      onTap: onPressed,
+      contentPadding: EdgeInsets.only(left: TSizes.defaultSpace * 0.7, right: TSizes.defaultSpace * 0.7),
+      title: SizedBox(
+        height: 48,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 29,
+                  width: 29,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.5),
+                    child: icon,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10,),
-              FittedBox(
-                fit: BoxFit.fill,
-                child: RichText(
+                const SizedBox(width: 10,),
+                RichText(
                     text: TextSpan(
                         style: Theme.of(context).textTheme.labelMedium,
                         children: <TextSpan> [
@@ -50,15 +57,16 @@ class ProfileLinkWidget extends StatelessWidget {
                         ]
                     )
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-              height: 34,
-              width: 34,
-              child: IconButton(onPressed: onPressed, icon: IconRight())
-          )
-        ],
+              ],
+            ),
+            Spacer(),
+            SizedBox(
+                height: 15,
+                width: 15,
+                child: IconRight()
+            )
+          ],
+        ),
       ),
     );
   }

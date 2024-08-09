@@ -7,7 +7,8 @@ class SectionWidgetContainer extends StatelessWidget {
   final bool darkMode;
   final String title;
   final String image;
-  const SectionWidgetContainer({super.key, required this.onTap, required this.darkMode, required this.title, required this.image});
+  final Icon icon;
+  const SectionWidgetContainer({super.key, required this.onTap, required this.darkMode, required this.title, required this.image, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +23,9 @@ class SectionWidgetContainer extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40)
             ),
-            child: Image(image: AssetImage(image)),
+            // child: Image(image: AssetImage(image)),
+            child: icon,
           ),
-          const SizedBox(height: 7,),
           RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
@@ -33,8 +34,8 @@ class SectionWidgetContainer extends StatelessWidget {
                     TextSpan(
                         text: title,
                         style: TextStyle(
-                            fontWeight: TSizes.fontWeightMd,
-                            color: darkMode ? Colors.white.withOpacity(0.7) : TColors.textPrimary
+                            color: darkMode ? Colors.white : TColors.textPrimary,
+                            height: 1.2
                         )
                     ),
                   ]

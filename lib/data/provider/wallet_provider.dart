@@ -36,7 +36,9 @@ class WalletProvider extends ChangeNotifier {
   bool showBankTransferOption = false;
   bool showWalletBalance = true;
   Bank _selectedNigBank = Bank.GTB;
+  ForeignBank _selectedForeignCurrency = ForeignBank.USD;
   List<Bank> _nigBanks = Bank.values;
+  List<ForeignBank> _foreignCurrencies = ForeignBank.values;
 
   DefaultWalletModel? defaultWalletDetail;
 
@@ -64,7 +66,9 @@ class WalletProvider extends ChangeNotifier {
   UssdModel? get ussdModel => _ussdModel;
   VerifyBankAccountModel? get bankAccountDetails => _bankAccountDetails;
   Bank get selectedNigBank => _selectedNigBank;
+  ForeignBank get selectedForeignCurrency => _selectedForeignCurrency;
   List<Bank> get nigBanks => _nigBanks;
+  List<ForeignBank> get foreignCurrencies => _foreignCurrencies;
 
   DefaultWalletModel? get defaultWallet => defaultWalletDetail;
 
@@ -141,6 +145,10 @@ class WalletProvider extends ChangeNotifier {
     _selectedNigBank = bank;
     notifyListeners();
   }
+  void setSelectedForeignCurrency(ForeignBank bank) {
+    _selectedForeignCurrency = bank;
+    notifyListeners();
+  }
 
   void setSelectedWalletCurrency(WalletCurrency currency) {
     _selectedWalletCurrency = currency;
@@ -204,6 +212,7 @@ class WalletProvider extends ChangeNotifier {
     _ussdModel = null;
     _bankAccountDetails = null;
     _selectedNigBank = Bank.GTB;
+    _selectedForeignCurrency = ForeignBank.USD;
     defaultWalletDetail = null;
     _selectedWithdrawalAccount = null;
     _savedBankAccounts = [];

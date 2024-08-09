@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
 import 'package:pouch/features/authentication/routes/names.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
@@ -20,299 +18,270 @@ import '../../../apis/api.dart';
 import '../../email_verify/email_verify.dart';
 
 class SignUpForm extends StatefulWidget {
-  const SignUpForm({
-    super.key,
-  });
+  const SignUpForm({super.key});
 
   @override
   State<SignUpForm> createState() => _SignUpFormState();
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-
-  var authProvider = Provider.of<AuthProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false);
-
   final formKey = GlobalKey<FormState>();
-  bool _obscurePasswordText = true;
-  bool _obscureConPasswordText = true;
+  bool obscurePasswordText = true;
+  bool obscureConPasswordText = true;
 
-  // form input values
-  String _firstName = '';
-  String _lastName = '';
-  String _email = '';
-  String _phoneNo = '';
-  String _country = '';
-  String _address = '';
-  String _state = '';
-  String _password = '';
-  String _confirmPass = '';
-  bool _acceptTerms = false;
+  // Form input values
+  String firstName = '';
+  String lastName = '';
+  String email = '';
+  String phoneNo = '';
+  String password = '';
+  String confirmPass = '';
+  bool acceptTerms = false;
 
+  late AuthProvider authProvider;
 
+  @override
+  void initState() {
+    super.initState();
+    authProvider = Provider.of<AuthProvider>(
+        AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+        listen: false);
+  }
 
+  @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
+
     return Column(
       children: [
         Form(
           key: formKey,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               children: [
-                Row(
-                  children: [
-
-                    /// First Name
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('First Name', style: Theme.of(context).textTheme.labelMedium,),
-                          const SizedBox(height: TSizes.sm,),
-                          SizedBox(
-                            child: TextFormField(
-                              style: Theme.of(context).textTheme.labelMedium,
-                              onChanged: (value) => _firstName = value,
-                              validator: TValidator.validateName,
-                              onSaved: (value) {
-                                _firstName = value as String;
-                              },
-                              keyboardType: TextInputType.name,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: TSizes.md),
-
-                    /// Last Name
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Last Name', style: Theme.of(context).textTheme.labelMedium,),
-                          const SizedBox(height: TSizes.sm,),
-                          SizedBox(
-                            child: TextFormField(
-                              style: Theme.of(context).textTheme.labelMedium,
-                              onChanged: (value) => _lastName = value,
-                              validator: TValidator.validateName,
-                              onSaved: (value) {
-                                _lastName = value as String;
-                              },
-                              keyboardType: TextInputType.name,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                _buildNameFields(context),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                /// Email
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Email', style: Theme.of(context).textTheme.labelMedium,),
-                    const SizedBox(height: TSizes.sm,),
-                    SizedBox(
-                      child: TextFormField(
-                        style: Theme.of(context).textTheme.labelMedium,
-                        onChanged: (value) => _email = value,
-                        validator: TValidator.validateEmail,
-                        onSaved: (email) {
-                          _email = email as String;
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                    )
-                  ],
-                ),
+                _buildEmailField(context),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                /// Phone No
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Phone Number', style: Theme.of(context).textTheme.labelMedium,),
-                    const SizedBox(height: TSizes.sm,),
-                    IntlPhoneField(
-                      initialCountryCode: 'NG',
-                      style: Theme.of(context).textTheme.labelMedium,
-                      pickerDialogStyle: PickerDialogStyle(
-                        backgroundColor: TColors.secondaryBorder,
-                        countryNameStyle: Theme.of(context).textTheme.titleSmall,
-                        width: THelperFunctions.screenWidth(),
-                        padding: const EdgeInsets.symmetric(horizontal: TSizes.md, vertical: TSizes.defaultSpace * 2),
-                      ),
-                      onChanged: (value) => _phoneNo = value.completeNumber,
-                      onSaved: (value) {
-                        // print('I get $_phoneNo');
-                        _phoneNo = value!.completeNumber;
-                      },
-                      keyboardType: TextInputType.phone,
-                    ),
-                  ],
-                ),
+                _buildPhoneField(context),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                // CountryStateCityPicker(
-                //   country: countryCont,
-                //   state: stateCont,
-                //   city: cityCont,
-                //   dialogColor: TColors.secondaryBorder,
-                //   textFieldDecoration: InputDecoration(
-                //     contentPadding: const EdgeInsets.all(15),
-                //     fillColor: darkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
-                //     hintStyle: Theme.of(context).textTheme.labelMedium,
-                //     suffixIcon: const Icon(Icons.keyboard_arrow_down_rounded),
-                //     suffixIconColor: darkMode ? Colors.white: TColors.textPrimary.withOpacity(0.8),
-                //     // isDense: true,
-                //   ),
-                // ),
-                // const SizedBox(height: TSizes.spaceBtwInputFields),
-                //
-                // /// Address
-                // Column(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     Text('Address', style: Theme.of(context).textTheme.labelMedium,),
-                //     const SizedBox(height: TSizes.sm,),
-                //     SizedBox(
-                //       child: TextFormField(
-                //         validator: TValidator.emptyFieldValidator,
-                //         style: Theme.of(context).textTheme.labelMedium,
-                //         onChanged: (value) => _address = value,
-                //         onSaved: (value) {
-                //           _address = value as String;
-                //         },
-                //       ),
-                //     )
-                //   ],
-                // ),
-                // const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                /// Password
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Password', style: Theme.of(context).textTheme.labelMedium,),
-                    const SizedBox(height: TSizes.sm,),
-                    SizedBox(
-                      child: TextFormField(
-                        style: Theme.of(context).textTheme.labelMedium,
-                        onChanged: (pass) => _password = pass,
-                        validator: TValidator.validatePassword,
-                        onSaved: (pass) {
-                          _password = pass as String;
-                        },
-                        obscureText: _obscurePasswordText,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _obscurePasswordText = !_obscurePasswordText;
-                                });
-                              },
-                              icon: Icon(_obscurePasswordText ? Iconsax.eye_slash : Iconsax.eye)
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                _buildPasswordField(context),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Confirm Password', style: Theme.of(context).textTheme.labelMedium,),
-                    const SizedBox(height: TSizes.sm,),
-                    SizedBox(
-                      child: TextFormField(
-                        style: Theme.of(context).textTheme.labelMedium,
-                        onChanged: (pass) => _confirmPass = pass,
-                        validator: (value) => TValidator.validateConfirmPassword(value, _password),
-                        obscureText: _obscureConPasswordText,
-                        decoration: InputDecoration(
-                          suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _obscureConPasswordText = !_obscureConPasswordText;
-                                });
-                              },
-                              icon: Icon(_obscureConPasswordText ? Iconsax.eye_slash : Iconsax.eye)
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                _buildConfirmPasswordField(context),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
-
-                SizedBox(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Checkbox(
-                          value: _acceptTerms,
-                          onChanged: (value){
-                            setState(() {
-                              _acceptTerms = !_acceptTerms!;
-                            });
-                          }
-                      ),
-                      Text(
-                        'I understand pouch Terms of Use',
-                        style: Theme.of(context).textTheme.labelMedium,
-                      )
-                    ],
-                  ),
-                ),
-
+                _buildTermsAndConditions(),
                 const SizedBox(height: TSizes.spaceBtwElements),
-                _acceptTerms == false
-                    ? SizedBox(
-                  height: 48,
-                  child: ElevatedButton(
-                      onPressed: null,
-                    child: Center(child: Text('Sign Up'),),
-                  ),
-                )
-                    : TElevatedButton(
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {
-                        formKey.currentState!.save();
-                        AuthService.instance.createAccount(
-                            firstName: _firstName,
-                            lastName: _lastName,
-                            email: _email,
-                            phoneNumber: _phoneNo,
-                            // country: '',
-                            // address: '',
-                            // state: '',
-                            password: _password,
-                            onSuccess: () {
-                              Get.to(() => EmailVerificationScreen(email: _email, password: _password,));
-                            });
-                      }
-                }, buttonText: 'Sign Up')
+                _buildSubmitButton(context),
               ],
-            )
+            ),
+          ),
         ),
         const SizedBox(height: TSizes.spaceBtwInputFields),
-        Center(
-          child: TextButton(
-              onPressed: (){
-                AppNavigator.instance.navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);
-                // Get.to(() => const LoginScreen());
-                },
-              child: Text('Already signed up? Log In', style: Theme.of(context).textTheme.labelMedium,)
-          ),
-        )
+        _buildLoginLink(context),
       ],
+    );
+  }
+
+  Widget _buildNameFields(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildTextField(
+            context: context,
+            label: 'First Name',
+            onChanged: (value) => firstName = value,
+            validator: TValidator.validateName,
+          ),
+        ),
+        const SizedBox(width: TSizes.lg),
+        Expanded(
+          child: _buildTextField(
+            context: context,
+            label: 'Last Name',
+            onChanged: (value) => lastName = value,
+            validator: TValidator.validateName,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmailField(BuildContext context) {
+    return _buildTextField(
+      context: context,
+      label: 'Email',
+      onChanged: (value) => email = value,
+      validator: TValidator.validateEmail,
+      keyboardType: TextInputType.emailAddress,
+    );
+  }
+
+  Widget _buildPhoneField(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Phone Number', style: Theme.of(context).textTheme.labelMedium),
+        const SizedBox(height: TSizes.sm),
+        IntlPhoneField(
+          initialCountryCode: 'NG',
+          style: Theme.of(context).textTheme.labelMedium,
+          pickerDialogStyle: PickerDialogStyle(
+            backgroundColor: TColors.secondaryBorder,
+            countryNameStyle: Theme.of(context).textTheme.titleSmall,
+            width: THelperFunctions.screenWidth(),
+            padding: const EdgeInsets.symmetric(
+              horizontal: TSizes.md,
+              vertical: TSizes.defaultSpace * 2,
+            ),
+          ),
+          onChanged: (value) => phoneNo = value.completeNumber,
+          onSaved: (value) => phoneNo = value?.completeNumber ?? '',
+          keyboardType: TextInputType.phone,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPasswordField(BuildContext context) {
+    return _buildTextField(
+      context: context,
+      label: 'Password',
+      onChanged: (value) => password = value,
+      validator: TValidator.validatePassword,
+      obscureText: obscurePasswordText,
+      suffixIcon: _buildToggleVisibilityIcon(
+        obscureText: obscurePasswordText,
+        onPressed: () {
+          setState(() {
+            obscurePasswordText = !obscurePasswordText;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildConfirmPasswordField(BuildContext context) {
+    return _buildTextField(
+      context: context,
+      label: 'Confirm Password',
+      onChanged: (value) => confirmPass = value,
+      validator: (value) => TValidator.validateConfirmPassword(value, password),
+      obscureText: obscureConPasswordText,
+      suffixIcon: _buildToggleVisibilityIcon(
+        obscureText: obscureConPasswordText,
+        onPressed: () {
+          setState(() {
+            obscureConPasswordText = !obscureConPasswordText;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildTermsAndConditions() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Checkbox(
+          value: acceptTerms,
+          onChanged: (value) {
+            setState(() {
+              acceptTerms = value ?? false;
+            });
+          },
+        ),
+        Expanded(
+          child: Text(
+            'I understand pouch Terms of Use',
+            style: Theme.of(context).textTheme.labelMedium,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSubmitButton(BuildContext context) {
+    return SizedBox(
+      height: 48,
+      child: acceptTerms
+          ? TElevatedButton(
+        onTap: () {
+          if (formKey.currentState!.validate()) {
+            formKey.currentState!.save();
+            AuthService.instance.createAccount(
+              firstName: firstName,
+              lastName: lastName,
+              email: email,
+              phoneNumber: phoneNo,
+              password: password,
+              onSuccess: () {
+                Get.to(() => EmailVerificationScreen(
+                  email: email,
+                  password: password,
+                ));
+              },
+            );
+          }
+        },
+        buttonText: 'Sign Up',
+      )
+          : ElevatedButton(
+        onPressed: null,
+        child: Center(child: Text('Sign Up')),
+      ),
+    );
+  }
+
+  Widget _buildLoginLink(BuildContext context) {
+    return Center(
+      child: TextButton(
+        onPressed: () {
+          AppNavigator.instance.navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);
+        },
+        child: Text(
+          'Already signed up? Log In',
+          style: Theme.of(context).textTheme.labelMedium,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required BuildContext context,
+    required String label,
+    required Function(String) onChanged,
+    required String? Function(String?) validator,
+    TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
+    Widget? suffixIcon,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: Theme.of(context).textTheme.labelMedium),
+        const SizedBox(height: TSizes.sm),
+        SizedBox(
+          child: TextFormField(
+            style: Theme.of(context).textTheme.labelMedium,
+            onChanged: onChanged,
+            validator: validator,
+            keyboardType: keyboardType,
+            obscureText: obscureText,
+            decoration: InputDecoration(suffixIcon: suffixIcon),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildToggleVisibilityIcon({
+    required bool obscureText,
+    required VoidCallback onPressed,
+  }) {
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(obscureText ? Iconsax.eye_slash : Iconsax.eye),
     );
   }
 }

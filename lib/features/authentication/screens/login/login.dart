@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/features/authentication/screens/add_details/add_address_detail.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
 import 'package:pouch/data/modules/session_manager.dart';
@@ -49,8 +50,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
     UserSession.instance.isLoginBool().then((value) {
       if (value == true && authProvider.user != null) {
-        AppNavigator.instance
-            .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+        if (authProvider.user?.address == null) {
+          Get.to(() => AddAddressDetail(
+              email: _email.toString(),
+              password: _password.toString(),
+              rememberMe: _rememberMe
+          ));
+        } else {
+          AppNavigator.instance
+              .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+        }
       }
     });
     super.initState();

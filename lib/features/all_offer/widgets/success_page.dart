@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
+import 'package:pouch/features/home/routes/names.dart';
+import 'package:pouch/features/home/screens/home.dart';
 import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../data/modules/app_navigator.dart';
@@ -7,7 +10,7 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
-import '../routes/names.dart';
+import '../../../utils/layouts/navigation_menu.dart';
 
 
 class SuccessScreenWidget extends StatelessWidget {
@@ -23,6 +26,8 @@ class SuccessScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(NavigationController());
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Padding(
         padding: TSpacingStyle.homePadding,
         child: SizedBox(
@@ -37,15 +42,19 @@ class SuccessScreenWidget extends StatelessWidget {
                   SizedBox(height: THelperFunctions.screenHeight() * 0.05,),
                   const Image(image: AssetImage(TImages.success)),
                   const SizedBox(height: TSizes.spaceBtwElements,),
-                  Text(
-                    text,
-                    style: Theme.of(context).textTheme.labelMedium,
+                  SizedBox(
+                    width: THelperFunctions.screenWidth() * 0.8,
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      text,
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
                   ),
                   const SizedBox(height: TSizes.spaceBtwSections * 2,),
                   Container(
                       height: THelperFunctions.screenHeight() * 0.25,
-                      padding: const EdgeInsets.symmetric(vertical: TSizes.xl, horizontal: TSizes.lg),
-                      color: TColors.primaryBackground,
+                      padding: const EdgeInsets.symmetric(horizontal: TSizes.lg),
+                      color: darkMode ? Colors.grey.withOpacity(0.5) : TColors.primaryBackground,
                       child: child
                   ),
                   const SizedBox(height: TSizes.spaceBtwSections * 1.5,),
@@ -53,8 +62,9 @@ class SuccessScreenWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                     child: TElevatedButton(
                         onTap: onTap != null ? onTap : (){
+                          controller.selectedIndex.value = 1;
                           AppNavigator.instance
-                              .removeAllNavigateToNavHandler(ALL_OFFER_SCREEN_ROUTE);
+                              .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                           },
                         buttonText: 'Done'),
                   )

@@ -59,7 +59,7 @@ class TransactionScreenLayout extends StatelessWidget {
           onRefresh: () async {
             TransactionService.instance.getTransactions(transactionProvider: transactionProvider);
           },
-          childWidget: childWidget,
+          child: childWidget,
 
         ),
       ),

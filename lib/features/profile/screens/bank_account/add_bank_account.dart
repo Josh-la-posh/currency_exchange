@@ -48,7 +48,7 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
           ),
         ),
         title: Text(
-          'Add Bank Account',
+          ' Add Bank Account',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,

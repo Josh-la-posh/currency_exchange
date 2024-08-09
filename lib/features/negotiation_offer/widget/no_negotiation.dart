@@ -10,14 +10,15 @@ class NoNegotiationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return SizedBox(
-      height: THelperFunctions.screenHeight() * 0.5,
+      height: 300,
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Image(image: AssetImage(TImages.emptyScreen)),
+            Icon(Icons.file_open_outlined, color: darkMode ? Colors.white.withOpacity(0.7) : Colors.black, size: 60,),
             const SizedBox(height: TSizes.spaceBtwItems,),
             Text('No $title', style: Theme.of(context).textTheme.titleMedium,),
             SizedBox(height: THelperFunctions.screenHeight() * 0.02),

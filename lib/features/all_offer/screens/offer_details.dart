@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pouch/utils/constants/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
@@ -84,7 +85,7 @@ class OfferDetailsScreen extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${item?.rate} ${item?.creditedCurrency} // ${item?.debitedCurrency}',
+                                        text: '${THelperFunctions.formatRate(item!.rate.toString())} ${item.creditedCurrency} // ${item.debitedCurrency}',
                                         style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
                                     ),
                                   ]
@@ -96,7 +97,7 @@ class OfferDetailsScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: 'Created ${THelperFunctions.getTimeDifference(item!.createdDate)} ago',
+                                    text: 'Created ${THelperFunctions.getTimeDifference(item.createdDate)} ago',
                                 ),
                               ]
                             )
@@ -140,7 +141,7 @@ class OfferDetailsScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.labelSmall,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: 'This offer expires in ${item?.expireCountDown == null ? '' : THelperFunctions.millisecondConversion(item!.expireCountDown) ?? ''}',
+                                  text: 'This offer expires in ${item?.expireCountDown == null ? '' : THelperFunctions.millisecondConversion(item.expireCountDown.toString()) ?? ''}',
                                   style: TextStyle(
                                       color: TColors.textPrimaryO80
                                   )
@@ -190,7 +191,7 @@ class OfferDetailsScreen extends StatelessWidget {
                         isScrollControlled: true,
                         // enableDrag: false,
                         context: context,
-                        builder: (ctx) => NegotiationScreen(id: item.id)
+                        builder: (ctx) => NegotiationScreen(id: item.id, debitedCurrency: item.debitedCurrency, creditedCurrency: item.creditedCurrency)
                     );
                   }, // Handle button press
                   child: const Text("I'm interested, but..."),

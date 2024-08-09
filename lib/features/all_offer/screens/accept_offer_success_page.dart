@@ -14,6 +14,7 @@ class AcceptOfferSuccessPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
         body: SuccessScreenWidget(
           text: 'You have successfully being credited with ${amount} ${creditedCurrency}.',
@@ -32,7 +33,7 @@ class AcceptOfferSuccessPage extends StatelessWidget {
                             TextSpan(
                                 text: THelperFunctions.getFormattedTime(DateTime.now().toString()),
                                 style: TextStyle(
-                                    color: TColors.textPrimary.withOpacity(0.6),
+                                    color: darkMode ? Colors.white : TColors.textPrimary.withOpacity(0.6),
                                     height: 1.5
                                 )
                             ),

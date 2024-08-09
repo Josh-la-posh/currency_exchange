@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/data/modules/background_task.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/features/all_offer/apis/api.dart';
@@ -30,9 +31,16 @@ class OfferItem extends StatelessWidget {
         ListTile(
           hoverColor: Colors.transparent,
           dense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: TSizes.md),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
           onTap: (){
-            OfferService.instance.getOfferById(offerProvider: provider, id: item.id);
+            NoLoaderService.instance.getOfferById(
+                offerProvider: provider,
+                id: item.id,
+                onSuccess: (){
+                  Get.to(() => OfferDetailsScreen());
+                  },
+                onFailure: (){}
+            );
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +89,7 @@ class OfferItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                                text: '${item.rate}',
+                                text: THelperFunctions.formatRate(item.rate.toString()),
                                 style: TextStyle(color: TColors.primary, fontWeight: FontWeight.w500)
                             ),
                             TextSpan(
@@ -133,7 +141,7 @@ class OfferItem extends StatelessWidget {
             ],
           ),
         ),
-        const DividerWidget()
+        // const DividerWidget()
       ],
     );
   }

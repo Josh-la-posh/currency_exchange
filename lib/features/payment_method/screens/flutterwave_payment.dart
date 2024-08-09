@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/home/routes/names.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/provider/auth_provider.dart';
 import 'package:pouch/data/provider/wallet_provider.dart';
@@ -10,6 +12,7 @@ import '../../../data/provider/transaction_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../../utils/layouts/navigation_menu.dart';
 import '../../transaction/apis/api.dart';
 import '../../wallet/apis/api.dart';
 
@@ -27,6 +30,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
 
     final darkMode = THelperFunctions.isDarkMode(context);
 
+    final controller = Get.put(NavigationController());
     final item = walletProvider.flutterwaveModel;
     return Scaffold(
       appBar: AppBar(
@@ -279,9 +283,9 @@ class FlutterwavePaymentScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
               child: GestureDetector(
                 onTap: () async {
+                  controller.selectedIndex.value = 3;
+                  AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                   await WalletServices.instance.getDefaultWallet(transactionProvider: transactionProvider, walletProvider: walletProvider);
-
-                  AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
                 },
                 child: Container(
                   width: double.infinity,

@@ -92,3 +92,24 @@ String getBankName(Bank bank) {
 
   }
 }
+
+enum ForeignBank {
+  USD,
+  GBP,
+  CAD,
+  EUR,
+}
+
+String getForeignName(ForeignBank bank) {
+  switch (bank) {
+    case ForeignBank.EUR:
+      return 'EUR';
+    case ForeignBank.GBP:
+      return 'GBP';
+    case ForeignBank.CAD:
+      return 'CAD';
+    default:
+      return 'USD';
+
+  }
+}

@@ -28,9 +28,6 @@ class AppInterceptor extends Interceptor {
             RequestInterceptorHandler handler) async {
           if (showLoader) {
             handleShowLoader();
-            // Timer(Duration(seconds: 2), () {
-            //   handleHideLoader();
-            // });
           }
           requestOptions.cancelToken = cancelToken;
           final connectivityResult = await Connectivity().checkConnectivity();

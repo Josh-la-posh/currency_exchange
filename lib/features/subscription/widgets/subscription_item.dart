@@ -23,11 +23,12 @@ class SubscriptionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<SubscriptionProvider>(context);
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         Container(
           height: TSizes.textReviewHeight * 1.4,
-          color: TColors.secondaryBorder30,
+          color: darkMode ? TColors.textPrimaryO40 : Colors.white,
           // padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
           child: Slidable(
             key: ValueKey(item.id),
@@ -80,7 +81,7 @@ class SubscriptionItem extends StatelessWidget {
             ),
             child: ListTile(
               dense: true,
-              contentPadding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5, top: 0, bottom: 0, right: TSizes.defaultSpace / 1.5),
+              contentPadding: const EdgeInsets.only(left: TSizes.defaultSpace * 0.8, top: 0, bottom: 0, right: TSizes.defaultSpace * 0.8),
               title: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -93,7 +94,11 @@ class SubscriptionItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodyMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: 'has: ${item.debitedCurrency}',
+                                    text: 'has: ',
+                                    style: TextStyle(fontWeight: TSizes.fontWeightNm, fontSize: 13)
+                                ),
+                                TextSpan(
+                                    text: item.debitedCurrency,
                                     style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                 ),
                               ]
@@ -103,10 +108,14 @@ class SubscriptionItem extends StatelessWidget {
                         children: [
                           RichText(
                               text: TextSpan(
-                                  style: Theme.of(context).textTheme.labelMedium,
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${item.maxRate} ${item.debitedCurrency} // ${item.creditedCurrency}',
+                                        text: '${item.maxRate} ',
+                                        style: TextStyle(color: Color(0xFF5ABFE4))
+                                    ),
+                                    TextSpan(
+                                        text: '${item.debitedCurrency} // ${item.creditedCurrency}',
                                         style: TextStyle(fontSize: TSizes.fontSize12, color: Color(0xFF5ABFE4))
                                     ),
                                   ]
@@ -151,7 +160,11 @@ class SubscriptionItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.bodyMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: 'needs: ${item.creditedCurrency}',
+                                    text: 'needs: ',
+                                    style: TextStyle(fontWeight: TSizes.fontWeightNm, fontSize: 13)
+                                ),
+                                TextSpan(
+                                    text: item.creditedCurrency,
                                     style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                 ),
                               ]
@@ -164,10 +177,14 @@ class SubscriptionItem extends StatelessWidget {
                             children: [
                               RichText(
                                   text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelMedium,
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: '${item.minRate} ${item.debitedCurrency} // ${item.creditedCurrency}',
+                                            text: '${item.minRate} ',
+                                            style: TextStyle( color: TColors.primary)
+                                        ),
+                                        TextSpan(
+                                            text: '${item.debitedCurrency} // ${item.creditedCurrency}',
                                             style: TextStyle(fontSize: TSizes.fontSize12, color: TColors.primary)
                                         ),
                                       ]
@@ -199,17 +216,17 @@ class SubscriptionItem extends StatelessWidget {
                               )
                             ],
                           ),
-                          RichText(
-                              text: TextSpan(
-                                  style: Theme.of(context).textTheme.labelSmall,
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                        text: '${THelperFunctions.getFormattedDate(item.createdDate.toString())}  - ${THelperFunctions.getFormattedTime(item.createdDate.toString())}',
-                                        style: TextStyle(color: TColors.primary)
-                                    ),
-                                  ]
-                              )
-                          ),
+                          // RichText(
+                          //     text: TextSpan(
+                          //         style: Theme.of(context).textTheme.labelSmall,
+                          //         children: <TextSpan> [
+                          //           TextSpan(
+                          //               text: '${THelperFunctions.getFormattedDate(item.createdDate.toString())}  - ${THelperFunctions.getFormattedTime(item.createdDate.toString())}',
+                          //               style: TextStyle(color: TColors.primary)
+                          //           ),
+                          //         ]
+                          //     )
+                          // ),
                         ],
                       ),
                     ],
@@ -219,10 +236,7 @@ class SubscriptionItem extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          height: 3,
-          color: Color(0XFFD9D9D9),
-        )
+        SizedBox(height: 8,)
       ],
     );
   }

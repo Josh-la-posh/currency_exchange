@@ -37,7 +37,7 @@ class WalletScreenLayout extends StatelessWidget {
           onRefresh: () async {
             WalletServices.instance.getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: '');
           },
-          childWidget: childWidget,
+          child: childWidget,
 
         ),
       ),

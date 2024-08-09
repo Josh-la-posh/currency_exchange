@@ -195,10 +195,14 @@ class _AppLayoutState extends State<AppLayout>
           ],
         ),
         // drawer: AppDrawerWidget(),
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          controller: _scrollController,
-          child: widget.childWidget,
+        body: SafeArea(
+          child: Container(
+            child: SingleChildScrollView(
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              controller: _scrollController,
+              child: widget.childWidget,
+            ),
+          ),
         ),
         floatingActionButton: widget.floatingActionButton,
       ),

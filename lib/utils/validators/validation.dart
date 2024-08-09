@@ -177,13 +177,22 @@ class TValidator {
     if (double.parse(val) > (val2)) {
       return 'Amount can\'t be greater than available balance';
     }
+    if (double.parse(val) < 1) {
+      return 'Amount must not be less than 1';
+    }
     return null;
   }
-
 
   static String? bankValidator(Bank? bank) {
     if (bank == '') {
       return 'Please select your preferred bank';
+    }
+    return null;
+  }
+
+  static String? foreignBankValidator(ForeignBank? bank) {
+    if (bank == '') {
+      return 'Please select your preferred currency';
     }
     return null;
   }

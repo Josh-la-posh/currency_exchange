@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/features/all_offer/routes/names.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/features/home/routes/names.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/layouts/bottom_sheet_widget.dart';
@@ -12,13 +12,18 @@ import 'package:pouch/utils/validators/validation.dart';
 
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/offer_provider.dart';
+import '../../../utils/layouts/navigation_menu.dart';
 import '../apis/api.dart';
 
 class NegotiationScreen extends StatefulWidget {
   final String id;
+  final String debitedCurrency;
+  final String creditedCurrency;
   NegotiationScreen({
     super.key,
     required this.id,
+    required this.debitedCurrency,
+    required this.creditedCurrency,
   });
 
   @override
@@ -32,6 +37,7 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(NavigationController());
     final offerProvider = Provider.of<OfferProvider>(context);
     final provider = Provider.of<OfferProvider>(context);
     return  HalfBottomSheetWidget(
@@ -47,27 +53,41 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('I have', style: Theme.of(context).textTheme.labelMedium,),
-                    TextFormField(
-                      onChanged: (val) => provider.setNegotiatorAmount(val),
-                      onSaved: (val) {
-                        provider.setNegotiatorAmount(val!);
-                      },
-                        keyboardType: TextInputType.number,
-                        validator: TValidator.numValidator,
-                      style: Theme.of(context).textTheme.labelMedium
+                    Text('I need', style: Theme.of(context).textTheme.labelMedium,),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            onChanged: (val) => provider.setNegotiatorAmount(val),
+                            onSaved: (val) {
+                              provider.setNegotiatorAmount(val!);
+                            },
+                              keyboardType: TextInputType.number,
+                              validator: TValidator.numValidator,
+                            style: Theme.of(context).textTheme.labelMedium
+                          ),
+                        ),
+                        Text(widget.creditedCurrency, style: Theme.of(context).textTheme.labelMedium,)
+                      ],
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields,),
-                    Text('At', style: Theme.of(context).textTheme.labelMedium,),
+                    Text('At (Rate)', style: Theme.of(context).textTheme.labelMedium,),
                     SizedBox(
-                      child: TextFormField(
-                          onChanged: (val) => provider.setNegotiatorRate(val),
-                          onSaved: (val) {
-                            provider.setNegotiatorRate(val!);
-                          },
-                          validator: TValidator.numValidator,
-                          keyboardType: TextInputType.number,
-                          style: Theme.of(context).textTheme.labelMedium
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                                onChanged: (val) => provider.setNegotiatorRate(val),
+                                onSaved: (val) {
+                                  provider.setNegotiatorRate(val!);
+                                },
+                                validator: TValidator.numValidator,
+                                keyboardType: TextInputType.number,
+                                style: Theme.of(context).textTheme.labelMedium
+                            ),
+                          ),
+                          Text(widget.debitedCurrency, style: Theme.of(context).textTheme.labelMedium,),
+                        ],
                       ),
                     ),
                   ],
@@ -82,8 +102,9 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                             negotiatorAmount: provider.negotiatorAmount,
                             offerProvider: offerProvider,
                             onSuccess: () {
+                              controller.selectedIndex.value = 3;
                               AppNavigator.instance
-                                .removeAllNavigateToNavHandler(ALL_OFFER_SCREEN_ROUTE);
+                                .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                             }
                         );
                       }

@@ -14,7 +14,9 @@ class TListLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        padding: EdgeInsets.zero,
         itemCount: itemCount,
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: itemBuilder
     );

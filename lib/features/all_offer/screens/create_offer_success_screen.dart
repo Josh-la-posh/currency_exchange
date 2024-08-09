@@ -39,7 +39,7 @@ class CreateOfferSuccessPage extends StatelessWidget {
                                           ? 'Now'
                                           : THelperFunctions.getFormattedTime(provider.offerResponse!.createdDate),
                                 style: TextStyle(
-                                    color: TColors.textPrimary.withOpacity(0.6),
+                                    // color: TColors.textPrimary.withOpacity(0.6),
                                     height: 1.5
                                 )
                             ),

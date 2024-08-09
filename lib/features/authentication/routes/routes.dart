@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pouch/features/authentication/screens/add_details/add_address_detail.dart';
 import 'package:pouch/features/authentication/screens/reset_password/forgot_password.dart';
 import 'package:pouch/features/authentication/screens/onboarding/onboarding.dart';
 import '../screens/login/login.dart';

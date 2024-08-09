@@ -33,7 +33,7 @@ class AllOfferScreenLayout extends StatelessWidget {
           onRefresh: () async {
             OfferService.instance.getAllOffers(offerProvider: offerProvider, currency: '', date: '');
           },
-          childWidget: childWidget,
+          child: childWidget,
 
         ),
       ),

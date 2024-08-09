@@ -1,188 +1,196 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/data/modules/app_navigator.dart';
 import 'package:pouch/data/provider/auth_provider.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/data/provider/subscription_provider.dart';
 import 'package:pouch/data/provider/transaction_provider.dart';
 import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:pouch/features/authentication/apis/api.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../../common/widgets/buttons/elevated_button.dart';
-import '../../../../data/modules/app_navigator.dart';
-import '../../../../utils/validators/validation.dart';
-import '../../apis/api.dart';
+import 'package:pouch/utils/validators/validation.dart';
 
 class AddAddressDetail extends StatefulWidget {
   final String email;
   final String password;
   final bool rememberMe;
 
-  const AddAddressDetail({super.key, required this.email, required this.password, required this.rememberMe});
+  const AddAddressDetail({
+    Key? key,
+    required this.email,
+    required this.password,
+    required this.rememberMe,
+  }) : super(key: key);
 
   @override
-  State<AddAddressDetail> createState() => _AddAddressDetailState();
+  _AddAddressDetailState createState() => _AddAddressDetailState();
 }
 
 class _AddAddressDetailState extends State<AddAddressDetail> {
-
-  var authProvider = Provider.of<AuthProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false);
-
-  var walletProvider = Provider.of<WalletProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false);
-
-  var transactionProvider = Provider.of<TransactionProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false);
-
-  var offerProvider = Provider.of<OfferProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false);
-
-  var subscriptionProvider = Provider.of<SubscriptionProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false);
+  late final AuthProvider authProvider;
+  late final WalletProvider walletProvider;
+  late final TransactionProvider transactionProvider;
+  late final OfferProvider offerProvider;
+  late final SubscriptionProvider subscriptionProvider;
 
   final formKey = GlobalKey<FormState>();
   String postCode = '';
   String address = '';
+  bool isLoading = false;
 
-  // String _data = '';
-  // Future<void> getResponse(String POSTCODE) async {
-  //   final dio = Dio();
-  //   final url = 'https://maps.googleapis.com/maps/api/geocode/json?address={234001}&key=AIzaSyBECoO_1MmoGnwVN5zXmjIbaFCIME11fRQ';
-  //   try {
-  //     final response = await dio.get(url);
-  //     if (response.statusCode == 200) {
-  //       final data = response.data;
-  //       // setState(() {
-  //       //   _data = data;
-  //       // });
-  //       print(data);
-  //     } else {
-  //       print(response.statusCode);
-  //     }
-  //   } catch (error) {
-  //     print((error.toString()));
-  //     throw error;
-  //   }
-  // }
+  @override
+  void initState() {
+    super.initState();
+    final context = AppNavigator.instance.navigatorKey.currentContext!;
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
+    walletProvider = Provider.of<WalletProvider>(context, listen: false);
+    transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
+    offerProvider = Provider.of<OfferProvider>(context, listen: false);
+    subscriptionProvider = Provider.of<SubscriptionProvider>(context, listen: false);
+  }
+
+  Future<void> fetchAddressFromPostCode(String postCode) async {
+    setState(() => isLoading = true);
+    try {
+      final apiKey = 'AIzaSyBECoO_1MmoGnwVN5zXmjIbaFCIME11fRQ'; // Replace with your Google Maps API key
+      final url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$postCode&key=$apiKey';
+      final response = await Dio().get(url);
+
+      if (response.statusCode == 200) {
+        print('cjeclomh ${response.data}');
+        final results = response.data['results'];
+        if (results.isNotEmpty) {
+          final formattedAddress = results[0]['formatted_address'];
+          setState(() => address = formattedAddress);
+        } else {
+          setState(() => address = 'No address found');
+        }
+      } else {
+        setState(() => address = 'Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      setState(() => address = 'Failed to fetch address');
+    } finally {
+      setState(() => isLoading = false);
+    }
+  }
+
+  void _submitForm() {
+    // if (formKey.currentState!.validate()) {
+    //   formKey.currentState!.save();
+      AuthService.instance.updateAddress(
+        postCode: postCode,
+        address: 'University Rd',
+        email: widget.email,
+        password: widget.password,
+        authProvider: authProvider,
+        walletProvider: walletProvider,
+        transactionProvider: transactionProvider,
+        offerProvider: offerProvider,
+        subscriptionProvider: subscriptionProvider,
+        rememberMe: widget.rememberMe,
+        handleEmailNotVerified: () {},
+      );
+    // }
+  }
+
+  Widget _buildTextField({
+    required String label,
+    required String initialValue,
+    required FormFieldSetter<String> onSaved,
+    required FormFieldValidator<String> validator,
+    Widget? suffix,
+    TextInputType keyboardType = TextInputType.text,
+    bool obscureText = false,
+    bool isReadOnly = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: Theme.of(context).textTheme.labelMedium),
+        SizedBox(
+          child: TextFormField(
+            initialValue: initialValue,
+            style: Theme.of(context).textTheme.labelMedium,
+            keyboardType: keyboardType,
+            obscureText: obscureText,
+            readOnly: isReadOnly,
+            onChanged: onSaved,
+            validator: validator,
+            decoration: InputDecoration(
+              suffixIcon: suffix
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: THelperFunctions.screenHeight(),
-        padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 20),
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RichText(
-                text: TextSpan(
-                    style: Theme.of(context).textTheme.bodyLarge,
-                    children: <TextSpan> [
-                      TextSpan(
-                          text: 'Address Details',
-                          style: TextStyle(
-                              fontWeight: TSizes.fontWeightLg
-                          )
-                      )
-                    ]
-                )
-            ),
-            SizedBox(height: 30,),
-            RichText(
-                text: TextSpan(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.defaultSpace, top: 30, bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                  text: TextSpan(
+                    text: 'Address Details',
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: TSizes.fontWeightLg,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                RichText(
+                  text: TextSpan(
+                    text: 'Enter your address details',
                     style: Theme.of(context).textTheme.labelMedium,
-                    children: const <TextSpan> [
-                      TextSpan(
-                          text: 'Enter your address details',
-                      )
-                    ]
-                )
-            ),
-            SizedBox(height: 20,),
-            Form(
-              key: formKey,
-              child: Column(
-                children: [
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Post Code', style: Theme.of(context).textTheme.labelMedium,),
-                      SizedBox(
-                        child: TextFormField(
-                          style: Theme.of(context).textTheme.labelMedium,
-                          onChanged: (val) => postCode = val,
-                          keyboardType: TextInputType.number,
-                          validator: TValidator.emptyFieldValidator,
-                          onSaved: (val) {
-                            setState(() {
-                              postCode = val as String;
-                            });
-                          },
-                          decoration: const InputDecoration(
-                          ),
-                        ),
-                      )
-                    ],
                   ),
-                  SizedBox(height: 20,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Address', style: Theme.of(context).textTheme.labelMedium,),
-                      SizedBox(
-                        child: TextFormField(
-                          style: Theme.of(context).textTheme.labelMedium,
-                          onChanged: (val) => address = val,
-                          validator: TValidator.emptyFieldValidator,
-                          onSaved: (val) {
-                            setState(() {
-                              address = val as String;
-                            });
-                          },
-                          decoration: const InputDecoration(
-                          ),
-                        ),
-                      )
-                    ],
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  label: 'Post Code',
+                  initialValue: postCode,
+                  suffix: IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      if (postCode.isNotEmpty) {
+                        fetchAddressFromPostCode(postCode);
+                      }
+                    },
                   ),
-                  SizedBox(height: TSizes.defaultSpace * 3),
+                  onSaved: (val) {
+                    postCode = val!;
+                  },
+                  validator: TValidator.emptyFieldValidator,
+                  keyboardType: TextInputType.number,
+                ),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  label: 'Address',
+                  initialValue: address,
+                  onSaved: (val) => address = val!,
+                  validator: TValidator.emptyFieldValidator,
+                  isReadOnly: true,
+                ),
+                const SizedBox(height: TSizes.defaultSpace * 3),
+                if (isLoading) CircularProgressIndicator(),
+                if (!isLoading)
                   TElevatedButton(
-                      onTap: (){
-                        if (formKey.currentState!.validate()) {
-                          formKey.currentState!.save();
-                          AuthService.instance.updateAddress(
-                              postCode: postCode,
-                              address: address,
-                              email: widget.email,
-                              password: widget.password,
-                              authProvider: authProvider,
-                              walletProvider: walletProvider,
-                              transactionProvider: transactionProvider,
-                              offerProvider: offerProvider,
-                              subscriptionProvider: subscriptionProvider,
-                              rememberMe: widget.rememberMe,
-                              handleEmailNotVerified: (){}
-                          );
-                        }
-                        // getResponse('230011');
-
-
-                      },
-                      buttonText: 'Submit'
-                  )
-                ],
-              ),
-            )
-          ],
+                    onTap: _submitForm,
+                    buttonText: 'Submit',
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

@@ -92,7 +92,7 @@ class AuthService {
     _createAccount({
       'firstName': firstName,
       'lastName': lastName,
-      'email': email.toLowerCase(),
+      'email': email.toLowerCase().trim(),
       'phoneNumber': phoneNumber,
       'password': password,
     }).then((responseData) {
@@ -117,13 +117,14 @@ class AuthService {
     required bool rememberMe,
     required VoidCallback handleEmailNotVerified,
     }) async {
+    handleShowCustomToast(message: 'Uploading data ...');
     _updateAddress({
       'postCode': postCode,
       'address': address,
     }).then((responseData) async{
       print(responseData.data);
       await currentUser(
-          email: email,
+          email: email.toLowerCase().trim(),
           password: password,
           authProvider: authProvider,
           walletProvider: walletProvider,
@@ -203,7 +204,7 @@ class AuthService {
 
       if (rememberMe) {
         UserSession.instance.setRememberMeHandler(
-            email: email,
+            email: email.toLowerCase().trim(),
             password: password,
             enabled: true
         );
@@ -229,7 +230,15 @@ class AuthService {
           offerProvider: offerProvider
         );
         // handleShowLoader();
-        AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+        if (authProvider.user?.address == null) {
+          Get.to(() => AddAddressDetail(
+              email: email.toLowerCase().trim(),
+              password: password,
+              rememberMe: rememberMe
+          ));
+        } else {
+          AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+        }
       }
 
     }).catchError((error) {
@@ -254,7 +263,8 @@ class AuthService {
     required String email,
     required VoidCallback onSuccess,
     VoidCallback? onFailure}) {
-    _sendEmailOtpCode({"email": email}).then((value) {
+    handleShowCustomToast(message: 'Sending OTP ...');
+    _sendEmailOtpCode({"email": email.toLowerCase().trim()}).then((value) {
       onSuccess();
     }).catchError((error) {
       if (onFailure != null) {
@@ -269,7 +279,7 @@ class AuthService {
     required String email,
     required VoidCallback onSuccess,
     VoidCallback? onFailure}) {
-    _emailVerificationOtp({"email": email}).then((value) {
+    _emailVerificationOtp({"email": email.toLowerCase().trim()}).then((value) {
       onSuccess();
     }).catchError((error) {
       if (onFailure != null) {
@@ -322,7 +332,7 @@ class AuthService {
     required VoidCallback handleEmailNotVerified
   }) async {
     _loginApi({
-      'email': email.toLowerCase(),
+      'email': email.toLowerCase().trim(),
       'password': password,
     }).then((responseData) async {
       var token = responseData['access_token'];
@@ -330,7 +340,7 @@ class AuthService {
       if (responseData != null && token != '') {
         UserSession.instance.setToken(token);
         await currentUser(
-            email: email,
+            email: email.toLowerCase().trim(),
             password: password,
             authProvider: authProvider,
             walletProvider: walletProvider,
@@ -343,6 +353,7 @@ class AuthService {
       }
       return token;
     }).catchError((error) {
+      print(error);
       handleShowCustomToast(message: handleApiFormatError(error));
     });
   }
@@ -359,7 +370,7 @@ class AuthService {
     required VoidCallback handleEmailNotVerified,
   }) async {
     _loginApi({
-      'email': email.toLowerCase(),
+      'email': email.toLowerCase().trim(),
       'password': password,
     }).then((responseData) async {
       var token = responseData['access_token'];
@@ -367,7 +378,7 @@ class AuthService {
       if (responseData != null && token != '') {
         UserSession.instance.setToken(token);
         Get.to(() => AddAddressDetail(
-            email: email,
+            email: email.toLowerCase().trim(),
             password: password,
             rememberMe: rememberMe,
         ));

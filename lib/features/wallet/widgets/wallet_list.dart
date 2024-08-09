@@ -25,63 +25,61 @@ class WalletList extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
-          onTap: () {
-            walletProvider.setShowWalletList();
-          },
-          child: Container(
-            width: double.infinity,
-            height: 62,
-            margin: const EdgeInsets.only(bottom: 5),
-            padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 40),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.black),
-                color: darkMode ? Colors.black : Color(0xFFE6E5E5).withOpacity(0.13)
-            ),
-            child:
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Add Wallet',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Roboto',
-                      color: TColors.black
-                  ),
-                ),
-                SizedBox(width: 5,),
-                SizedBox(
-                    width: 5,
-                    child: Icon(
-                      walletProvider.showWalletLists == true
-                          ? Icons.arrow_drop_up
-                          : Icons.arrow_drop_down,
-                      size: 25,
-                      color: TColors.black,)
-                )
-              ],
-            ),
-          ),
-        ),
-        Container(
+        // GestureDetector(
+        //   onTap: () {
+        //     walletProvider.setShowWalletList();
+        //   },
+        //   child: Container(
+        //     width: double.infinity,
+        //     height: 62,
+        //     margin: const EdgeInsets.only(bottom: 5),
+        //     padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 40),
+        //     decoration: BoxDecoration(
+        //         borderRadius: BorderRadius.circular(12),
+        //         border: Border.all(color: Colors.black),
+        //         color: darkMode ? Colors.black : Color(0xFFE6E5E5).withOpacity(0.13)
+        //     ),
+        //     child:
+        //     Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         Text(
+        //           'Add Wallet',
+        //           style: TextStyle(
+        //               fontSize: 16,
+        //               fontWeight: FontWeight.w500,
+        //               fontFamily: 'Roboto',
+        //               color: TColors.black
+        //           ),
+        //         ),
+        //         SizedBox(width: 5,),
+        //         SizedBox(
+        //             width: 5,
+        //             child: Icon(
+        //               walletProvider.showWalletLists == true
+        //                   ? Icons.arrow_drop_up
+        //                   : Icons.arrow_drop_down,
+        //               size: 25,
+        //               color: TColors.black,)
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        walletProvider.showWalletLists == true
+        ? Container(
           margin: EdgeInsets.only(
-              top: walletProvider.showWalletLists == true ? 20 : 0,
-              // right: walletProvider.showWalletLists == true ? 20 : 0,
-              // left: walletProvider.showWalletLists == true ? 20 : 0,
-              bottom: walletProvider.showWalletLists == true ? 35 : 10,
+              bottom: walletProvider.showWalletLists == true ? 7 : 0,
           ),
-          child: walletProvider.showWalletLists == true
-              ? ListView(
+          child: ListView(
+            padding: EdgeInsets.zero,
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             children: walletProvider.walletCurrencies.map((currency) {
               return Column(
                 children: [
                   Container(
                     margin: EdgeInsets.only(bottom: 8),
-                    padding: EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
                       onTap: (){
                         walletProvider.setSelectedWalletCurrency(currency);
@@ -93,10 +91,10 @@ class WalletList extends StatelessWidget {
                         );
                       },
                       child: Container(
-                        height: 42,
+                        height: 48,
                         padding: EdgeInsets.symmetric(horizontal: 25),
                         decoration: BoxDecoration(
-                            color: Color(0xFFF6F6F6),
+                            color: darkMode ? Color(0xFF3E3E3E) : Color(0xFFF6F6F6),
                             borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
@@ -132,8 +130,7 @@ class WalletList extends StatelessWidget {
               );
             }).toList(),
           )
-              : Text('')
-        ),
+        ) : SizedBox(),
       ],
     );
   }

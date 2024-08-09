@@ -24,7 +24,7 @@ class TCheckboxTheme {
 
   static CheckboxThemeData darkCheckboxTheme = CheckboxThemeData(
     // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-    side: BorderSide(color: TColors.secondaryBorder30,),
+    side: BorderSide(color: TColors.textPrimaryO40,),
     checkColor: MaterialStateProperty.resolveWith((states) {
       if (states.contains(MaterialState.selected)) {
         return TColors.white;

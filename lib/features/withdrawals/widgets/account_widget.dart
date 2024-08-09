@@ -28,11 +28,12 @@ class _AccountWidgetState extends State<AccountWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Container(
           width: double.infinity,
-          padding: const EdgeInsets.only(top: 12, bottom: 12, right: 20, left: TSizes.defaultSpace * 1.5),
+          padding: EdgeInsets.only(top: 12, bottom: 12, right: width > 400 ? 20 : 0, left: width > 400 ? TSizes.defaultSpace * 1.5 : 10),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               boxShadow: [
@@ -68,9 +69,9 @@ class _AccountWidgetState extends State<AccountWidget> {
                       RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: widget.darkMode ? Colors.white : Colors.black.withOpacity(0.43),
+                                  color: Colors.black.withOpacity(0.43),
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 16,
+                                  fontSize: width > 400 ? 18 : 14,
                                   fontFamily: 'Roboto'
                               ),
                               children: <TextSpan> [
@@ -81,20 +82,26 @@ class _AccountWidgetState extends State<AccountWidget> {
                           )
                       ),
                       const SizedBox(height: TSizes.md,),
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: widget.darkMode ? Colors.white : Colors.black.withOpacity(0.43),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: <TextSpan> [
-                                TextSpan(
-                                  text: widget.item.accountNumber,
-                                ),
-                              ]
-                          )
+                      SizedBox(
+                        width: width * 0.2,
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: RichText(
+                              text: TextSpan(
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.43),
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      fontFamily: 'Roboto'
+                                  ),
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                      text: widget.item.accountNumber,
+                                    ),
+                                  ]
+                              )
+                          ),
+                        ),
                       ),
                     ],
                   ),

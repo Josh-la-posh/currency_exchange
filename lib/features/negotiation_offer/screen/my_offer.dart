@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pouch/utils/shimmer/order_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/features/negotiation_offer/widget/my_offer_item.dart';
@@ -10,8 +11,10 @@ import '../../../utils/layouts/list_layout.dart';
 
 class MyOfferScreen extends StatelessWidget {
   final bool darkMode;
-  const MyOfferScreen({
-    super.key, required this.darkMode,
+  bool? displayMyOffer;
+  String? length;
+  MyOfferScreen({
+    super.key, required this.darkMode, this.length, this.displayMyOffer
   });
 
   Widget build(BuildContext context) {
@@ -19,15 +22,20 @@ class MyOfferScreen extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: TSizes.md,),
         Column(
           children: [
-            offerProvider.myOffers.isEmpty
+            displayMyOffer == false
+                ? OrderShimmer(length: length)
+                : offerProvider.myOffers.isEmpty
                 ? LayoutBuilder(builder: (context, constraints) {
               return const NoNegotiationScreen(title: 'Offer',);
             })
                 : TListLayout(
-                itemCount: offerProvider.myOffers.length,
+                itemCount: length != null
+                    ? offerProvider.myOffers.length < int.parse(length!)
+                    ? offerProvider.myOffers.length
+                    : int.parse(length!)
+                    : offerProvider.myOffers.length,
                 itemBuilder: (_, index) {
                   final item = offerProvider.myOffers[index];
                   return MyOfferItem(item: item);

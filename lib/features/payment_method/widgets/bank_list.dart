@@ -95,6 +95,7 @@ class BankList extends StatelessWidget {
           child: ListView.builder(
               itemCount: walletProvider.filteredBanks.length,
               shrinkWrap: true,
+              // physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (_, index) {
                 final bankDetail = walletProvider.filteredBanks[index];
                 return BankListItem(bankDetail: bankDetail, walletProvider: walletProvider,);

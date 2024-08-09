@@ -38,7 +38,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: darkMode ? Colors.black : Colors.white,
+                                  color: darkMode ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 18,
                                   fontFamily: 'Roboto'
@@ -52,7 +52,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                       ),
                       IconButton(
                           onPressed: () {Get.back();},
-                          icon: Icon(Icons.cancel, color: Colors.white, size: 30,)
+                          icon: Icon(Icons.cancel, color: darkMode ? Colors.white : Colors.black, size: 30,)
                       )
                     ],
                   ),
@@ -63,7 +63,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: darkMode ? Colors.black : Colors.white,
+                                  color: darkMode ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14,
                                   fontFamily: 'Roboto'
@@ -80,7 +80,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                         child: RichText(
                             text: TextSpan(
                                 style: TextStyle(
-                                    color: darkMode ? Colors.black : Colors.white,
+                                    color: darkMode ? Colors.white : Colors.black,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14,
                                     fontFamily: 'Roboto'
@@ -102,7 +102,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                       RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: darkMode ? Colors.black : Colors.white,
+                                  color: darkMode ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 20,
                                   fontFamily: 'Roboto'
@@ -119,7 +119,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                         child: RichText(
                             text: TextSpan(
                                 style: TextStyle(
-                                    color: darkMode ? Colors.black : Colors.white,
+                                    color: darkMode ? Colors.white : Colors.black,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 18,
                                     fontFamily: 'Roboto'
@@ -145,7 +145,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                           style: TextStyle(
-                              color: darkMode ? Colors.black : Colors.white,
+                              color: darkMode ? Colors.white : Colors.black,
                               fontWeight: FontWeight.w400,
                               fontSize: 16,
                               fontFamily: 'Roboto'
@@ -175,7 +175,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                   RichText(
                       text: TextSpan(
                           style: TextStyle(
-                              color: darkMode ? Colors.black : Colors.white,
+                              color: darkMode ? Colors.white : Colors.black,
                               fontWeight: FontWeight.w700,
                               fontSize: 18,
                               fontFamily: 'Roboto'
@@ -193,25 +193,28 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: darkMode ? Colors.black : Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 18,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: <TextSpan> [
-                                TextSpan(
-                                  text: item?.bankName,
-                                )
-                              ]
-                          )
+                      SizedBox(
+                        width: THelperFunctions.screenWidth() * 0.5,
+                        child: RichText(
+                            text: TextSpan(
+                                style: TextStyle(
+                                    color: darkMode ? Colors.white : Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 16,
+                                    fontFamily: 'Roboto'
+                                ),
+                                children: <TextSpan> [
+                                  TextSpan(
+                                    text: item?.bankName,
+                                  )
+                                ]
+                            )
+                        ),
                       ),
                       RichText(
                           text: TextSpan(
                               style: TextStyle(
-                                  color: darkMode ? Colors.black : Colors.white,
+                                  color: darkMode ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.w400,
                                   fontSize: 14,
                                   fontFamily: 'Roboto'
@@ -240,7 +243,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                     child: RichText(
                         text: TextSpan(
                             style: TextStyle(
-                                color: darkMode ? Colors.black : Colors.white,
+                                color: darkMode ? Colors.white : Colors.black,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                                 fontFamily: 'Roboto'
@@ -259,7 +262,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                     child: RichText(
                         text: TextSpan(
                             style: TextStyle(
-                                color: darkMode ? Colors.black : Colors.white,
+                                color: darkMode ? Colors.white : Colors.black,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14,
                                 fontFamily: 'Roboto'
@@ -281,7 +284,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                 child: TElevatedButton(
                     onTap: (){
                       WalletServices.instance.transferLocalBank(
-                          amount: int.parse(amount),
+                          amount: amount,
                           currency: provider.selectedWithdrawalAccount!.currency,
                           bankId: provider.selectedWithdrawalAccount!.id,
                           transactionProvider: transactionProvider,

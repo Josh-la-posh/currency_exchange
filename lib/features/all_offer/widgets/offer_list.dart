@@ -23,91 +23,88 @@ class OfferList extends StatelessWidget {
     final selectedCurrency = offerProvider.selectedCurrency;
     final darkMode = THelperFunctions.isDarkMode(context);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 1.5),
-      child: SizedBox(
-        child: Column(
-          children: [
-            const SizedBox(height: TSizes.spaceBtwSections),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [RichText(
-                  text: TextSpan(
-                      style: Theme.of(context).textTheme.titleLarge,
-                      children: <TextSpan> [
-                        TextSpan(
-                            text: 'All Offers',
-                            style: const TextStyle(
-                              fontSize: 20
-                            )
-                        )
-                      ]
-                  )
-              ),
-                Row(
-                  children: [
-                    if (selectedCurrency != Currency.NGN && offerProvider.filterAll == false)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                        decoration: BoxDecoration(
-                            color: TColors.primary,
-                            borderRadius: BorderRadius.circular(50)
-                        ),
-                        child: RichText(
-                            text: TextSpan(
-                                style: Theme.of(context).textTheme.labelMedium,
-                                children: <TextSpan> [
-                                  TextSpan(
-                                      text: 'Currency: ${getCurrencyName(selectedCurrency) ?? ''}',
-                                      style: const TextStyle(color: TColors.white)
-                                  )
-                                ]
-                            )
-                        ),
+    return SizedBox(
+      child: Column(
+        children: [
+          const SizedBox(height: TSizes.spaceBtwSections),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [RichText(
+                text: TextSpan(
+                    style: Theme.of(context).textTheme.titleLarge,
+                    children: <TextSpan> [
+                      TextSpan(
+                          text: 'All Offers',
+                          style: const TextStyle(
+                            fontSize: 20
+                          )
+                      )
+                    ]
+                )
+            ),
+              Row(
+                children: [
+                  if (selectedCurrency != Currency.NGN && offerProvider.filterAll == false)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                      decoration: BoxDecoration(
+                          color: TColors.primary,
+                          borderRadius: BorderRadius.circular(50)
                       ),
-                    const SizedBox(width: TSizes.spaceBtwItems,),
-                    IconButton(
-                      onPressed: (){
-                        showModalBottomSheet(
-                            // isDismissible: false,
-                            isScrollControlled: true,
-                            // enableDrag: false,
-                            context: context,
-                            builder: (cdx) =>  const FilterScreen()
-                        );
-                      },
-                      icon: Container(
-                        width: 15,
-                        height: 20,
-                        decoration: BoxDecoration(
-                            color: darkMode ? TColors.primary : TColors.secondaryBorder30,
-                            borderRadius: BorderRadius.circular(12)
-                        ),
-                        child: FilterIcon(),
+                      child: RichText(
+                          text: TextSpan(
+                              style: Theme.of(context).textTheme.labelMedium,
+                              children: <TextSpan> [
+                                TextSpan(
+                                    text: 'Currency: ${getCurrencyName(selectedCurrency) ?? ''}',
+                                    style: const TextStyle(color: TColors.white)
+                                )
+                              ]
+                          )
                       ),
                     ),
-                  ],
-                )
-              ],
-            ),
-              const SizedBox(height: TSizes.md,),
-            offerProvider.offers.isEmpty
-                ? LayoutBuilder(builder: (context, constraints) {
-                  return NoOfferScreen();
-                })
-                : Column(
-                children: [
-                  TListLayout(
-                      itemCount: offerProvider.offers.length,
-                      itemBuilder: (_, index) {
-                        final item = offerProvider.offers[index];
-                        return OfferItem(item: item);
-                      }
-                  )
+                  const SizedBox(width: TSizes.spaceBtwItems,),
+                  IconButton(
+                    onPressed: (){
+                      showModalBottomSheet(
+                          // isDismissible: false,
+                          isScrollControlled: true,
+                          // enableDrag: false,
+                          context: context,
+                          builder: (cdx) =>  const FilterScreen()
+                      );
+                    },
+                    icon: Container(
+                      width: 15,
+                      height: 20,
+                      decoration: BoxDecoration(
+                          color: darkMode ? TColors.primary : TColors.secondaryBorder30,
+                          borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: FilterIcon(),
+                    ),
+                  ),
                 ],
               )
-          ],
-        ),
+            ],
+          ),
+            const SizedBox(height: TSizes.md,),
+          offerProvider.offers.isEmpty
+              ? LayoutBuilder(builder: (context, constraints) {
+                return NoOfferScreen();
+              })
+              : Column(
+              children: [
+                TListLayout(
+                    itemCount: offerProvider.offers.length,
+                    itemBuilder: (_, index) {
+                      final item = offerProvider.offers[index];
+                      return OfferItem(item: item);
+                    }
+                )
+              ],
+            )
+        ],
       ),
     );
   }

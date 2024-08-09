@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:pouch/features/authentication/screens/add_details/add_address_detail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
 import 'package:pouch/data/modules/background_task.dart';
@@ -63,7 +65,15 @@ class UserSession {
       //   Duration(seconds: 1),
       //     () {
       //     handleHideLoader();
-          AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
+      if (authProvider.user?.address == null) {
+        Get.to(() => AddAddressDetail(
+            email: USER_REMEMBER_ME_EMAIL,
+            password: USER_REMEMBER_ME_PASS,
+            rememberMe: true
+        ));
+      } else {
+        AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
+      }
           // }
       // );
     }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/features/home/routes/names.dart';
-import 'package:pouch/features/transaction/apis/api.dart';
 import 'package:pouch/features/wallet/apis/api.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/auth_provider.dart';
@@ -10,345 +11,168 @@ import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
+import '../../../utils/layouts/navigation_menu.dart';
+import '../../wallet/models/ussd_modal.dart';
 import '../../wallet/routes/names.dart';
 
 class UssdFundingDetailScreen extends StatelessWidget {
-  String? amount;
+  final String? amount;
+
   UssdFundingDetailScreen({super.key, this.amount});
 
   @override
   Widget build(BuildContext context) {
-    var authProvider = Provider.of<AuthProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-    var walletProvider = Provider.of<WalletProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-    var transactionProvider = Provider.of<TransactionProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-
+    final controller = Get.put(NavigationController());
+    final authProvider = Provider.of<AuthProvider>(context);
+    final walletProvider = Provider.of<WalletProvider>(context);
+    final transactionProvider = Provider.of<TransactionProvider>(context);
     final darkMode = THelperFunctions.isDarkMode(context);
-
     final item = walletProvider.ussdModel;
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: darkMode ? TColors.black : const Color(0xFFE9D9FF).withOpacity(0.12),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(  vertical: TSizes.defaultSpace * 3, horizontal: TSizes.defaultSpace * 2),
+      body: Container(
+        margin: EdgeInsets.only(top: THelperFunctions.screenHeight() * 0.1),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 0.8),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: darkMode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: <TextSpan> [
-                                TextSpan(
-                                  text: 'Reference No:',
-                                )
-                              ]
-                          )
-                      ),
-                      const SizedBox(height: TSizes.sm,),
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: darkMode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: <TextSpan> [
-                                TextSpan(
-                                  text: '${item?.reference}',
-                                )
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: darkMode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: <TextSpan> [
-                                TextSpan(
-                                  text: '${authProvider.user?.email}',
-                                )
-                              ]
-                          )
-                      ),
-                      const SizedBox(height: TSizes.sm,),
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: darkMode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: <TextSpan> [
-                                TextSpan(
-                                  text: 'Pay NGN ${amount}',
-                                )
-                              ]
-                          )
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: THelperFunctions.screenHeight() * 0.1),
-              Column(
-                children: [
-                  RichText(
-                      text: TextSpan(
-                          style: TextStyle(
-                              color: darkMode ? Colors.white : Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20,
-                              fontFamily: 'Roboto'
-                          ),
-                          children: <TextSpan> [
-                            TextSpan(
-                              text: 'Transfer ',
-                            ),
-                            TextSpan(
-                                text: 'NGN ${amount} ',
-                                style: TextStyle(color: Color(0xFFA17DD0))
-                            ),
-                            TextSpan(
-                              text: ' to',
-                            ),
-                          ]
-                      )
-                  ),
-                  const SizedBox(height: 20,),
-                  RichText(
-                      text: TextSpan(
-                          style: TextStyle(
-                              color: darkMode ? Colors.white : Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
-                              fontFamily: 'Roboto'
-                          ),
-                          children: const <TextSpan> [
-                            TextSpan(
-                              text: 'Paystack Checkout',
-                            ),
-                          ]
-                      )
-                  ),
-                  const SizedBox(height: TSizes.defaultSpace,),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-                    decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: TColors.black.withOpacity(0.3),
-                            offset: const Offset(2.3,3.87),
-                            // blurRadius: 1.94,
-                            // spreadRadius: 1.94
-                          ),
-                          BoxShadow(
-                              color: const Color(0xFFA58DC4).withOpacity(0.3),
-                              offset: const Offset(0.0,0.0),
-                              blurRadius: 0,
-                              spreadRadius: 0
-                          ),
-                          BoxShadow(
-                              color: Colors.white.withOpacity(0.8),
-                              offset: const Offset(0.0,0.0),
-                              blurRadius: 0,
-                              spreadRadius: 0
-                          ),
-                        ]
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: TSizes.lg, right: TSizes.lg, top: TSizes.md, bottom: TSizes.xl),
-                      child: Column(
-                        children: [
-                          // RichText(
-                          //     text: TextSpan(
-                          //         style: TextStyle(
-                          //             color: darkMode ? Colors.white : Colors.black,
-                          //             fontWeight: FontWeight.w500,
-                          //             fontSize: 22,
-                          //             fontFamily: 'Roboto'
-                          //         ),
-                          //         children: <TextSpan> [
-                          //           TextSpan(
-                          //             text: 'Please dial',
-                          //           ),
-                          //         ]
-                          //     )
-                          // ),
-                          const SizedBox(height: TSizes.defaultSpace,),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                      style: TextStyle(
-                                          color: darkMode ? Colors.white : Colors.black,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 32,
-                                          fontFamily: 'Roboto'
-                                      ),
-                                      children: <TextSpan> [
-                                        TextSpan(
-                                          text: '${item?.ussd_code}',
-                                        ),
-                                      ]
-                                  )
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: TSizes.defaultSpace  / 1.2,),
-                          RichText(
-                            textAlign: TextAlign.center,
-                              text: TextSpan(
-                                  style: TextStyle(
-                                      color: darkMode ? Colors.white : Colors.black,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14,
-                                      fontFamily: 'Roboto'
-                                  ),
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                      text: '${item?.display_text}',
-                                    ),
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: TSizes.defaultSpace * 4),
-                  GestureDetector(
-                    onTap: () {
-                      AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: TColors.black.withOpacity(0.3),
-                              offset: const Offset(2.3,3.87),
-                              // blurRadius: 1.94,
-                              // spreadRadius: 1.94
-                            ),
-                            BoxShadow(
-                                color: const Color(0xFFA58DC4).withOpacity(0.3),
-                                offset: const Offset(0.0,0.0),
-                                blurRadius: 0,
-                                spreadRadius: 0
-                            ),
-                            BoxShadow(
-                                color: Colors.white.withOpacity(0.8),
-                                offset: const Offset(0.0,0.0),
-                                blurRadius: 0,
-                                spreadRadius: 0
-                            ),
-                          ]
-                      ),
-                      child:
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: darkMode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: const <TextSpan> [
-                                TextSpan(
-                                  text: 'Proceed to Wallet',
-                                ),
-                              ]
-                          )
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: TSizes.defaultSpace),
-                  GestureDetector(
-                    onTap: () async {
-                      await WalletServices.instance.getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: '');
-                      AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: TColors.black.withOpacity(0.3),
-                              offset: const Offset(2.3,3.87),
-                              // blurRadius: 1.94,
-                              // spreadRadius: 1.94
-                            ),
-                            BoxShadow(
-                                color: const Color(0xFFA58DC4).withOpacity(0.3),
-                                offset: const Offset(0.0,0.0),
-                                blurRadius: 0,
-                                spreadRadius: 0
-                            ),
-                            BoxShadow(
-                                color: Colors.white.withOpacity(0.8),
-                                offset: const Offset(0.0,0.0),
-                                blurRadius: 0,
-                                spreadRadius: 0
-                            ),
-                          ]
-                      ),
-                      child:
-                      RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: darkMode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: const <TextSpan> [
-                                TextSpan(
-                                  text: 'Proceed to Dashboard',
-                                ),
-                              ]
-                          )
-                      ),
-                    ),
-                  )
-                ],
-              )
+              _buildReferenceAndEmailSection(context, authProvider, walletProvider, darkMode),
+              SizedBox(height: THelperFunctions.screenHeight() * 0.07),
+              _buildTransferDetails(context, darkMode, width, item!),
+              const SizedBox(height: TSizes.defaultSpace * 4),
+              _buildActionButton(context, "Proceed to Wallet", darkMode, () async {
+                controller.selectedIndex.value = 3;
+                AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
+                await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
+              }),
+              const SizedBox(height: TSizes.defaultSpace),
+              _buildActionButton(context, "Proceed to Dashboard", darkMode, () async {
+                await WalletServices.instance.getWallets(
+                    transactionProvider: transactionProvider,
+                    walletProvider: walletProvider,
+                    currency: '');
+                controller.selectedIndex.value = 0;
+                AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
+              }),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildReferenceAndEmailSection(BuildContext context, AuthProvider authProvider, WalletProvider walletProvider, bool darkMode) {
+    final item = walletProvider.ussdModel;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildTextColumn(
+          context,
+          title: 'Reference No:',
+          content: item?.reference ?? '',
+          darkMode: darkMode,
+        ),
+        _buildTextColumn(
+          context,
+          title: authProvider.user?.email ?? '',
+          content: 'Pay NGN $amount',
+          darkMode: darkMode,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextColumn(BuildContext context, {required String title, required String content, required bool darkMode}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildRichText(context, title, darkMode, fontSize: 14),
+        const SizedBox(height: TSizes.sm),
+        _buildRichText(context, content, darkMode, fontSize: 16),
+      ],
+    );
+  }
+
+  Widget _buildRichText(BuildContext context, String text, bool darkMode, {double fontSize = 12}) {
+    return RichText(
+      text: TextSpan(
+        style: TextStyle(
+          color: darkMode ? Colors.white : Colors.black,
+          fontWeight: FontWeight.w600,
+          fontSize: fontSize,
+          fontFamily: 'Roboto',
+        ),
+        children: [TextSpan(text: text)],
+      ),
+    );
+  }
+
+  Widget _buildTransferDetails(BuildContext context, bool darkMode, double width, UssdModel item) {
+    return Column(
+      children: [
+        _buildRichText(context, 'Transfer NGN $amount to', darkMode, fontSize: 20),
+        const SizedBox(height: 15),
+        _buildRichText(context, 'Paystack Checkout', darkMode, fontSize: 18),
+        const SizedBox(height: TSizes.defaultSpace),
+        _buildTransferCodeContainer(context, darkMode, width, item),
+      ],
+    );
+  }
+
+  Widget _buildTransferCodeContainer(BuildContext context, bool darkMode, double width, UssdModel item) {
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
+      decoration: _buildContainerDecoration(darkMode),
+      child: Column(
+        children: [
+          const SizedBox(height: TSizes.defaultSpace),
+          _buildRichText(context, item.ussd_code ?? '', darkMode, fontSize: width > 380 ? 32 : 26),
+          const SizedBox(height: TSizes.defaultSpace / 1.2),
+          _buildRichText(context, item.display_text ?? '', darkMode, fontSize: 14),
+        ],
+      ),
+    );
+  }
+
+  BoxDecoration _buildContainerDecoration(bool darkMode) {
+    return darkMode
+        ? BoxDecoration(
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
+      color: TColors.primary
+    )
+        : BoxDecoration(
+      borderRadius: const BorderRadius.all(Radius.circular(10)),
+      boxShadow: [
+        BoxShadow(
+          color: TColors.black.withOpacity(0.3),
+          offset: const Offset(2.3, 3.87),
+        ),
+        BoxShadow(
+          color: const Color(0xFFA58DC4).withOpacity(0.3),
+          offset: const Offset(0.0, 0.0),
+        ),
+        BoxShadow(
+          color: Colors.white.withOpacity(0.8),
+          offset: const Offset(0.0, 0.0),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButton(BuildContext context, String text, bool darkMode, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        decoration: _buildContainerDecoration(darkMode),
+        child: _buildRichText(context, text, darkMode, fontSize: 16),
       ),
     );
   }

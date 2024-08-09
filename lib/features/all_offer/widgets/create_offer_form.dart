@@ -43,9 +43,10 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                       onSaved: (value) {
                         offerProvider.updateAmount(value!);
                       },
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         suffixIcon: DropdownButton<Currency>(
-                          dropdownColor: darkMode ? TColors.grey : TColors.white,
+                          dropdownColor: darkMode ? Colors.black : TColors.white,
                           borderRadius: BorderRadius.circular(10),
                           focusColor: Colors.white,
                           autofocus: false,
@@ -95,7 +96,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                   TextFormField(
                     decoration: InputDecoration(
                       suffixIcon: DropdownButton<Currency>(
-                        dropdownColor: darkMode ? TColors.grey : TColors.white,
+                        dropdownColor: darkMode ? Colors.black : TColors.white,
                         borderRadius: BorderRadius.circular(10),
                         focusColor: Colors.white,
                         autofocus: false,
@@ -151,7 +152,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Preferred rate ${offerProvider.debitedCurrency != Currency.NGN ? '(per ${getCurrencyName(offerProvider.debitedCurrency)})' : ''}', style: Theme.of(context).textTheme.labelMedium,),
+                  Text('Preferred rate (per ${getCurrencyName(offerProvider.debitedCurrency)}}', style: Theme.of(context).textTheme.labelMedium,),
                   TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
                     validator: TValidator.numValidator,
@@ -159,6 +160,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                     onSaved: (val) {
                       offerProvider.updateRate(val!);
                     },
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       suffixIcon: Padding(
                         padding: const EdgeInsets.only(right: 14.8),
@@ -185,8 +187,8 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                   TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
                     decoration: InputDecoration(
-                      suffixIcon: DropdownButton<int>(
-                        dropdownColor: darkMode ? TColors.grey : TColors.white,
+                      suffixIcon: DropdownButton<String>(
+                        dropdownColor: darkMode ? Colors.black : TColors.white,
                         borderRadius: BorderRadius.circular(10),
                         focusColor: Colors.white,
                         autofocus: false,
@@ -220,7 +222,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
                         },
                         items: [
                           for (final hour in offerProvider.hours)
-                            DropdownMenuItem<int>(
+                            DropdownMenuItem<String>(
                               value: hour,
                               child: SizedBox(
                                 child: Padding(
@@ -286,7 +288,7 @@ class _CreateOfferFormState extends State<CreateOfferForm> {
               ),
               const SizedBox(height: TSizes.spaceBtwSections,),
               offerProvider.amount == 0 ||
-                  offerProvider.rate == 0 ?
+                  offerProvider.rate == '' ?
               SizedBox(
                 height: 48,
                 width: double.infinity,

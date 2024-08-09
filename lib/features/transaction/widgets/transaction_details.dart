@@ -50,7 +50,7 @@ class TransactionDetails extends StatelessWidget {
                             style: Theme.of(context).textTheme.headlineLarge,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: item.rate == null ? '' : '${THelperFunctions.getStringMultiplication(item.rate.toString(), item.amount.toString())} ${item.debitedCurrency}  ',
+                                  text: item.rate == null ? '' : '${THelperFunctions.getStringMultiplication(THelperFunctions.formatRate(item.rate.toString()), item.amount.toString())} ${item.debitedCurrency}  ',
                                   style: TextStyle(
                                       color: darkMode ? TColors.grey : TColors.textPrimaryO80
                                   )
@@ -81,7 +81,7 @@ class TransactionDetails extends StatelessWidget {
                         style: Theme.of(context).textTheme.labelMedium,
                         children: <TextSpan> [
                           TextSpan(
-                              text: item.rate == null ? '${item.status}' : '${item.rate} ${item.creditedCurrency} // ${item.debitedCurrency}',
+                              text: item.rate == null ? '${item.status}' : '${THelperFunctions.formatRate(item.rate.toString())} ${item.creditedCurrency} // ${item.debitedCurrency}',
                               style: TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary, fontWeight: FontWeight.w700)
                           ),
                         ]
@@ -111,89 +111,80 @@ class TransactionDetails extends StatelessWidget {
                             ]
                         )
                     ),
-                    Row(
-                      children: [
-                        // Container(
-                        //   width: 20,
-                        //   height: 20,
-                        //   color: TColors.danger,
-                        // ),
-                        // const SizedBox(width: TSizes.md,),
-                        SizedBox(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                      children: <TextSpan> [
-                                        TextSpan(
-                                            text: item.debitedWallet == null ? item.description : item.debitedWallet,
-                                            style: TextStyle(
-                                                fontSize: TSizes.fontSize12,
-                                                height: 1.39,
-                                                fontWeight: FontWeight.w700
-                                            )
-                                        )
-                                      ]
-                                  )
-                              ),
-                              // Row(
-                              //   crossAxisAlignment: CrossAxisAlignment.end,
-                              //   children: [
-                              //     RichText(
-                              //         text: TextSpan(
-                              //             style: Theme.of(context).textTheme.labelSmall,
-                              //             children: <TextSpan> [
-                              //               TextSpan(
-                              //                   text: '60-00-06',
-                              //                   style: TextStyle(
-                              //                     fontSize: TSizes.fontSize10,
-                              //                     color: TColors.textPrimary.withOpacity(0.5),
-                              //                     height: 1.4
-                              //                   )
-                              //               ),
-                              //             ]
-                              //         )
-                              //     ),
-                              //     RichText(
-                              //         text: TextSpan(
-                              //             style: Theme.of(context).textTheme.labelSmall,
-                              //             children: <TextSpan> [
-                              //               TextSpan(
-                              //                   text: ' * ',
-                              //                   style: TextStyle(
-                              //                       fontSize: TSizes.fontSize10,
-                              //                       color: TColors.textPrimary.withOpacity(0.5),
-                              //                       height: 1.4
-                              //                   )
-                              //               ),
-                              //             ]
-                              //         )
-                              //     ),
-                              //     RichText(
-                              //         text: TextSpan(
-                              //             style: Theme.of(context).textTheme.labelSmall,
-                              //             children: <TextSpan> [
-                              //               TextSpan(
-                              //                   text: '445347697',
-                              //                   style: TextStyle(
-                              //                       fontSize: TSizes.fontSize10,
-                              //                       color: TColors.textPrimary.withOpacity(0.5),
-                              //                       height: 1.4
-                              //                   )
-                              //               ),
-                              //             ]
-                              //         )
-                              //     ),
-                              //   ],
-                              // ),
-                            ],
-                          ),
-                        )
-                      ],
-                    )
+                    SizedBox(
+                      width: THelperFunctions.screenWidth() * 0.7,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.labelSmall,
+                                    children: <TextSpan> [
+                                      TextSpan(
+                                          text: item.debitedWallet == null ? item.description : item.debitedWallet,
+                                          style: TextStyle(
+                                              fontSize: TSizes.fontSize12,
+                                              height: 1.39,
+                                              fontWeight: FontWeight.w700
+                                          )
+                                      )
+                                    ]
+                                )
+                            ),
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.end,
+                            //   children: [
+                            //     RichText(
+                            //         text: TextSpan(
+                            //             style: Theme.of(context).textTheme.labelSmall,
+                            //             children: <TextSpan> [
+                            //               TextSpan(
+                            //                   text: '60-00-06',
+                            //                   style: TextStyle(
+                            //                     fontSize: TSizes.fontSize10,
+                            //                     color: TColors.textPrimary.withOpacity(0.5),
+                            //                     height: 1.4
+                            //                   )
+                            //               ),
+                            //             ]
+                            //         )
+                            //     ),
+                            //     RichText(
+                            //         text: TextSpan(
+                            //             style: Theme.of(context).textTheme.labelSmall,
+                            //             children: <TextSpan> [
+                            //               TextSpan(
+                            //                   text: ' * ',
+                            //                   style: TextStyle(
+                            //                       fontSize: TSizes.fontSize10,
+                            //                       color: TColors.textPrimary.withOpacity(0.5),
+                            //                       height: 1.4
+                            //                   )
+                            //               ),
+                            //             ]
+                            //         )
+                            //     ),
+                            //     RichText(
+                            //         text: TextSpan(
+                            //             style: Theme.of(context).textTheme.labelSmall,
+                            //             children: <TextSpan> [
+                            //               TextSpan(
+                            //                   text: '445347697',
+                            //                   style: TextStyle(
+                            //                       fontSize: TSizes.fontSize10,
+                            //                       color: TColors.textPrimary.withOpacity(0.5),
+                            //                       height: 1.4
+                            //                   )
+                            //               ),
+                            //             ]
+                            //         )
+                            //     ),
+                            //   ],
+                            // ),
+                          ],
+                        ),
+                      )
                   ],
                 ),
                 const SizedBox(height: TSizes.spaceBtwItems,),
@@ -218,88 +209,79 @@ class TransactionDetails extends StatelessWidget {
                             ]
                         )
                     ),
-                    Row(
-                      children: [
-                        // Container(
-                        //   width: 20,
-                        //   height: 20,
-                        //   color: TColors.danger,
-                        // ),
-                        const SizedBox(width: TSizes.md,),
-                        SizedBox(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                      children: <TextSpan> [
-                                        TextSpan(
-                                            text: item.creditedWallet,
-                                            style: TextStyle(
-                                                fontSize: TSizes.fontSize12,
-                                                height: 1.39,
-                                                fontWeight: FontWeight.w700
-                                            )
+                    SizedBox(
+                      width: THelperFunctions.screenWidth() * 0.7,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                              text: TextSpan(
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: item.creditedWallet,
+                                        style: TextStyle(
+                                            fontSize: TSizes.fontSize12,
+                                            height: 1.39,
+                                            fontWeight: FontWeight.w700
                                         )
-                                      ]
-                                  )
-                              ),
-                              // Row(
-                              //   crossAxisAlignment: CrossAxisAlignment.end,
-                              //   children: [
-                              //     RichText(
-                              //         text: TextSpan(
-                              //             style: Theme.of(context).textTheme.labelSmall,
-                              //             children: <TextSpan> [
-                              //               TextSpan(
-                              //                   text: '60-00-06',
-                              //                   style: TextStyle(
-                              //                       fontSize: TSizes.fontSize10,
-                              //                       color: TColors.textPrimary.withOpacity(0.5),
-                              //                       height: 1.4
-                              //                   )
-                              //               ),
-                              //             ]
-                              //         )
-                              //     ),
-                              //     RichText(
-                              //         text: TextSpan(
-                              //             style: Theme.of(context).textTheme.labelSmall,
-                              //             children: <TextSpan> [
-                              //               TextSpan(
-                              //                   text: ' * ',
-                              //                   style: TextStyle(
-                              //                       fontSize: TSizes.fontSize10,
-                              //                       color: TColors.textPrimary.withOpacity(0.5),
-                              //                       height: 1.4
-                              //                   )
-                              //               ),
-                              //             ]
-                              //         )
-                              //     ),
-                              //     RichText(
-                              //         text: TextSpan(
-                              //             style: Theme.of(context).textTheme.labelSmall,
-                              //             children: <TextSpan> [
-                              //               TextSpan(
-                              //                   text: '445347697',
-                              //                   style: TextStyle(
-                              //                       fontSize: TSizes.fontSize10,
-                              //                       color: TColors.textPrimary.withOpacity(0.5),
-                              //                       height: 1.4
-                              //                   )
-                              //               ),
-                              //             ]
-                              //         )
-                              //     ),
-                              //   ],
-                              // ),
-                            ],
+                                    )
+                                  ]
+                              )
                           ),
-                        )
-                      ],
+                          // Row(
+                          //   crossAxisAlignment: CrossAxisAlignment.end,
+                          //   children: [
+                          //     RichText(
+                          //         text: TextSpan(
+                          //             style: Theme.of(context).textTheme.labelSmall,
+                          //             children: <TextSpan> [
+                          //               TextSpan(
+                          //                   text: '60-00-06',
+                          //                   style: TextStyle(
+                          //                       fontSize: TSizes.fontSize10,
+                          //                       color: TColors.textPrimary.withOpacity(0.5),
+                          //                       height: 1.4
+                          //                   )
+                          //               ),
+                          //             ]
+                          //         )
+                          //     ),
+                          //     RichText(
+                          //         text: TextSpan(
+                          //             style: Theme.of(context).textTheme.labelSmall,
+                          //             children: <TextSpan> [
+                          //               TextSpan(
+                          //                   text: ' * ',
+                          //                   style: TextStyle(
+                          //                       fontSize: TSizes.fontSize10,
+                          //                       color: TColors.textPrimary.withOpacity(0.5),
+                          //                       height: 1.4
+                          //                   )
+                          //               ),
+                          //             ]
+                          //         )
+                          //     ),
+                          //     RichText(
+                          //         text: TextSpan(
+                          //             style: Theme.of(context).textTheme.labelSmall,
+                          //             children: <TextSpan> [
+                          //               TextSpan(
+                          //                   text: '445347697',
+                          //                   style: TextStyle(
+                          //                       fontSize: TSizes.fontSize10,
+                          //                       color: TColors.textPrimary.withOpacity(0.5),
+                          //                       height: 1.4
+                          //                   )
+                          //               ),
+                          //             ]
+                          //         )
+                          //     ),
+                          //   ],
+                          // ),
+                        ],
+                      ),
                     )
                   ],
                 ),
