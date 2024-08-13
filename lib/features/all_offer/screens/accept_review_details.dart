@@ -42,7 +42,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: TSizes.spaceBtwSections / 2,),
+                    const SizedBox(height: TSizes.spaceBtwSections / 4,),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                       child: Column(
@@ -52,11 +52,11 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                           const SizedBox(height: TSizes.spaceBtwSections,),
                           RichText(
                               text: TextSpan(
-                                  text: 'You are about to swap ',
+                                  text: 'You\'re swapping ',
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString())} ${item?.creditedCurrency} ',
+                                        text: '${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString()))} ${item?.creditedCurrency} ',
                                         style: TextStyle(
                                             fontWeight: TSizes.fontWeightLg,
                                             color: TColors.golden
@@ -66,7 +66,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                         text: 'for '
                                     ),
                                     TextSpan(
-                                        text: '${item?.amount} ${item?.debitedCurrency}',
+                                        text: '${THelperFunctions.moneyFormatter(item!.amount.toString())} ${item?.debitedCurrency}',
                                         style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                     ),
                                   ]
@@ -122,7 +122,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                       style: Theme.of(context).textTheme.labelMedium,
                                       children: <TextSpan> [
                                         TextSpan(
-                                            text: '${item?.amount} ${item?.debitedCurrency}',
+                                            text: '${THelperFunctions.moneyFormatter(item!.amount.toString())} ${item?.debitedCurrency}',
                                             style: TextStyle(fontWeight: TSizes.fontWeightMd)
                                         )
                                       ]
@@ -131,7 +131,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const DividerWidget(),
+                        
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           height: TSizes.textReviewHeight,
@@ -163,7 +163,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const DividerWidget(),
+                        
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           height: TSizes.textReviewHeight,
@@ -195,7 +195,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const DividerWidget(),
+                        
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           height: TSizes.textReviewHeight,
@@ -233,7 +233,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const DividerWidget(),
+                        
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace/2),
                           child: Column(
@@ -358,7 +358,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                             style: Theme.of(context).textTheme.labelMedium,
                                             children:  <TextSpan> [
                                               TextSpan(
-                                                  text: item!.amount.toString(),
+                                                  text: THelperFunctions.moneyFormatter(item!.amount.toString()),
                                                   style: TextStyle(
                                                       fontWeight: FontWeight.w800,
                                                       color: TColors.primary
@@ -385,7 +385,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                 transactionProvider: transactionProvider,
                                 walletProvider: walletProvider
                             );},
-                              buttonText: 'Pay ${THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString())} ${item?.creditedCurrency}'),
+                              buttonText: 'Pay ${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString()))} ${item?.creditedCurrency}'),
                         ),
                         const SizedBox(height: TSizes.spaceBtwSections ),
                       ],

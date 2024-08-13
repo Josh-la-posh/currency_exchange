@@ -58,43 +58,41 @@ class CreateReviewDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: TSizes.spaceBtwSections / 2,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                            text: TextSpan(
-                                style: Theme.of(context).textTheme.labelMedium,
-                                children: <TextSpan> [
-                                  TextSpan(
-                                      text: 'You are about to swap ',
-                                      style: const TextStyle(
-                                          // fontSize: 16
-                                      )
-                                  ),
-                                  TextSpan(
-                                      text: '${data.amount} ${getCurrencyName(data.debitedCurrency)}',
-                                      style: const TextStyle(
-                                          fontWeight: TSizes.fontWeightLg,
-                                          fontSize: 16
-                                      )
-                                  ),
-                                  const TextSpan(
-                                      text: ' for '
-                                  ),
-                                  TextSpan(
-                                      text: '${(THelperFunctions.getStringMultiplication(data.amount.toString(), data.rate))} ${getCurrencyName(data.creditedCurrency)}',
-                                      style: const TextStyle(fontWeight: TSizes.fontWeightLg)
-                                  ),
-                                ]
-                            )
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwElements),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.start,
+                  //     children: [
+                  //       RichText(
+                  //           text: TextSpan(
+                  //               style: Theme.of(context).textTheme.labelMedium,
+                  //               children: <TextSpan> [
+                  //                 TextSpan(
+                  //                     text: 'You\'re about to swap ',
+                  //                     style: const TextStyle(
+                  //                         // fontSize: 16
+                  //                     )
+                  //                 ),
+                  //                 TextSpan(
+                  //                     text: '${THelperFunctions.moneyFormatter(data.amount)} ${getCurrencyName(data.debitedCurrency)}',
+                  //                     style: const TextStyle(
+                  //                         fontWeight: TSizes.fontWeightLg,
+                  //                         fontSize: 16
+                  //                     )
+                  //                 ),
+                  //                 const TextSpan(
+                  //                     text: ' for '
+                  //                 ),
+                  //                 TextSpan(
+                  //                     text: '${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(data.amount.toString(), data.rate))} ${getCurrencyName(data.creditedCurrency)}',
+                  //                     style: const TextStyle(fontWeight: TSizes.fontWeightLg)
+                  //                 ),
+                  //               ]
+                  //           )
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Container(
                     alignment: Alignment.centerLeft,
                     width: double.infinity,
@@ -142,7 +140,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text: '${data.amount} ${getCurrencyName(data.debitedCurrency)}',
+                                          text: '${THelperFunctions.moneyFormatter(data.amount)} ${getCurrencyName(data.debitedCurrency)}',
                                           style: const TextStyle(
                                               // fontSize: TSizes.fontSize13,
                                               fontWeight: TSizes.fontWeightLg
@@ -154,7 +152,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const DividerWidget(),
+                      
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         height: TSizes.textReviewHeight,
@@ -189,7 +187,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const DividerWidget(),
+                      
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         height: TSizes.textReviewHeight,
@@ -231,7 +229,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         style: Theme.of(context).textTheme.labelMedium,
                                         children: <TextSpan> [
                                           TextSpan(
-                                              text: '${THelperFunctions.getStringMultiplication(data.rate, data.amount.toString())} ${getCurrencyName(data.creditedCurrency)}',
+                                              text: '${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(data.rate, data.amount.toString()))} ${getCurrencyName(data.creditedCurrency)}',
                                               style: const TextStyle(
                                                   // fontSize: TSizes.fontSize13,
                                                   fontWeight: TSizes.fontWeightLg
@@ -245,7 +243,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const DividerWidget(),
+                      
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         height: TSizes.textReviewHeight,
@@ -281,100 +279,97 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const DividerWidget(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 2),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: TSizes.xs),
-                            Container(
-                              padding: const EdgeInsets.only(left: TSizes.defaultSpace / 2),
-                              height: TSizes.textReviewHeight,
-                              decoration: BoxDecoration(
-                                  color: TColors.secondaryBorder30,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  RichText(
-                                      text: TextSpan(
-                                          style: Theme.of(context).textTheme.labelMedium,
-                                          children: <TextSpan> [
-                                            TextSpan(
-                                                text: 'You will be debited from ',
-                                                style: TextStyle(
+                      
+                      Column(
+                        children: [
+                          const SizedBox(height: TSizes.xs),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+                            height: TSizes.textReviewHeight,
+                            decoration: BoxDecoration(
+                                color: TColors.secondaryBorder30,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RichText(
+                                    text: TextSpan(
+                                        style: Theme.of(context).textTheme.labelMedium,
+                                        children: <TextSpan> [
+                                          TextSpan(
+                                              text: 'You will be debited from ',
+                                              style: TextStyle(
+                                                fontSize: TSizes.fontSize13,
+                                                color: darkMode ? TColors.white : TColors.primary
+                                              )
+                                          ),
+                                          TextSpan(
+                                              text: ' ${getCurrencyName(data.debitedCurrency)} ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  color: darkMode ? TColors.white : TColors.primary
+                                              )
+                                          ),
+                                          TextSpan(
+                                              text: ' wallet',
+                                              style: TextStyle(
                                                   fontSize: TSizes.fontSize13,
                                                   color: darkMode ? TColors.white : TColors.primary
-                                                )
-                                            ),
-                                            TextSpan(
-                                                text: ' ${getCurrencyName(data.debitedCurrency)} ',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    color: darkMode ? TColors.white : TColors.primary
-                                                )
-                                            ),
-                                            TextSpan(
-                                                text: ' wallet',
-                                                style: TextStyle(
-                                                    fontSize: TSizes.fontSize13,
-                                                    color: darkMode ? TColors.white : TColors.primary
-                                                )
-                                            )
-                                          ]
-                                      )
-                                  ),
-                                ],
-                              ),
+                                              )
+                                          )
+                                        ]
+                                    )
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: TSizes.defaultSpace,),
-                            Container(
-                              padding: const EdgeInsets.only(left: TSizes.defaultSpace / 2),
-                              height: TSizes.textReviewHeight,
-                              decoration: BoxDecoration(
-                                  color: TColors.secondaryBorder30,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  RichText(
-                                      text: TextSpan(
-                                          style: Theme.of(context).textTheme.labelMedium,
-                                          children: <TextSpan> [
-                                            TextSpan(
-                                                text: 'You will be credited to ',
-                                                style: TextStyle(
-                                                    fontSize: TSizes.fontSize13,
-                                                    color: darkMode ? TColors.white : TColors.primary
-                                                )
-                                            ),
-                                            TextSpan(
-                                                text: ' ${getCurrencyName(data.creditedCurrency)} ',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    color: darkMode ? TColors.white : TColors.primary
-                                                )
-                                            ),
-                                            TextSpan(
-                                                text: ' wallet',
-                                                style: TextStyle(
-                                                    fontSize: TSizes.fontSize13,
-                                                    color: darkMode ? TColors.white : TColors.primary
-                                                )
-                                            )
-                                          ]
-                                      )
-                                  ),
-                                ],
-                              ),
+                          ),
+                          const SizedBox(height: TSizes.defaultSpace,),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+                            height: TSizes.textReviewHeight,
+                            decoration: BoxDecoration(
+                                color: TColors.secondaryBorder30,
                             ),
-                            const SizedBox(height: TSizes.xs),
-                          ],
-                        ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                RichText(
+                                    text: TextSpan(
+                                        style: Theme.of(context).textTheme.labelMedium,
+                                        children: <TextSpan> [
+                                          TextSpan(
+                                              text: 'You will be credited to ',
+                                              style: TextStyle(
+                                                  fontSize: TSizes.fontSize13,
+                                                  color: darkMode ? TColors.white : TColors.primary
+                                              )
+                                          ),
+                                          TextSpan(
+                                              text: ' ${getCurrencyName(data.creditedCurrency)} ',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  color: darkMode ? TColors.white : TColors.primary
+                                              )
+                                          ),
+                                          TextSpan(
+                                              text: ' wallet',
+                                              style: TextStyle(
+                                                  fontSize: TSizes.fontSize13,
+                                                  color: darkMode ? TColors.white : TColors.primary
+                                              )
+                                          )
+                                        ]
+                                    )
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: TSizes.xs),
+                        ],
                       ),
-                      const DividerWidget(),
+                      
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         height: TSizes.textReviewHeight,
@@ -430,7 +425,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                   expireIn: data.expireIn
                               );
                             },
-                            buttonText: 'Pay ${data.amount.toString()} ${getCurrencyName(data.debitedCurrency)}'),
+                            buttonText: 'Pay ${THelperFunctions.moneyFormatter(data.amount.toString())} ${getCurrencyName(data.debitedCurrency)}'),
                       ),
                       const SizedBox(height: TSizes.spaceBtwElements),
                       Row(

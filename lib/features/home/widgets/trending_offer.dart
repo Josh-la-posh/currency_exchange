@@ -90,14 +90,14 @@ class TrendingOffer extends StatelessWidget {
           // ),
           displayOffer == false
               ? OrderShimmer(length: '3',)
-              : offerProvider.offers.isEmpty
+              : offerProvider.allOffers.isEmpty
               ? NoNegotiationScreen(title: 'Offer',)
               : ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: offerProvider.offers.length > 3 ? 3 : offerProvider.offers.length,
+            itemCount: offerProvider.allOffers.length > 3 ? 3 : offerProvider.allOffers.length,
               itemBuilder: (_, index) {
-                final item = offerProvider.offers[index];
+                final item = offerProvider.allOffers[index];
                 return Column(
                 children: [
                   Container(
@@ -129,7 +129,7 @@ class TrendingOffer extends StatelessWidget {
                                             style: TextStyle(fontSize: 13)
                                         ),
                                         TextSpan(
-                                            text: '${item.amount} ${item.debitedCurrency}',
+                                            text: '${THelperFunctions.moneyFormatter(item.amount.toString())} ${item.debitedCurrency}',
                                             style: TextStyle(fontWeight: FontWeight.w500)
                                         ),
                                       ]

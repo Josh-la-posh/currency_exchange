@@ -4,13 +4,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/data/modules/background_task.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
-import 'package:pouch/features/all_offer/apis/api.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-
-import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
-import '../icons/svg.dart';
 import '../models/offer.dart';
 import '../screens/offer_details.dart';
 
@@ -57,7 +53,7 @@ class OfferItem extends StatelessWidget {
                                 style: TextStyle(fontSize: 13)
                             ),
                             TextSpan(
-                                text: '${item.amount} ${item.debitedCurrency}',
+                                text: '${THelperFunctions.moneyFormatter(item.amount.toString())} ${item.debitedCurrency}',
                                 style: TextStyle(fontWeight: FontWeight.w500)
                             ),
                           ]

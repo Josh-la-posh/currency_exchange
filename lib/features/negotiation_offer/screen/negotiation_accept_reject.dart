@@ -123,7 +123,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text: '${widget.item.amount} ${widget.item.debitedCurrency}',
+                                          text: '${THelperFunctions.moneyFormatter(widget.item.amount)} ${widget.item.debitedCurrency}',
                                           style: TextStyle(
                                               fontWeight: TSizes.fontWeightMd
                                           )
@@ -219,7 +219,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text: '${widget.item.negotiatorAmount} ${widget.item.debitedCurrency}',
+                                          text: '${THelperFunctions.moneyFormatter(widget.item.negotiatorAmount.toString())} ${widget.item.debitedCurrency}',
                                           style: TextStyle(
                                               fontWeight: TSizes.fontWeightMd
                                           )
@@ -313,7 +313,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                               style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: ' ${THelperFunctions.getStringMultiplication(widget.item.negotiatorAmount.toString(), widget.item.negotiatorRate.toString())} ${widget.item.creditedCurrency}',
+                                    text: ' ${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(widget.item.negotiatorAmount.toString(), widget.item.negotiatorRate.toString()))} ${widget.item.creditedCurrency}',
                                     style: TextStyle(
                                         fontWeight: TSizes.fontWeightLg,
                                         color: Color(0xFFEA8484)
@@ -323,7 +323,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                                     text: ' for '
                                 ),
                                 TextSpan(
-                                    text: ' ${widget.item.negotiatorAmount} ${widget.item.debitedCurrency}',
+                                    text: ' ${THelperFunctions.moneyFormatter(widget.item.negotiatorAmount.toString())} ${widget.item.debitedCurrency}',
                                     style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                 ),
                               ]
@@ -385,7 +385,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
           :  showAcceptOfferMsg == true
           ? SuccessScreenWidget(
         onTap: () {Get.back();},
-        text: 'You have successfully swapped ${THelperFunctions.getStringMultiplication(widget.item.amount, widget.item.rate)} ${widget.item.debitedCurrency} for ${widget.item.amount} ${widget.item.creditedCurrency}.',
+        text: 'You have successfully swapped ${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(widget.item.amount, widget.item.rate))} ${widget.item.debitedCurrency} for ${THelperFunctions.moneyFormatter(widget.item.amount)} ${widget.item.creditedCurrency}.',
         child: TListLayout(
             itemCount: 3,
             itemBuilder: (_, index) => MyTimeLine(
@@ -401,7 +401,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                           TextSpan(
                               text: THelperFunctions.getFormattedTime(DateTime.now().toString()),
                               style: TextStyle(
-                                  color: TColors.textPrimary.withOpacity(0.6),
+                                  // color: TColors.textPrimary.withOpacity(0.6),
                                   height: 1.5
                               )
                           ),
@@ -416,7 +416,7 @@ class _NegotiationAcceptRejectScreenState extends State<NegotiationAcceptRejectS
                         ? 'You accepted this offer'
                         : index == 1
                         ? 'We received your funds'
-                        : 'Your ${widget.item.creditedCurrency} ${widget.item.amount} is on its way to you',
+                        : 'Your ${THelperFunctions.moneyFormatter(widget.item.amount)} ${widget.item.creditedCurrency} is on its way to you',
                     style: Theme.of(context).textTheme.labelMedium,)
               ),
             )

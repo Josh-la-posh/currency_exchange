@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
 
             themeMode: ThemeMode.system,
             theme: TAppTheme.lightTheme,
-            darkTheme: TAppTheme.darkTheme,
+            // darkTheme: TAppTheme.darkTheme,
             initialRoute: SPLASH_SCREEN_ROUTE,
             routes: routes,
             navigatorKey: AppNavigator.instance.navigatorKey,

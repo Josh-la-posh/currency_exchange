@@ -412,7 +412,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 darkMode: darkMode,
                                 displayOffer: displayOffer,
                               ),
-                              if (offerProvider.myOffers.isNotEmpty)
+                              if (offerProvider.allOffers.isNotEmpty)
                                 ListTile(
                                   contentPadding: EdgeInsets.zero,
                                   hoverColor: Colors.transparent,

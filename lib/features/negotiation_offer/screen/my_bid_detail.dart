@@ -44,8 +44,9 @@ class MyBidDetail extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 10),
-                  margin: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 1.5, vertical: 10),
+                  // margin: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                   decoration: BoxDecoration(
                       color: TColors.secondaryBorder30,
                       borderRadius: BorderRadius.circular(5)
@@ -143,8 +144,9 @@ class MyBidDetail extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 10),
-                  margin: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                  padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 1.5, vertical: 10),
+                  // margin: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                  width: double.infinity,
                   decoration: BoxDecoration(
                       color: TColors.secondaryBorder30,
                       borderRadius: BorderRadius.circular(5)
@@ -176,7 +178,7 @@ class MyBidDetail extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: const <TextSpan> [
                                 TextSpan(
-                                  text: 'I have',
+                                  text: 'I need',
                                   // style: TextStyle(fontSize: TSizes.fontSize13)
                                 )
                               ]
@@ -187,7 +189,7 @@ class MyBidDetail extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${item!.amount} ${item!.debitedCurrency}',
+                                    text: '${THelperFunctions.moneyFormatter(item!.negotiatorAmount.toString())} ${item!.debitedCurrency}',
                                     style: const TextStyle(
                                         fontWeight: TSizes.fontWeightLg
                                     )
@@ -222,7 +224,7 @@ class MyBidDetail extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${(THelperFunctions.formatRate(item!.rate))} ${item!.creditedCurrency} // ${item!.debitedCurrency}',
+                                        text: '${(THelperFunctions.formatRate(item!.negotiatorRate.toString()))} ${item!.creditedCurrency} // ${item!.debitedCurrency}',
                                         style: const TextStyle(
                                           // fontSize: TSizes.fontSize13,
                                             fontWeight: TSizes.fontWeightLg

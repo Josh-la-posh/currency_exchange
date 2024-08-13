@@ -76,7 +76,7 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
       child: Scaffold(
         backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
         body: Container(
-          padding: EdgeInsets.symmetric(vertical: 30, horizontal: TSizes.defaultSpace * 0.8),
+          padding: EdgeInsets.only(top: 30, left: TSizes.defaultSpace * 0.8, right: TSizes.defaultSpace * 0.8),
           height: THelperFunctions.screenHeight() - kBottomNavigationBarHeight,
           child: Column(
             children: [
@@ -108,7 +108,6 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
               ),
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.only(bottom: 30.0),
                   height: THelperFunctions.screenHeight() - kBottomNavigationBarHeight - 40,
                   child: TabBarView(
                       children: [

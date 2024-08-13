@@ -101,7 +101,7 @@ class MyBidItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${(THelperFunctions.formatRate(item.negotiatorAmount.toString()))}',
+                                    text: '${(THelperFunctions.moneyFormatter(item.negotiatorAmount.toString()))}',
                                     style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                 ),
                                 TextSpan(

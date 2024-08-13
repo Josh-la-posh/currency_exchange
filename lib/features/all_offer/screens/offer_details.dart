@@ -110,6 +110,7 @@ class OfferDetailsScreen extends StatelessWidget {
               ],
             ),
           ),
+          if (item.expireIn != null)
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 10),

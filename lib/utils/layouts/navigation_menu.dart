@@ -4,7 +4,6 @@ import 'package:pouch/features/all_offer/screens/all_offer.dart';
 import 'package:pouch/features/transaction/screens/history.dart';
 import 'package:pouch/features/home/screens/home.dart';
 import 'package:pouch/features/wallet/screens/wallet.dart';
-
 import '../constants/colors.dart';
 import '../helpers/helper_functions.dart';
 
@@ -68,7 +67,6 @@ class NavigationMenu extends StatelessWidget {
 
 class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
-
   final screens = [
     const HomeScreen(),
     const AllOfferScreen(),

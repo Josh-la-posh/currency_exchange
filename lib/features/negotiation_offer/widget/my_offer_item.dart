@@ -102,7 +102,7 @@ class MyOfferItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${item.amount}',
+                                    text: '${THelperFunctions.moneyFormatter(item.amount)}',
                                     style: TextStyle(
                                         fontWeight: TSizes.fontWeightLg,
                                     )

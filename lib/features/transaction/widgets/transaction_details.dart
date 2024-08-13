@@ -47,10 +47,10 @@ class TransactionDetails extends StatelessWidget {
                   children: [
                     RichText(
                         text: TextSpan(
-                            style: Theme.of(context).textTheme.headlineLarge,
+                            style: Theme.of(context).textTheme.titleLarge,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: item.rate == null ? '' : '${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(THelperFunctions.formatRate(item.rate.toString()), item.amount.toString()))} ${item.debitedCurrency}  ',
+                                  text: item.rate == null ? '' : '${THelperFunctions.moneyFormatter(item.debitedAmount.toString())} ${item.debitedCurrency}  ',
                                   style: TextStyle(
                                       color: darkMode ? TColors.grey : TColors.textPrimaryO80
                                   )
@@ -62,7 +62,7 @@ class TransactionDetails extends StatelessWidget {
                     Image(image: AssetImage(TImages.handIcon), height: 25, color: TColors.primary,),
                     RichText(
                         text: TextSpan(
-                            style: Theme.of(context).textTheme.headlineLarge,
+                            style: Theme.of(context).textTheme.titleLarge,
                             children: <TextSpan> [
                               TextSpan(
                                   text: item.rate == null ? '${THelperFunctions.moneyFormatter(item.amount.toString())} ${item.creditedCurrency != null ? item.creditedCurrency : item.debitedCurrency}' : ' ${THelperFunctions.moneyFormatter(item.amount.toString())} ${item.creditedCurrency}',
@@ -81,7 +81,7 @@ class TransactionDetails extends StatelessWidget {
                         style: Theme.of(context).textTheme.labelMedium,
                         children: <TextSpan> [
                           TextSpan(
-                              text: item.rate == null ? '${item.status}' : '${(THelperFunctions.formatRate(item.rate.toString()))} ${item.creditedCurrency} // ${item.debitedCurrency}',
+                              text: item.rate == null ? '${item.status}' : '${(THelperFunctions.formatRate(item.rate.toString()))} ${item.debitedCurrency} // ${item.creditedCurrency}',
                               style: TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary, fontWeight: FontWeight.w700)
                           ),
                         ]

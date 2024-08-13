@@ -43,7 +43,7 @@ class NegotiationItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                  text: '${item.negotiatorAmount}',
+                                  text: '${THelperFunctions.moneyFormatter(item.negotiatorAmount.toString())}',
                                     style: TextStyle(
                                         fontWeight: TSizes.fontWeightLg
                                     )
@@ -93,7 +93,7 @@ class NegotiationItem extends StatelessWidget {
                                 )
                             ),
                             TextSpan(
-                                text: ' ${item.creditedCurrency} // ${item.debitedCurrency} ',
+                                text: ' ${item.creditedCurrency} // ${item.debitedCurrency}',
                                 style: TextStyle(
                                     color: TColors.primary,
                                     fontSize: TSizes.fontSize12,

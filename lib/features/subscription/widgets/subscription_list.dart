@@ -17,9 +17,7 @@ class SubscriptionList extends StatelessWidget {
     final provider = Provider.of<SubscriptionProvider>(context);
 
     return SizedBox(
-      child: provider.subscriptions.isEmpty
-          ? const NoSubscriptionScreen()
-          : Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: TSizes.defaultSpace,),

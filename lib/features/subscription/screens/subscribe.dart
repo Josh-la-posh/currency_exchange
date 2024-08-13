@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pouch/data/modules/background_task.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/floating_button.dart';
 import 'package:pouch/features/subscription/apis/api.dart';
@@ -11,6 +12,7 @@ import '../../../data/provider/subscription_provider.dart';
 import '../../../data/provider/verification_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/helpers/helper_functions.dart';
+import '../widgets/no_subscription.dart';
 
 class SubscribeScreen extends StatefulWidget {
   const SubscribeScreen({super.key});
@@ -39,6 +41,11 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
         AppNavigator.instance.navigatorKey.currentContext as BuildContext,
         listen: false
     );
+    NoLoaderService.instance.getSubscriptions(
+        provider: subscriptionProvider,
+        currency: ''
+    );
+    print('The value is not working ${subscriptionProvider.subscriptions.length}');
 
     if (subscriptionProvider.subscriptions.isEmpty) {
       SubscriptionService.instance.getSubscriptions(
@@ -46,7 +53,6 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
           currency: ''
       );
     }
-
     if (authProvider.user?.isVerified == false) {
       setState(() {
         verificationProvider.showVerifyModal = true;
@@ -66,7 +72,9 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: SubscriptionList(),
+        child: subscriptionProvider.subscriptions.isEmpty
+            ? const NoSubscriptionScreen()
+            : SubscriptionList(),
       ),
       floatingActionButton: TFloatingButton(
         onPressed: () {

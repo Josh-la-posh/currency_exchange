@@ -116,7 +116,7 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
           Text(
-            'Rate Range per GBP',
+            'Rate Range per ${getCurrencyName(provider.createSubscription?.debitedCurrency ?? Currency.USD)}',
             style: Theme.of(context).textTheme.labelSmall,
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
