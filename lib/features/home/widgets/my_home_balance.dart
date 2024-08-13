@@ -103,7 +103,7 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                                     ? '---'
                                     : walletProvider.defaultWallet == null
                                     ? '---'
-                                    : '${walletProvider.showWalletBalance == false ? '*****' : THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString())} ',
+                                    : '${walletProvider.showWalletBalance == false ? '**********' : THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString())} ',
                               style: TextStyle(
                                   fontSize: width > 400 ? 28 : 20,
                                   fontWeight: TSizes.fontWeightXl,

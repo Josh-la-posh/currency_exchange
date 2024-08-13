@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pouch/common/widgets/currencyWidget.dart';
+import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_bid.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_offer.dart';
@@ -95,109 +97,111 @@ class _NegotiationOfferScreenState extends State<MyBidAndOfferScreen> {
     super.initState();
   }
 
+  Future<void> _refreshOffers() async {
+    await NoLoaderService.instance.getMyOffers(offerProvider: offerProvider, days: '', currency: '', onFailure: (){}, onSuccess: (){});
+    await NoLoaderService.instance.getMyBids(offerProvider: offerProvider, days: '', currency: '', onFailure: (){}, onSuccess: (){print('okkkk');});
+    await Future.delayed(const Duration(seconds: 2),);
+  }
+
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
     return SafeArea(
       child: Scaffold(
-        backgroundColor: darkMode ? TColors.textPrimaryO40 : TColors.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              CurrencyWidgetWithBack(),
-              SizedBox(height: TSizes.defaultSpace * 1.5),
-      
-              Padding(
-                padding: const EdgeInsets.only(left: TSizes.defaultSpace * 2, right: TSizes.defaultSpace),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          showMyOffer = true;
-                        });
-                      },
-                      child: Container(
-                        height: 25,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: showMyOffer == true ? TColors.primary : Color(0xFFC1BBC9),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            RichText(
+        appBar: AppBar(),
+        body: Column(
+          children: [
+            CurrencyWidget(),
+            Padding(
+              padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.defaultSpace, bottom: 10),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        showMyOffer = true;
+                      });
+                    },
+                    child: Container(
+                      height: 25,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: showMyOffer == true ? TColors.primary : Color(0xFFC1BBC9),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          RichText(
+                            textAlign: TextAlign.center,
+                              text: TextSpan(
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: 'My Offers',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: TSizes.fontWeightLg
+                                        )
+                                    ),
+                                  ]
+                              )
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: TSizes.defaultSpace * 1.2),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        showMyOffer = false;
+                      });
+                    },
+                    child: Container(
+                      height: 25,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        color: showMyOffer == true ? Color(0xFFC1BBC9) : TColors.primary,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          RichText(
                               textAlign: TextAlign.center,
-                                text: TextSpan(
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                    children: <TextSpan> [
-                                      TextSpan(
-                                          text: 'My Offers',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: TSizes.fontWeightLg
-                                          )
-                                      ),
-                                    ]
-                                )
-                            ),
-                          ],
-                        ),
+                              text: TextSpan(
+                                  style: Theme.of(context).textTheme.labelSmall,
+                                  children: <TextSpan> [
+                                    TextSpan(
+                                        text: 'My Bids',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: TSizes.fontWeightLg
+                                        )
+                                    ),
+                                  ]
+                              )
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(width: TSizes.defaultSpace * 1.2),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          showMyOffer = false;
-                        });
-                      },
-                      child: Container(
-                        height: 25,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: showMyOffer == true ? Color(0xFFC1BBC9) : TColors.primary,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                    style: Theme.of(context).textTheme.labelSmall,
-                                    children: <TextSpan> [
-                                      TextSpan(
-                                          text: 'My Bids',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: TSizes.fontWeightLg
-                                          )
-                                      ),
-                                    ]
-                                )
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Spacer(),
-                    IconButton(
-                      onPressed: (){
-                        NoLoaderService.instance.getMyOffers(offerProvider: offerProvider, days: '', currency: '', onFailure: (){}, onSuccess: (){});
-                        NoLoaderService.instance.getMyBids(offerProvider: offerProvider, days: '', currency: '', onFailure: (){}, onSuccess: (){});
-                      },
-                      icon: Icon(Icons.refresh, size: 18, color: darkMode ? Colors.white : TColors.textPrimary,),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              showMyOffer == true 
-                  ? MyOfferScreen(darkMode: darkMode, displayMyOffer: displayMyOffer,)
-                  : MyBidScreen(darkMode: darkMode, displayMyBids: displayMyOffer,),
-            ],
-          ),
+            ),
+            Expanded(
+              child: CustomRefreshIndicator(
+                  onRefresh: _refreshOffers,
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: showMyOffer == true
+                        ? MyOfferScreen(darkMode: darkMode, displayMyOffer: displayMyOffer,)
+                        : MyBidScreen(darkMode: darkMode, displayMyBids: displayMyOffer,),
+                  )
+              ),
+            )
+          ],
         ),
       ),
     );

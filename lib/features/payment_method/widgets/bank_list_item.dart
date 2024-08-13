@@ -19,24 +19,27 @@ class BankListItem extends StatelessWidget {
           walletProvider.setSelectedBank(bankDetail);
           walletProvider.filteredBanks = [];
         },
-        contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 0),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            RichText(
-                text: TextSpan(
-                    style: TextStyle(
-                        color: darkMode ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        fontFamily: 'Roboto'
-                    ),
-                    children: <TextSpan> [
-                      TextSpan(
-                        text: bankDetail.name,
+            SizedBox(
+              width: THelperFunctions.screenWidth() * 0.7,
+              child: RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                          color: darkMode ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          fontFamily: 'Roboto'
                       ),
-                    ]
-                )
+                      children: <TextSpan> [
+                        TextSpan(
+                          text: bankDetail.name,
+                        ),
+                      ]
+                  )
+              ),
             ),
             if (walletProvider.selectedBank == bankDetail)
             const SizedBox(

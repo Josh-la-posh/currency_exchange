@@ -9,6 +9,7 @@ import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../data/modules/app_navigator.dart';
+import '../../../data/modules/background_task.dart';
 import '../../../data/provider/auth_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
@@ -235,9 +236,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                   const SizedBox(height: TSizes.defaultSpace * 4),
                   GestureDetector(
                     onTap: () async {
+                      await NoLoaderService.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
                       controller.selectedIndex.value = 3;
                       AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                      await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
                     },
                     child: Container(
                       width: double.infinity,

@@ -20,6 +20,11 @@ class AccountList extends StatelessWidget {
           'My Accounts',
           style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14),
         ),
+        if (_walletProvider.wallets.isNotEmpty && _walletProvider.defaultWallet == null)
+        Text(
+          'Please, select a default wallet below',
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 12, color: Colors.red),
+        ),
         SizedBox(height: 5),
         _walletProvider.wallets.isNotEmpty
         ? ListView.builder(

@@ -54,6 +54,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
           // const SizedBox(height: TSizes.spaceBtwSections / 2,),
           Expanded(
             child: SingleChildScrollView(
+              padding: EdgeInsets.only(bottom: 100),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

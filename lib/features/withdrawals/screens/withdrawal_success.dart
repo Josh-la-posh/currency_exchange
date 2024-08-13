@@ -60,10 +60,10 @@ class WithdrawalSuccessScreen extends StatelessWidget {
               const SizedBox(height: TSizes.defaultSpace * 3),
               GestureDetector(
                 onTap: () async {
+                  await NoLoaderService.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
                   controller.selectedIndex.value = 3;
                   AppNavigator.instance
                       .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                  await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -100,10 +100,10 @@ class WithdrawalSuccessScreen extends StatelessWidget {
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () async {
+                  await NoLoaderService.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
+                  controller.selectedIndex.value = 0;
                   AppNavigator.instance
                       .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                  controller.selectedIndex.value = 0;
-                  await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
                 },
                 child: Container(
                   alignment: Alignment.center,

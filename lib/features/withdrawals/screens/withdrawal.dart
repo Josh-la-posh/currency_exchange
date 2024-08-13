@@ -82,9 +82,9 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: THelperFunctions.screenHeight() * 0.04),
-                  _buildAmountSection(provider, darkMode),
-                  const SizedBox(height: TSizes.defaultSpace * 1.5),
                   _buildBalanceInfo(provider, darkMode),
+                  const SizedBox(height: TSizes.defaultSpace * 1.5),
+                  _buildAmountSection(provider, darkMode),
                   const SizedBox(height: TSizes.defaultSpace * 2),
                   _buildWithdrawToSection(context, darkMode),
                   const SizedBox(height: TSizes.defaultSpace * 2),
@@ -143,7 +143,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
         children: [
           const TextSpan(text: 'Amount '),
           TextSpan(
-            text: '(${provider.defaultWallet!.currency})',
+            text: provider.defaultWallet == null ? '***'  : '(${provider.defaultWallet!.currency})',
             style: const TextStyle(fontSize: 12),
           ),
         ],
@@ -202,7 +202,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
               fontSize: 16,
             ),
             children: [
-              TextSpan(text: '${provider.defaultWallet!.currency} ${THelperFunctions.moneyFormatter(provider
+              TextSpan(text: '${provider.defaultWallet == null ? '******' : provider.defaultWallet!.currency} ${provider.defaultWallet == null ? '' : THelperFunctions.moneyFormatter(provider
                   .defaultWallet!.balance.toString())}'),
             ],
           ),

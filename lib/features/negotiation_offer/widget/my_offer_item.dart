@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:pouch/features/negotiation_offer/screen/my_offer_detail.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
@@ -78,7 +79,10 @@ class MyOfferItem extends StatelessWidget {
             ]
         ),
         child: ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: TSizes.lg, horizontal: TSizes.defaultSpace * 1.3),
+          contentPadding: EdgeInsets.symmetric(vertical: TSizes.lg, horizontal: TSizes.defaultSpace),
+          onTap: (){
+            Get.to(() => MyOfferDetail(item: item));
+          },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

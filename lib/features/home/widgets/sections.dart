@@ -114,7 +114,7 @@ class LinkSectionWidget extends StatelessWidget {
                       },
                       icon: Icon(Iconsax.calculator5, size: 30, color: TColors.primary,),
                       darkMode: darkMode,
-                      title: 'Negotiation Offers',
+                      title: 'Offers Review',
                       image: TImages.negotiationOfferIcon
                   ),
                 ],

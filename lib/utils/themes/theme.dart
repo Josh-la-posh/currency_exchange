@@ -17,7 +17,7 @@ class TAppTheme {
     brightness: Brightness.light,
     primaryColor: TColors.primary,
     textTheme: TTextTheme.lightTextTheme,
-    scaffoldBackgroundColor: Colors.white.withOpacity(0.96),
+    scaffoldBackgroundColor: Colors.white,
     checkboxTheme: TCheckboxTheme.lightCheckboxTheme,
     elevatedButtonTheme: TElevatedButtonTheme.lightElevatedButtonTheme,
     outlinedButtonTheme: TOutlinedButtonTheme.lightOutlinedButtonTheme,

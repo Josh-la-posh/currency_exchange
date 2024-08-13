@@ -23,7 +23,6 @@ class BankList extends StatelessWidget {
         Container(
             width: double.infinity,
             alignment: Alignment.center,
-            // padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             decoration: BoxDecoration(
               color: darkMode ? TColors.timeLineBorder : Colors.transparent,
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
@@ -76,7 +75,7 @@ class BankList extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelSmall,
                   children:  const <TextSpan> [
                     TextSpan(
-                        text: 'Please search your bank provider here',
+                        text: 'Please enter your bank provider here',
                         style: TextStyle(fontSize: 10, color: TColors.danger)
                     )
                   ]
@@ -84,18 +83,14 @@ class BankList extends StatelessWidget {
           ),
         ),
 
-        if (walletProvider.filteredBanks.length > 0)
-        const SizedBox(height: TSizes.defaultSpace,),
-
         // Bank list display
 
         if (walletProvider.filteredBanks.length > 0)
         SizedBox(
-          // height: THelperFunctions.screenHeight() * 0.4,
           child: ListView.builder(
               itemCount: walletProvider.filteredBanks.length,
               shrinkWrap: true,
-              // physics: const NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (_, index) {
                 final bankDetail = walletProvider.filteredBanks[index];
                 return BankListItem(bankDetail: bankDetail, walletProvider: walletProvider,);

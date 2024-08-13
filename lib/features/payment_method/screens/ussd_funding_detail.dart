@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/data/modules/background_task.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/features/home/routes/names.dart';
 import 'package:pouch/features/wallet/apis/api.dart';
@@ -43,19 +44,18 @@ class UssdFundingDetailScreen extends StatelessWidget {
               _buildTransferDetails(context, darkMode, width, item!),
               const SizedBox(height: TSizes.defaultSpace * 4),
               _buildActionButton(context, "Proceed to Wallet", darkMode, () async {
+                await NoLoaderService.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
                 controller.selectedIndex.value = 3;
                 AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
-                await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
               }),
               const SizedBox(height: TSizes.defaultSpace),
               _buildActionButton(context, "Proceed to Dashboard", darkMode, () async {
-                await WalletServices.instance.getWallets(
+                await NoLoaderService.instance.getWallets(
                     transactionProvider: transactionProvider,
                     walletProvider: walletProvider,
                     currency: '');
                 controller.selectedIndex.value = 0;
                 AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
               }),
             ],
           ),

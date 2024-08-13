@@ -77,13 +77,13 @@ class THelperFunctions {
     String timeDifference;
     print(seconds);
     if (seconds < 60) {
-      timeDifference = "$seconds seconds";
+      timeDifference = "$seconds seconds ago";
     } else if (seconds >= 60 && seconds < 3600) {
       int minutes = seconds ~/ 60;
-      timeDifference = "$minutes minutes";
+      timeDifference = "$minutes minutes ago";
     } else  if ( seconds >= 3600 && seconds < 86400){
       int hours = seconds ~/ (60 * 60);
-      timeDifference = "$hours hours";
+      timeDifference = "$hours hours ago";
     } else {
       int days = seconds ~/ (60 * 60 * 24);
       timeDifference = "$days days ago";

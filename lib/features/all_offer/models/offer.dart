@@ -60,7 +60,7 @@ class OfferEntity {
 class CreateOfferEntity {
   Currency debitedCurrency;
   Currency creditedCurrency;
-  int amount;
+  String amount;
   String rate;
   String? expireIn;
 

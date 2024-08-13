@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/features/wallet/apis/api.dart';
@@ -11,6 +12,7 @@ import '../../../data/provider/transaction_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/enums.dart';
+import '../../all_offer/decimal_formatter.dart';
 
 class UssdFundingScreen extends StatefulWidget {
   const UssdFundingScreen({super.key});
@@ -162,6 +164,12 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                       TextFormField(
                         validator: TValidator.numValidator,
                         style: Theme.of(context).textTheme.bodyMedium,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          DecimalTextInputFormatter(decimalRange: 2),
+                          // Apply the formatter here
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                        ],
                         onChanged: (val) => _amount = val,
                         onSaved: (val) {
                           setState(() {
@@ -183,7 +191,7 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                           WalletServices.instance.fundWalletNairaUssd(
                               walletProvider: walletProvider,
                               transactionProvider: transactionProvider,
-                              amount: int.parse(_amount),
+                              amount: _amount,
                               currency: 'NGN',
                               bank: getBankName(walletProvider.selectedNigBank)
                           );

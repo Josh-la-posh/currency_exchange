@@ -1346,8 +1346,10 @@ class NoLoaderService {
         ));
         offerProvider.saveMyBids(negotiations);
       }
+      print('value ${content.length}');
       onSuccess();
     }).catchError((error) {
+      print('checking $error');
       onFailure();
     });
   }

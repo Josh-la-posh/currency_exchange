@@ -4,10 +4,10 @@ class CreateOfferResponse {
   final String id;
   final String debitedCurrency;
   final String creditedCurrency;
-  final int amount;
-  final int rate;
-  final String expireIn;
-  final String expireCountDown;
+  final String amount;
+  final String rate;
+  String? expireIn;
+  String? expireCountDown;
   final int views;
   String? negotiatorRate;
   String? negotiatorAmount;
@@ -40,8 +40,8 @@ class CreateOfferResponse {
   factory CreateOfferResponse.fromJson(Map<String, dynamic> json) => CreateOfferResponse(
     debitedCurrency: json['debitedCurrency'] as String,
     creditedCurrency: json['creditedCurrency'] as String,
-    amount: json['amount'] as int,
-    rate: json['rate'] as int,
+    amount: json['amount'] as String,
+    rate: json['rate'] as String,
     expireIn: json['expireIn'] as String,
     expireCountDown: json['expireCountDown'] as String,
     status: json['status'] as String,

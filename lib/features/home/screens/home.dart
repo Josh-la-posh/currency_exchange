@@ -9,9 +9,7 @@ import 'package:pouch/features/home/widgets/app_drawer.dart';
 import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_bid.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_offer.dart';
-import 'package:pouch/features/profile/screens/profile.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
-import 'package:pouch/utils/shimmer/order_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/verify_your_account.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
@@ -28,13 +26,9 @@ import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
-import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/texts.dart';
-import '../../all_offer/apis/api.dart';
-import '../../all_offer/screens/all_offer.dart';
-import '../../wallet/apis/api.dart';
+import '../../../utils/layouts/navigation_menu.dart';
 import '../../wallet/models/default_wallet_model.dart';
-import '../widgets/layout.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -300,6 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
+    final controller = Get.put(NavigationController());
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -398,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontFamily: TTexts.fontFamily
                         ),
                         tabs: [
-                          Tab(text: 'Trending',),
+                          Tab(text: 'All Offers',),
                           Tab(text: 'My Offers',),
                           Tab(text: 'My Bids',)
                         ]
@@ -407,18 +402,61 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     color: darkMode ? TColors.textPrimaryO40 : Colors.white,
                     padding: const EdgeInsets.only(bottom: 30.0),
-                    height: 360,
+                    height: 400,
                     child: TabBarView(
                         children: [
-                          TrendingOffer(
-                            offerProvider: offerProvider,
-                            darkMode: darkMode,
-                            displayOffer: displayOffer,
+                          Column(
+                            children: [
+                              TrendingOffer(
+                                offerProvider: offerProvider,
+                                darkMode: darkMode,
+                                displayOffer: displayOffer,
+                              ),
+                              if (offerProvider.myOffers.isNotEmpty)
+                                ListTile(
+                                  contentPadding: EdgeInsets.zero,
+                                  hoverColor: Colors.transparent,
+                                  splashColor: Colors.transparent,
+                                  // tileColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
+                                  onTap: () {
+                                    controller.selectedIndex.value = 1;
+                                  },
+                                  title: Container(
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                        border: Border(
+                                            top: BorderSide(
+                                              color: darkMode ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.1),
+                                            )
+                                        )
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'More',
+                                          style: TextStyle(
+                                              color: darkMode ? Colors.white : Colors.grey,
+                                              fontSize: 14,
+                                              fontWeight: TSizes.fontWeightNm
+                                          ),),
+                                        SizedBox(width: 3),
+                                        Icon(
+                                          Icons.arrow_forward,
+                                          color: darkMode ? Colors.white : Colors.grey,
+                                          size: 15,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                            ],
                           ),
                           Column(
                             children: [
                               MyOfferScreen(darkMode: darkMode, length: '3', displayMyOffer: displayMyOffer,),
-                              if (offerProvider.myOffers.isNotEmpty)
+                              if (offerProvider.allOffers.isNotEmpty)
                               ListTile(
                                 contentPadding: EdgeInsets.zero,
                                 hoverColor: Colors.transparent,

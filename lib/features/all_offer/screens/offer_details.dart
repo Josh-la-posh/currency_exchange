@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pouch/common/widgets/currencyWidget.dart';
 import 'package:pouch/utils/constants/enums.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/styles/spacing_styles.dart';
@@ -26,136 +27,134 @@ class OfferDetailsScreen extends StatelessWidget {
     final item = provider.offerDetail;
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
-      body: Padding(
-        padding: TSpacingStyle.homePadding,
-        child: Column(
-          children: [
-            CurrencyWidgetWithBack(onTap: onTap,),
-            Padding(
-              padding: const EdgeInsets.all(TSizes.defaultSpace),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                      text: TextSpan(
-                          style: Theme.of(context).textTheme.titleMedium,
-                          children: const <TextSpan> [
-                            TextSpan(
-                                text: 'Would you like to swap?',
-                                style: TextStyle(fontWeight: TSizes.fontWeightMd)
-                            )
-                          ]
-                      )
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwElements * 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                              text: TextSpan(
-                                  style: Theme.of(context).textTheme.labelMedium,
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                        text: 'has: ${item?.amount} ${item?.debitedCurrency}',
-                                    ),
-                                  ]
-                              )
-                          ),
-                          const SizedBox(height: TSizes.md,),
-                          RichText(
-                              text: TextSpan(
-                                  style: Theme.of(context).textTheme.labelMedium,
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                        text: 'needs: ${item?.creditedCurrency}',
-                                    ),
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          RichText(
-                              text: TextSpan(
-                                  style: Theme.of(context).textTheme.labelMedium,
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                        text: '${THelperFunctions.formatRate(item!.rate.toString())} ${item.creditedCurrency} // ${item.debitedCurrency}',
-                                        style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
-                                    ),
-                                  ]
-                              )
-                          ),
-                          const SizedBox(height: TSizes.md,),
-                          RichText(
+      appBar: AppBar(),
+      body: Column(
+        children: [
+          CurrencyWidget(),
+          Padding(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RichText(
+                    text: TextSpan(
+                        style: Theme.of(context).textTheme.titleMedium,
+                        children: const <TextSpan> [
+                          TextSpan(
+                              text: 'Would you like to swap?',
+                              style: TextStyle(fontWeight: TSizes.fontWeightMd)
+                          )
+                        ]
+                    )
+                ),
+                const SizedBox(height: TSizes.spaceBtwElements * 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
                             text: TextSpan(
-                              style: Theme.of(context).textTheme.labelSmall,
-                              children: <TextSpan> [
-                                TextSpan(
-                                    text: 'Created ${THelperFunctions.getTimeDifference(item.createdDate)} ago',
-                                ),
-                              ]
+                                style: Theme.of(context).textTheme.labelMedium,
+                                children: <TextSpan> [
+                                  TextSpan(
+                                      text: 'has: ${item?.amount} ${item?.debitedCurrency}',
+                                  ),
+                                ]
                             )
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwSections),
-                ],
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 10),
-              decoration: const BoxDecoration(
-                  color: TColors.primaryBackground
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 15,
-                    width: 15,
-                    decoration: BoxDecoration(
-                        color: TColors.primary,
-                        borderRadius: BorderRadius.circular(15)
+                        ),
+                        const SizedBox(height: TSizes.md,),
+                        RichText(
+                            text: TextSpan(
+                                style: Theme.of(context).textTheme.labelMedium,
+                                children: <TextSpan> [
+                                  TextSpan(
+                                      text: 'needs: ${item?.creditedCurrency}',
+                                  ),
+                                ]
+                            )
+                        ),
+                      ],
                     ),
-                    child: const Center(
-                      child: Text('!', style: TextStyle(
-                          color: TColors.white
-                      ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: TSizes.md,),
-                  Expanded(
-                    child: RichText(
-                        // textAlign: TextAlign.center,
-                        text: TextSpan(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        RichText(
+                            text: TextSpan(
+                                style: Theme.of(context).textTheme.labelMedium,
+                                children: <TextSpan> [
+                                  TextSpan(
+                                      text: '${THelperFunctions.formatRate(item!.rate.toString())} ${item.creditedCurrency} // ${item.debitedCurrency}',
+                                      style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
+                                  ),
+                                ]
+                            )
+                        ),
+                        const SizedBox(height: TSizes.md,),
+                        RichText(
+                          text: TextSpan(
                             style: Theme.of(context).textTheme.labelSmall,
                             children: <TextSpan> [
                               TextSpan(
-                                  text: 'This offer expires in ${item?.expireCountDown == null ? '' : THelperFunctions.millisecondConversion(item.expireCountDown.toString()) ?? ''}',
-                                  style: TextStyle(
-                                      color: TColors.textPrimaryO80
-                                  )
+                                  text: 'Created ${THelperFunctions.getTimeDifference(item.createdDate)}',
                               ),
-
                             ]
-                        )
+                          )
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                const SizedBox(height: TSizes.spaceBtwSections),
+              ],
+            ),
+          ),
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 10),
+            decoration: const BoxDecoration(
+                color: TColors.primaryBackground
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 15,
+                  width: 15,
+                  decoration: BoxDecoration(
+                      color: TColors.primary,
+                      borderRadius: BorderRadius.circular(15)
+                  ),
+                  child: const Center(
+                    child: Text('!', style: TextStyle(
+                        color: TColors.white
+                    ),
                     ),
                   ),
-                ],
-              ),
-            )
-          ],
-        ),
+                ),
+                const SizedBox(width: TSizes.md,),
+                Expanded(
+                  child: RichText(
+                      // textAlign: TextAlign.center,
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelSmall,
+                          children: <TextSpan> [
+                            TextSpan(
+                                text: 'This offer expires in ${item.expireCountDown == null ? '' : THelperFunctions.millisecondConversion(item.expireCountDown.toString()) ?? ''}',
+                                style: TextStyle(
+                                    color: TColors.textPrimaryO80
+                                )
+                            ),
+
+                          ]
+                      )
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
       ),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(

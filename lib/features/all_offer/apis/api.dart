@@ -82,8 +82,8 @@ class OfferService {
     required OfferProvider offerProvider,
     required String debitedCurrency,
     required String creditedCurrency,
-    required int amount,
-    String? rate,
+    required String amount,
+    required String rate,
     String? expireIn,
   }) {
 
@@ -91,8 +91,8 @@ class OfferService {
     queryParameters['debitedCurrency'] = debitedCurrency;
     queryParameters['creditedCurrency'] = creditedCurrency;
     queryParameters['amount'] = amount;
-    queryParameters['rate'] = rate != null ? int.parse(rate) : null;
-    queryParameters['expireIn'] = expireIn != 'Never' ? int.parse(expireIn.toString()) : 2000;
+    queryParameters['rate'] = rate;
+    queryParameters['expireIn'] = expireIn != 'Never' ? int.parse(expireIn.toString()) : 0;
 
     _createOffer(queryParameters).then((response) async {
       var item = response.data;
@@ -151,6 +151,8 @@ class OfferService {
     required String id,
     required bool negotiationAccepted,
     required OfferProvider offerProvider,
+    required WalletProvider walletProvider,
+    required TransactionProvider transactionProvider,
     required VoidCallback onSuccess
   }) {
     _acceptRejectOffer(
@@ -176,6 +178,7 @@ class OfferService {
       await NoLoaderService.instance.getGbpTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
       await NoLoaderService.instance.getCadTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
       await NoLoaderService.instance.getEurTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+      await NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
       onSuccess();
     }).catchError((error) {
       print(error.toString());
@@ -187,10 +190,11 @@ class OfferService {
 
   negotiateOffer({
     required String id,
-    required int negotiatorRate,
-    required int negotiatorAmount,
+    required String negotiatorRate,
+    required String negotiatorAmount,
     required OfferProvider offerProvider,
-    required VoidCallback onSuccess
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
   }) {
     _negotiateOffer(
         id: id,
@@ -226,6 +230,7 @@ class OfferService {
           () => handleShowCustomToast(message: 'Your bid has been created successfully!!!')
       );
     }).catchError((error) {
+      onFailure();
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
@@ -491,6 +496,11 @@ class OfferService {
         offerProvider.saveMyOffers(negotiations);
       }
 
+
+      print('value ${content.length}');
+
+    }).catchError((error) {
+      print('newly found error $error');
     });
   }
 

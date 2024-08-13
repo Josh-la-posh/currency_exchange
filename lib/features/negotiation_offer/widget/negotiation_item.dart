@@ -86,7 +86,7 @@ class NegotiationItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                              text: THelperFunctions.formatRate(item.negotiatorRate.toString()),
+                              text: (THelperFunctions.formatRate(item.negotiatorRate.toString())),
                                 style: TextStyle(
                                     color: TColors.primary,
                                     fontWeight: FontWeight.w500

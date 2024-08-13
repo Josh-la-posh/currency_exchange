@@ -59,7 +59,7 @@ class _NegotiationOfferScreenState extends State<NegotiationOfferScreen> {
                   style: Theme.of(context).textTheme.labelSmall,
                   children: const <TextSpan> [
                     TextSpan(
-                        text: 'Negotiation Offer',
+                        text: 'Offers Review',
                         style: TextStyle(fontSize: TSizes.fontSize16, fontWeight: TSizes.fontWeightMd)
                     )
                   ]
@@ -68,18 +68,11 @@ class _NegotiationOfferScreenState extends State<NegotiationOfferScreen> {
         ),
         body: Container(
           height: THelperFunctions.screenHeight() - TSizes.appBarHeight,
-          child: Column(
-            children: [
-              CurrencyWidget(),
-              Expanded(
-                child: CustomRefreshIndicator(
-                    onRefresh: _refreshOffers,
-                    child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        child: NegotiationList(darkMode: darkMode))
-                ),
-              ),
-            ],
+          child: CustomRefreshIndicator(
+              onRefresh: _refreshOffers,
+              child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: NegotiationList(darkMode: darkMode))
           ),
         ),
       ),

@@ -46,17 +46,17 @@ class OfferProvider extends ChangeNotifier {
   OfferEntity? _selectedOffer;
   Currency creditedCurrency = Currency.NGN;
   Currency debitedCurrency = Currency.NGN;
-  int amount = 0;
+  String amount = '';
   String rate = '';
   String expireIn = '1';
-  int negotiatorRate = 0;
-  int negotiatorAmount = 0;
+  String negotiatorRate = '';
+  String negotiatorAmount = '';
   String? waitingHour;
-  List hours = ['1', '2', '3', '4', '5', '24', '48', '72', 'Never'];
+  List hours = ['1', '2', '5', '8', '12', '24', '48', '72', 'Never'];
   bool _filterAll = false;
 
   CreateOfferEntity _createOfferEntity = CreateOfferEntity(
-      debitedCurrency: Currency.NGN, creditedCurrency: Currency.NGN, amount: 0, rate: '', expireIn: '1');
+      debitedCurrency: Currency.NGN, creditedCurrency: Currency.NGN, amount: '', rate: '', expireIn: '1');
   CreateOfferEntity get createOfferEntity => _createOfferEntity;
 
   OfferDetailsEntity? get offerDetails => _offerDetails;
@@ -270,8 +270,8 @@ class OfferProvider extends ChangeNotifier {
   }
 
   void updateAmount(String val) {
-    _createOfferEntity.amount = int.parse(val);
-    amount = int.parse(val);
+    _createOfferEntity.amount = val;
+    amount = val;
   }
 
   void updateDebitedCurrency(Currency currency) {
@@ -304,22 +304,22 @@ class OfferProvider extends ChangeNotifier {
   }
 
   void setNegotiatorAmount(String val) {
-    negotiatorAmount = int.parse(val);
+    negotiatorAmount = val;
     notifyListeners();
   }
 
   void setNegotiatorRate(String val) {
-    negotiatorRate = int.parse(val);
+    negotiatorRate = val;
     notifyListeners();
   }
 
   resetCreateOfferDetails() {
-    amount = 0;
+    amount = '';
     debitedCurrency = Currency.NGN;
     creditedCurrency = Currency.NGN;
     rate = '';
     expireIn = '1';
-    _createOfferEntity.amount = 0;
+    _createOfferEntity.amount = '';
     _createOfferEntity.creditedCurrency = Currency.NGN;
     _createOfferEntity.debitedCurrency = Currency.NGN;
     _createOfferEntity.rate = '';
@@ -349,8 +349,8 @@ class OfferProvider extends ChangeNotifier {
     resetCreateOfferDetails();
     _offerDetails = null;
     _selectedOffer = null;
-    negotiatorAmount = 0;
-    negotiatorRate = 0;
+    negotiatorAmount = '';
+    negotiatorRate = '';
     _offerResponse = null;
     _myOffers = [];
     _myBids = [];

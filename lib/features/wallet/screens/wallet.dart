@@ -36,18 +36,15 @@ class _WalletDashboardScreenState extends State<WalletDashboardScreen> {
       AppNavigator.instance.navigatorKey.currentContext as BuildContext,
       listen: false,
     );
-
     _initializeData();
   }
 
   void _initializeData() {
-    if (_walletProvider.wallets.isEmpty) {
-      NoLoaderService.instance.getWallets(
-        transactionProvider: _transactionProvider,
-        walletProvider: _walletProvider,
-        currency: '',
-      );
-    }
+    NoLoaderService.instance.getWallets(
+      transactionProvider: _transactionProvider,
+      walletProvider: _walletProvider,
+      currency: '',
+    );
   }
 
   Future<void> _refreshAssets() async {

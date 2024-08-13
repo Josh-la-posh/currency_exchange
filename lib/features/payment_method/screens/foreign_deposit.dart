@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:pouch/features/home/routes/names.dart';
@@ -14,6 +15,7 @@ import '../../../data/provider/transaction_provider.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/enums.dart';
+import '../../all_offer/decimal_formatter.dart';
 
 class ForeignFundingScreen extends StatefulWidget {
   const ForeignFundingScreen({super.key});
@@ -145,6 +147,12 @@ class _ForeignFundingScreenState extends State<ForeignFundingScreen> {
                       TextFormField(
                         validator: TValidator.numValidator,
                         style: Theme.of(context).textTheme.bodyMedium,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          DecimalTextInputFormatter(decimalRange: 2),
+                          // Apply the formatter here
+                          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                        ],
                         onChanged: (val) => _amount = val,
                         onSaved: (val) {
                           setState(() {

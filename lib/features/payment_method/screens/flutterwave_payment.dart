@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/features/home/routes/names.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/provider/auth_provider.dart';
@@ -37,6 +38,8 @@ class FlutterwavePaymentScreen extends StatelessWidget {
         leading: const BackButton(),
       ),
       body: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        padding: EdgeInsets.only(bottom: 100),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -283,9 +286,8 @@ class FlutterwavePaymentScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
               child: GestureDetector(
                 onTap: () async {
-                  controller.selectedIndex.value = 3;
+                  await NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
                   AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                  await WalletServices.instance.getDefaultWallet(transactionProvider: transactionProvider, walletProvider: walletProvider);
                 },
                 child: Container(
                   width: double.infinity,
@@ -334,7 +336,6 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 30,)
           ],
         ),
       ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:pouch/features/negotiation_offer/screen/my_bid_detail.dart';
+import 'package:pouch/features/negotiation_offer/screen/my_offer_detail.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/features/negotiation_offer/screen/negotiation_accept_reject.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
@@ -76,7 +78,10 @@ class MyBidItem extends StatelessWidget {
             ]
         ),
         child: ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: TSizes.md, horizontal: TSizes.defaultSpace * 1.3),
+          onTap: () {
+            Get.to(() => MyBidDetail(item: item,));
+          },
+          contentPadding: EdgeInsets.symmetric(vertical: TSizes.md, horizontal: TSizes.defaultSpace),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -96,7 +101,7 @@ class MyBidItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${item.negotiatorAmount}',
+                                    text: '${(THelperFunctions.formatRate(item.negotiatorAmount.toString()))}',
                                     style: TextStyle(fontWeight: TSizes.fontWeightLg)
                                 ),
                                 TextSpan(
@@ -114,7 +119,7 @@ class MyBidItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: const <TextSpan> [
                                 TextSpan(
-                                    text: 'Bid offers',
+                                    text: 'My Bid',
                                     style: TextStyle(
                                       fontSize: TSizes.fontSize10,
                                       fontWeight: TSizes.fontWeightLg,

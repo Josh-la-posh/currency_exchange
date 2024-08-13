@@ -33,7 +33,7 @@ class NegotiationScreen extends StatefulWidget {
 class _NegotiationScreenState extends State<NegotiationScreen> {
   final formKey = GlobalKey<FormState>();
 
-  bool isBidCompleted = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +67,12 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                             style: Theme.of(context).textTheme.labelMedium
                           ),
                         ),
-                        Text(widget.creditedCurrency, style: Theme.of(context).textTheme.labelMedium,)
+                        SizedBox(width: 5,),
+                        Text(widget.debitedCurrency, style: Theme.of(context).textTheme.bodyMedium,)
                       ],
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields,),
-                    Text('At (Rate)', style: Theme.of(context).textTheme.labelMedium,),
+                    Text('At', style: Theme.of(context).textTheme.labelMedium,),
                     SizedBox(
                       child: Row(
                         children: [
@@ -86,14 +87,18 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                                 style: Theme.of(context).textTheme.labelMedium
                             ),
                           ),
-                          Text(widget.debitedCurrency, style: Theme.of(context).textTheme.labelMedium,),
+                          SizedBox(width: 5,),
+                          Text('${widget.creditedCurrency} // ${widget.debitedCurrency} ', style: Theme.of(context).textTheme.bodyMedium,),
                         ],
                       ),
                     ),
                   ],
                 ),
                 TElevatedButton(
-                    onTap: (){
+                    onTap: isLoading ? null : (){
+                      setState(() {
+                        isLoading = true;
+                      });
                       if (formKey.currentState!.validate()) {
                         OfferService.instance
                             .negotiateOffer(
@@ -102,14 +107,19 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                             negotiatorAmount: provider.negotiatorAmount,
                             offerProvider: offerProvider,
                             onSuccess: () {
-                              controller.selectedIndex.value = 3;
+                              controller.selectedIndex.value = 1;
                               AppNavigator.instance
                                 .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                            },
+                            onFailure: (){
+                              setState(() {
+                                isLoading = false;
+                              });
                             }
                         );
                       }
                     },
-                    buttonText: 'Done'
+                    buttonText: isLoading ? 'Loading ...' : 'Done'
                 )
               ],
             ),

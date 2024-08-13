@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/payment_method/screens/foreign_deposit.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ import '../../../data/modules/app_navigator.dart';
 import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/validators/validation.dart';
+import '../../all_offer/decimal_formatter.dart';
 import '../../wallet/apis/api.dart';
 
 class PaymentOptionScreen extends StatefulWidget {
@@ -143,7 +145,7 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
                 walletProvider.showErrorMessage();
               } else {
                 WalletServices.instance.fundWalletNairaTransfer(
-                  amount: int.parse(_amount),
+                  amount: _amount,
                   walletProvider: walletProvider,
                 );
               }
@@ -155,7 +157,7 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
                 walletProvider.showErrorMessage();
               } else {
                 WalletServices.instance.fundWalletNairaPaystack(
-                  amount: int.parse(_amount),
+                  amount: _amount,
                   walletProvider: walletProvider,
                 );
               }
@@ -295,6 +297,11 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
       textAlign: TextAlign.center,
       validator: TValidator.numValidator,
       keyboardType: TextInputType.number,
+      inputFormatters: [
+        DecimalTextInputFormatter(decimalRange: 2),
+        // Apply the formatter here
+        FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+      ],
       style: Theme.of(context).textTheme.titleLarge,
       onChanged: (val) {
         setState(() {

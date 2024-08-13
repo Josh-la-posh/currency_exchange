@@ -3,7 +3,6 @@ import 'package:pouch/features/transaction/models/transaction_entity.dart';
 import 'package:pouch/features/transaction/widgets/transaction_details.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../icons/svg.dart';
@@ -47,6 +46,11 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
+
+
+
+
+
   Column _buildTransactionInfo(BuildContext context, double width, RichText formattedAmount, Color statusColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -59,8 +63,8 @@ class TransactionItem extends StatelessWidget {
               child: item.transactionType == 'Exchange' 
                   ? TransactionIcon(height: 18) 
                   : item.transactionType == 'Debit'
-                  ? Icon(Icons.keyboard_double_arrow_up_outlined, size: 22, color: Color(0xFFFF0944),)
-                  : Icon(Icons.keyboard_double_arrow_down_outlined, size: 22, color: Color(0xFF04FF69),),
+                  ? Icon(Icons.keyboard_double_arrow_down_outlined, size: 22, color: Color(0xFFFF0944),)
+                  : Icon(Icons.keyboard_double_arrow_up_outlined, size: 22, color: Color(0xFF04FF69),),
             ),
             const SizedBox(width: TSizes.md),
             Column(
@@ -149,7 +153,7 @@ class TransactionItem extends StatelessWidget {
 
   String _getRateInfo(TransactionEntity item, double width) {
     if (item.rate == null) return '';
-    return '${THelperFunctions.formatRate(item.rate.toString())} ${item.debitedCurrency} // ${item.creditedCurrency}';
+    return '${(THelperFunctions.formatRate(item.rate.toString()))} ${item.debitedCurrency} // ${item.creditedCurrency}';
   }
 
   String _getTransactionTime(TransactionEntity item) {

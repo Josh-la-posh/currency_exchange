@@ -180,7 +180,7 @@ class WalletServices{
   }
 
   fundWalletNairaTransfer({
-    required int amount,
+    required String amount,
     required WalletProvider walletProvider
   }) {
     _fundWalletNairaTransfer({'amount': amount})
@@ -209,6 +209,7 @@ class WalletServices{
             Get.to(() => FlutterwavePaymentScreen());
 
     }).catchError((error) {
+      print('finding $error');
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });
   }
@@ -248,7 +249,7 @@ class WalletServices{
 
   fundWalletNairaPaystack({
     required WalletProvider walletProvider,
-    required int amount,
+    required String amount,
   }) {
     _fundWalletNairaPaystack({
       'amount': amount
@@ -360,7 +361,7 @@ class WalletServices{
   fundWalletNairaUssd({
     required WalletProvider walletProvider,
     required TransactionProvider transactionProvider,
-    required int amount,
+    required String amount,
     required String currency,
     required String bank
   }) {
@@ -387,7 +388,7 @@ class WalletServices{
 
       walletProvider.saveUssdDetail(ussdModel);
 
-      Get.to(() => UssdFundingDetailScreen(amount: amount.toString(),));
+      Get.to(() => UssdFundingDetailScreen(amount: amount));
     }).catchError((error) {
       showErrorAlertHelper(errorMessage: handleApiFormatError(error));
     });

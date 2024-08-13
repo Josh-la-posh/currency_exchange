@@ -6,7 +6,7 @@ class NegotiateOfferModel {
   final String creditedCurrency;
   final String amount;
   final String rate;
-  final String expireIn;
+  String? expireIn;
   String? expireCountDown;
   final int views;
   String? negotiatorRate;

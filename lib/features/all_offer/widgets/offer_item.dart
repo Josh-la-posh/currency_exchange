@@ -126,7 +126,7 @@ class OfferItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${THelperFunctions.getTimeDifference(item.createdDate)} ago',
+                                    text: '${THelperFunctions.getTimeDifference(item.createdDate)}',
                                     style: TextStyle(
                                       color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
                                     )

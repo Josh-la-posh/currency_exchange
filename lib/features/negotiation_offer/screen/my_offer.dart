@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pouch/utils/shimmer/order_shimmer.dart';
 import 'package:provider/provider.dart';
-import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/features/negotiation_offer/widget/my_offer_item.dart';
 import 'package:pouch/features/negotiation_offer/widget/no_negotiation.dart';
 import '../../../data/provider/offer_provider.dart';
-import '../../../utils/constants/colors.dart';
-import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/list_layout.dart';
 
 class MyOfferScreen extends StatelessWidget {
