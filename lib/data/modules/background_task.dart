@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/data/modules/interceptor.dart';
 import 'package:pouch/data/provider/auth_provider.dart';
 import 'package:pouch/features/authentication/models/user_model.dart';
+import 'package:pouch/features/notification/model/get_user_notification.dart';
 
 import '../../features/all_offer/models/negotiate_offer_entity.dart';
 import '../../features/all_offer/models/negotiate_offer_model.dart';
 import '../../features/all_offer/models/offer.dart';
 import '../../features/all_offer/models/offer_details_entity.dart';
-import '../../features/all_offer/screens/offer_details.dart';
 import '../../features/subscription/models/subscribeEnity.dart';
 import '../../features/subscription/models/subscription_details.dart';
 import '../../features/transaction/models/transaction_details_entity.dart';
@@ -21,6 +19,7 @@ import '../../features/wallet/models/get_bank_account.dart';
 import '../../features/wallet/models/get_wallet.dart';
 import '../../utils/responses/handleApiError.dart';
 import '../../utils/shared/notification/snackbar.dart';
+import '../provider/notificaton_provider.dart';
 import '../provider/offer_provider.dart';
 import '../provider/subscription_provider.dart';
 import '../provider/transaction_provider.dart';
@@ -36,6 +35,7 @@ handleBackgroundAppRequest({
   required TransactionProvider transactionProvider,
   required OfferProvider offerProvider,
   required SubscriptionProvider subscriptionProvider,
+  required NotificationProvider notificationProvider
 }) async {
   NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
   NoLoaderService.instance.getMyBids(offerProvider: offerProvider, days: '', currency: '', onSuccess: (){}, onFailure: (){});
@@ -44,8 +44,9 @@ handleBackgroundAppRequest({
   NoLoaderService.instance.getDefaultWallet(walletProvider: walletProvider, transactionProvider: transactionProvider);
   NoLoaderService.instance.getBankList(walletProvider: walletProvider);
   NoLoaderService.instance.getLocalBank(walletProvider: walletProvider);
-  NoLoaderService.instance.getSubscriptions(provider: subscriptionProvider, currency: '');
+  NoLoaderService.instance.getSubscriptions(provider: subscriptionProvider, currency: '', onSuccess: (){});
   NoLoaderService.instance.getTransactions(transactionProvider: transactionProvider);
+  NoLoaderService.instance.getUserNotification(provider: notificationProvider, onSuccess: () {});
 }
 
 class NoLoaderService {
@@ -130,6 +131,16 @@ class NoLoaderService {
 
   Future _getBankList() {return _apiService.get('/wallet/list-banks');}
 
+
+  // Notification
+
+  Future _getUserNotifications() {
+    return _apiService.get('/notification/user/notifications');
+  }
+
+  Future _getNotificationsId(String id) {
+    return _apiService.get('/notification/user/notifications/$id');
+  }
 
 
 
@@ -1497,7 +1508,7 @@ class NoLoaderService {
   
   // subscribe function
 
-  getSubscriptions({required SubscriptionProvider provider, required String currency}) {
+  getSubscriptions({required SubscriptionProvider provider, required String currency, required VoidCallback onSuccess}) {
     List<SubscriptionEntity> subscriptions = [];
     _getSubscriptions(currency)
         .then((response) {
@@ -1526,14 +1537,16 @@ class NoLoaderService {
           maxRate: item['maxRate'],
           lastModifiedDate: item['lastModifiedDate'],
         ));
-        provider.saveSubscriptions(subscriptions);
       }
+      provider.saveSubscriptions(subscriptions);
+      print('The value is not working ${subscriptions.length}');
+      onSuccess();
     });
   }
 
   deleteSubscription({required String id, required SubscriptionProvider subscriptionProvider}) {
     _deleteSubscriptions(id).then((response) async {
-      await getSubscriptions(provider: subscriptionProvider, currency: '');
+      await getSubscriptions(provider: subscriptionProvider, currency: '', onSuccess: (){});
       handleShowCustomToast(message: response.data['message']);
     }).catchError((error) {
       handleShowCustomToast(message: handleApiFormatError(error));
@@ -1584,5 +1597,49 @@ class NoLoaderService {
   }
 
 
+  // Notification function
 
+  getUserNotification({
+    required NotificationProvider provider,
+    required VoidCallback onSuccess
+  }) {
+    List<GetUserNotification> notification = [];
+    _getUserNotifications()
+        .then((response) {
+      var data = response.data;
+
+      for (var item in data) {
+        notification.add(GetUserNotification(
+          id: item['id'],
+          description: item['description'],
+          read: item['read'],
+          delivered: item['delivered'],
+          type: item['type'],
+          offerId: item['offerId'],
+          createdDate: item['createdDate'],
+          lastModifiedDate: item['lastModifiedDate']
+        ));
+      }
+      provider.saveUserNotifications(notification);
+
+      onSuccess();
+      print('The value is not working ${notification.length}');
+    });
+  }
+
+  getNotificationId({
+    required NotificationProvider provider,
+    required String id,
+    // required VoidCallback onSuccess
+  }) {
+    _getNotificationsId(id)
+        .then((response) async {
+      var data = response.data;
+
+      print(data);
+      await getUserNotification(provider: provider, onSuccess: (){});
+      // onSuccess();
+      print('The value is not working');
+    });
+  }
 }

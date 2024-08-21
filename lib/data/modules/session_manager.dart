@@ -17,6 +17,7 @@ import 'package:pouch/utils/shared/notification/snackbar.dart';
 
 import '../../utils/constants/app.dart';
 import '../provider/auth_provider.dart';
+import '../provider/notificaton_provider.dart';
 import '../provider/wallet_provider.dart';
 
 class UserSession {
@@ -46,7 +47,8 @@ class UserSession {
       WalletProvider walletProvider,
       TransactionProvider transactionProvider,
       OfferProvider offerProvider,
-      SubscriptionProvider subscriptionProvider
+      SubscriptionProvider subscriptionProvider,
+      NotificationProvider notificationProvider
       ) async {
     final userJson = _storage.getString(USER_DATA);
     var isLogin = await UserSession.instance.isLoginBool();
@@ -58,7 +60,8 @@ class UserSession {
           walletProvider: walletProvider,
           transactionProvider: transactionProvider,
           offerProvider: offerProvider,
-          subscriptionProvider: subscriptionProvider
+          subscriptionProvider: subscriptionProvider,
+          notificationProvider: notificationProvider
       );
       // handleShowLoader();
       // Future.delayed(

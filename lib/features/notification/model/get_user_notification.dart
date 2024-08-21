@@ -1,5 +1,3 @@
-
-
 import 'package:pouch/utils/constants/enums.dart';
 
 class GetUserNotification{

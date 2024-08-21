@@ -15,11 +15,10 @@ import 'package:pouch/features/authentication/screens/add_details/add_address_de
 import 'package:pouch/features/home/routes/names.dart';
 import 'package:pouch/utils/shared/notification/snackbar.dart';
 import '../../../data/modules/interceptor.dart';
-import '../../../utils/loader.dart';
-import '../../../utils/responses/error_dialog.dart';
+import '../../../data/provider/notificaton_provider.dart';
 import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/responses/success_dialog.dart';
-import '../models/create_account_model.dart';
+
 final _apiService = AppInterceptor(showLoader: false).dio;
 class AuthService {
   static final AuthService _instance = AuthService._();
@@ -112,6 +111,7 @@ class AuthService {
     required AuthProvider authProvider,
     required WalletProvider walletProvider,
     required TransactionProvider transactionProvider,
+    required NotificationProvider notificationProvider,
     required OfferProvider offerProvider,
     required SubscriptionProvider subscriptionProvider,
     required bool rememberMe,
@@ -131,6 +131,7 @@ class AuthService {
           transactionProvider: transactionProvider,
           offerProvider: offerProvider,
           subscriptionProvider: subscriptionProvider,
+          notificationProvider: notificationProvider,
           rememberMe: rememberMe,
           handleEmailNotVerified: handleEmailNotVerified
       );
@@ -172,6 +173,7 @@ class AuthService {
     required TransactionProvider transactionProvider,
     required OfferProvider offerProvider,
     required SubscriptionProvider subscriptionProvider,
+    required NotificationProvider notificationProvider,
     required bool rememberMe,
     required VoidCallback handleEmailNotVerified
   }) async {
@@ -227,7 +229,8 @@ class AuthService {
           walletProvider: walletProvider,
           transactionProvider: transactionProvider,
           subscriptionProvider: subscriptionProvider,
-          offerProvider: offerProvider
+          offerProvider: offerProvider,
+          notificationProvider: notificationProvider
         );
         // handleShowLoader();
         if (authProvider.user?.address == null) {
@@ -328,6 +331,7 @@ class AuthService {
     required TransactionProvider transactionProvider,
     required OfferProvider offerProvider,
     required SubscriptionProvider subscriptionProvider,
+    required NotificationProvider notificationProvider,
     required bool rememberMe,
     required VoidCallback handleEmailNotVerified
   }) async {
@@ -347,6 +351,7 @@ class AuthService {
             transactionProvider: transactionProvider,
             offerProvider: offerProvider,
             subscriptionProvider: subscriptionProvider,
+            notificationProvider: notificationProvider,
             rememberMe: rememberMe,
             handleEmailNotVerified: handleEmailNotVerified
         );

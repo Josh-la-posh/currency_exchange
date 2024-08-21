@@ -7,6 +7,7 @@ import 'package:pouch/data/provider/wallet_provider.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/modules/session_manager.dart';
 import '../../../data/provider/auth_provider.dart';
+import '../../../data/provider/notificaton_provider.dart';
 import '../../../utils/configs/app_config.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
@@ -45,6 +46,11 @@ class _SplashScreenState extends State<SplashScreen>
     listen: false,
   );
 
+  var notificationProvider = Provider.of<NotificationProvider>(
+    AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+    listen: false,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +59,8 @@ class _SplashScreenState extends State<SplashScreen>
       walletProvider,
       transactionProvider,
       offerProvider,
-      subscriptionProvider
+      subscriptionProvider,
+      notificationProvider
     );
 
     _controller = AnimationController(

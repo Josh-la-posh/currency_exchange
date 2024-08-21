@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/data/modules/dio.dart';
 import 'package:pouch/data/provider/subscription_provider.dart';
 import 'package:pouch/features/subscription/models/subscribeEnity.dart';
@@ -44,9 +45,10 @@ class SubscriptionService {
       'minRate': minRate,
       'maxRate': maxRate
     }).then((response) async {
-      await getSubscriptions(
+      await NoLoaderService.instance.getSubscriptions(
           provider: subscriptionProvider,
           currency : '',
+          onSuccess: (){}
       );
       handleShowCustomToast(message: 'Subscription created successfully');
       Get.back();
@@ -58,7 +60,9 @@ class SubscriptionService {
 
   getSubscriptions({
     required SubscriptionProvider provider,
-    required String currency
+    required String currency,
+    required VoidCallback onSuccess,
+    // required VoidCallback onFailure,
   }) {
     List<SubscriptionEntity> subscriptions = [];
     _getSubscriptions(currency)
@@ -90,12 +94,13 @@ class SubscriptionService {
             ));
             provider.saveSubscriptions(subscriptions);
           }
+          onSuccess();
     });
   }
 
   deleteSubscription({required String id, required SubscriptionProvider subscriptionProvider}) {
     _deleteSubscriptions(id).then((response) async {
-      await getSubscriptions(provider: subscriptionProvider, currency: '');
+      await NoLoaderService.instance.getSubscriptions(provider: subscriptionProvider, currency: '', onSuccess: (){});
       handleShowCustomToast(message: response.data['message']);
     }).catchError((error) {
       print(error.toString());

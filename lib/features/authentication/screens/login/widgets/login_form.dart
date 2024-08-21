@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:pouch/data/provider/notificaton_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
@@ -46,6 +47,10 @@ class _LoginFormState extends State<LoginForm> {
       listen: false);
 
   var walletProvider = Provider.of<WalletProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false);
+
+  var notificationProvider = Provider.of<NotificationProvider>(
       AppNavigator.instance.navigatorKey.currentContext as BuildContext,
       listen: false);
 
@@ -158,6 +163,7 @@ class _LoginFormState extends State<LoginForm> {
                         walletProvider: walletProvider,
                         transactionProvider: transactionProvider,
                         offerProvider: offerProvider,
+                        notificationProvider: notificationProvider,
                         subscriptionProvider: subscriptionProvider,
                         rememberMe: _rememberMe,
                         handleEmailNotVerified: () {
@@ -173,6 +179,7 @@ class _LoginFormState extends State<LoginForm> {
                                   walletProvider: walletProvider,
                                   transactionProvider: transactionProvider,
                                   offerProvider: offerProvider,
+                                  notificationProvider: notificationProvider,
                                   subscriptionProvider: subscriptionProvider,
                                   rememberMe: _rememberMe,
                                   handleEmailNotVerified: (){}

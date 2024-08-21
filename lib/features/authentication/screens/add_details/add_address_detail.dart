@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:pouch/data/provider/notificaton_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
@@ -35,6 +36,7 @@ class _AddAddressDetailState extends State<AddAddressDetail> {
   late final TransactionProvider transactionProvider;
   late final OfferProvider offerProvider;
   late final SubscriptionProvider subscriptionProvider;
+  late final NotificationProvider notificationProvider;
 
   final formKey = GlobalKey<FormState>();
   String postCode = '';
@@ -50,6 +52,7 @@ class _AddAddressDetailState extends State<AddAddressDetail> {
     transactionProvider = Provider.of<TransactionProvider>(context, listen: false);
     offerProvider = Provider.of<OfferProvider>(context, listen: false);
     subscriptionProvider = Provider.of<SubscriptionProvider>(context, listen: false);
+    notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
   }
 
   Future<void> fetchAddressFromPostCode(String postCode) async {
@@ -89,6 +92,7 @@ class _AddAddressDetailState extends State<AddAddressDetail> {
         authProvider: authProvider,
         walletProvider: walletProvider,
         transactionProvider: transactionProvider,
+        notificationProvider: notificationProvider,
         offerProvider: offerProvider,
         subscriptionProvider: subscriptionProvider,
         rememberMe: widget.rememberMe,

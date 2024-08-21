@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pouch/data/provider/notificaton_provider.dart';
 import 'package:provider/provider.dart';
 import '../provider/auth_provider.dart';
 import '../provider/currency_provider.dart';
@@ -63,6 +64,10 @@ class AppNavigator {
       navigatorKey.currentState!.context,
       listen: false,
     );
+    var notificationProvider = Provider.of<NotificationProvider>(
+      navigatorKey.currentState!.context,
+      listen: false,
+    );
 
     authProvider.removeUser();
     currencyProvider.resetState();
@@ -70,5 +75,6 @@ class AppNavigator {
     subscriptionProvider.resetState();
     transactionProvider.resetState();
     walletProvider.resetState();
+    notificationProvider.resetState();
   }
 }

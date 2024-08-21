@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pouch/data/provider/notificaton_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/provider/auth_provider.dart';
 import 'package:pouch/data/provider/currency_provider.dart';
@@ -33,6 +34,9 @@ class RootProvider extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => TransactionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => NotificationProvider(),
         ),
         ChangeNotifierProvider(
           create: (_) => VerificationProvider(),

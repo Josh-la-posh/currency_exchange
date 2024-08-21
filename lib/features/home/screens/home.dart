@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
+import 'package:pouch/data/provider/notificaton_provider.dart';
 import 'package:pouch/features/home/widgets/app_drawer.dart';
 import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_bid.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_offer.dart';
+import 'package:pouch/features/notification/screens/notification.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/verify_your_account.dart';
@@ -55,6 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
       listen: false
   );
   TransactionProvider transactionProvider = Provider.of<TransactionProvider>(
+      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+      listen: false
+  );
+  NotificationProvider notificationProvider = Provider.of<NotificationProvider>(
       AppNavigator.instance.navigatorKey.currentContext as BuildContext,
       listen: false
   );
@@ -302,11 +308,14 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
           leading: Builder(
-              builder: (context) => Padding(
-                padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+              builder: (context) => Container(
+                width: 60,
+                height: 60,
+                margin: const EdgeInsets.only(left: TSizes.defaultSpace / 2),
                 child: IconButton(
                     hoverColor: Colors.transparent,
                     splashColor: Colors.transparent,
+                    padding: EdgeInsets.zero,
                     onPressed: () =>
                         Navigator.push(
                             context,
@@ -328,10 +337,62 @@ class _HomeScreenState extends State<HomeScreen> {
               )
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: TSizes.defaultSpace),
-              child: Icon(Iconsax.notification4, size: 30,),
-            )
+            Builder(
+                builder: (context) => Container(
+                  margin: EdgeInsets.only(right: TSizes.defaultSpace),
+                  child: Stack(
+                    children: [
+                      IconButton(
+                        hoverColor: Colors.transparent,
+                        splashColor: Colors.transparent,
+                        padding: EdgeInsets.zero,
+                        onPressed: () =>
+                            Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                    pageBuilder: (_, __, ___) => NotificationScreen(),
+                                    transitionDuration: Duration(milliseconds: 500) ,
+                                    transitionsBuilder: (_, a, __, c) {
+                                      const begin = Offset(1.0, 0.0);
+                                      const end = Offset.zero;
+                                      const curve = Curves.ease;
+                                      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                                      return SlideTransition(position: a.drive(tween), child: c,);
+                                    }
+                                )
+                            ),
+                        icon: Icon(Iconsax.notification4, color: TColors.primary, size: 30)
+                    ),
+                      Positioned(
+                          right: 4,
+                          child: Container(
+                            width: 18,
+                            height: 18,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(9),
+                              color: Colors.red
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  notificationProvider.userNotifications.isEmpty
+                                      ? '0'
+                                      : notificationProvider.userNotifications.length.toString(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                      )
+                    ],
+                  ),
+                )
+            ),
           ],
         ),
         // drawer: AppDrawerWidget(darkMode: darkMode,),
@@ -375,7 +436,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: CurrencyWidget()
                   ),
                   const SizedBox(height: 8),
-
                   Container(
                     padding: EdgeInsets.only(top: 10),
                     color: darkMode ? TColors.textPrimaryO40 : Colors.white,

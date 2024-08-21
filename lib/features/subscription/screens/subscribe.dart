@@ -26,6 +26,7 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
   late AuthProvider authProvider;
   late VerificationProvider verificationProvider;
 
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -41,16 +42,23 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
         AppNavigator.instance.navigatorKey.currentContext as BuildContext,
         listen: false
     );
-    NoLoaderService.instance.getSubscriptions(
-        provider: subscriptionProvider,
-        currency: ''
-    );
-    print('The value is not working ${subscriptionProvider.subscriptions.length}');
-
     if (subscriptionProvider.subscriptions.isEmpty) {
-      SubscriptionService.instance.getSubscriptions(
+      setState(() {
+        isLoading = true;
+      });
+      NoLoaderService.instance.getSubscriptions(
           provider: subscriptionProvider,
-          currency: ''
+          currency: '',
+          onSuccess: () {
+              setState(() {
+                Future.delayed(
+                  Duration(seconds: 2),
+                    () => setState(() {
+                      isLoading = false;
+                    })
+                );
+              });
+          }
       );
     }
     if (authProvider.user?.isVerified == false) {
@@ -72,8 +80,10 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: subscriptionProvider.subscriptions.isEmpty
+        child: isLoading == true
             ? const NoSubscriptionScreen()
+            // : subscriptionProvider.subscriptions.isEmpty
+            // ? const NoSubscriptionScreen()
             : SubscriptionList(),
       ),
       floatingActionButton: TFloatingButton(
