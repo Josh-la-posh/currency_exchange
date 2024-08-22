@@ -1,0 +1,9 @@
+{
+  "auth_token": "KJN217v5KAG6lNRsthGCY0toKbgnyoncCw85m73fztwaCcHIKG0jSCssquLqMMjHGMl5M9bX4K8jX77vPCjcHuE2bDEyLS1MnYG+e+Q69ctWH98zSozgz2EFxpxXVBr59qn2pSWJo27bYf1XaxZgpNUA08b2tjTcWuBv9ES2eR8=",
+  "partner_id": "6951",
+  "prod_lambda_url": "https://api.smileidentity.com/v1/",
+  "prod_url": "",
+  "test_lambda_url": "https://testapi.smileidentity.com/v1/",
+  "test_url": "",
+  "version": "1.0.0"
+}
