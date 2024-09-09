@@ -10,10 +10,11 @@ import 'package:pouch/utils/constants/sizes.dart';
 
 import '../../../utils/constants/colors.dart';
 import '../../../utils/helpers/helper_functions.dart';
+import '../controllers/create_offer_controller.dart';
 import '../widgets/create_offer_form.dart';
 
 class CreateOfferScreen extends StatelessWidget {
-  const CreateOfferScreen({super.key});
+  final CreateOfferController createOfferController = Get.put(CreateOfferController());
 
   @override
   Widget build(BuildContext context) {
@@ -47,20 +48,18 @@ class CreateOfferScreen extends StatelessWidget {
             child: Container(
               padding: TSpacingStyle.horizontalPadding,
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: darkMode ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.1),
+                  border: Border(
+                      top: BorderSide(
+                        color: darkMode ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.1),
+                      )
                   )
-                )
               ),
               child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: TSizes.spaceBtwItems / 2),
-                      // Text('A brief explanation here on what users can do.', style: Theme.of(context).textTheme.labelMedium,),
-                      // const SizedBox(height: TSizes.spaceBtwElements,),
-                      const CreateOfferForm()
+                      CreateOfferForm()
                     ],
                   )
               ),

@@ -104,7 +104,7 @@ class _WalletDashboardState extends State<WalletDashboard> {
                   Text(
                     walletProvider.defaultWallet == null
                         ? '---------'
-                        : '${walletProvider.showWalletBalance ? THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString()) : '**********'}',
+                        : '${walletProvider.showWalletBalance ? THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString()) : '*****'}',
                     style: TextStyle(
                         fontSize: width > 400 ? 35 : 22,
                         fontWeight: FontWeight.w800,

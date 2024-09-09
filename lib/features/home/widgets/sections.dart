@@ -13,10 +13,7 @@ import 'package:pouch/utils/constants/image_strings.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/navigation_menu.dart';
-import '../../all_offer/screens/all_offer.dart';
 import '../../subscription/screens/subscribe.dart';
-import '../../transaction/screens/history.dart';
-import '../../wallet/screens/wallet.dart';
 
 class LinkSectionWidget extends StatelessWidget {
   final bool darkMode;
@@ -72,7 +69,7 @@ class LinkSectionWidget extends StatelessWidget {
                     const SizedBox(height: TSizes.sm),
                     SectionWidgetContainer(
                         onTap: () {
-                          Get.to(() => const MyBidAndOfferScreen());
+                          Get.to(() => MyBidAndOfferScreen());
                         },
                         icon: Icon(Icons.credit_card, size: 30, color: TColors.primary,),
                         darkMode: darkMode,
@@ -110,11 +107,11 @@ class LinkSectionWidget extends StatelessWidget {
                   const SizedBox(height: TSizes.xl),
                   SectionWidgetContainer(
                       onTap: () {
-                        Get.to(() => const NegotiationOfferScreen());
+                        Get.to(() => NegotiationOfferScreen());
                       },
                       icon: Icon(Iconsax.calculator5, size: 30, color: TColors.primary,),
                       darkMode: darkMode,
-                      title: 'Offers Review',
+                      title: 'Offers In Review',
                       image: TImages.negotiationOfferIcon
                   ),
                 ],

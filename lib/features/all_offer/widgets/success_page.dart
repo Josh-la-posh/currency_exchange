@@ -28,51 +28,55 @@ class SuccessScreenWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(NavigationController());
     final darkMode = THelperFunctions.isDarkMode(context);
-    return Padding(
-        padding: TSpacingStyle.homePadding,
-        child: SizedBox(
-          height: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return SingleChildScrollView(
+      padding: TSpacingStyle.homePadding,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: THelperFunctions.screenHeight() * 0.05,),
-                  const Image(image: AssetImage(TImages.success)),
-                  const SizedBox(height: TSizes.spaceBtwElements,),
-                  SizedBox(
-                    width: THelperFunctions.screenWidth() * 0.8,
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      text,
-                      style: Theme.of(context).textTheme.labelMedium,
+              SizedBox(height: THelperFunctions.screenHeight() * 0.05,),
+              const Image(image: AssetImage(TImages.success)),
+              const SizedBox(height: TSizes.spaceBtwElements,),
+              SizedBox(
+                width: THelperFunctions.screenWidth() * 0.8,
+                child: Text(
+                  textAlign: TextAlign.center,
+                  text,
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ),
+              const SizedBox(height: TSizes.spaceBtwSections * 2,),
+              Container(
+                  padding: const EdgeInsets.symmetric(horizontal: TSizes.lg, vertical: 15),
+                  height: THelperFunctions.screenHeight() * 0.28,
+                  color: darkMode ? Colors.grey.withOpacity(0.5) : TColors.primaryBackground,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        child,
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwSections * 2,),
-                  Container(
-                      height: THelperFunctions.screenHeight() * 0.25,
-                      padding: const EdgeInsets.symmetric(horizontal: TSizes.lg),
-                      color: darkMode ? Colors.grey.withOpacity(0.5) : TColors.primaryBackground,
-                      child: child
-                  ),
-                  const SizedBox(height: TSizes.spaceBtwSections * 1.5,),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                    child: TElevatedButton(
-                        onTap: onTap != null ? onTap : (){
-                          controller.selectedIndex.value = 1;
-                          AppNavigator.instance
-                              .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                          },
-                        buttonText: 'Done'),
                   )
-                ],
+              ),
+              const SizedBox(height: TSizes.spaceBtwSections * 1.5,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                child: TElevatedButton(
+                    onTap: onTap != null ? onTap : (){
+                      controller.selectedIndex.value = 1;
+                      AppNavigator.instance
+                          .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                      },
+                    buttonText: 'Done'),
               )
             ],
-          ),
-        ),
-      );
+          )
+        ],
+      ),
+    );
   }
 }

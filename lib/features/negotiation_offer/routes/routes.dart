@@ -7,10 +7,10 @@ import '../../../data/routes/guard_route.dart';
 import 'names.dart';
 
 Map<String, WidgetBuilder> negotiationRoute = {
-  NEGOTIATION_OFFER_SCREEN: (context) => const AuthGuard(
+  NEGOTIATION_OFFER_SCREEN: (context) => AuthGuard(
     widget: NegotiationOfferScreen(),
   ),
-  MY_OFFER_AND_BID_SCREEN_ROUTE: (context) => const AuthGuard(
+  MY_OFFER_AND_BID_SCREEN_ROUTE: (context) => AuthGuard(
     widget: MyBidAndOfferScreen(),
   ),
   MY_OFFER_DETAIL_SCREEN_ROUTE: (context) => AuthGuard(

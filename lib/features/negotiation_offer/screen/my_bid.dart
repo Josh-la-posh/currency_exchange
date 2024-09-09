@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
+import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import 'package:pouch/utils/shimmer/order_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/modules/background_task.dart';
@@ -11,39 +14,42 @@ import '../../../utils/layouts/list_layout.dart';
 
 class MyBidScreen extends StatelessWidget {
   final bool darkMode;
-  bool? displayMyBids;
   String? length;
+  final OfferController offerController = Get.put(OfferController());
   MyBidScreen({
-    super.key, required this.darkMode, this.length, this.displayMyBids
+    super.key, required this.darkMode, this.length
   });
 
   Widget build(BuildContext context) {
-    final offerProvider = Provider.of<OfferProvider>(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          children: [
-            displayMyBids == false
-                ? OrderShimmer(length: length,)
-                : offerProvider.myBids.isEmpty
-                ? LayoutBuilder(builder: (context, constraints) {
-              return const NoNegotiationScreen(title: 'Bid',);
-            })
-                : TListLayout(
-                itemCount: length != null
-                    ? offerProvider.myBids.length < int.parse(length!)
-                    ? offerProvider.myBids.length
-                    : int.parse(length!)
-                    : offerProvider.myBids.length,
-                itemBuilder: (_, index) {
-                  final item = offerProvider.myBids[index];
-                  return MyBidItem(item: item);
-                }
-            )
-          ],
-        )
-      ],
-    );
+    return Obx(() {
+      if (offerController.isMyBidsLoading.value) {
+        return OrderShimmer(length: length);
+      } else {
+        return CustomRefreshIndicator(
+            onRefresh: () => offerController.fetchMyBids(days: '', currency: ''),
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  offerController.myBids.isEmpty
+                      ? LayoutBuilder(builder: (context, constraints) {
+                    return const NoNegotiationScreen(title: 'Bid',);
+                  })
+                      : TListLayout(
+                      itemCount: length != null
+                          ? offerController.myBids.length < int.parse(length!)
+                          ? offerController.myBids.length
+                          : int.parse(length!)
+                          : offerController.myBids.length,
+                      itemBuilder: (_, index) {
+                        final item = offerController.myBids[index];
+                        return MyBidItem(item: item);
+                      }
+                  )
+                ],
+              ),
+            ));
+      }
+    });
   }
 }

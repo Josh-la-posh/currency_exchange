@@ -92,7 +92,7 @@ class VerificationSuccessScreen extends StatelessWidget {
               height: 40,
               child: TElevatedButton(
                   onTap: () {
-                    Get.to(() => const HomeScreen());
+                    Get.to(() => HomeScreen());
                   },
                   buttonText: 'Go To Dashboard'
               ),

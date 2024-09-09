@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
@@ -17,51 +18,13 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
   late AnimationController _controller;
-  // ignore: unused_field
   late Animation<double> _animation;
-
-  var authProvider = Provider.of<AuthProvider>(
-    AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-    listen: false,
-  );
-  var transactionProvider = Provider.of<TransactionProvider>(
-    AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-    listen: false,
-  );
-
-  var offerProvider = Provider.of<OfferProvider>(
-    AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-    listen: false,
-  );
-  var subscriptionProvider = Provider.of<SubscriptionProvider>(
-    AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-    listen: false,
-  );
-
-  var walletProvider = Provider.of<WalletProvider>(
-    AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-    listen: false,
-  );
-
-  var notificationProvider = Provider.of<NotificationProvider>(
-    AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-    listen: false,
-  );
 
   @override
   void initState() {
     super.initState();
-    UserSession.instance.routeUserToHomeIfLoggedIn(
-      authProvider,
-      walletProvider,
-      transactionProvider,
-      offerProvider,
-      subscriptionProvider,
-      notificationProvider
-    );
 
     _controller = AnimationController(
       duration: const Duration(seconds: SPLASH_DURATION),
@@ -72,38 +35,50 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller.forward();
 
-
     _controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        // Future.delayed(Duration(seconds: 1), () {
-          UserSession.instance.handleIfUserIsNotLoginAfterSplashScreen();
-        // });
+        UserSession.instance.handleIfUserIsNotLoginAfterSplashScreen();
       }
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // you need this
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const PopScope(
+    final authProvider = context.read<AuthProvider>();
+    final transactionProvider = context.read<TransactionProvider>();
+    final offerProvider = context.read<OfferProvider>();
+    final subscriptionProvider = context.read<SubscriptionProvider>();
+    final walletProvider = context.read<WalletProvider>();
+    final notificationProvider = context.read<NotificationProvider>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      UserSession.instance.routeUserToHomeIfLoggedIn(
+        authProvider,
+        walletProvider,
+        transactionProvider,
+        offerProvider,
+        subscriptionProvider,
+        notificationProvider,
+      );
+    });
+
+    return PopScope(
       canPop: false,
       child: Scaffold(
         backgroundColor: TColors.primary,
-        body: Stack(
-          children: [
-            Positioned(
-                top: 0,
-                bottom: 0,
-                right: 0,
-                left: 0,
-                child: Image(image: AssetImage(TImages.appLogoPng))
-            )
-          ],
+        body: Center(
+          child: Image.asset(
+            'assets/logos/swappr-splash-logo.png',
+            fit: BoxFit.contain,
+            width: 90,
+            height: 90,
+          ),
         ),
       ),
     );

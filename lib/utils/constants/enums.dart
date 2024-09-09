@@ -32,7 +32,7 @@ enum Currency {
   EUR,
 }
 
-String getCurrencyName(Currency currency) {
+String getCurrencyName(Currency? currency) {
   switch (currency) {
     case Currency.NGN:
       return 'NGN';

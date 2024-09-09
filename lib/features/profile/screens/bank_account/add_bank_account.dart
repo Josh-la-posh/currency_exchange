@@ -116,7 +116,10 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
                       initialValue: walletProvider.bankAccountDetails == null
                           ? ''
                           : walletProvider.bankAccountDetails?.account_number,
-                      onChanged: (val) => _accountNumber = val,
+                      onChanged: (val) {
+                        _accountNumber = val;
+                        formKey.currentState?.validate();
+                      },
                       onSaved: (val) {
                         setState(() {
                           _accountNumber = val as String;
@@ -157,7 +160,10 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
                       enabled: false,
                       style: Theme.of(context).textTheme.bodyMedium,
                       initialValue: walletProvider.bankAccountDetails?.account_name,
-                      onChanged: (val) => _accountNumber = val,
+                      onChanged: (val) {
+                        _accountNumber = val;
+                        formKey.currentState?.validate();
+                      },
                       onSaved: (val) {
                         setState(() {
                           _accountNumber = val as String;

@@ -11,14 +11,14 @@ class GetUserNotification{
   String? lastModifiedDate;
 
   GetUserNotification({
-    required this.id,
-    required this.description,
-    required this.read,
-    required this.delivered,
-    required this.type,
-    required this.offerId,
-    required this.createdDate,
-    required this.lastModifiedDate
+    this.id,
+    this.description,
+    this.read,
+    this.delivered,
+    this.type,
+    this.offerId,
+    this.createdDate,
+    this.lastModifiedDate
   });
 
   factory GetUserNotification.fromJson(Map<String, dynamic> json) => GetUserNotification(

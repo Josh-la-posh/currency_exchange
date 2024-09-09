@@ -1,224 +1,165 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:pouch/data/provider/offer_provider.dart';
-import 'package:pouch/features/all_offer/apis/api.dart';
-import 'package:pouch/features/home/screens/home.dart';
-import 'package:pouch/utils/constants/image_strings.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
+import 'package:pouch/features/home/controller/home_controller.dart';
+import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import 'package:pouch/utils/shimmer/order_shimmer.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
-import '../../../utils/constants/texts.dart';
 import '../../../utils/helpers/helper_functions.dart';
-import '../../all_offer/icons/svg.dart';
-import '../../all_offer/screens/all_offer.dart';
 import '../../negotiation_offer/widget/no_negotiation.dart';
 
 class TrendingOffer extends StatelessWidget {
-  final bool displayOffer;
-  final OfferProvider offerProvider;
-  final bool darkMode;
-  const TrendingOffer({super.key, required this.offerProvider, required this.darkMode, required this.displayOffer});
+  final HomeController homeController = Get.put(HomeController());
+  final OfferController offerController = Get.put(OfferController());
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Container(
       width: double.infinity,
-      child: Column(
-        children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 1.5),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Container(
-          //         padding: const EdgeInsets.symmetric(horizontal: TSizes.lg, vertical: TSizes.xs),
-          //         decoration: BoxDecoration(
-          //             borderRadius: BorderRadius.circular(10),
-          //             border: Border.all(
-          //                 color: TColors.primary
-          //             ),
-          //           color: darkMode ? TColors.primary : TColors.secondaryBorder30
-          //         ),
-          //         child: Row(
-          //           children: [
-          //             Text('Trending Offer',
-          //               style: TextStyle(
-          //                 color: darkMode ? TColors.white : TColors.primary,
-          //                 fontSize: 16,
-          //                 fontWeight: TSizes.fontWeightNm,
-          //                 fontFamily: TTexts.fontFamily,
-          //               ),
-          //             ),
-          //             const SizedBox(width: TSizes.md,),
-          //             Container(
-          //               width: 23,
-          //               height: 23,
-          //               decoration: BoxDecoration(
-          //                   borderRadius: BorderRadius.circular(23)
-          //               ),
-          //               child: Image(image: AssetImage(TImages.trendingOfferIcon)),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       IconButton(
-          //         hoverColor: Colors.transparent,
-          //         onPressed: () {
-          //           Get.to(() => const AllOfferScreen());
-          //         },
-          //         icon: Row(
-          //           children: [
-          //             Text('View All',
-          //               style: TextStyle(
-          //                   color: darkMode ? TColors.white.withOpacity(0.5) : TColors.primary,
-          //                   fontSize: 12,
-          //                   fontWeight: TSizes.fontWeightNm,
-          //                   fontFamily: TTexts.fontFamily
-          //               ),
-          //             ),
-          //             Icon(
-          //               Icons.keyboard_arrow_right_outlined,
-          //               size: 20,
-          //               color: darkMode ? TColors.white.withOpacity(0.5) : TColors.primary
-          //             )
-          //           ],
-          //         ),
-          //       )
-          //     ],
-          //   ),
-          // ),
-          displayOffer == false
-              ? OrderShimmer(length: '3',)
-              : offerProvider.allOffers.isEmpty
-              ? NoNegotiationScreen(title: 'Offer',)
-              : ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: offerProvider.allOffers.length > 3 ? 3 : offerProvider.allOffers.length,
-              itemBuilder: (_, index) {
-                final item = offerProvider.allOffers[index];
-                return Column(
+      child: Obx(() {
+        if (homeController.isOfferLoading.value) {
+          return OrderShimmer(length: '3');
+        } else {
+         return CustomRefreshIndicator(
+           onRefresh: () => offerController.fetchTrendingOffers(),
+           child: SingleChildScrollView(
+             physics: AlwaysScrollableScrollPhysics(),
+             child: Column(
                 children: [
-                  Container(
-                    // color: darkMode ? TColors.textBlack.withOpacity(0.5) : Colors.white,
-                    child: ListTile(
-                      tileColor: darkMode ? Colors.black38 : Color(0xFFFDF9FE),
-                      dense: true,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.sm),
-                      onTap: (){
-                        OfferService.instance.getOfferById(
-                            offerProvider: offerProvider,
-                            id: item.id,
-                            onTap: () {
-                              Get.to(() => HomeScreen());
-                            });
-                      },
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  offerController.trendingOffers.isEmpty
+                      ? NoNegotiationScreen(title: 'Offer',)
+                      : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: offerController.trendingOffers.length > 3 ? 3 : offerController.trendingOffers.length,
+                    itemBuilder: (_, index) {
+                      final item = offerController.trendingOffers[index];
+                      return Column(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelMedium,
-                                      children: <TextSpan> [
-                                        TextSpan(
-                                            text: 'has: ',
-                                            style: TextStyle(fontSize: 13)
-                                        ),
-                                        TextSpan(
-                                            text: '${THelperFunctions.moneyFormatter(item.amount.toString())} ${item.debitedCurrency}',
-                                            style: TextStyle(fontWeight: FontWeight.w500)
-                                        ),
-                                      ]
-                                  )
-                              ),
-                              const SizedBox(height: TSizes.md,),
-                              RichText(
-                                  text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelMedium,
-                                      children: <TextSpan> [
-                                        TextSpan(
-                                            text: 'needs: ',
-                                            style: TextStyle(fontSize: 13)
-                                        ),
-                                        TextSpan(
-                                            text: '${item.creditedCurrency}',
-                                            style: TextStyle(fontWeight: FontWeight.w500)
-                                        ),
-                                      ]
-                                  )
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelMedium,
-                                      children: <TextSpan> [
-                                        TextSpan(
-                                            text: THelperFunctions.formatRate(item.rate.toString()),
-                                            style: TextStyle(color: TColors.primary, fontWeight: FontWeight.w500)
-                                        ),
-                                        TextSpan(
-                                            text: ' ${item.creditedCurrency} // ${item.debitedCurrency}',
-                                            style: TextStyle(fontSize: TSizes.fontSize12, color: TColors.primary, fontWeight: FontWeight.w500)
-                                        ),
-                                      ]
-                                  )
-                              ),
-                              const SizedBox(height: TSizes.md,),
-                              Row(
+                          Container(
+                            child: ListTile(
+                              tileColor: darkMode ? Colors.black38 : Color(0xFFFDF9FE),
+                              dense: true,
+                              contentPadding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.sm),
+                              onTap: (){
+                                offerController.fetchOfferById(
+                                    id: item.id.toString(),
+                                    currency: item.debitedCurrency.toString(),
+                                    onSuccess: () {}
+                                );
+                              },
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Icon(
-                                    Icons.visibility,
-                                    size: 15,
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      RichText(
+                                          text: TextSpan(
+                                              style: Theme.of(context).textTheme.labelMedium,
+                                              children: <TextSpan> [
+                                                TextSpan(
+                                                    text: 'has: ',
+                                                    style: TextStyle(fontSize: 13)
+                                                ),
+                                                TextSpan(
+                                                    text: '${THelperFunctions.moneyFormatter(item.amount.toString())} ${item.debitedCurrency}',
+                                                    style: TextStyle(fontWeight: FontWeight.w500)
+                                                ),
+                                              ]
+                                          )
+                                      ),
+                                      const SizedBox(height: TSizes.md,),
+                                      RichText(
+                                          text: TextSpan(
+                                              style: Theme.of(context).textTheme.labelMedium,
+                                              children: <TextSpan> [
+                                                TextSpan(
+                                                    text: 'needs: ',
+                                                    style: TextStyle(fontSize: 13)
+                                                ),
+                                                TextSpan(
+                                                    text: '${item.creditedCurrency}',
+                                                    style: TextStyle(fontWeight: FontWeight.w500)
+                                                ),
+                                              ]
+                                          )
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(width: TSizes.md,),
-                                  RichText(
-                                      text: TextSpan(
-                                          style: Theme.of(context).textTheme.labelSmall,
-                                          children: <TextSpan> [
-                                            TextSpan(
-                                                text: '${item.views}',
-                                                style: TextStyle(
-                                                  color: darkMode ? TColors.white : TColors.textPrimaryO80,
-                                                )
-                                            ),
-                                          ]
-                                      )
-                                  ),
-                                  const SizedBox(width: TSizes.lg,),
-                                  RichText(
-                                      text: TextSpan(
-                                          style: Theme.of(context).textTheme.labelSmall,
-                                          children: <TextSpan> [
-                                            TextSpan(
-                                                text: '${THelperFunctions.getTimeDifference(item.createdDate)}',
-                                                style: TextStyle(
-                                                  color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
-                                                )
-                                            ),
-                                          ]
-                                      )
-                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      RichText(
+                                          text: TextSpan(
+                                              style: Theme.of(context).textTheme.labelMedium,
+                                              children: <TextSpan> [
+                                                TextSpan(
+                                                    text: THelperFunctions.formatRate(item.rate.toString()),
+                                                    style: TextStyle(color: TColors.primary, fontWeight: FontWeight.w500)
+                                                ),
+                                                TextSpan(
+                                                    text: ' ${item.creditedCurrency} // ${item.debitedCurrency}',
+                                                    style: TextStyle(fontSize: TSizes.fontSize12, color: TColors.primary, fontWeight: FontWeight.w500)
+                                                ),
+                                              ]
+                                          )
+                                      ),
+                                      const SizedBox(height: TSizes.md,),
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.visibility,
+                                            size: 15,
+                                          ),
+                                          const SizedBox(width: TSizes.md,),
+                                          RichText(
+                                              text: TextSpan(
+                                                  style: Theme.of(context).textTheme.labelSmall,
+                                                  children: <TextSpan> [
+                                                    TextSpan(
+                                                        text: '${item.views}',
+                                                        style: TextStyle(
+                                                          color: darkMode ? TColors.white : TColors.textPrimaryO80,
+                                                        )
+                                                    ),
+                                                  ]
+                                              )
+                                          ),
+                                          const SizedBox(width: TSizes.lg,),
+                                          RichText(
+                                              text: TextSpan(
+                                                  style: Theme.of(context).textTheme.labelSmall,
+                                                  children: <TextSpan> [
+                                                    TextSpan(
+                                                        text: '${THelperFunctions.getTimeDifference(item.createdDate.toString())}',
+                                                        style: TextStyle(
+                                                          color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
+                                                        )
+                                                    ),
+                                                  ]
+                                              )
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
+                            ),
+                          ),
+                          const SizedBox(height: TSizes.md,)
+                        ],);},
                   ),
-                  const SizedBox(height: TSizes.md,)
-                ],);},
-          ),
-        ],
-      ),
+                ],
+              ),
+           ),
+         );
+        }
+      }),
     );
   }
 }

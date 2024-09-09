@@ -90,7 +90,9 @@ class _SignUpFormState extends State<SignUpForm> {
           child: _buildTextField(
             context: context,
             label: 'First Name',
-            onChanged: (value) => firstName = value,
+            onChanged: (value) {
+              firstName = value;
+            },
             validator: TValidator.validateName,
           ),
         ),
@@ -99,7 +101,9 @@ class _SignUpFormState extends State<SignUpForm> {
           child: _buildTextField(
             context: context,
             label: 'Last Name',
-            onChanged: (value) => lastName = value,
+            onChanged: (value) {
+              lastName = value;
+            },
             validator: TValidator.validateName,
           ),
         ),
@@ -111,7 +115,9 @@ class _SignUpFormState extends State<SignUpForm> {
     return _buildTextField(
       context: context,
       label: 'Email',
-      onChanged: (value) => email = value,
+      onChanged: (value) {
+        email = value;
+      },
       validator: TValidator.validateEmail,
       keyboardType: TextInputType.emailAddress,
     );
@@ -135,7 +141,9 @@ class _SignUpFormState extends State<SignUpForm> {
               vertical: TSizes.defaultSpace * 2,
             ),
           ),
-          onChanged: (value) => phoneNo = value.completeNumber,
+          onChanged: (value) {
+            phoneNo = value.completeNumber;
+          },
           onSaved: (value) => phoneNo = value?.completeNumber ?? '',
           keyboardType: TextInputType.phone,
         ),
@@ -147,7 +155,9 @@ class _SignUpFormState extends State<SignUpForm> {
     return _buildTextField(
       context: context,
       label: 'Password',
-      onChanged: (value) => password = value,
+      onChanged: (value) {
+        password = value;
+      },
       validator: TValidator.validatePassword,
       obscureText: obscurePasswordText,
       suffixIcon: _buildToggleVisibilityIcon(
@@ -165,7 +175,9 @@ class _SignUpFormState extends State<SignUpForm> {
     return _buildTextField(
       context: context,
       label: 'Confirm Password',
-      onChanged: (value) => confirmPass = value,
+      onChanged: (value) {
+        confirmPass = value;
+      },
       validator: (value) => TValidator.validateConfirmPassword(value, password),
       obscureText: obscureConPasswordText,
       suffixIcon: _buildToggleVisibilityIcon(

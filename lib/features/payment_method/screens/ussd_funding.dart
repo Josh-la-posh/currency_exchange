@@ -93,7 +93,10 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                         ),
                       ),
                     ),
-                    onChanged: (val) => walletProvider.setSelectedNigBank(val!),
+                    onChanged: (val) {
+                      walletProvider.setSelectedNigBank(val!);
+                      formKey.currentState?.validate();
+                    },
                     items: [
                       for (final item in walletProvider.nigBanks)
                         DropdownMenuItem<Bank>(
@@ -170,7 +173,10 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                           // Apply the formatter here
                           FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                         ],
-                        onChanged: (val) => _amount = val,
+                        onChanged: (val) {
+                          _amount = val;
+                          formKey.currentState?.validate();
+                        },
                         onSaved: (val) {
                           setState(() {
                             _amount = val as String;

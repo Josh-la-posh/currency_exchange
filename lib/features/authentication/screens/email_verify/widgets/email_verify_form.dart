@@ -201,6 +201,7 @@ class _EmailVerificationFormState extends State<EmailVerificationForm> {
           if (value.isEmpty && index > 0) {
             _focusNodes[index - 1].requestFocus();
           }
+          formKey.currentState?.validate();
         },
         validator: (value) => value!.isEmpty ? 'Please enter a digit' : null,
       ),

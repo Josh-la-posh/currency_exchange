@@ -119,7 +119,9 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
                 SizedBox(
                   child: TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
-                    onChanged: (pass) => _password = pass,
+                    onChanged: (pass) {
+                      _password = pass;
+                    },
                     validator: TValidator.validatePassword,
                     onSaved: (pass) {
                       _password = pass as String;
@@ -148,7 +150,9 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
                 SizedBox(
                   child: TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
-                    onChanged: (pass) => _confirmPass = pass,
+                    onChanged: (pass) {
+                      _confirmPass = pass;
+                    },
                     validator: (value) => TValidator.validateConfirmPassword(value, _password),
                     obscureText: _obscureConPasswordText,
                     decoration: InputDecoration(
@@ -192,7 +196,9 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
                     fontWeight: FontWeight.w500,
                     decoration: TextDecoration.none,
                   ),
-                  onChanged: (val) => _otpCode = val,
+                  onChanged: (val) {
+                    _otpCode = val;
+                  },
                   validator: TValidator.otpValidator,
                   onSaved: (value) {
                     setState(() {
@@ -231,7 +237,6 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
                           // if (formKey.currentState!.validate()) {
                           // }
                         } else {
-                          formKey.currentState!.validate();
                           setState(() {
                             _canSendOtp = false;
                           });

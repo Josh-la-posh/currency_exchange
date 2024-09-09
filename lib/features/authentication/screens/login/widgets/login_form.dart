@@ -80,7 +80,9 @@ class _LoginFormState extends State<LoginForm> {
                 SizedBox(
                   child: TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
-                    onChanged: (val) => _email = val,
+                    onChanged: (val) {
+                      _email = val;
+                    },
                     validator: TValidator.validateEmail,
                     onSaved: (email) {
                       setState(() {
@@ -104,7 +106,9 @@ class _LoginFormState extends State<LoginForm> {
                   child: TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
                     validator: TValidator.validateLoginPassword,
-                    onChanged: (pass) => _password = pass,
+                    onChanged: (pass) {
+                      _password = pass;
+                    },
                     onSaved: (pass) {
                       setState(() {
                         _password = pass as String;

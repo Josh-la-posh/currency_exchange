@@ -81,7 +81,7 @@ class TransactionDetails extends StatelessWidget {
                         style: Theme.of(context).textTheme.labelMedium,
                         children: <TextSpan> [
                           TextSpan(
-                              text: item.rate == null ? '${item.status}' : '${(THelperFunctions.formatRate(item.rate.toString()))} ${item.debitedCurrency} // ${item.creditedCurrency}',
+                              text: item.rateDescription == null ? '${item.status}' : item.rateDescription,
                               style: TextStyle(fontSize: TSizes.fontSize11, color: TColors.primary, fontWeight: FontWeight.w700)
                           ),
                         ]

@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/provider/offer_provider.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../models/offer.dart';
-import '../screens/offer_details.dart';
 
 class OfferItem extends StatelessWidget {
+  final OfferController offerController = Get.put(OfferController());
   final OfferEntity item;
-  const OfferItem({
+  OfferItem({
     super.key,
     required this.item
-    // required this.item
   });
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    var provider = Provider.of<OfferProvider>(context);
     return Column(
       children: [
         ListTile(
@@ -29,14 +25,7 @@ class OfferItem extends StatelessWidget {
           dense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
           onTap: (){
-            NoLoaderService.instance.getOfferById(
-                offerProvider: provider,
-                id: item.id,
-                onSuccess: (){
-                  Get.to(() => OfferDetailsScreen());
-                  },
-                onFailure: (){}
-            );
+            offerController.fetchOfferById(id: item.id.toString(), currency: item.debitedCurrency.toString(), onSuccess: () {});
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,7 +111,7 @@ class OfferItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${THelperFunctions.getTimeDifference(item.createdDate)}',
+                                    text: '${THelperFunctions.getTimeDifference(item.createdDate.toString())}',
                                     style: TextStyle(
                                       color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimary.withOpacity(0.5),
                                     )

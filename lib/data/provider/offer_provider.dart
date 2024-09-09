@@ -35,9 +35,11 @@ class OfferProvider extends ChangeNotifier {
 
 
   CreateOfferResponse? _offerResponse;
-  List<NegotiateOfferModel> _negotiationsOffers = [];
-  List<NegotiateOfferModel> _myOffers = [];
-  List<NegotiateOfferModel> _myBids = [];
+  List<OfferEntity> _negotiationsOffers = [];
+  List<OfferEntity> _myOffers = [];
+  List<OfferEntity> _myBids = [];
+  OfferEntity? _myBid;
+  OfferEntity? _myOffer;
   OfferEntity? _offerDetail;
   List<Currency> _currencies = Currency.values;
   Currency _selectedCurrency = Currency.NGN;
@@ -84,9 +86,11 @@ class OfferProvider extends ChangeNotifier {
 
 
 
-  List<NegotiateOfferModel> get negotiationsOffers => _negotiationsOffers;
-  List<NegotiateOfferModel> get myOffers => _myOffers;
-  List<NegotiateOfferModel> get myBids => _myBids;
+  List<OfferEntity> get negotiationsOffers => _negotiationsOffers;
+  List<OfferEntity> get myOffers => _myOffers;
+  List<OfferEntity> get myBids => _myBids;
+  OfferEntity? get myBid => _myBid;
+  OfferEntity? get myOffer => _myOffer;
   OfferEntity? get offerDetail => _offerDetail;
   OfferEntity? get selectedOffer => _selectedOffer;
   List<Currency> get currencies => _currencies;
@@ -204,18 +208,28 @@ class OfferProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveNegotiations(List<NegotiateOfferModel> data) {
+  void saveNegotiations(List<OfferEntity> data) {
     _negotiationsOffers = data;
     notifyListeners();
   }
 
-  void saveMyOffers(List<NegotiateOfferModel> data) {
+  void saveMyOffers(List<OfferEntity> data) {
     _myOffers = data;
     notifyListeners();
   }
 
-  void saveMyBids(List<NegotiateOfferModel> data) {
+  void saveMyBids(List<OfferEntity> data) {
     _myBids = data;
+    notifyListeners();
+  }
+
+  void saveMyOffer(OfferEntity? data) {
+    _myOffer = data;
+    notifyListeners();
+  }
+
+  void saveMyBid(OfferEntity? data) {
+    _myBid = data;
     notifyListeners();
   }
 

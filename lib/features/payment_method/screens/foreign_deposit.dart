@@ -96,7 +96,10 @@ class _ForeignFundingScreenState extends State<ForeignFundingScreen> {
                         ),
                       ),
                     ),
-                    onChanged: (val) => walletProvider.setSelectedForeignCurrency(val!),
+                    onChanged: (val) {
+                      walletProvider.setSelectedForeignCurrency(val!);
+                      formKey.currentState?.validate();
+                    },
                     items: [
                       for (final item in walletProvider.foreignCurrencies)
                         DropdownMenuItem<ForeignBank>(
@@ -153,7 +156,10 @@ class _ForeignFundingScreenState extends State<ForeignFundingScreen> {
                           // Apply the formatter here
                           FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                         ],
-                        onChanged: (val) => _amount = val,
+                        onChanged: (val) {
+                          _amount = val;
+                          formKey.currentState?.validate();
+                        },
                         onSaved: (val) {
                           setState(() {
                             _amount = val as String;

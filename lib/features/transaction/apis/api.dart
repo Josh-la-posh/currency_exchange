@@ -54,6 +54,7 @@ class TransactionService {
             debitedAmount: item['debitedAmount'],
             transactionType: item['transactionType'],
             rate: item['rate'],
+            rateDescription: item['rateDescription'],
             creditedWallet: item['creditedWallet'],
             debitedWallet: item['debitedWallet'],
             createdDate: item['createdDate'],

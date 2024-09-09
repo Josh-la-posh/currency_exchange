@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/custom_time_line.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
-import 'package:pouch/utils/constants/enums.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/layouts/list_layout.dart';
-import '../../../utils/constants/colors.dart';
 import '../widgets/success_page.dart';
 
 class CreateOfferSuccessPage extends StatelessWidget {
-  const CreateOfferSuccessPage({super.key});
+  final OfferController offerController = Get.put(OfferController());
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,9 @@ class CreateOfferSuccessPage extends StatelessWidget {
           child: TListLayout(
               itemCount: 4,
               itemBuilder: (_, index) => MyTimeLine(
-                  isFirst: index == 0 ? true : false,
-                  isLast: index == 3 ? true : false,
-                  isDone: index == 3 ? false : true,
+                isFirst: index == 0 ? true : false,
+                isLast: index == 3 ? true : false,
+                isDone: index == 3 ? false : true,
                 startChild: Container(
                   padding: const EdgeInsets.only(bottom: 17),
                   child: RichText(
@@ -34,10 +34,10 @@ class CreateOfferSuccessPage extends StatelessWidget {
                             TextSpan(
                                 text: index == 3
                                     ? ''
-                                    : THelperFunctions.getFormattedTime(provider.offerResponse!.createdDate) ==
+                                    : THelperFunctions.getFormattedTime(offerController.createOfferResponse.value.createdDate.toString()) ==
                                         THelperFunctions.getFormattedTime(DateTime.now().toString())
                                           ? 'Now'
-                                          : THelperFunctions.getFormattedTime(provider.offerResponse!.createdDate),
+                                          : THelperFunctions.getFormattedTime(offerController.createOfferResponse.value.createdDate.toString()),
                                 style: TextStyle(
                                     // color: TColors.textPrimary.withOpacity(0.6),
                                     height: 1.5

@@ -108,7 +108,7 @@ class TransactionItem extends StatelessWidget {
   }
 
   RichText _formatAmount(BuildContext context, TransactionEntity item, double width) {
-    return RichText(
+    return  RichText(
       text: TextSpan(
         style: Theme.of(context).textTheme.titleSmall,
         children: [
@@ -152,8 +152,8 @@ class TransactionItem extends StatelessWidget {
   }
 
   String _getRateInfo(TransactionEntity item, double width) {
-    if (item.rate == null) return '';
-    return '${(THelperFunctions.formatRate(item.rate.toString()))} ${item.debitedCurrency} // ${item.creditedCurrency}';
+    if (item.rateDescription == null) return '';
+    return item.rateDescription.toString();
   }
 
   String _getTransactionTime(TransactionEntity item) {

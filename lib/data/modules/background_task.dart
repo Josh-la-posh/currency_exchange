@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart' as GetX;
 import 'package:pouch/data/modules/interceptor.dart';
 import 'package:pouch/data/provider/auth_provider.dart';
 import 'package:pouch/features/authentication/models/user_model.dart';
+import 'package:pouch/features/notification/controller/notification_controller.dart';
 import 'package:pouch/features/notification/model/get_user_notification.dart';
 
 import '../../features/all_offer/models/negotiate_offer_entity.dart';
@@ -27,6 +29,7 @@ import '../provider/wallet_provider.dart';
 import 'dio.dart';
 
 final _apiService = AppInterceptor(showLoader: false).dio;
+final notificationController = GetX.Get.find<NotificationController>();
 
 handleBackgroundAppRequest({
   required UserModel user,
@@ -75,6 +78,14 @@ class NoLoaderService {
 
   Future _getMyBids(String days, String currency) {
     return _apiService.get('/offer/me/my-bids', queryParameters: {"status": '', 'days': days, 'currency': currency});
+  }
+
+  Future _getMyOfferById(String id) {
+    return _apiService.get('/offer/me/my-offer/$id');
+  }
+
+  Future _getMyBidsById(String id) {
+    return _apiService.get('/offer/me/my-bid/$id');
   }
 
   Future _deleteOffer(String id) {return _apiService.delete('/offer/$id');}
@@ -139,7 +150,7 @@ class NoLoaderService {
   }
 
   Future _getNotificationsId(String id) {
-    return _apiService.get('/notification/user/notifications/$id');
+    return _apiService.get('/notification/$id');
   }
 
 
@@ -158,7 +169,6 @@ class NoLoaderService {
     final queryParameters = <String, dynamic>{};
     queryParameters['sortByAmount'] = 'sortByAmount';
     List<OfferEntity> offers = [];
-
     _getAllOffers(queryParameters).then((response) {
       var data = response.data;
 
@@ -175,7 +185,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -231,7 +241,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -286,7 +296,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -343,7 +353,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -399,7 +409,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -455,7 +465,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -512,7 +522,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -568,7 +578,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -624,7 +634,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -681,7 +691,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -737,7 +747,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -793,7 +803,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -850,7 +860,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -906,7 +916,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -962,7 +972,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -1019,7 +1029,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -1075,7 +1085,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -1131,7 +1141,7 @@ class NoLoaderService {
 
       var content = offerDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         offers.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
@@ -1217,7 +1227,8 @@ class NoLoaderService {
   getAllNegotiatedOOffers({
     required OfferProvider offerProvider,
   }) {
-    List<NegotiateOfferModel> negotiations = [];
+    handleShowCustomToast(message: 'Fetching Offers ...', time: Duration(minutes: 25));
+    List<OfferEntity> negotiations = [];
 
     _getAllNegotiatedOffers().then((response) {
       var data = response.data;
@@ -1235,7 +1246,7 @@ class NoLoaderService {
       var content = negotiatedOffers.content;
 
       for (var item in content) {
-        negotiations.add(NegotiateOfferModel(
+        negotiations.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
             creditedCurrency: item['creditedCurrency'],
@@ -1255,6 +1266,7 @@ class NoLoaderService {
         ));
         offerProvider.saveNegotiations(negotiations);
       }
+      handleShowCustomToast(message: 'Successful', time: Duration(milliseconds: 200));
 
     });
   }
@@ -1266,8 +1278,7 @@ class NoLoaderService {
     required VoidCallback onSuccess,
     required VoidCallback onFailure,
   }) {
-    List<NegotiateOfferModel> negotiations = [];
-
+    List<OfferEntity> negotiations = [];
     _getMyOffers(days, currency).then((response) {
       var data = response.data;
 
@@ -1283,8 +1294,8 @@ class NoLoaderService {
 
       var content = negotiatedOffers.content;
 
-      for (var item in content) {
-        negotiations.add(NegotiateOfferModel(
+      for (var item in content!) {
+        negotiations.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
             creditedCurrency: item['creditedCurrency'],
@@ -1304,7 +1315,6 @@ class NoLoaderService {
         ));
         offerProvider.saveMyOffers(negotiations);
       }
-
       onSuccess();
 
     }).catchError((error) {
@@ -1319,11 +1329,9 @@ class NoLoaderService {
     required VoidCallback onSuccess,
     required VoidCallback onFailure,
   }) {
-    List<NegotiateOfferModel> negotiations = [];
-
+    List<OfferEntity> negotiations = [];
     _getMyBids(days, currency).then((response) {
       var data = response.data;
-
       NegotiatedOffersEntity bids = NegotiatedOffersEntity(
           totalPages: data['totalPages'],
           payloadSize: data['payloadSize'],
@@ -1333,11 +1341,9 @@ class NoLoaderService {
           skippedRecords: data['skippedRecords'],
           totalRecords: data['totalRecords']
       );
-
       var content = bids.content;
-
-      for (var item in content) {
-        negotiations.add(NegotiateOfferModel(
+      for (var item in content!) {
+        negotiations.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
             creditedCurrency: item['creditedCurrency'],
@@ -1361,6 +1367,78 @@ class NoLoaderService {
       onSuccess();
     }).catchError((error) {
       print('checking $error');
+      onFailure();
+    });
+  }
+
+  getMyOfferById({
+    required OfferProvider offerProvider,
+    required String id,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) {
+    _getMyOfferById(id).then((response) async {
+      var item = response.data;
+      OfferEntity myOffer = OfferEntity(
+          id: item['id'],
+          debitedCurrency: item['debitedCurrency'],
+          creditedCurrency: item['creditedCurrency'],
+          amount: item['amount'],
+          rate: item['rate'],
+          expireIn: item['expireIn'],
+          expireCountDown: item['expireCountDown'],
+          views: item['views'],
+          negotiatorRate: item['negotiatorRate'],
+          negotiatorAmount: item['negotiatorAmount'],
+          negotiationAccepted: item['negotiationAccepted'],
+          negotiatorId: item['negotiatorId'],
+          isActive: item['isActive'],
+          status: item['status'],
+          createdDate: item['createdDate'],
+          lastModifiedDate: item['lastModifiedDate']
+      );
+      offerProvider.saveMyOffer(myOffer);
+      onSuccess();
+    }).catchError((error) {
+      print('newly found error $error');
+      handleShowCustomToast(message: handleApiFormatError(error));
+      onFailure();
+    });
+  }
+
+  getMyBidsById({
+    required OfferProvider offerProvider,
+    required String id,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure,
+  }) {
+    handleShowCustomToast(message: 'Fetching Bid details ...', time: Duration(minutes: 25));
+    _getMyBidsById(id).then((response) async {
+      var item = response.data;
+      OfferEntity myBid = OfferEntity(
+          id: item['id'],
+          debitedCurrency: item['debitedCurrency'],
+          creditedCurrency: item['creditedCurrency'],
+          amount: item['amount'],
+          rate: item['rate'],
+          expireIn: item['expireIn'],
+          expireCountDown: item['expireCountDown'],
+          views: item['views'],
+          negotiatorRate: item['negotiatorRate'],
+          negotiatorAmount: item['negotiatorAmount'],
+          negotiationAccepted: item['negotiationAccepted'],
+          negotiatorId: item['negotiatorId'],
+          isActive: item['isActive'],
+          status: item['status'],
+          createdDate: item['createdDate'],
+          lastModifiedDate: item['lastModifiedDate']
+      );
+      offerProvider.saveMyBid(myBid);
+      onSuccess();
+      handleShowCustomToast(message: 'Successful', time: Duration(milliseconds: 200));
+    }).catchError((error) {
+      print('newly found error $error');
+      handleShowCustomToast(message: handleApiFormatError(error));
       onFailure();
     });
   }
@@ -1527,7 +1605,7 @@ class NoLoaderService {
 
       var content = subscriptionDetails.content;
 
-      for (var item in content) {
+      for (var item in content!) {
         subscriptions.add(SubscriptionEntity(
           id: item['id'],
           debitedCurrency: item['debitedCurrency'],
@@ -1539,7 +1617,6 @@ class NoLoaderService {
         ));
       }
       provider.saveSubscriptions(subscriptions);
-      print('The value is not working ${subscriptions.length}');
       onSuccess();
     });
   }
@@ -1572,7 +1649,7 @@ class NoLoaderService {
       );
       transactionProvider.saveTransactionDetails(transactionDetails);
       var content = transactionDetails.content;
-      for (var item in content) {
+      for (var item in content!) {
         transactions.add(TransactionEntity(
           id: item['id'],
           transactionId: item['transactionId'],
@@ -1583,6 +1660,7 @@ class NoLoaderService {
           debitedAmount: item['debitedAmount'],
           transactionType: item['transactionType'],
           rate: item['rate'],
+          rateDescription: item['rateDescription'],
           creditedWallet: item['creditedWallet'],
           debitedWallet: item['debitedWallet'],
           createdDate: item['createdDate'],
@@ -1621,9 +1699,7 @@ class NoLoaderService {
         ));
       }
       provider.saveUserNotifications(notification);
-
       onSuccess();
-      print('The value is not working ${notification.length}');
     });
   }
 
@@ -1634,12 +1710,11 @@ class NoLoaderService {
   }) {
     _getNotificationsId(id)
         .then((response) async {
-      var data = response.data;
+          print('The true ${response}');
 
-      print(data);
+      // print(data);
       await getUserNotification(provider: provider, onSuccess: (){});
       // onSuccess();
-      print('The value is not working');
     });
   }
 }

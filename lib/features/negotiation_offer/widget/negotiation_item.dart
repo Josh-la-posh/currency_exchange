@@ -12,7 +12,7 @@ import '../../all_offer/models/negotiate_offer_model.dart';
 import '../../transaction/icons/svg.dart';
 
 class NegotiationItem extends StatelessWidget {
-  final NegotiateOfferModel item;
+  final OfferEntity item;
   const NegotiationItem({
     super.key,
     required this.item
@@ -108,7 +108,7 @@ class NegotiationItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelSmall,
                           children: <TextSpan> [
                             TextSpan(
-                                text: '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
+                                text: '${THelperFunctions.getFormattedDate(item.createdDate.toString())}  ${THelperFunctions.getFormattedTime(item.createdDate.toString())}',
                                 style: TextStyle(
                                     color: darkMode ? TColors.white.withOpacity(0.5) : TColors.textPrimary.withOpacity(0.5),
                                     fontSize: TSizes.fontSize11,

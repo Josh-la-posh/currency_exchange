@@ -42,7 +42,9 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
             const SizedBox(height: TSizes.lg),
 
             TextFormField(
-              onChanged: (value) => _email = value,
+              onChanged: (value) {
+                _email = value;
+              },
               validator: TValidator.validateEmail,
               onSaved: (value) {
                 setState(() {

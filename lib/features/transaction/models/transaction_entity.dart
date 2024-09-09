@@ -8,6 +8,7 @@ class TransactionEntity {
    String? debitedAmount;
    String? transactionType;
    String? rate;
+   String? rateDescription;
    String? creditedWallet;
    String? debitedWallet;
    String? createdDate;
@@ -24,6 +25,7 @@ class TransactionEntity {
     required this.debitedAmount,
     required this.transactionType,
     required this.rate,
+    required this.rateDescription,
     required this.creditedWallet,
     required this.debitedWallet,
     required this.createdDate,
@@ -41,6 +43,7 @@ class TransactionEntity {
     debitedAmount: json['debitedAmount'] as String,
     transactionType: json['transactionType'] as String,
     rate: json['rate'] as String,
+    rateDescription: json['rateDescription'] as String,
     creditedWallet: json['creditedWallet'] as String,
     debitedWallet: json['debitedWallet'] as String,
     createdDate: json['createdDate'] as String,

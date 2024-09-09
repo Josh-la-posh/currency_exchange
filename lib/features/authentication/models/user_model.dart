@@ -60,47 +60,47 @@ class RoleModel {
 }
 
 class UserModel {
-  final String id;
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String password;
+  String? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? password;
   bool? isVerified;
   String? nin;
   String? country;
   String? address;
   String? postCode;
   String? state;
-  final String status;
-  final String phoneNumber;
+  String? status;
+  String? phoneNumber;
   int? otp;
   int? emailOtp;
   bool? isEmailVerified;
   String? otpExpiration;
-  final String createdDate;
-  final String lastModifiedDate;
+  String? createdDate;
+  String? lastModifiedDate;
   Map<String,dynamic>? role;
 
    UserModel({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.password,
-    required this.isVerified,
-    required this.nin,
-    required this.country,
-    required this.address,
-    required this.postCode,
-    required this.state,
-    required this.status,
-    required this.phoneNumber,
-    required this.otp,
-    required this.emailOtp,
-    required this.isEmailVerified,
-    required this.otpExpiration,
-    required this.createdDate,
-    required this.lastModifiedDate,
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.password,
+    this.isVerified,
+    this.nin,
+    this.country,
+    this.address,
+    this.postCode,
+    this.state,
+    this.status,
+    this.phoneNumber,
+    this.otp,
+    this.emailOtp,
+    this.isEmailVerified,
+    this.otpExpiration,
+    this.createdDate,
+    this.lastModifiedDate,
     this.role
   });
 

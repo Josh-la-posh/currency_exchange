@@ -58,7 +58,10 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
-                            onChanged: (val) => provider.setNegotiatorAmount(val),
+                            onChanged: (val) {
+                              provider.setNegotiatorAmount(val);
+                              formKey.currentState?.validate();
+                            },
                             onSaved: (val) {
                               provider.setNegotiatorAmount(val!);
                             },
@@ -78,7 +81,10 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                         children: [
                           Expanded(
                             child: TextFormField(
-                                onChanged: (val) => provider.setNegotiatorRate(val),
+                                onChanged: (val) {
+                                  provider.setNegotiatorRate(val);
+                                  formKey.currentState?.validate();
+                                },
                                 onSaved: (val) {
                                   provider.setNegotiatorRate(val!);
                                 },

@@ -1,21 +1,23 @@
 
+import 'package:pouch/features/all_offer/models/offer.dart';
+
 class OfferDetailsEntity {
-  final int totalPages;
-  final int payloadSize;
-  final bool hasNext;
-  final List content;
-  final int currentPage;
-  final int skippedRecords;
-  final int totalRecords;
+  int? totalPages;
+  int? payloadSize;
+  bool? hasNext;
+  List? content;
+  int? currentPage;
+  int? skippedRecords;
+  int? totalRecords;
 
   OfferDetailsEntity({
-    required this.totalPages,
-    required this.payloadSize,
-    required this.hasNext,
-    required this.content,
-    required this.currentPage,
-    required this.skippedRecords,
-    required this.totalRecords,
+    this.totalPages,
+    this.payloadSize,
+    this.hasNext,
+    this.content,
+    this.currentPage,
+    this.skippedRecords,
+    this.totalRecords,
   });
 
   factory OfferDetailsEntity.fromJson(Map<String, dynamic> json) => OfferDetailsEntity(

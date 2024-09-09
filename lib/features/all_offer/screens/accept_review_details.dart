@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/common/widgets/custom_shapes/currency_widget_with_back.dart';
-import 'package:pouch/common/widgets/divider.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
@@ -378,10 +377,10 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                           child: TElevatedButton(onTap: (){
                             OfferService.instance.swapOffer(
-                                id: item!.id,
+                                id: item!.id.toString(),
                                 offerProvider: provider,
                                 amount: item!.amount.toString(),
-                                creditedCurrency: item!.debitedCurrency,
+                                creditedCurrency: item!.debitedCurrency.toString(),
                                 transactionProvider: transactionProvider,
                                 walletProvider: walletProvider
                             );},

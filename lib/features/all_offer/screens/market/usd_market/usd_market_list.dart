@@ -1,84 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/utils/shimmer/order_shimmer.dart';
-import 'package:provider/provider.dart';
-import '../../../../../data/modules/app_navigator.dart';
-import '../../../../../data/modules/background_task.dart';
-import '../../../../../data/provider/offer_provider.dart';
 import '../../../../../utils/layouts/list_layout.dart';
 import '../../../../../utils/shared/refresh_indicator/refresh_indicator.dart';
+import '../../../controllers/offer_controller.dart';
 import '../../../widgets/no_offer.dart';
 import '../../../widgets/offer_item.dart';
 
-class UsdMarketList extends StatefulWidget {
-  const UsdMarketList({super.key});
-
-  @override
-  State<UsdMarketList> createState() => _UsdMarketListState();
-}
-
-class _UsdMarketListState extends State<UsdMarketList> {
-  late OfferProvider offerProvider;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    offerProvider = Provider.of<OfferProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false,
-    );
-    if (offerProvider.usdOffers.isEmpty) {
-      _fetchUsdOffers();
-      _toggleLoading(true);
-    } else {
-      _fetchUsdOffers();
-      _toggleLoading(false);
-    }
-  }
-
-  Future<void> _fetchUsdOffers() async {
-    await NoLoaderService.instance.getUsdOffers(
-      offerProvider: offerProvider,
-      onSuccess: () {
-        _toggleLoading(false);
-      },
-      onFailure: () {
-        _toggleLoading(false);
-      },
-    );
-  }
-
-  Future<void> _refreshUsdOffers() async {
-    await _fetchUsdOffers();
-    await Future.delayed(const Duration(seconds: 2));
-  }
-
-  void _toggleLoading(bool value) {
-    setState(() {
-      isLoading = value;
-    });
-  }
+class UsdMarketList extends StatelessWidget {
+  final OfferController offerController = Get.put(OfferController());
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return OrderShimmer();
-    } else if (offerProvider.usdOffers.isEmpty) {
-      return const NoOfferScreen();
-    } else {
-      return CustomRefreshIndicator(
-        onRefresh: _refreshUsdOffers,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: TListLayout(
-            itemCount: offerProvider.usdOffers.length,
-            itemBuilder: (_, index) {
-              final item = offerProvider.usdOffers[index];
-              return OfferItem(item: item);
-            },
+    return Obx(() {
+      if (offerController.isOfferLoading.value && offerController.allUsdOffers.isEmpty) {
+        return OrderShimmer();
+      } else {
+        return CustomRefreshIndicator(
+          onRefresh: () => offerController.fetchOffersByCurrency(currency: 'USD'),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                offerController.allUsdOffers.isEmpty
+                    ? const NoOfferScreen()
+                    : TListLayout(
+                  itemCount: offerController.allUsdOffers.length,
+                  itemBuilder: (_, index) {
+                    final item = offerController.allUsdOffers[index];
+                    return OfferItem(item: item);
+                  },
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    }
+        );
+      }
+    });
   }
 }

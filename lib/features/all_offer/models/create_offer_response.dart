@@ -1,40 +1,40 @@
 import 'package:pouch/utils/constants/enums.dart';
 
 class CreateOfferResponse {
-  final String id;
-  final String debitedCurrency;
-  final String creditedCurrency;
-  final String amount;
-  final String rate;
+  String? id;
+  String? debitedCurrency;
+  String? creditedCurrency;
+  String? amount;
+  String? rate;
   String? expireIn;
   String? expireCountDown;
-  final int views;
+  int? views;
   String? negotiatorRate;
   String? negotiatorAmount;
   bool? negotiationAccepted;
   String? negotiatorId;
   bool? isActive;
-  final String status;
-  final String createdDate;
-  final String lastModifiedDate;
+  String? status;
+  String? createdDate;
+  String? lastModifiedDate;
 
   CreateOfferResponse({
-    required this.id,
-    required this.debitedCurrency,
-    required this.creditedCurrency,
-    required this.amount,
-    required this.rate,
-    required this.expireIn,
-    required this.expireCountDown,
-    required this.views,
-    required this.negotiatorRate,
-    required this.negotiatorAmount,
-    required this.negotiationAccepted,
-    required this.negotiatorId,
-    required this.isActive,
-    required this.status,
-    required this.createdDate,
-    required this.lastModifiedDate
+    this.id,
+    this.debitedCurrency,
+    this.creditedCurrency,
+    this.amount,
+    this.rate,
+    this.expireIn,
+    this.expireCountDown,
+    this.views,
+    this.negotiatorRate,
+    this.negotiatorAmount,
+    this.negotiationAccepted,
+    this.negotiatorId,
+    this.isActive,
+    this.status,
+    this.createdDate,
+    this.lastModifiedDate
   });
 
   factory CreateOfferResponse.fromJson(Map<String, dynamic> json) => CreateOfferResponse(

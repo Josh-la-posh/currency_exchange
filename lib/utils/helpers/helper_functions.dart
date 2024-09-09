@@ -247,7 +247,7 @@ class THelperFunctions {
         )
     );
 
-    overlayState!.insert(overlayEntry);
+    overlayState.insert(overlayEntry);
     await Future.delayed(duration);
     overlayEntry.remove();
   }

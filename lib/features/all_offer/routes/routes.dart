@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pouch/features/negotiation_offer/screen/negotiation_offer.dart';
 import '../../../data/routes/guard_route.dart';
-import '../../home/routes/names.dart';
 import '../screens/accept_review_details.dart';
 import '../screens/create_offer.dart';
 import '../screens/create_offer_success_screen.dart';
@@ -12,7 +10,7 @@ import 'names.dart';
 
 
 Map<String, WidgetBuilder> offerRoute = {
-  ALL_OFFER_SCREEN_ROUTE: (context) => const AuthGuard(
+  ALL_OFFER_SCREEN_ROUTE: (context) => AuthGuard(
     widget: AllOfferScreen(),
   ),
   OFFER_DETAILS_SCREEN: (context) => AuthGuard(
@@ -24,13 +22,13 @@ Map<String, WidgetBuilder> offerRoute = {
   ACCEPT_SUCCESS_SCREEN: (context) => const AuthGuard(
     widget: AcceptReviewDetailsScreen(),
   ),
-  CREATE_OFFER_SCREEN: (context) => const AuthGuard(
+  CREATE_OFFER_SCREEN: (context) => AuthGuard(
     widget: CreateOfferScreen(),
   ),
-  CREATE_REVIEW_DETAILS_SCREEN: (context) => const AuthGuard(
+  CREATE_REVIEW_DETAILS_SCREEN: (context) => AuthGuard(
     widget: CreateReviewDetailsScreen(),
   ),
-  CREATE_SUCCESS_SCREEN: (context) => const AuthGuard(
+  CREATE_SUCCESS_SCREEN: (context) => AuthGuard(
     widget: CreateOfferSuccessPage(),
   ),
 };

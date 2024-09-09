@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_bid.dart';
@@ -16,95 +18,17 @@ import '../../../utils/helpers/helper_functions.dart';
 import '../../all_offer/apis/api.dart';
 import '../widget/negotiation_list.dart';
 
-class MyBidAndOfferScreen extends StatefulWidget {
-  const MyBidAndOfferScreen({super.key});
-
-  @override
-  State<MyBidAndOfferScreen> createState() => _NegotiationOfferScreenState();
-}
-
-class _NegotiationOfferScreenState extends State<MyBidAndOfferScreen> {
-  OfferProvider offerProvider = Provider.of<OfferProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false
-  );
-
-  bool showMyOffer = true;
-  bool displayMyOffer = false;
-  bool displayMyBid = false;
-
-  handleShowMyOffer(val) {
-    setState(() {
-      showMyOffer = val;
-    });
-  }
-
-  @override
-  void initState() {
-    if (offerProvider.myBids.isEmpty) {
-      NoLoaderService.instance.getMyBids(
-          offerProvider: offerProvider,
-          days: '', currency: '',
-          onSuccess: () {
-            Future.delayed(
-                Duration(seconds: 2),
-                    () => setState(() {
-                  displayMyBid = true;
-                })
-            );
-          },
-          onFailure: () {
-            setState(() {
-              displayMyBid = true;
-            });
-          }
-      );
-      setState(() {
-        displayMyBid = false;
-      });
-    } else {
-      setState(() {
-        displayMyBid = true;
-      });
-    }
-    if (offerProvider.myOffers.isEmpty) {
-      NoLoaderService.instance.getMyOffers(
-          offerProvider: offerProvider,
-          days: '',
-          currency: '',
-          onFailure: (){
-            setState(() {
-              displayMyOffer = true;
-            });
-          },
-          onSuccess: (){
-            Future.delayed(
-                Duration(seconds: 2),
-                    () => setState(() {
-                  displayMyOffer = true;
-                })
-            );
-          }
-      );
-      setState(() {
-        displayMyOffer = false;
-      });
-    } else {
-      setState(() {
-        displayMyOffer = true;
-      });
-    }
-    super.initState();
-  }
-
-  Future<void> _refreshOffers() async {
-    await NoLoaderService.instance.getMyOffers(offerProvider: offerProvider, days: '', currency: '', onFailure: (){}, onSuccess: (){});
-    await NoLoaderService.instance.getMyBids(offerProvider: offerProvider, days: '', currency: '', onFailure: (){}, onSuccess: (){print('okkkk');});
-    await Future.delayed(const Duration(seconds: 2),);
-  }
+class MyBidAndOfferScreen extends StatelessWidget {
+  final OfferController offerController = Get.put(OfferController());
 
   @override
   Widget build(BuildContext context) {
+    if (offerController.myOffers.isEmpty) {
+      offerController.fetchMyOffers(days: '', currency: '');
+    }
+    if (offerController.myBids.isEmpty) {
+      offerController.fetchMyBids(days: '', currency: '');
+    }
     final darkMode = THelperFunctions.isDarkMode(context);
     return SafeArea(
       child: Scaffold(
@@ -114,26 +38,22 @@ class _NegotiationOfferScreenState extends State<MyBidAndOfferScreen> {
             CurrencyWidget(),
             Padding(
               padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.defaultSpace, bottom: 10),
-              child: Row(
+              child: Obx(() => Row(
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        showMyOffer = true;
-                      });
-                    },
+                    onTap: () => offerController.myOfferIndex.value = 0,
                     child: Container(
                       height: 25,
                       width: 80,
                       decoration: BoxDecoration(
-                        color: showMyOffer == true ? TColors.primary : Color(0xFFC1BBC9),
+                        color: offerController.myOfferIndex == 0 ? TColors.primary : Color(0xFFC1BBC9),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           RichText(
-                            textAlign: TextAlign.center,
+                              textAlign: TextAlign.center,
                               text: TextSpan(
                                   style: Theme.of(context).textTheme.labelSmall,
                                   children: <TextSpan> [
@@ -153,16 +73,12 @@ class _NegotiationOfferScreenState extends State<MyBidAndOfferScreen> {
                   ),
                   SizedBox(width: TSizes.defaultSpace * 1.2),
                   GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        showMyOffer = false;
-                      });
-                    },
+                    onTap: () => offerController.myOfferIndex.value = 1,
                     child: Container(
                       height: 25,
                       width: 80,
                       decoration: BoxDecoration(
-                        color: showMyOffer == true ? Color(0xFFC1BBC9) : TColors.primary,
+                        color: offerController.myOfferIndex == 0 ? Color(0xFFC1BBC9) : TColors.primary,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -188,19 +104,13 @@ class _NegotiationOfferScreenState extends State<MyBidAndOfferScreen> {
                     ),
                   ),
                 ],
-              ),
+              )),
             ),
-            Expanded(
-              child: CustomRefreshIndicator(
-                  onRefresh: _refreshOffers,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    child: showMyOffer == true
-                        ? MyOfferScreen(darkMode: darkMode, displayMyOffer: displayMyOffer,)
-                        : MyBidScreen(darkMode: darkMode, displayMyBids: displayMyOffer,),
-                  )
-              ),
-            )
+            Obx(() => Expanded(
+              child: offerController.myOfferIndex == 0
+                  ? MyOfferScreen(darkMode: darkMode)
+                  : MyBidScreen(darkMode: darkMode),
+            ))
           ],
         ),
       ),

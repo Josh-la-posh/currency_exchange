@@ -3,13 +3,15 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/features/verification/screens/identity_verification_type.dart';
+import 'package:country_picker/country_picker.dart';
 
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
 class CountrySelectionPage extends StatelessWidget {
-  const CountrySelectionPage({super.key});
+  Country? country;
+  CountrySelectionPage({super.key, this.country});
 
   @override
   Widget build(BuildContext context) {
@@ -17,40 +19,154 @@ class CountrySelectionPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,
       appBar: AppBar(
-        leading: InkWell(
-            onTap: () {Get.back();},
-            child: const Icon(Icons.arrow_back_ios_outlined)
+        automaticallyImplyLeading: false,
+        title: RichText(
+            text: TextSpan(
+                style: Theme.of(context).textTheme.headlineLarge,
+                children: <TextSpan> [
+                  TextSpan(
+                      text: 'Verification Process',
+                      style: TextStyle(
+                        fontSize: 20,
+                        // color: TColors.textPrimaryO80
+                      )
+                  ),
+                ]
+            )
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(TSizes.defaultSpace),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RichText(
-                  text: TextSpan(
-                      style: Theme.of(context).textTheme.headlineLarge,
-                      children: <TextSpan> [
-                        TextSpan(
-                            text: 'Select Country',
-                            style: TextStyle(
-                                fontSize: 20,
+        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace * 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 20,),
+            Row(
+              children: [
+                SizedBox(
+                  width: 110,
+                  child: RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelSmall,
+                          children: <TextSpan> [
+                            TextSpan(
+                                text: 'ISO Code:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  // color: TColors.textPrimaryO80
+                                )
+                            ),
+                          ]
+                      )
+                  ),
+                ),
+                SizedBox(width: 20,),
+                RichText(
+                    text: TextSpan(
+                        style: Theme.of(context).textTheme.headlineLarge,
+                        children: <TextSpan> [
+                          TextSpan(
+                              text: country?.countryCode,
+                              style: TextStyle(
+                                fontSize: 18,
                                 // color: TColors.textPrimaryO80
-                            )
-                        ),
-                      ]
-                  )
-              ),
-              const SizedBox(height: TSizes.defaultSpace * 2,),
-              TElevatedButton(
-                  onTap: (){
-                    Get.to(() => const IdentityVerificationTypeScreen());
-                  },
-                  buttonText: 'Select'
-              )
-            ],
-          ),
+                              )
+                          ),
+                        ]
+                    )
+                ),
+              ],
+            ),
+            SizedBox(height: 20,),
+            Row(
+              children: [
+                SizedBox(
+                  width: 110,
+                  child: RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelSmall,
+                          children: <TextSpan> [
+                            TextSpan(
+                                text: 'Country Code:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  // color: TColors.textPrimaryO80
+                                )
+                            ),
+                          ]
+                      )
+                  ),
+                ),
+                SizedBox(width: 20,),
+                RichText(
+                    text: TextSpan(
+                        style: Theme.of(context).textTheme.headlineLarge,
+                        children: <TextSpan> [
+                          TextSpan(
+                              text: '+${country?.phoneCode}',
+                              style: TextStyle(
+                                fontSize: 18,
+                                // color: TColors.textPrimaryO80
+                              )
+                          ),
+                        ]
+                    )
+                ),
+              ],
+            ),
+            SizedBox(height: 20,),
+            Row(
+              children: [
+                SizedBox(
+                  width: 110,
+                  child: RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.labelSmall,
+                          children: <TextSpan> [
+                            TextSpan(
+                                text: 'Country Name:',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  // color: TColors.textPrimaryO80
+                                )
+                            ),
+                          ]
+                      )
+                  ),
+                ),
+                SizedBox(width: 20,),
+                RichText(
+                    text: TextSpan(
+                        style: Theme.of(context).textTheme.headlineLarge,
+                        children: <TextSpan> [
+                          TextSpan(
+                              text: country?.name.toString(),
+                              style: TextStyle(
+                                fontSize: 18,
+                                // color: TColors.textPrimaryO80
+                              )
+                          ),
+                        ]
+                    )
+                ),
+              ],
+            ),
+            const SizedBox(height: TSizes.defaultSpace * 3,),
+            TElevatedButton(
+                onTap: (){
+                  Get.to(() => IdentityVerificationTypeScreen(country: country));
+                },
+                buttonText: 'Proceed'
+            ),
+            SizedBox(height: 20,),
+            TElevatedButton(
+                onTap: (){
+                  Get.back();
+                },
+                buttonText: 'Back'
+            )
+          ],
         ),
       ),
     );

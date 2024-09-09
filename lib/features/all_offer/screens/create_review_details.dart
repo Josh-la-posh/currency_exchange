@@ -4,6 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
+import 'package:pouch/features/all_offer/controllers/create_offer_controller.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
+import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
@@ -20,13 +23,13 @@ import '../../../utils/helpers/helper_functions.dart';
 import '../apis/api.dart';
 
 class CreateReviewDetailsScreen extends StatelessWidget {
-  const CreateReviewDetailsScreen({super.key});
+  final CreateOfferController createOfferController = Get.put(CreateOfferController());
+  final OfferController offerController = Get.put(OfferController());
+  final HelperFunctionsController helperFunctionsController = Get.put(HelperFunctionsController());
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    final offerDetail = Provider.of<OfferProvider>(context);
-    final data = offerDetail.createOfferEntity;
     return Scaffold(
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
       appBar: AppBar(
@@ -58,41 +61,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       RichText(
-                  //           text: TextSpan(
-                  //               style: Theme.of(context).textTheme.labelMedium,
-                  //               children: <TextSpan> [
-                  //                 TextSpan(
-                  //                     text: 'You\'re about to swap ',
-                  //                     style: const TextStyle(
-                  //                         // fontSize: 16
-                  //                     )
-                  //                 ),
-                  //                 TextSpan(
-                  //                     text: '${THelperFunctions.moneyFormatter(data.amount)} ${getCurrencyName(data.debitedCurrency)}',
-                  //                     style: const TextStyle(
-                  //                         fontWeight: TSizes.fontWeightLg,
-                  //                         fontSize: 16
-                  //                     )
-                  //                 ),
-                  //                 const TextSpan(
-                  //                     text: ' for '
-                  //                 ),
-                  //                 TextSpan(
-                  //                     text: '${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(data.amount.toString(), data.rate))} ${getCurrencyName(data.creditedCurrency)}',
-                  //                     style: const TextStyle(fontWeight: TSizes.fontWeightLg)
-                  //                 ),
-                  //               ]
-                  //           )
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   Container(
                     alignment: Alignment.centerLeft,
                     width: double.infinity,
@@ -106,7 +74,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                               TextSpan(
                                   text: 'Offer Summary',
                                   style: TextStyle(
-                                      // fontSize: TSizes.fontSize13,
                                       fontWeight: TSizes.fontWeightMd,
                                       color: TColors.textPrimaryO80
                                   )
@@ -129,8 +96,8 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: const <TextSpan> [
                                       TextSpan(
-                                          text: 'I have',
-                                          // style: TextStyle(fontSize: TSizes.fontSize13)
+                                        text: 'I have',
+                                        // style: TextStyle(fontSize: TSizes.fontSize13)
                                       )
                                     ]
                                 )
@@ -140,9 +107,9 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text: '${THelperFunctions.moneyFormatter(data.amount)} ${getCurrencyName(data.debitedCurrency)}',
+                                          text: '${helperFunctionsController.moneyFormatter(createOfferController.amountController.text)} ${getCurrencyName(createOfferController.debitedCurrency.value)}',
                                           style: const TextStyle(
-                                              // fontSize: TSizes.fontSize13,
+                                            // fontSize: TSizes.fontSize13,
                                               fontWeight: TSizes.fontWeightLg
                                           )
                                       )
@@ -152,7 +119,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      
+
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         height: TSizes.textReviewHeight,
@@ -164,8 +131,8 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: const <TextSpan> [
                                       TextSpan(
-                                          text: 'I need',
-                                          // style: TextStyle(fontSize: TSizes.fontSize13)
+                                        text: 'I need',
+                                        // style: TextStyle(fontSize: TSizes.fontSize13)
                                       )
                                     ]
                                 )
@@ -175,9 +142,9 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text: getCurrencyName(data.creditedCurrency),
+                                          text: getCurrencyName(createOfferController.creditedCurrency.value),
                                           style: const TextStyle(
-                                              // fontSize: TSizes.fontSize13,
+                                            // fontSize: TSizes.fontSize13,
                                               fontWeight: TSizes.fontWeightLg
                                           )
                                       )
@@ -187,7 +154,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      
+
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         height: TSizes.textReviewHeight,
@@ -199,64 +166,8 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: const <TextSpan> [
                                       TextSpan(
-                                          text: 'Rate',
-                                          // style: TextStyle(fontSize: TSizes.fontSize13)
-                                      )
-                                    ]
-                                )
-                            ),
-                            Row(
-                              children: [
-                                RichText(
-                                    text: TextSpan(
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                        children: <TextSpan> [
-                                          TextSpan(
-                                              text: '${data.rate} ${getCurrencyName(data.debitedCurrency)}',
-                                              style: const TextStyle(
-                                                  // fontSize: TSizes.fontSize13,
-                                                  fontWeight: TSizes.fontWeightLg
-                                              )
-                                          )
-                                        ]
-                                    )
-                                ),
-                                const SizedBox(width: TSizes.sm,),
-                                AppoxIcon(),
-                                const SizedBox(width: TSizes.sm,),
-                                RichText(
-                                    text: TextSpan(
-                                        style: Theme.of(context).textTheme.labelMedium,
-                                        children: <TextSpan> [
-                                          TextSpan(
-                                              text: '${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(data.rate, data.amount.toString()))} ${getCurrencyName(data.creditedCurrency)}',
-                                              style: const TextStyle(
-                                                  // fontSize: TSizes.fontSize13,
-                                                  fontWeight: TSizes.fontWeightLg
-                                              )
-                                          )
-                                        ]
-                                    )
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                        height: TSizes.textReviewHeight,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RichText(
-                                text: TextSpan(
-                                    style: Theme.of(context).textTheme.labelMedium,
-                                    children: const <TextSpan> [
-                                      TextSpan(
-                                          text: 'Expires in',
-                                          // style: TextStyle(fontSize: TSizes.fontSize13)
+                                        text: 'Rate',
+                                        // style: TextStyle(fontSize: TSizes.fontSize13)
                                       )
                                     ]
                                 )
@@ -266,10 +177,78 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text: '${data.expireIn} hour',
+                                          text: '${createOfferController.rateController.text} ${getCurrencyName(createOfferController.creditedCurrency.value)} // ${getCurrencyName(createOfferController.debitedCurrency.value)}',
+                                          style: const TextStyle(
+                                              fontWeight: TSizes.fontWeightLg
+                                          )
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                        height: TSizes.textReviewHeight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                    children: const <TextSpan> [
+                                      TextSpan(
+                                        text: 'Expected Returns',
+                                        // style: TextStyle(fontSize: TSizes.fontSize13)
+                                      )
+                                    ]
+                                )
+                            ),
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                    children: <TextSpan> [
+                                      TextSpan(
+                                          text: '${helperFunctionsController.moneyFormatter(helperFunctionsController.multipliedString.value)} ${getCurrencyName(createOfferController.creditedCurrency.value)}',
+                                          style: const TextStyle(
+                                              fontWeight: TSizes.fontWeightLg
+                                          )
+                                      )
+                                    ]
+                                )
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+                        height: TSizes.textReviewHeight,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                    children: const <TextSpan> [
+                                      TextSpan(
+                                        text: 'Expires in',
+                                        // style: TextStyle(fontSize: TSizes.fontSize13)
+                                      )
+                                    ]
+                                )
+                            ),
+                            RichText(
+                                text: TextSpan(
+                                    style: Theme.of(context).textTheme.labelMedium,
+                                    children: <TextSpan> [
+                                      TextSpan(
+                                          text: createOfferController.expiryHour.value == 'Never' ? "Don't expire" : '${createOfferController.expiryHour.value} hour',
                                           // text: '${difference.inHours}h ${difference.inMinutes % 60}m hour',
                                           style: const TextStyle(
-                                              // fontSize: TSizes.fontSize13,
+                                            // fontSize: TSizes.fontSize13,
                                               fontWeight: TSizes.fontWeightLg
                                           )
                                       )
@@ -279,7 +258,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      
+
                       Column(
                         children: [
                           const SizedBox(height: TSizes.xs),
@@ -288,7 +267,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(left: TSizes.defaultSpace),
                             height: TSizes.textReviewHeight,
                             decoration: BoxDecoration(
-                                color: TColors.secondaryBorder30,
+                              color: TColors.secondaryBorder30,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -300,12 +279,12 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                           TextSpan(
                                               text: 'You will be debited from ',
                                               style: TextStyle(
-                                                fontSize: TSizes.fontSize13,
-                                                color: darkMode ? TColors.white : TColors.primary
+                                                  fontSize: TSizes.fontSize13,
+                                                  color: darkMode ? TColors.white : TColors.primary
                                               )
                                           ),
                                           TextSpan(
-                                              text: ' ${getCurrencyName(data.debitedCurrency)} ',
+                                              text: ' ${getCurrencyName(createOfferController.debitedCurrency.value)} ',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w700,
                                                   color: darkMode ? TColors.white : TColors.primary
@@ -330,7 +309,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(left: TSizes.defaultSpace),
                             height: TSizes.textReviewHeight,
                             decoration: BoxDecoration(
-                                color: TColors.secondaryBorder30,
+                              color: TColors.secondaryBorder30,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -347,7 +326,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                               )
                                           ),
                                           TextSpan(
-                                              text: ' ${getCurrencyName(data.creditedCurrency)} ',
+                                              text: ' ${getCurrencyName(createOfferController.creditedCurrency.value)} ',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w700,
                                                   color: darkMode ? TColors.white : TColors.primary
@@ -369,7 +348,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                           const SizedBox(height: TSizes.xs),
                         ],
                       ),
-                      
+
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         height: TSizes.textReviewHeight,
@@ -383,8 +362,8 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         style: Theme.of(context).textTheme.labelMedium,
                                         children: const <TextSpan> [
                                           TextSpan(
-                                              text: 'Fee',
-                                              // style: TextStyle(fontSize: TSizes.fontSize13)
+                                            text: 'Fee',
+                                            // style: TextStyle(fontSize: TSizes.fontSize13)
                                           )
                                         ]
                                     )
@@ -399,9 +378,10 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     style: Theme.of(context).textTheme.labelMedium,
                                     children: <TextSpan> [
                                       TextSpan(
-                                          text: '${TPriceCalculator.calculateFee(getCurrencyName(data.debitedCurrency))} ${getCurrencyName(data.debitedCurrency)}',
+                                          // text: '${TPriceCalculator.calculateFee(getCurrencyName(createOfferController.debitedCurrency.value))} ${getCurrencyName(createOfferController.debitedCurrency.value)}',
+                                          text: '0 ${getCurrencyName(createOfferController.debitedCurrency.value)}',
                                           style: const TextStyle(
-                                              // fontSize: TSizes.fontSize13,
+                                            // fontSize: TSizes.fontSize13,
                                               fontWeight: TSizes.fontWeightLg)
                                       )
                                     ]
@@ -413,19 +393,21 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                       const SizedBox(height: TSizes.spaceBtwSections),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                        child: TElevatedButton(
+                        child: Obx(() => TElevatedButton(
                             onTap: (){
-                              OfferService.instance
-                                  .createOffer(
-                                  offerProvider: offerDetail,
-                                  debitedCurrency: getCurrencyName(data.debitedCurrency),
-                                  creditedCurrency: getCurrencyName(data.creditedCurrency),
-                                  amount: data.amount,
-                                  rate: data.rate,
-                                  expireIn: data.expireIn
+                              offerController.creatingOffer(
+                                  debitedCurrency: getCurrencyName(createOfferController.debitedCurrency.value),
+                                  creditedCurrency: getCurrencyName(createOfferController.creditedCurrency.value),
+                                  amount: createOfferController.amountController.text,
+                                  rate: createOfferController.rateController.text,
+                                  expireIn: createOfferController.expiryHour.value,
+                                  onSuccess: () {
+                                    createOfferController.clearForm();
+                                    helperFunctionsController.multipliedString.value = '0';
+                                  }
                               );
                             },
-                            buttonText: 'Pay ${THelperFunctions.moneyFormatter(data.amount.toString())} ${getCurrencyName(data.debitedCurrency)}'),
+                            buttonText: offerController.isLoading.value ? 'Paying ...' : 'Pay ${helperFunctionsController.moneyFormatter(createOfferController.amountController.text.toString())} ${getCurrencyName(createOfferController.debitedCurrency.value)}')),
                       ),
                       const SizedBox(height: TSizes.spaceBtwElements),
                       Row(

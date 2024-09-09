@@ -30,7 +30,9 @@ class ForgetPasswordForm extends StatelessWidget {
                 SizedBox(
                   child: TextFormField(
                     style: Theme.of(context).textTheme.labelMedium,
-                    onChanged: (val) => _email = val,
+                    onChanged: (val) {
+                      _email = val;
+                    },
                     validator: TValidator.validateEmail,
                     onSaved: (val) {
                       _email = val as String;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/features/all_offer/screens/market/all_market/all_market.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
@@ -13,7 +14,6 @@ import 'package:pouch/utils/shared/notification/snackbar.dart';
 import '../../../common/widgets/buttons/floating_button.dart';
 import '../../../data/provider/auth_provider.dart';
 import '../../../data/provider/offer_provider.dart';
-import '../../../data/provider/verification_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
@@ -24,52 +24,37 @@ import 'market/gbp_market/gbp_market.dart';
 import 'market/ngn_market/ngn_market.dart';
 import 'market/usd_market/usd_market.dart';
 
-class AllOfferScreen extends StatefulWidget {
-  const AllOfferScreen({super.key});
+class AllOfferScreen extends StatelessWidget {
+  final OfferController offerController = Get.put(OfferController());
 
-  @override
-  State<AllOfferScreen> createState() => _AllOfferScreenState();
-}
+  // OfferProvider offerProvider = Provider.of<OfferProvider>(
+  //   AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+  //   listen: false
+  // );
 
-class _AllOfferScreenState extends State<AllOfferScreen> {
-  OfferProvider offerProvider = Provider.of<OfferProvider>(
-    AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-    listen: false
-  );
-  AuthProvider authProvider = Provider.of<AuthProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false
-  );
-  VerificationProvider verifyProvider = Provider.of<VerificationProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false
-  );
+  // AuthProvider authProvider = Provider.of<AuthProvider>(
+  //     AppNavigator.instance.navigatorKey.currentContext as BuildContext,
+  //     listen: false
+  // );
 
 
-  @override
-  void initState() {
-    NoLoaderService.instance.getAllOffers(
-        offerProvider: offerProvider,
-        onFailure: (){},
-        onSuccess: (){}
-    );
-    if (offerProvider.offers.isEmpty) {
-      NoLoaderService.instance.getAllOffers(
-          offerProvider: offerProvider,
-          onFailure: (){},
-          onSuccess: (){}
-      );
-    }
-    if (authProvider.user?.isVerified == false) {
-      setState(() {
-        verifyProvider.showVerifyModal = true;
-      });
-    }
-    super.initState();
-  }
 
+  // NoLoaderService.instance.getAllOffers(
+  // offerProvider: offerProvider,
+  // onFailure: (){},
+  // onSuccess: (){}
+  // );
+  // if (offerProvider.offers.isEmpty) {
+  // NoLoaderService.instance.getAllOffers(
+  // offerProvider: offerProvider,
+  // onFailure: (){},
+  // onSuccess: (){}
+  // );
+  // }
   @override
   Widget build(BuildContext context) {
+    offerController.fetchAllOffers();
+    var authProvider = Provider.of<AuthProvider>(context);
     final darkMode = THelperFunctions.isDarkMode(context);
     return DefaultTabController(
       length: 6,
@@ -120,17 +105,6 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
                       ]
                   ),
                 ),
-                // child: SingleChildScrollView(
-                //   child: Column(
-                //       children: [
-                //         Column(
-                //           children: [
-                //             OfferList(),
-                //           ],
-                //         ),
-                //       ],
-                //     ),
-                // ),
               ),
             ],
           ),
@@ -138,13 +112,9 @@ class _AllOfferScreenState extends State<AllOfferScreen> {
         floatingActionButton: TFloatingButton(
           onPressed: (){
             if (authProvider.user?.isVerified == true) {
-              handleShowCustomToast(message: "Please verify your account");
+              Get.snackbar('Verification', 'Please verify your account');
             } else {
-              offerProvider.updateDebitedCurrency(Currency.NGN);
-              offerProvider.updateCreditedCurrency(Currency.NGN);
-              offerProvider.updateAmount('0');
-              offerProvider.updateRate('0');
-              Get.to(() => const CreateOfferScreen());
+              Get.to(() => CreateOfferScreen());
             }
             },
         ),

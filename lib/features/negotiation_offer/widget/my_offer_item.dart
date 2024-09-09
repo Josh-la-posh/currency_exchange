@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_offer_detail.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/modules/background_task.dart';
@@ -18,8 +19,9 @@ import '../../all_offer/models/negotiate_offer_model.dart';
 import '../../transaction/icons/svg.dart';
 
 class MyOfferItem extends StatelessWidget {
-  final NegotiateOfferModel item;
-  const MyOfferItem({
+  final OfferController offerController = Get.put(OfferController());
+  final OfferEntity item;
+  MyOfferItem({
     super.key,
     required this.item
   });
@@ -27,7 +29,6 @@ class MyOfferItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    final provider = Provider.of<OfferProvider>(context);
     return Container(
       height: TSizes.textReviewHeight * 1.4,
       child: Slidable(
@@ -42,9 +43,7 @@ class MyOfferItem extends StatelessWidget {
                       height: 68,
                       width: 60,
                       child: ElevatedButton(
-                        onPressed: () {
-                          NoLoaderService.instance.deleteOffer(id: item.id.toString(), offerProvider: provider, days: '', currency: '');
-                        },
+                        onPressed: () => offerController.deleteOffer(id: item.id.toString(), currency: '', days: ''),
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)
@@ -81,7 +80,7 @@ class MyOfferItem extends StatelessWidget {
         child: ListTile(
           contentPadding: EdgeInsets.symmetric(vertical: TSizes.lg, horizontal: TSizes.defaultSpace),
           onTap: (){
-            Get.to(() => MyOfferDetail(item: item));
+            Get.to(() => MyOfferDetail(), arguments: item);
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,7 +101,7 @@ class MyOfferItem extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelMedium,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${THelperFunctions.moneyFormatter(item.amount)}',
+                                    text: '${THelperFunctions.moneyFormatter(item.amount.toString())}',
                                     style: TextStyle(
                                         fontWeight: TSizes.fontWeightLg,
                                     )
@@ -145,7 +144,7 @@ class MyOfferItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                                text: THelperFunctions.formatRate(item.rate),
+                                text: THelperFunctions.formatRate(item.rate.toString()),
                                 style: TextStyle(
                                     color: TColors.primary,
                                     fontWeight: FontWeight.w500
@@ -167,7 +166,7 @@ class MyOfferItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelSmall,
                           children: <TextSpan> [
                             TextSpan(
-                                text: '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
+                                text: '${THelperFunctions.getFormattedDate(item.createdDate.toString())}  ${THelperFunctions.getFormattedTime(item.createdDate.toString())}',
                                 style: TextStyle(
                                   color: darkMode ? TColors.white.withOpacity(0.8) : TColors.textPrimary.withOpacity(0.5),
                                   fontSize: TSizes.fontSize11,

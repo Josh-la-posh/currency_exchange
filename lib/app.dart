@@ -4,6 +4,8 @@ import 'package:pouch/features/splash/routes/names.dart';
 import 'package:pouch/utils/shared/error_boundary/error_boundary.dart';
 import 'package:pouch/utils/shared/loader/global_loader.dart';
 import 'package:pouch/utils/themes/theme.dart';
+import 'package:smile_id/smile_id.dart';
+import 'package:smile_id/smileid_messages.g.dart';
 
 import 'data/modules/app_navigator.dart';
 import 'data/provider/root_provider.dart';
@@ -35,6 +37,17 @@ class _MyAppState extends State<MyApp> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
+    SmileID.initialize(
+        config: FlutterConfig(
+            partnerId: "6951",
+            authToken: "KJN217v5KAG6lNRsthGCY0toKbgnyoncCw85m73fztwaCcHIKG0jSCssquLqMMjHGMl5M9bX4K8jX77vPCjcHuE2bDEyLS1MnYG+e+Q69ctWH98zSozgz2EFxpxXVBr59qn2pSWJo27bYf1XaxZgpNUA08b2tjTcWuBv9ES2eR8=",
+            prodBaseUrl: "https://api.smileidentity.com/",
+            sandboxBaseUrl: "https://testapi.smileidentity.com/"
+        ),
+        useSandbox: true,
+        enableCrashReporting: false
+    );
+
   }
 
   @override
@@ -44,9 +57,7 @@ class _MyAppState extends State<MyApp> {
         app: RootProvider(
           app: GetMaterialApp(
             title: 'pouch',
-
             // CUSTOM THEME
-
             themeMode: ThemeMode.system,
             theme: TAppTheme.lightTheme,
             // darkTheme: TAppTheme.darkTheme,

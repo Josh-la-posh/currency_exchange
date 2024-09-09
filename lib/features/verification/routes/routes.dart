@@ -13,8 +13,8 @@ import '../screens/identity_verification.dart';
 Map<String, WidgetBuilder> verifyRoute = {
   VERIFICATION_PAGE_SCREEN: (context) => VerificationPage(),
   VERIFICATION_PROCESS_SCREEN: (context) => const VerificationProcess(),
-  COUNTRY_SELECTION_SCREEN: (context) => const CountrySelectionPage(),
-  IDENTITY_VERIFICATION_TYPE_SCREEN: (context) => const IdentityVerificationTypeScreen(),
+  COUNTRY_SELECTION_SCREEN: (context) => CountrySelectionPage(),
+  IDENTITY_VERIFICATION_TYPE_SCREEN: (context) => IdentityVerificationTypeScreen(),
   IDENTITY_VERIFICATION_SCREEN: (context) => IdentityVerificationScreen(),
   VERIFICATION_SUCCESS_SCREEN: (context) => const VerificationSuccessScreen(),
   VERIFICATION_IN_PROGRESS_SCREEN: (context) => const VerificationInProgressScreen()

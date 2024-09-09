@@ -65,7 +65,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       SizedBox(
                         child: TextFormField(
                           style: Theme.of(context).textTheme.labelMedium,
-                          onChanged: (pass) => _oldPass = pass,
+                          onChanged: (pass) {
+                            _oldPass = pass;
+                          },
                           validator: TValidator.validatePassword,
                           onSaved: (pass) {
                             _oldPass = pass as String;
@@ -96,7 +98,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       SizedBox(
                         child: TextFormField(
                           style: Theme.of(context).textTheme.labelMedium,
-                          onChanged: (pass) => _password = pass,
+                          onChanged: (pass) {
+                            _password = pass;
+                          },
                           validator: TValidator.validatePassword,
                           onSaved: (pass) {
                             _password = pass as String;
@@ -126,7 +130,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       SizedBox(
                         child: TextFormField(
                           style: Theme.of(context).textTheme.labelMedium,
-                          onChanged: (pass) => _confirmPass = pass,
+                          onChanged: (pass) {
+                            _confirmPass = pass;
+                          },
                           validator: (value) => TValidator.validateConfirmPassword(value, _password),
                           obscureText: _obscureConPasswordText,
                           decoration: InputDecoration(

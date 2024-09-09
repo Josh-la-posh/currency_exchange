@@ -2,23 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_bid_detail.dart';
-import 'package:pouch/features/negotiation_offer/screen/my_offer_detail.dart';
 import 'package:provider/provider.dart';
-import 'package:pouch/features/negotiation_offer/screen/negotiation_accept_reject.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../common/widgets/divider.dart';
-import '../../../data/modules/background_task.dart';
 import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
-import '../../all_offer/models/negotiate_offer_model.dart';
+import '../../all_offer/controllers/offer_controller.dart';
+import '../../all_offer/models/offer.dart';
 import '../../transaction/icons/svg.dart';
 
 class MyBidItem extends StatelessWidget {
-  final NegotiateOfferModel item;
-  const MyBidItem({
+  final OfferController offerController = Get.put(OfferController());
+  final OfferEntity item;
+  MyBidItem({
     super.key,
     required this.item
   });
@@ -26,7 +24,6 @@ class MyBidItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    final provider = Provider.of<OfferProvider>(context);
     return Container(
       height: TSizes.textReviewHeight * 1.4,
       child: Slidable(
@@ -41,9 +38,7 @@ class MyBidItem extends StatelessWidget {
                       height: 68,
                       width: 60,
                       child: ElevatedButton(
-                        onPressed: () {
-                          NoLoaderService.instance.deleteBid(id: item.id.toString(), offerProvider: provider, days: '', currency: '');
-                        },
+                        onPressed: () => offerController.deleteBid(id: item.id.toString(), currency: '', days: ''),
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)
@@ -79,7 +74,7 @@ class MyBidItem extends StatelessWidget {
         ),
         child: ListTile(
           onTap: () {
-            Get.to(() => MyBidDetail(item: item,));
+            Get.to(() => MyBidDetail(), arguments: item);
           },
           contentPadding: EdgeInsets.symmetric(vertical: TSizes.md, horizontal: TSizes.defaultSpace),
           title: Row(
@@ -164,7 +159,7 @@ class MyBidItem extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelSmall,
                           children: <TextSpan> [
                             TextSpan(
-                                text: '${THelperFunctions.getFormattedDate(item.createdDate)}  ${THelperFunctions.getFormattedTime(item.createdDate)}',
+                                text: '${THelperFunctions.getFormattedDate(item.createdDate.toString())}  ${THelperFunctions.getFormattedTime(item.createdDate.toString())}',
                                 style: TextStyle(
                                   color: darkMode ? TColors.white.withOpacity(0.5) : TColors.textPrimary.withOpacity(0.5),
                                   fontSize: TSizes.fontSize11,

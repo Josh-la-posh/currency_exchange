@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/texts.dart';
@@ -7,34 +9,21 @@ import 'all_market_list.dart';
 import 'all_new_market_list.dart';
 import 'all_trending_market_list.dart';
 
-class AllMarketScreen extends StatefulWidget {
-  const AllMarketScreen({super.key});
-
-  @override
-  State<AllMarketScreen> createState() => _AllMarketScreenState();
-}
-
-class _AllMarketScreenState extends State<AllMarketScreen> {
-  int selectedIndex = 1;
-
-  void handleSelectedIndex(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
+class AllMarketScreen extends StatelessWidget {
+  final OfferController offerController = Get.put(OfferController());
 
   Widget _buildTab({
     required String label,
     required int index,
     required bool darkMode,
   }) {
-    final isSelected = selectedIndex == index;
+    final isSelected = offerController.allOfferIndex.value == index;
     final backgroundColor = darkMode
         ? isSelected ? TColors.textPrimary : Colors.transparent
         : isSelected ? Color(0xFFEEEEEE) : Colors.transparent;
 
     return GestureDetector(
-      onTap: () => handleSelectedIndex(index),
+      onTap: () => offerController.allOfferIndex.value = index,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
         decoration: BoxDecoration(
@@ -55,6 +44,9 @@ class _AllMarketScreenState extends State<AllMarketScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (offerController.allOffers.isEmpty) {
+      offerController.fetchAllOffers();
+    }
     final darkMode = THelperFunctions.isDarkMode(context);
     final double availableHeight =
         THelperFunctions.screenHeight() - kBottomNavigationBarHeight - 70;
@@ -62,19 +54,19 @@ class _AllMarketScreenState extends State<AllMarketScreen> {
     return Container(
       height: availableHeight,
       margin: const EdgeInsets.only(top: 9),
-      child: Column(
+      child: Obx(() => Column(
         children: [
           Row(
             children: [
-              _buildTab(label: 'All', index: 1, darkMode: darkMode),
-              _buildTab(label: 'New', index: 2, darkMode: darkMode),
-              _buildTab(label: 'Trending', index: 3, darkMode: darkMode),
+              _buildTab(label: 'All', index: 0, darkMode: darkMode),
+              _buildTab(label: 'New', index: 1, darkMode: darkMode),
+              _buildTab(label: 'Trending', index: 2, darkMode: darkMode),
             ],
           ),
           Expanded(
             child: IndexedStack(
-              index: selectedIndex - 1,
-              children: const [
+              index: offerController.allOfferIndex.value,
+              children: [
                 AllMarketList(),
                 AllNewMarketList(),
                 AllTrendingMarketList(),
@@ -82,7 +74,7 @@ class _AllMarketScreenState extends State<AllMarketScreen> {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

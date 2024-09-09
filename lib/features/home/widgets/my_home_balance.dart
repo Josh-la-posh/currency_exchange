@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/data/provider/transaction_provider.dart';
@@ -13,44 +16,25 @@ import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
+import '../../wallet/controller/wallet_controller.dart';
 
-class HomeBalanceWidget extends StatefulWidget {
-  final bool darkMode;
-  final bool displayBalance;
-  const HomeBalanceWidget({super.key, required this.darkMode, required this.displayBalance});
-
-  @override
-  State<HomeBalanceWidget> createState() => _HomeBalanceWidgetState();
-}
-
-class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
+class HomeBalanceWidget extends StatelessWidget {
+  final WalletController walletController = Get.put(WalletController());
+  final HelperFunctionsController helperFunctionsController = Get.put(HelperFunctionsController());
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
     final width = MediaQuery.of(context).size.width;
-    final walletProvider = Provider.of<WalletProvider>(context);
-    final transactionProvider = Provider.of<TransactionProvider>(context);
-    final offerProvider = Provider.of<OfferProvider>(context);
+    if (walletController.defaultWallet.value.balance == null) {
+      walletController.fetchingDefaultWallet();
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: Color(0xFF4B0082),
-            // boxShadow: [
-            //   BoxShadow(
-            //       color: TColors.black.withOpacity(0.12),
-            //       offset: const Offset(1.94,3.87),
-            //       blurRadius: 1.94,
-            //       spreadRadius: 1.94
-            //   ),
-            //   BoxShadow(
-            //       color: TColors.secondaryBorder,
-            //       offset: const Offset(0.0,0.0),
-            //       blurRadius: 0,
-            //       spreadRadius: 0
-            //   ),
-            // ]
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.lg, top: TSizes.md, bottom: TSizes.xl),
@@ -78,19 +62,15 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                   SizedBox(
                     // width: 15,
                     child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            walletProvider.setShowWalletBalance(!walletProvider.showWalletBalance);
-                          });
-                        },
-                        icon: walletProvider.showWalletBalance == false
+                        onPressed: () => walletController.showWalletBalance.value = !walletController.showWalletBalance.value,
+                        icon: walletController.showWalletBalance.value == false
                             ? Icon(Icons.visibility_off_outlined, color: Colors.white, size: 17,)
                             : Icon(Icons.visibility_outlined, color: Colors.white, size: 17,)
                     ),
                   ),
                 ],
               ),
-              Row(
+              Obx(() => Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -99,11 +79,11 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                                text: widget.displayBalance == false
-                                    ? '---'
-                                    : walletProvider.defaultWallet == null
-                                    ? '---'
-                                    : '${walletProvider.showWalletBalance == false ? '**********' : THelperFunctions.moneyFormatter(walletProvider.defaultWallet!.balance.toString())} ',
+                              text: walletController.isDefaultWalletLoading.value
+                                  ? '---'
+                                  : walletController.defaultWallet.value.balance == null
+                                  ? '---'
+                                  : '${walletController.showWalletBalance.value == false ? '*****' : helperFunctionsController.moneyFormatter(walletController.defaultWallet.value.balance.toString())} ',
                               style: TextStyle(
                                   fontSize: width > 400 ? 28 : 20,
                                   fontWeight: TSizes.fontWeightXl,
@@ -119,11 +99,11 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                           children: <TextSpan> [
                             TextSpan(
                               text:
-                              widget.displayBalance == false
+                              walletController.isDefaultWalletLoading.value
                                   ? ''
-                                  : walletProvider.defaultWallet == null
+                                  : walletController.defaultWallet.value.balance == null
                                   ? ''
-                                  : '${walletProvider.showWalletBalance == false ? '' : walletProvider.defaultWallet?.currency}',
+                                  : '${walletController.showWalletBalance.value == false ? '' : walletController.defaultWallet.value.currency}',
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: TSizes.fontWeightLg,
@@ -136,13 +116,12 @@ class _HomeBalanceWidgetState extends State<HomeBalanceWidget> {
                   Spacer(),
                   IconButton(
                     onPressed: (){
-                      NoLoaderService.instance.getDefaultWallet(walletProvider: walletProvider, transactionProvider: transactionProvider);
-                      NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-                      },
-                    icon: Icon(Icons.refresh, size: 20, color: widget.darkMode ? Colors.white : Colors.white,),
+                      walletController.fetchingDefaultWallet();
+                    },
+                    icon: Icon(Icons.refresh, size: 20, color: darkMode ? Colors.white : Colors.white,),
                   ),
                 ],
-              )
+              ))
             ],
           ),
         ),

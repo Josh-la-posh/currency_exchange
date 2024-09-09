@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
-import 'package:pouch/utils/constants/enums.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/common/styles/spacing_styles.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
+import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
-import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
-import '../models/offer.dart';
 import '../widgets/negotiation_screen.dart';
 import 'accept_review_details.dart';
 
 class OfferDetailsScreen extends StatelessWidget {
-  VoidCallback? onTap;
-  OfferDetailsScreen({
-    super.key,
-    this.onTap
-  });
+  final OfferController offerController = Get.put(OfferController());
+  final HelperFunctionsController helperFunctionsController = Get.put(HelperFunctionsController());
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    var provider = Provider.of<OfferProvider>(context);
-    final item = provider.offerDetail;
+    final item = offerController.offerById.value;
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
       appBar: AppBar(),
@@ -54,54 +46,54 @@ class OfferDetailsScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RichText(
+                        Obx(() => RichText(
                             text: TextSpan(
                                 style: Theme.of(context).textTheme.labelMedium,
                                 children: <TextSpan> [
                                   TextSpan(
-                                      text: 'has: ${item?.amount} ${item?.debitedCurrency}',
+                                      text: 'has: ${offerController.isFetchOfferByIdLoading.value ? '---- ---' : '${item.amount} ${item.debitedCurrency}'}'
                                   ),
                                 ]
                             )
-                        ),
+                        )),
                         const SizedBox(height: TSizes.md,),
-                        RichText(
+                        Obx(() => RichText(
                             text: TextSpan(
                                 style: Theme.of(context).textTheme.labelMedium,
                                 children: <TextSpan> [
                                   TextSpan(
-                                      text: 'needs: ${item?.creditedCurrency}',
+                                    text: 'needs: ${offerController.isFetchOfferByIdLoading.value ? '---' : item.creditedCurrency}',
                                   ),
                                 ]
                             )
-                        ),
+                        )),
                       ],
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        RichText(
+                        Obx(() => RichText(
                             text: TextSpan(
                                 style: Theme.of(context).textTheme.labelMedium,
                                 children: <TextSpan> [
                                   TextSpan(
-                                      text: '${THelperFunctions.formatRate(item!.rate.toString())} ${item.creditedCurrency} // ${item.debitedCurrency}',
+                                      text: '${offerController.isFetchOfferByIdLoading.value ? '-- --- // ---' : '${THelperFunctions.formatRate(item.rate.toString())} ${item.creditedCurrency} // ${item.debitedCurrency}'}',
                                       style: const TextStyle(fontSize: TSizes.fontSize13, color: TColors.primary)
                                   ),
                                 ]
                             )
-                        ),
+                        )),
                         const SizedBox(height: TSizes.md,),
-                        RichText(
-                          text: TextSpan(
-                            style: Theme.of(context).textTheme.labelSmall,
-                            children: <TextSpan> [
-                              TextSpan(
-                                  text: 'Created ${THelperFunctions.getTimeDifference(item.createdDate)}',
-                              ),
-                            ]
-                          )
-                        ),
+                        Obx(() => RichText(
+                            text: TextSpan(
+                                style: Theme.of(context).textTheme.labelSmall,
+                                children: <TextSpan> [
+                                  TextSpan(
+                                    text: 'Created ${offerController.isFetchOfferByIdLoading.value ? '-- days ago' : '${THelperFunctions.getFormattedTime(item.createdDate.toString())}'}',
+                                  ),
+                                ]
+                            )
+                        )),
                       ],
                     )
                   ],
@@ -110,51 +102,59 @@ class OfferDetailsScreen extends StatelessWidget {
               ],
             ),
           ),
-          if (item.expireIn != null)
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 10),
-            decoration: const BoxDecoration(
-                color: TColors.primaryBackground
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  height: 15,
-                  width: 15,
-                  decoration: BoxDecoration(
-                      color: TColors.primary,
-                      borderRadius: BorderRadius.circular(15)
+          Obx(() {
+            if (offerController.isFetchOfferByIdLoading.value == false) {
+              if (item.expireIn != null) {
+                return Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 10),
+                  decoration: const BoxDecoration(
+                      color: TColors.primaryBackground
                   ),
-                  child: const Center(
-                    child: Text('!', style: TextStyle(
-                        color: TColors.white
-                    ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: TSizes.md,),
-                Expanded(
-                  child: RichText(
-                      // textAlign: TextAlign.center,
-                      text: TextSpan(
-                          style: Theme.of(context).textTheme.labelSmall,
-                          children: <TextSpan> [
-                            TextSpan(
-                                text: 'This offer expires in ${item.expireCountDown == null ? '' : THelperFunctions.millisecondConversion(item.expireCountDown.toString()) ?? ''}',
-                                style: TextStyle(
-                                    color: TColors.textPrimaryO80
-                                )
-                            ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 15,
+                        width: 15,
+                        decoration: BoxDecoration(
+                            color: TColors.primary,
+                            borderRadius: BorderRadius.circular(15)
+                        ),
+                        child: const Center(
+                          child: Text('!', style: TextStyle(
+                              color: TColors.white
+                          ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: TSizes.md,),
+                      Expanded(
+                        child: RichText(
+                            text: TextSpan(
+                                style: Theme.of(context).textTheme.labelSmall,
+                                children: <TextSpan> [
+                                  TextSpan(
+                                      text: 'This offer expires in ${'${item.expireCountDown == null ? '' : THelperFunctions.millisecondConversion(item.expireCountDown.toString()) ?? ''}'}',
+                                      style: TextStyle(
+                                          color: TColors.textPrimaryO80
+                                      )
+                                  ),
 
-                          ]
-                      )
+                                ]
+                            )
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          )
+                );
+              } else {
+                return SizedBox();
+              }
+            } else {
+              return SizedBox();
+            }
+          }),
         ],
       ),
       bottomNavigationBar: Theme(
@@ -167,38 +167,44 @@ class OfferDetailsScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
               color: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                    width: double.infinity,
-                    height: TSizes.buttonHeight,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Get.to(() => AcceptReviewDetailsScreen(item: item));
-                        },
-                      child: const Text("I'm interested"),
-                    ),
-                  ),
-                    const SizedBox(height: TSizes.spaceBtwButtons,),
-                    SizedBox(
-                width: double.infinity,
-                height: TSizes.buttonHeight,
-                child: OutlinedButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                        // isDismissible: false,
-                        isScrollControlled: true,
-                        // enableDrag: false,
-                        context: context,
-                        builder: (ctx) => NegotiationScreen(id: item.id, debitedCurrency: item.debitedCurrency, creditedCurrency: item.creditedCurrency)
-                    );
-                  }, // Handle button press
-                  child: const Text("I'm interested, but..."),
-                  ),
-              ),
-                ],
-              ),
+              child: Obx(() {
+                if (offerController.isFetchOfferByIdLoading.value == false) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: TSizes.buttonHeight,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.to(() => AcceptReviewDetailsScreen(item: item));
+                          },
+                          child: const Text("I'm interested"),
+                        ),
+                      ),
+                      const SizedBox(height: TSizes.spaceBtwButtons,),
+                      SizedBox(
+                        width: double.infinity,
+                        height: TSizes.buttonHeight,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              // isDismissible: false,
+                                isScrollControlled: true,
+                                // enableDrag: false,
+                                context: context,
+                                builder: (ctx) => NegotiationScreen(id: item.id.toString(), debitedCurrency: item.debitedCurrency.toString(), creditedCurrency: item.creditedCurrency.toString())
+                            );
+                          }, // Handle button press
+                          child: const Text("I'm interested, but..."),
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return SizedBox();
+                }
+              }),
             ),
           ),
         ),

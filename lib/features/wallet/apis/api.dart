@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/data/modules/dio.dart';
+import 'package:pouch/data/modules/interceptor.dart';
 import 'package:pouch/data/provider/transaction_provider.dart';
 import 'package:pouch/data/provider/wallet_provider.dart';
 import 'package:pouch/features/payment_method/screens/flutterwave_payment.dart';
@@ -32,12 +33,45 @@ import 'package:pouch/utils/shared/notification/snackbar.dart';
 import '../../withdrawals/screens/withdrawal_success.dart';
 import '../models/get_wallet.dart';
 
+const WALLET_URL = '/wallet';
+const CREATE_URL = 'create';
+const NAIRA_TRANSFER_URL = 'fund-wallet-naira-transfer';
+const PAYSTACK_URL = 'fund-wallet-naira-paystack';
+const ADD_LOCAL_BANK_URL = 'add-local-bank';
+const TRANSFER_LOCAL_BANK_URL = 'transfer-local-bank';
+const NAIRA_USSD_URL = 'fund-wallet-naira-ussd';
+const NAIRA_BANK_DIRECT_URL = 'fund-wallet-naira-bank-direct';
+const DEFAULT_WALLET_URL = 'default-wallet';
+const GET_WALLET_URL = 'get-wallets';
+const GET_DEFAULT_WALLET_URL = 'user-default-wallet';
+const GET_LOCAL_WALLET_URL = 'get-local-bank';
+const GET_BANK_LIST_URL = 'list-banks';
+const VERIFY_BANK_ACCOUNT_URL = 'verify-bank-account';
+
+
+
+
+final _apiService = AppInterceptor(showLoader: false).dio;
+
 class WalletServices{
   static final WalletServices _instance = WalletServices._();
 
   WalletServices._();
 
   static WalletServices get instance => _instance;
+
+
+  Future fetchDefaultWallet() async {
+    try {
+      final response = await _apiService.get('$WALLET_URL/$GET_DEFAULT_WALLET_URL');
+      return response;
+    } catch (err) {
+      Get.snackbar('Error', handleApiFormatError(err));
+    }
+  }
+
+
+
 
   // Post requests
 

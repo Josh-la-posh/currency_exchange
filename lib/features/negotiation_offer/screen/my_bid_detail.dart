@@ -5,11 +5,11 @@ import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
-import '../../all_offer/models/negotiate_offer_model.dart';
+import '../../all_offer/models/offer.dart';
 
 class MyBidDetail extends StatelessWidget {
-  final NegotiateOfferModel? item;
-  MyBidDetail({super.key, this.item});
+  final OfferEntity? item = Get.arguments;
+  MyBidDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +123,7 @@ class MyBidDetail extends StatelessWidget {
                                   style: Theme.of(context).textTheme.labelMedium,
                                   children: <TextSpan> [
                                     TextSpan(
-                                        text: '${(THelperFunctions.formatRate(item!.rate))} ${item!.creditedCurrency} // ${item!.debitedCurrency}',
+                                        text: '${(THelperFunctions.formatRate(item!.rate.toString()))} ${item!.creditedCurrency} // ${item!.debitedCurrency}',
                                         style: const TextStyle(
                                           // fontSize: TSizes.fontSize13,
                                             fontWeight: TSizes.fontWeightLg
@@ -261,8 +261,15 @@ class MyBidDetail extends StatelessWidget {
                               children: <TextSpan> [
                                 TextSpan(
                                     text: '${item!.status}',
-                                    style: const TextStyle(
-                                        fontWeight: TSizes.fontWeightLg
+                                    style: TextStyle(
+                                        fontWeight: TSizes.fontWeightLg,
+                                        color: item!.status == 'COMPLETED'
+                                            ? Colors.green
+                                            : item!.status == 'EXPIRED'
+                                            ? Colors.red
+                                            : item!.status == 'REJECTED'
+                                            ? Colors.red
+                                            : Colors.yellow
                                     )
                                 )
                               ]

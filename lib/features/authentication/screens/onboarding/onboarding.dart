@@ -40,7 +40,7 @@ class OnboardingScreen extends StatelessWidget {
   Widget _buildLogoSection(TextTheme textTheme) {
     return Column(
       children: [
-        Image.asset(TImages.appLogoPng),
+        Image.asset(TImages.appLogoPng, height: 80, width: 80),
         const SizedBox(height: TSizes.md),
         Text(
           'Welcome to pouch!',

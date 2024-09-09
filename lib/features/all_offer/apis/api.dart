@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/data/modules/dio.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/data/provider/transaction_provider.dart';
 import 'package:pouch/features/all_offer/models/create_offer_response.dart';
@@ -11,7 +10,6 @@ import 'package:pouch/features/all_offer/models/offer_details_entity.dart';
 import 'package:pouch/features/all_offer/routes/names.dart';
 import 'package:pouch/features/all_offer/screens/accept_offer_success_page.dart';
 import 'package:pouch/features/all_offer/screens/offer_details.dart';
-import 'package:pouch/utils/constants/enums.dart';
 import 'package:pouch/utils/responses/error_dialog.dart';
 import 'package:pouch/utils/responses/handleApiError.dart';
 import 'package:pouch/utils/shared/notification/snackbar.dart';
@@ -19,8 +17,21 @@ import 'package:pouch/utils/shared/notification/snackbar.dart';
 import '../../../data/modules/app_navigator.dart';
 import '../../../data/modules/interceptor.dart';
 import '../../../data/provider/wallet_provider.dart';
-import '../models/negotiate_offer_model.dart';
 import '../models/offer.dart';
+
+const OFFER_URL = '/offer';
+const CREATE_OFFER_URL = 'create';
+const ACCEPT_REJECT_OFFER_URL = 'accept-reject';
+const NEGOTIATE_OFFER_URL = 'negotiate';
+const SWAP_OFFER_URL = 'swap';
+const ALL_NEGOTIATED_OFFER_URL = 'negotiate/negotiated-offers';
+const MY_OFFER_URL = 'me/my-offer';
+const MY_OFFERS_URL = 'me/my-offers';
+const MY_BIDS_URL = 'me/my-bids';
+const MY_BID_URL = 'me/my-bid';
+
+final _apiService = AppInterceptor(showLoader: false).dio;
+final apiService = AppInterceptor(showLoader: true).dio;
 
 class OfferService {
   static final OfferService _instance = OfferService._();
@@ -30,6 +41,134 @@ class OfferService {
   static OfferService get instance => _instance;
 
   // post requests
+
+  Future creatingOffer(Map<String, dynamic> queryParameters) async {
+    try {
+      final response = await _apiService.post('$OFFER_URL/$CREATE_OFFER_URL', data: queryParameters);
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future acceptingOrRejectingOffer({required String id, required Object data}) async {
+    try {
+      final response = await _apiService.post('$OFFER_URL/$ACCEPT_REJECT_OFFER_URL/$id', data: data);
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future negotiatingOffer({required String id, required Object data}) async {
+    try {
+      final response = await _apiService.post('$OFFER_URL/$NEGOTIATE_OFFER_URL/$id', data: data);
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future swappingOffer({required String id}) async {
+    try {
+      final response = await _apiService.post('$OFFER_URL/$SWAP_OFFER_URL/$id');
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future fetchAllOffers(Map<String, dynamic> queryParameters) async {
+    try {
+      final response = await _apiService.get('$OFFER_URL', queryParameters: queryParameters);
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future fetchOfferById(String id) async {
+    try {
+      final response = await _apiService.get('$OFFER_URL/$id',);
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future fetchAllNegotiatedOffers() async {
+    try {
+      final response = await _apiService.get('$OFFER_URL/$ALL_NEGOTIATED_OFFER_URL');
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future fetchMyOffers(String days, String currency) async {
+    try {
+      final response = await _apiService.get('$OFFER_URL/$MY_OFFERS_URL', queryParameters: {'days': days, 'currency': currency});
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future fetchMyBids(String days, String currency) async {
+    try {
+      final response = await _apiService.get('$OFFER_URL/$MY_BIDS_URL', queryParameters: {'days': days, 'currency': currency});
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future fetchMyOffersById(String id) async {
+    try {
+      final response = await _apiService.get('$OFFER_URL/$MY_OFFER_URL/$id');
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future fetchMyBidsById(String id) async {
+    try {
+      final response = await _apiService.get('$OFFER_URL/$MY_BID_URL/$id');
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future deleteOffer(String id) async {
+    try {
+      final response = await _apiService.delete('$OFFER_URL/$id');
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+  Future deleteBid(String id) async {
+    try {
+      final response = await _apiService.delete('$OFFER_URL/bid/$id');
+      return response;
+    } catch (e) {
+      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
   
   Future _createOffer(Map<String, dynamic> queryParameters) {
     return apiService.post('/offer/create', data: queryParameters);
@@ -74,6 +213,14 @@ class OfferService {
 
   Future _getMyBids(String days, String currency) {
     return apiService.get('/offer/me/my-bids', queryParameters: {'days': days, 'currency': currency});
+  }
+
+  Future _getMyOfferById(String id) {
+    return apiService.get('/offer/me/my-offer/$id');
+  }
+
+  Future _getMyBidsById(String id) {
+    return apiService.get('/offer/me/my-bid/$id');
   }
 
   // Creating an offer
@@ -302,7 +449,7 @@ class OfferService {
 
         var content = offerDetails.content;
 
-        for (var item in content) {
+        for (var item in content!) {
           offers.add(OfferEntity(
               id: item['id'],
               debitedCurrency: item['debitedCurrency'],
@@ -323,7 +470,6 @@ class OfferService {
           ));
           offerProvider.saveOffers(offers);
         }
-
     });
   }
 
@@ -357,14 +503,14 @@ class OfferService {
     });
     await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
 
-    Get.to(() => OfferDetailsScreen(onTap: onTap,));
+    Get.to(() => OfferDetailsScreen());
   }
 
 
   getAllNegotiatedOOffers({
     required OfferProvider offerProvider,
   }) {
-    List<NegotiateOfferModel> negotiations = [];
+    List<OfferEntity> negotiations = [];
 
     _getAllNegotiatedOffers().then((response) {
       var data = response.data;
@@ -382,7 +528,7 @@ class OfferService {
       var content = negotiatedOffers.content;
 
       for (var item in content) {
-        negotiations.add(NegotiateOfferModel(
+        negotiations.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
             creditedCurrency: item['creditedCurrency'],
@@ -410,7 +556,7 @@ class OfferService {
     required String days,
     required String currency
   }) {
-    List<NegotiateOfferModel> negotiations = [];
+    List<OfferEntity> negotiations = [];
 
     _getMyOffers(days, currency).then((response) {
       var data = response.data;
@@ -428,7 +574,7 @@ class OfferService {
       var content = negotiatedOffers.content;
 
       for (var item in content) {
-        negotiations.add(NegotiateOfferModel(
+        negotiations.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
             creditedCurrency: item['creditedCurrency'],
@@ -457,11 +603,10 @@ class OfferService {
     required String days,
     required String currency
   }) {
-    List<NegotiateOfferModel> negotiations = [];
+    List<OfferEntity> negotiations = [];
 
     _getMyBids(days, currency).then((response) {
       var data = response.data;
-
       NegotiatedOffersEntity negotiatedOffers = NegotiatedOffersEntity(
           totalPages: data['totalPages'],
           payloadSize: data['payloadSize'],
@@ -475,7 +620,7 @@ class OfferService {
       var content = negotiatedOffers.content;
 
       for (var item in content) {
-        negotiations.add(NegotiateOfferModel(
+        negotiations.add(OfferEntity(
             id: item['id'],
             debitedCurrency: item['debitedCurrency'],
             creditedCurrency: item['creditedCurrency'],
@@ -499,6 +644,37 @@ class OfferService {
 
       print('value ${content.length}');
 
+    }).catchError((error) {
+      print('newly found error $error');
+    });
+  }
+
+  getMyBidsById({
+    required OfferProvider offerProvider,
+    required String id
+  }) {
+    _getMyBidsById(id).then((response) {
+      var item = response.data;
+
+      OfferEntity myBid = OfferEntity(
+          id: item['id'],
+          debitedCurrency: item['debitedCurrency'],
+          creditedCurrency: item['creditedCurrency'],
+          amount: item['amount'],
+          rate: item['rate'],
+          expireIn: item['expireIn'],
+          expireCountDown: item['expireCountDown'],
+          views: item['views'],
+          negotiatorRate: item['negotiatorRate'],
+          negotiatorAmount: item['negotiatorAmount'],
+          negotiationAccepted: item['negotiationAccepted'],
+          negotiatorId: item['negotiatorId'],
+          isActive: item['isActive'],
+          status: item['status'],
+          createdDate: item['createdDate'],
+          lastModifiedDate: item['lastModifiedDate']
+      );
+      offerProvider.saveMyBid(myBid);
     }).catchError((error) {
       print('newly found error $error');
     });

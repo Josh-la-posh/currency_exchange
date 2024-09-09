@@ -5,18 +5,17 @@ import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/data/provider/auth_provider.dart';
 import 'package:pouch/data/provider/verification_provider.dart';
 import 'package:pouch/features/verification/screens/verify_page.dart';
+import '../../features/authentication/controllers/auth_controller.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/sizes.dart';
 import '../../utils/helpers/helper_functions.dart';
 
 class VerifyYourAccountWidget extends StatelessWidget {
-  final bool darkMode;
-  final VoidCallback onTap;
-  const VerifyYourAccountWidget({super.key, required this.darkMode, required this.onTap});
+  final AuthController authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
-    // var provider = Provider.of<VerificationProvider>(context);
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Stack(
       children: [
         Container(
@@ -89,7 +88,7 @@ class VerifyYourAccountWidget extends StatelessWidget {
             top: 0,
             right: 0,
             child: IconButton(
-                onPressed: onTap,
+                onPressed: () => authController.isVerifiedDisplay.value = !authController.isVerifiedDisplay.value,
                 icon: const Icon(
                   Icons.cancel_rounded,
                   color: TColors.primary,

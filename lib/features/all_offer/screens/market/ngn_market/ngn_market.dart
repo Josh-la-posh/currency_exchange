@@ -1,36 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/texts.dart';
 import '../../../../../utils/helpers/helper_functions.dart';
+import '../../../controllers/offer_controller.dart';
 import 'ngn_market_list.dart';
 import 'ngn_new_market_list.dart';
 import 'ngn_trending_market_list.dart';
 
-class NgnMarketScreen extends StatefulWidget {
-  const NgnMarketScreen({super.key});
-
-  @override
-  State<NgnMarketScreen> createState() => _NgnMarketScreenState();
-}
-
-class _NgnMarketScreenState extends State<NgnMarketScreen> {
-  int selectedIndex = 1;
-
-  void handleSelectedIndex(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
+class NgnMarketScreen extends StatelessWidget {
+  final OfferController offerController = Get.put(OfferController());
 
   Widget _buildTab({
     required String title,
     required int index,
     required bool darkMode,
   }) {
-    final isSelected = selectedIndex == index;
+    final isSelected = offerController.ngnOfferIndex.value == index;
     return GestureDetector(
-      onTap: () => handleSelectedIndex(index),
+      onTap: () => offerController.ngnOfferIndex.value = index,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
         decoration: BoxDecoration(
@@ -57,27 +47,30 @@ class _NgnMarketScreenState extends State<NgnMarketScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (offerController.allNgnOffers.isEmpty) {
+      offerController.fetchOffersByCurrency(currency: 'NGN');
+    }
     final darkMode = THelperFunctions.isDarkMode(context);
     final screenHeight = THelperFunctions.screenHeight();
 
     return Container(
       height: screenHeight - kBottomNavigationBarHeight - 70,
-      child: Column(
+      child: Obx(() => Column(
         children: [
           Container(
             margin: const EdgeInsets.only(top: 9),
             child: Row(
               children: [
-                _buildTab(title: 'All', index: 1, darkMode: darkMode),
-                _buildTab(title: 'New', index: 2, darkMode: darkMode),
-                _buildTab(title: 'Trending', index: 3, darkMode: darkMode),
+                _buildTab(title: 'All', index: 0, darkMode: darkMode),
+                _buildTab(title: 'New', index: 1, darkMode: darkMode),
+                _buildTab(title: 'Trending', index: 2, darkMode: darkMode),
               ],
             ),
           ),
           Expanded(
             child: IndexedStack(
-              index: selectedIndex - 1,
-              children: const [
+              index: offerController.ngnOfferIndex.value,
+              children: [
                 NgnMarketList(),
                 NgnNewMarketList(),
                 NgnTrendingMarketList(),
@@ -85,7 +78,7 @@ class _NgnMarketScreenState extends State<NgnMarketScreen> {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:get/get.dart';
+import 'package:pouch/data/modules/reset_controllers.dart';
 import 'package:pouch/features/authentication/screens/add_details/add_address_detail.dart';
+import 'package:pouch/features/authentication/screens/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
 import 'package:pouch/data/modules/background_task.dart';
@@ -28,6 +30,7 @@ class UserSession {
   static UserSession get instance => _instance;
 
   final SharedPreferences _storage = LocalStorage.instance.storage;
+  final resetController = ResetControllers();
 
   setToken(String accessToken) async {
     _storage.setString(USER_SESSION_TOKEN, accessToken);
@@ -63,11 +66,6 @@ class UserSession {
           subscriptionProvider: subscriptionProvider,
           notificationProvider: notificationProvider
       );
-      // handleShowLoader();
-      // Future.delayed(
-      //   Duration(seconds: 1),
-      //     () {
-      //     handleHideLoader();
       if (authProvider.user?.address == null) {
         Get.to(() => AddAddressDetail(
             email: USER_REMEMBER_ME_EMAIL,
@@ -97,7 +95,8 @@ class UserSession {
   logoutUser({String? logoutMessage = ''}) async {
     _storage.remove(USER_SESSION_TOKEN);
     AppNavigator.instance.resetProviders();
-    AppNavigator.instance.removeAllNavigateToNavHandler(AUTH_LOGIN_SCREEN_ROUTE);
+    await resetController.clearData();
+    // AppNavigator.instance.removeAllNavigateToNavHandler(AUTH_LOGIN_SCREEN_ROUTE);
     handleShowCustomToast(
         message: logoutMessage ??
             '''You've successfully logged out of pouch.

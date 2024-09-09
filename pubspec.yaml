@@ -38,6 +38,10 @@ dependencies:
   country_state_city_pro: ^0.0.6
   flutter_native_splash: ^2.4.0
   shimmer: ^3.0.0
+  smile_id: ^10.1.7
+  country_picker: ^2.0.26
+  flutter_localization: ^0.2.2
+  socket_io_client: ^2.0.3+1
 
 
   #------------------- ./ PACKAGES END ---------------#

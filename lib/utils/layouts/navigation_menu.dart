@@ -51,10 +51,10 @@ class NavigationMenu extends StatelessWidget {
           showSelectedLabels: true,
           showUnselectedLabels: true,
           selectedLabelStyle: TextStyle(
-            fontSize: 14, // Adjust the font size for the selected label
+            fontSize: 11, // Adjust the font size for the selected label
           ),
           unselectedLabelStyle: TextStyle(
-            fontSize: 12, // Adjust the font size for the unselected label
+            fontSize: 9, // Adjust the font size for the unselected label
           ),
           selectedIconTheme: IconThemeData(size: 25),
           unselectedIconTheme: IconThemeData(size: 23),
@@ -68,8 +68,8 @@ class NavigationMenu extends StatelessWidget {
 class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
   final screens = [
-    const HomeScreen(),
-    const AllOfferScreen(),
+    HomeScreen(),
+    AllOfferScreen(),
     const TransactionHistoryScreen(),
     const WalletDashboardScreen(),
   ];

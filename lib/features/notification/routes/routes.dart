@@ -5,5 +5,5 @@ import 'named.dart';
 
 
 Map<String, WidgetBuilder> notificationRoutes = {
-  NOTIFICATION_SCREEN_ROUTE: (context) => const AuthGuard(widget: NotificationScreen()),
+  NOTIFICATION_SCREEN_ROUTE: (context) => AuthGuard(widget: NotificationScreen()),
 };

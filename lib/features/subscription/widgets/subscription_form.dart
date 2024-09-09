@@ -55,7 +55,10 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                   ),
                 ),
               ),
-              onChanged: (val) => provider.setDebitedCurrency(val as Currency),
+              onChanged: (val) {
+                provider.setDebitedCurrency(val as Currency);
+                _formKey.currentState?.validate();
+              },
               items: [
                 for (final item in provider.currencies)
                   DropdownMenuItem<Currency>(
@@ -97,7 +100,10 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                   ),
                 ),
               ),
-              onChanged: (val) => provider.setCreditedCurrency(val!),
+              onChanged: (val) {
+                provider.setCreditedCurrency(val!);
+                _formKey.currentState?.validate();
+              },
               items: [
                 for (final item in provider.currencies)
                   DropdownMenuItem<Currency>(
@@ -134,7 +140,10 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                   ),
                   child: TextFormField(
                     validator: TValidator.numValidator,
-                    onChanged: (val) => provider.setMinRate(val),
+                    onChanged: (val) {
+                      provider.setMinRate(val);
+                      _formKey.currentState?.validate();
+                    },
                     onSaved: (val) => provider.setMinRate(val!),
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(
@@ -170,7 +179,10 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                   ),
                   child: TextFormField(
                     validator: TValidator.numValidator,
-                    onChanged: (val) => provider.setMaxRate(val),
+                    onChanged: (val) {
+                      provider.setMaxRate(val);
+                      _formKey.currentState?.validate();
+                    },
                     onSaved: (val) => provider.setMaxRate(val!),
                     keyboardType: TextInputType.phone,
                     decoration: InputDecoration(

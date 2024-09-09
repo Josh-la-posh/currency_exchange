@@ -7,6 +7,7 @@ import 'package:pouch/features/verification/icons/svg.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/layouts/navigation_menu.dart';
 
 class VerificationInProgressScreen extends StatelessWidget {
   const VerificationInProgressScreen({super.key});
@@ -130,7 +131,8 @@ class VerificationInProgressScreen extends StatelessWidget {
               height: 40,
               child: TElevatedButton(
                   onTap: () {
-                    Get.to(() => const HomeScreen());
+                    Get.to(() => const NavigationMenu());
+
                   },
                   buttonText: 'Go To Dashboard'
               ),

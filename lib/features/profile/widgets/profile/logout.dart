@@ -21,7 +21,6 @@ class LogoutButton extends StatelessWidget {
         splashColor: Colors.transparent,
         tileColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
         onTap: (){
-
           showModalBottomSheet(
               isScrollControlled: true,
               backgroundColor: darkMode ? TColors.textPrimary : Colors.white,

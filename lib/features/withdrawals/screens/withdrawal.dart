@@ -181,7 +181,10 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
           fontWeight: FontWeight.w800,
           fontSize: 24,
         ),
-        onChanged: (val) => _amount = val,
+        onChanged: (val) {
+          _amount = val;
+          _formKey.currentState?.validate();
+        },
         onSaved: (val) {
           setState(() {
             _amount = val!;
@@ -202,7 +205,7 @@ class _WithdrawalScreenState extends State<WithdrawalScreen> {
               fontSize: 16,
             ),
             children: [
-              TextSpan(text: '${provider.defaultWallet == null ? '******' : provider.defaultWallet!.currency} ${provider.defaultWallet == null ? '' : THelperFunctions.moneyFormatter(provider
+              TextSpan(text: '${provider.defaultWallet == null ? '*****' : provider.defaultWallet!.currency} ${provider.defaultWallet == null ? '' : THelperFunctions.moneyFormatter(provider
                   .defaultWallet!.balance.toString())}'),
             ],
           ),
