@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/features/authentication/screens/email_verify/widgets/email_verify_form.dart';
 import 'package:pouch/utils/layouts/auth_layout.dart';
-import '../../../../common/widgets/buttons/app_bar.dart';
 
 class EmailVerificationScreen extends StatelessWidget {
-  final bool sendEmailOtpOnBuild;
   final String email;
   final String password;
-  final VoidCallback? onSuccess;
   const EmailVerificationScreen({
     super.key,
-    this.sendEmailOtpOnBuild = false,
     required this.email,
     required this.password,
-    this.onSuccess = null
   });
 
   @override

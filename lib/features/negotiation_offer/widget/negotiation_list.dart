@@ -6,7 +6,7 @@ import '../../../utils/layouts/list_layout.dart';
 import 'negotiation_item.dart';
 
 class NegotiationList extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
   final bool darkMode;
 
   NegotiationList({Key? key, required this.darkMode}) : super(key: key);

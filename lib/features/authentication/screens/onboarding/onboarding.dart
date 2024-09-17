@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/outlined_button.dart';
 import 'package:pouch/features/authentication/screens/login/login.dart';
 import 'package:pouch/features/authentication/screens/sign_up/sign_up.dart';
-import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
@@ -20,18 +19,20 @@ class OnboardingScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: darkMode ? Colors.black.withOpacity(0.5) : Colors.white,
-      body: Container(
-        height: THelperFunctions.screenHeight(),
-        padding: const EdgeInsets.symmetric(
-          horizontal: TSizes.defaultSpace,
-          vertical: TSizes.defaultSpace * 3,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildLogoSection(textTheme),
-            _buildActionSection(context),
-          ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: THelperFunctions.screenHeight(),
+          padding: const EdgeInsets.symmetric(
+            horizontal: TSizes.defaultSpace,
+            vertical: TSizes.defaultSpace * 3,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildLogoSection(textTheme),
+              _buildActionSection(context),
+            ],
+          ),
         ),
       ),
     );
@@ -68,12 +69,12 @@ class OnboardingScreen extends StatelessWidget {
         ),
         const SizedBox(height: TSizes.defaultSpace * 2),
         TElevatedButton(
-          onTap: () => Get.to(() => const CreateAccountScreen()),
+          onTap: () => Get.to(() => CreateAccountScreen()),
           buttonText: 'Sign Up',
         ),
         const SizedBox(height: TSizes.spaceBtwButtons),
         TOutlinedButton(
-          onTap: () => Get.to(() => const LoginScreen()),
+          onTap: () => Get.to(() => LoginScreen()),
           buttonText: 'Log In',
         ),
       ],

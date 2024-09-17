@@ -8,12 +8,15 @@ import '../../../widgets/no_offer.dart';
 import '../../../widgets/offer_item.dart';
 
 class AllMarketList extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
 
   @override
   Widget build(BuildContext context) {
+    if (offerController.allOffers.isEmpty) {
+      offerController.fetchAllOffers();
+    }
     return Obx(() {
-      if (offerController.isOfferLoading.value && offerController.allOffers.isEmpty) {
+      if (offerController.isAllOffersLoading.value && offerController.allOffers.isEmpty) {
         return OrderShimmer();
       } else {
         return CustomRefreshIndicator(

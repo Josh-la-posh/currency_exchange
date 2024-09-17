@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../../utils/constants/texts.dart';
@@ -11,7 +10,7 @@ import 'gbp_new_market_list.dart';
 import 'gbp_trending_market_list.dart';
 
 class GbpMarketScreen extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
 
   Widget _buildTab({
     required String title,
@@ -47,9 +46,6 @@ class GbpMarketScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (offerController.allGbpOffers.isEmpty) {
-      offerController.fetchOffersByCurrency(currency: 'GBP');
-    }
     final darkMode = THelperFunctions.isDarkMode(context);
     final screenHeight = THelperFunctions.screenHeight();
 

@@ -14,7 +14,7 @@ import '../../all_offer/models/offer.dart';
 import '../../transaction/icons/svg.dart';
 
 class MyBidItem extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
   final OfferEntity item;
   MyBidItem({
     super.key,

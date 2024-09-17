@@ -1,21 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:pouch/features/home/routes/names.dart';
-import 'package:provider/provider.dart';
+import 'package:pouch/features/all_offer/controllers/create_offer_controller.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/layouts/bottom_sheet_widget.dart';
 import 'package:pouch/utils/validators/validation.dart';
-
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/provider/offer_provider.dart';
 import '../../../utils/layouts/navigation_menu.dart';
-import '../apis/api.dart';
 
-class NegotiationScreen extends StatefulWidget {
+class NegotiationScreen extends StatelessWidget {
+  final offerController = Get.find<OfferController>();
+  final controller = Get.find<NavigationController>();
+  final createOfferController = Get.find<CreateOfferController>();
   final String id;
   final String debitedCurrency;
   final String creditedCurrency;
@@ -27,25 +24,13 @@ class NegotiationScreen extends StatefulWidget {
   });
 
   @override
-  State<NegotiationScreen> createState() => _NegotiationScreenState();
-}
-
-class _NegotiationScreenState extends State<NegotiationScreen> {
-  final formKey = GlobalKey<FormState>();
-
-  bool isLoading = false;
-
-  @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
-    final offerProvider = Provider.of<OfferProvider>(context);
-    final provider = Provider.of<OfferProvider>(context);
     return  HalfBottomSheetWidget(
         title: "I'm interested, but...",
         child: SizedBox(
           height: THelperFunctions.screenHeight() * 0.48,
           child: Form(
-            key: formKey,
+            key: createOfferController.formKey,
             child:
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -58,20 +43,14 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                       children: [
                         Expanded(
                           child: TextFormField(
-                            onChanged: (val) {
-                              provider.setNegotiatorAmount(val);
-                              formKey.currentState?.validate();
-                            },
-                            onSaved: (val) {
-                              provider.setNegotiatorAmount(val!);
-                            },
+                              controller: createOfferController.amountController,
                               keyboardType: TextInputType.number,
                               validator: TValidator.numValidator,
-                            style: Theme.of(context).textTheme.labelMedium
+                              style: Theme.of(context).textTheme.labelMedium
                           ),
                         ),
                         SizedBox(width: 5,),
-                        Text(widget.debitedCurrency, style: Theme.of(context).textTheme.bodyMedium,)
+                        Text(debitedCurrency, style: Theme.of(context).textTheme.bodyMedium,)
                       ],
                     ),
                     const SizedBox(height: TSizes.spaceBtwInputFields,),
@@ -81,52 +60,54 @@ class _NegotiationScreenState extends State<NegotiationScreen> {
                         children: [
                           Expanded(
                             child: TextFormField(
-                                onChanged: (val) {
-                                  provider.setNegotiatorRate(val);
-                                  formKey.currentState?.validate();
-                                },
-                                onSaved: (val) {
-                                  provider.setNegotiatorRate(val!);
-                                },
+                                controller: createOfferController.rateController,
                                 validator: TValidator.numValidator,
                                 keyboardType: TextInputType.number,
                                 style: Theme.of(context).textTheme.labelMedium
                             ),
                           ),
                           SizedBox(width: 5,),
-                          Text('${widget.creditedCurrency} // ${widget.debitedCurrency} ', style: Theme.of(context).textTheme.bodyMedium,),
+                          Text('$creditedCurrency // $debitedCurrency ', style: Theme.of(context).textTheme.bodyMedium,),
                         ],
                       ),
                     ),
                   ],
                 ),
-                TElevatedButton(
-                    onTap: isLoading ? null : (){
-                      setState(() {
-                        isLoading = true;
-                      });
-                      if (formKey.currentState!.validate()) {
-                        OfferService.instance
-                            .negotiateOffer(
-                            id: widget.id,
-                            negotiatorRate: provider.negotiatorRate,
-                            negotiatorAmount: provider.negotiatorAmount,
-                            offerProvider: offerProvider,
+                Obx(() => TElevatedButton(
+                    onTap: offerController.isLoading.value ? null : (){
+                      if (createOfferController.formKey.currentState!.validate()) {
+                        offerController.negotiatingOffer(
+                            id: id,
+                            currency: debitedCurrency,
+                            negotiatorRate: createOfferController.rateController.text,
+                            negotiatorAmount: createOfferController.amountController.text,
                             onSuccess: () {
-                              controller.selectedIndex.value = 1;
-                              AppNavigator.instance
-                                .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                            },
-                            onFailure: (){
-                              setState(() {
-                                isLoading = false;
-                              });
+                              createOfferController.rateController.clear();
+                              createOfferController.amountController.clear();
+                              Get.offAll(() => NavigationMenu());
                             }
                         );
+                        // OfferService.instance
+                        //     .negotiateOffer(
+                        //     id: widget.id,
+                        //     negotiatorRate: provider.negotiatorRate,
+                        //     negotiatorAmount: provider.negotiatorAmount,
+                        //     offerProvider: offerProvider,
+                        //     onSuccess: () {
+                        //       widget.controller.selectedIndex.value = 1;
+                        //       AppNavigator.instance
+                        //           .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                        //     },
+                        //     onFailure: (){
+                        //       setState(() {
+                        //         isLoading = false;
+                        //       });
+                        //     }
+                        // );
                       }
                     },
-                    buttonText: isLoading ? 'Loading ...' : 'Done'
-                )
+                    buttonText: offerController.isLoading.value ? 'Loading ...' : 'Done'
+                ))
               ],
             ),
           ),

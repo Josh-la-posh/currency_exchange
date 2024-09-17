@@ -1,74 +1,70 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pouch/features/payment_method/widgets/bank_list_item.dart';
+import 'package:pouch/features/wallet/controller/add_bank_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-
-import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 
 class BankList extends StatelessWidget {
-  final WalletProvider walletProvider;
-  const BankList({super.key, required this.walletProvider});
+  final addBankController = Get.find<AddBankController>();
+  BankList({super.key});
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    return Column(
+    return Obx(() => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
         // Search bar
-
-        if (walletProvider.bankAccountDetails == null)
-        Container(
-            width: double.infinity,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: darkMode ? TColors.timeLineBorder : Colors.transparent,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
-                boxShadow: [
-                  BoxShadow(
-                      color: darkMode ? TColors.black : TColors.black.withOpacity(0.1),
-                      offset: const Offset(1.32,1.87),
-                      blurRadius: 1.94,
-                      spreadRadius: 1.94
-                  ),
-                  BoxShadow(
-                      color: darkMode ? TColors.black : Color(0xFFFDF6FF).withOpacity(0.5),
-                      offset: const Offset(0.0,0.0),
-                      blurRadius: 0,
-                      spreadRadius: 0
-                  ),
-                  BoxShadow(
-                      color: darkMode ? TColors.black : Colors.white.withOpacity(0.8),
-                      offset: const Offset(0,0.0),
-                      blurRadius: 1.8,
-                      spreadRadius: 0
-                  ),
-                ]
-            ),
-            child: TextField(
-              decoration:  InputDecoration(
-                  prefixIcon: Icon(
-                      Icons.search,
-                    color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimaryO80,
-                  ),
-                  hintText: 'Search Bank'
+        if (addBankController.walletController.bankAccountDetails.value.account_name == null)
+          Container(
+              width: double.infinity,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: darkMode ? TColors.timeLineBorder : Colors.transparent,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: darkMode ? TColors.black : TColors.black.withOpacity(0.1),
+                        offset: const Offset(1.32,1.87),
+                        blurRadius: 1.94,
+                        spreadRadius: 1.94
+                    ),
+                    BoxShadow(
+                        color: darkMode ? TColors.black : Color(0xFFFDF6FF).withOpacity(0.5),
+                        offset: const Offset(0.0,0.0),
+                        blurRadius: 0,
+                        spreadRadius: 0
+                    ),
+                    BoxShadow(
+                        color: darkMode ? TColors.black : Colors.white.withOpacity(0.8),
+                        offset: const Offset(0,0.0),
+                        blurRadius: 1.8,
+                        spreadRadius: 0
+                    ),
+                  ]
               ),
-              style: Theme.of(context).textTheme.labelMedium,
-              onChanged: (text) {
-                walletProvider.filterBanks(text);
-              },
-            )
-        ),
+              child: TextField(
+                decoration:  InputDecoration(
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: darkMode ? TColors.white.withOpacity(0.7) : TColors.textPrimaryO80,
+                    ),
+                    hintText: 'Search bank ...'
+                ),
+                style: Theme.of(context).textTheme.labelMedium,
+                onChanged: (text) => addBankController.walletController.filterBanks(text),
+              )
+          ),
 
 
-        if (walletProvider.bankAccountDetails == null)
-        const SizedBox(height: TSizes.sm,),
+        if (addBankController.walletController.bankAccountDetails.value.account_number == null)
+          const SizedBox(height: TSizes.sm,),
 
         // Error text
         Visibility(
-          visible: walletProvider.showErrorText,
+          visible: addBankController.showErrorText.value,
           child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
@@ -85,94 +81,94 @@ class BankList extends StatelessWidget {
 
         // Bank list display
 
-        if (walletProvider.filteredBanks.length > 0)
-        SizedBox(
-          child: ListView.builder(
-              itemCount: walletProvider.filteredBanks.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (_, index) {
-                final bankDetail = walletProvider.filteredBanks[index];
-                return BankListItem(bankDetail: bankDetail, walletProvider: walletProvider,);
-              }
+        if (addBankController.walletController.filteredBanks.length > 0)
+          SizedBox(
+            child: ListView.builder(
+                itemCount: addBankController.walletController.filteredBanks.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemBuilder: (_, index) {
+                  final bankDetail = addBankController.walletController.filteredBanks[index];
+                  return BankListItem(bankDetail: bankDetail);
+                }
+            ),
           ),
-        ),
         const SizedBox(height: TSizes.defaultSpace,),
 
         // Bank name display
 
-        if (walletProvider.selectedBank?.name != null)
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RichText(
-                text: TextSpan(
-                    style: TextStyle(
-                        color: darkMode ? Colors.white : Colors.black,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
-                        fontFamily: 'Roboto'
-                    ),
-                    children: const <TextSpan> [
-                      TextSpan(
-                        text: 'Bank Name',
-                      ),
-                    ]
-                )
-            ),
-            const SizedBox(height: 10,),
-            Container(
-              height: 48,
-              width: double.infinity,
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              decoration: BoxDecoration(
-                color: darkMode ? TColors.timeLineBorder : Color(0xFFFDF6FF).withOpacity(0.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  border: Border.all(
-                    color: darkMode ? TColors.secondaryBorder30 : Colors.transparent
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                        color: darkMode ? Colors.black : TColors.black.withOpacity(0.1),
-                        offset: const Offset(1.32,1.87),
-                        blurRadius: 1.94,
-                        spreadRadius: 1.94
-                    ),
-                    BoxShadow(
-                        color: darkMode ? Colors.black :  Color(0xFFFDF6FF).withOpacity(0.5),
-                        offset: const Offset(0.0,0.0),
-                        blurRadius: 0,
-                        spreadRadius: 0
-                    ),
-                    BoxShadow(
-                        color: darkMode ? Colors.black : Colors.white.withOpacity(0.8),
-                        offset: const Offset(0,0.0),
-                        blurRadius: 1.8,
-                        spreadRadius: 0
-                    ),
-                  ]
-              ),
-              child:
+        if (addBankController.walletController.selectedBank.value.name != null)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
               RichText(
                   text: TextSpan(
                       style: TextStyle(
                           color: darkMode ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
                           fontFamily: 'Roboto'
                       ),
-                      children: <TextSpan> [
+                      children: const <TextSpan> [
                         TextSpan(
-                          text: walletProvider.selectedBank!.name.toString(),
+                          text: 'Bank Name',
                         ),
                       ]
                   )
               ),
-            ),
-          ],
-        ),
+              const SizedBox(height: 10,),
+              Container(
+                height: 48,
+                width: double.infinity,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                decoration: BoxDecoration(
+                    color: darkMode ? TColors.timeLineBorder : Color(0xFFFDF6FF).withOpacity(0.5),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    border: Border.all(
+                        color: darkMode ? TColors.secondaryBorder30 : Colors.transparent
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                          color: darkMode ? Colors.black : TColors.black.withOpacity(0.1),
+                          offset: const Offset(1.32,1.87),
+                          blurRadius: 1.94,
+                          spreadRadius: 1.94
+                      ),
+                      BoxShadow(
+                          color: darkMode ? Colors.black :  Color(0xFFFDF6FF).withOpacity(0.5),
+                          offset: const Offset(0.0,0.0),
+                          blurRadius: 0,
+                          spreadRadius: 0
+                      ),
+                      BoxShadow(
+                          color: darkMode ? Colors.black : Colors.white.withOpacity(0.8),
+                          offset: const Offset(0,0.0),
+                          blurRadius: 1.8,
+                          spreadRadius: 0
+                      ),
+                    ]
+                ),
+                child:
+                RichText(
+                    text: TextSpan(
+                        style: TextStyle(
+                            color: darkMode ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            fontFamily: 'Roboto'
+                        ),
+                        children: <TextSpan> [
+                          TextSpan(
+                            text: addBankController.walletController.selectedBank.value.name,
+                          ),
+                        ]
+                    )
+                ),
+              ),
+            ],
+          ),
       ],
-    );
+    ));
   }
 }

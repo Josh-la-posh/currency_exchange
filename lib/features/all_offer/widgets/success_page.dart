@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/common/widgets/currencyWidget.dart';
 import 'package:pouch/features/home/routes/names.dart';
-import 'package:pouch/features/home/screens/home.dart';
 import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../data/modules/app_navigator.dart';
@@ -14,6 +12,7 @@ import '../../../utils/layouts/navigation_menu.dart';
 
 
 class SuccessScreenWidget extends StatelessWidget {
+  final controller = Get.find<NavigationController>();
   SuccessScreenWidget({
     super.key,
     required this.text,
@@ -26,7 +25,6 @@ class SuccessScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return SingleChildScrollView(
       padding: TSpacingStyle.homePadding,
@@ -68,8 +66,9 @@ class SuccessScreenWidget extends StatelessWidget {
                 child: TElevatedButton(
                     onTap: onTap != null ? onTap : (){
                       controller.selectedIndex.value = 1;
-                      AppNavigator.instance
-                          .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                      Get.offAll(() => NavigationMenu());
+                      // AppNavigator.instance
+                      //     .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                       },
                     buttonText: 'Done'),
               )

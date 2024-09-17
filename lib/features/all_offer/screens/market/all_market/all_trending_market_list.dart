@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import '../../../../../utils/layouts/list_layout.dart';
 import '../../../controllers/offer_controller.dart';
@@ -9,12 +8,15 @@ import '../../../widgets/offer_item.dart';
 import 'package:pouch/utils/shimmer/order_shimmer.dart';
 
 class AllTrendingMarketList extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
 
   @override
   Widget build(BuildContext context) {
+    if (offerController.trendingOffers.isEmpty) {
+      offerController.fetchTrendingOffers();
+    }
     return Obx(() {
-      if (offerController.isOfferLoading.value && offerController.trendingOffers.isEmpty) {
+      if (offerController.isTrendingOffersLoading.value && offerController.trendingOffers.isEmpty) {
         return OrderShimmer();
       } else {
         return CustomRefreshIndicator(

@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/data/provider/wallet_provider.dart';
 import 'package:pouch/features/wallet/models/bank_list.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 
 import '../../../utils/helpers/helper_functions.dart';
+import '../../wallet/controller/wallet_controller.dart';
 
 class BankListItem extends StatelessWidget {
+  final walletController = Get.find<WalletController>();
   final BankListModel bankDetail;
-  final WalletProvider walletProvider;
-  const BankListItem({super.key, required this.bankDetail, required this.walletProvider});
+  BankListItem({super.key, required this.bankDetail});
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
     return ListTile(
         onTap: () {
-          walletProvider.setSelectedBank(bankDetail);
-          walletProvider.filteredBanks = [];
+          walletController.selectedBank(bankDetail);
+          walletController.filteredBanks.clear();
         },
         contentPadding: const EdgeInsets.symmetric(horizontal: 0),
         title: Row(
@@ -41,7 +44,7 @@ class BankListItem extends StatelessWidget {
                   )
               ),
             ),
-            if (walletProvider.selectedBank == bankDetail)
+            if (walletController.selectedBank.value == bankDetail)
             const SizedBox(
                 height: 36,
                 width: 36,

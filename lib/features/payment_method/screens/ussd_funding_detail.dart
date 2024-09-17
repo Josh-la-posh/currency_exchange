@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/data/modules/background_task.dart';
+import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/features/home/routes/names.dart';
 import 'package:pouch/features/wallet/apis/api.dart';
@@ -13,22 +14,22 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../../../utils/layouts/navigation_menu.dart';
+import '../../wallet/controller/wallet_controller.dart';
 import '../../wallet/models/ussd_modal.dart';
 import '../../wallet/routes/names.dart';
 
 class UssdFundingDetailScreen extends StatelessWidget {
+  final walletController = Get.find<WalletController>();
+  final controller = Get.find<NavigationController>();
+  final authController = Get.find<AuthController>();
   final String? amount;
 
   UssdFundingDetailScreen({super.key, this.amount});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
-    final authProvider = Provider.of<AuthProvider>(context);
-    final walletProvider = Provider.of<WalletProvider>(context);
-    final transactionProvider = Provider.of<TransactionProvider>(context);
     final darkMode = THelperFunctions.isDarkMode(context);
-    final item = walletProvider.ussdModel;
+    final item = walletController.ussdDetails.value;
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -39,23 +40,21 @@ class UssdFundingDetailScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildReferenceAndEmailSection(context, authProvider, walletProvider, darkMode),
+              _buildReferenceAndEmailSection(context, darkMode),
               SizedBox(height: THelperFunctions.screenHeight() * 0.07),
-              _buildTransferDetails(context, darkMode, width, item!),
+              _buildTransferDetails(context, darkMode, width, item),
               const SizedBox(height: TSizes.defaultSpace * 4),
               _buildActionButton(context, "Proceed to Wallet", darkMode, () async {
-                await NoLoaderService.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
+                await walletController.fetchWallets(currency: '');
                 controller.selectedIndex.value = 3;
-                AppNavigator.instance.removeAllNavigateToNavHandler(WALLET_SCREEN_ROUTE);
+                Get.offAll(() => NavigationMenu());
               }),
               const SizedBox(height: TSizes.defaultSpace),
               _buildActionButton(context, "Proceed to Dashboard", darkMode, () async {
-                await NoLoaderService.instance.getWallets(
-                    transactionProvider: transactionProvider,
-                    walletProvider: walletProvider,
-                    currency: '');
+                await walletController.fetchWallets(currency: '');
                 controller.selectedIndex.value = 0;
-                AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                Get.offAll(() => NavigationMenu());
+                // AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
               }),
             ],
           ),
@@ -64,8 +63,8 @@ class UssdFundingDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildReferenceAndEmailSection(BuildContext context, AuthProvider authProvider, WalletProvider walletProvider, bool darkMode) {
-    final item = walletProvider.ussdModel;
+  Widget _buildReferenceAndEmailSection(BuildContext context, bool darkMode) {
+    final item = walletController.ussdDetails.value;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,12 +72,12 @@ class UssdFundingDetailScreen extends StatelessWidget {
         _buildTextColumn(
           context,
           title: 'Reference No:',
-          content: item?.reference ?? '',
+          content: item.reference ?? '',
           darkMode: darkMode,
         ),
         _buildTextColumn(
           context,
-          title: authProvider.user?.email ?? '',
+          title: authController.user.value.email ?? '',
           content: 'Pay NGN $amount',
           darkMode: darkMode,
         ),

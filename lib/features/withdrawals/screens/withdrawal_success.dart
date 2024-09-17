@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/features/home/routes/names.dart';
+import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
@@ -18,15 +15,14 @@ import '../../../utils/layouts/navigation_menu.dart';
 import '../../wallet/apis/api.dart';
 
 class WithdrawalSuccessScreen extends StatelessWidget {
+  final walletController = Get.find<WalletController>();
   final String title;
-  const WithdrawalSuccessScreen({super.key, required this.title});
+  WithdrawalSuccessScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
+    final controller = Get.find<NavigationController>();
     final darkMode = THelperFunctions.isDarkMode(context);
-    final walletProvider = Provider.of<WalletProvider>(context);
-    final transactionProvider = Provider.of<TransactionProvider>(context);
     return Scaffold(
       backgroundColor: darkMode ? Colors.black : Colors.white,
       body: SingleChildScrollView(
@@ -60,10 +56,9 @@ class WithdrawalSuccessScreen extends StatelessWidget {
               const SizedBox(height: TSizes.defaultSpace * 3),
               GestureDetector(
                 onTap: () async {
-                  await NoLoaderService.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
+                  await walletController.fetchWallets(currency: '');
                   controller.selectedIndex.value = 3;
-                  AppNavigator.instance
-                      .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                  Get.offAll(() => NavigationMenu());
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -100,10 +95,9 @@ class WithdrawalSuccessScreen extends StatelessWidget {
               const SizedBox(height: 20),
               GestureDetector(
                 onTap: () async {
-                  await NoLoaderService.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');await WalletServices.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
+                  await walletController.fetchWallets(currency: '');
                   controller.selectedIndex.value = 0;
-                  AppNavigator.instance
-                      .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                  Get.offAll(() => NavigationMenu());
                 },
                 child: Container(
                   alignment: Alignment.center,

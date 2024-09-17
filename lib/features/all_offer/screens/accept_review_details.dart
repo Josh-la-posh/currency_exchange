@@ -1,32 +1,24 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/common/widgets/custom_shapes/currency_widget_with_back.dart';
-import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../data/provider/transaction_provider.dart';
-import '../../../data/provider/wallet_provider.dart';
-import '../apis/api.dart';
 import '../icons/svg.dart';
 import '../models/offer.dart';
 
 class AcceptReviewDetailsScreen extends StatelessWidget {
+  final offerController = Get.find<OfferController>();
   final OfferEntity? item;
-  const AcceptReviewDetailsScreen({
+  AcceptReviewDetailsScreen({
     super.key,
     this.item,
   });
-
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<OfferProvider>(context);
-    var transactionProvider = Provider.of<TransactionProvider>(context);
-    var walletProvider = Provider.of<WalletProvider>(context);
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       body: Padding(
@@ -287,17 +279,6 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                                         )
                                       ],
                                     )
-                                    // RichText(
-                                    //     text: TextSpan(
-                                    //         style: Theme.of(context).textTheme.labelSmall,
-                                    //         children:  <TextSpan> [
-                                    //           TextSpan(
-                                    //               text: ,
-                                    //               style: TextStyle(fontSize: TSizes.fontSize13)
-                                    //           )
-                                    //         ]
-                                    //     )
-                                    // ),
                                   ],
                                 ),
                               ),
@@ -375,16 +356,16 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                         const SizedBox(height: TSizes.spaceBtwSections),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                          child: TElevatedButton(onTap: (){
-                            OfferService.instance.swapOffer(
+                          child: Obx(() => TElevatedButton(onTap: (){
+                            offerController.swappingOffer(
                                 id: item!.id.toString(),
-                                offerProvider: provider,
                                 amount: item!.amount.toString(),
-                                creditedCurrency: item!.debitedCurrency.toString(),
-                                transactionProvider: transactionProvider,
-                                walletProvider: walletProvider
-                            );},
-                              buttonText: 'Pay ${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString()))} ${item?.creditedCurrency}'),
+                                creditedCurrency: item!.debitedCurrency.toString());
+                          },
+                              buttonText: offerController.isLoading.value
+                                  ? 'Loading ...'
+                                  : 'Pay ${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString()))} ${item?.creditedCurrency}'
+                          )),
                         ),
                         const SizedBox(height: TSizes.spaceBtwSections ),
                       ],

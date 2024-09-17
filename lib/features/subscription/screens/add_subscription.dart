@@ -34,7 +34,7 @@ class AddSubscriptionScreen extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelMedium,
                 ),
                 const SizedBox(height: TSizes.spaceBtwItems),
-                const SubscriptionForm(),
+                SubscriptionForm(),
               ],
             ),
           ],

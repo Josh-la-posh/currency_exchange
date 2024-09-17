@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:pouch/features/authentication/apis/api.dart';
-import 'package:pouch/features/authentication/models/password_model.dart';
-import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
@@ -77,7 +73,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm> {
                         //       }
                         //   );
                         // }
-                        Get.to(() => const LoginScreen());
+                        Get.to(() => LoginScreen());
                       },
                       buttonText: 'Reset password'
                   ),

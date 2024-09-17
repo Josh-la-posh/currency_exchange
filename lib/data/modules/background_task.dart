@@ -7,7 +7,6 @@ import 'package:pouch/features/notification/controller/notification_controller.d
 import 'package:pouch/features/notification/model/get_user_notification.dart';
 
 import '../../features/all_offer/models/negotiate_offer_entity.dart';
-import '../../features/all_offer/models/negotiate_offer_model.dart';
 import '../../features/all_offer/models/offer.dart';
 import '../../features/all_offer/models/offer_details_entity.dart';
 import '../../features/subscription/models/subscribeEnity.dart';
@@ -21,35 +20,31 @@ import '../../features/wallet/models/get_bank_account.dart';
 import '../../features/wallet/models/get_wallet.dart';
 import '../../utils/responses/handleApiError.dart';
 import '../../utils/shared/notification/snackbar.dart';
-import '../provider/notificaton_provider.dart';
-import '../provider/offer_provider.dart';
 import '../provider/subscription_provider.dart';
 import '../provider/transaction_provider.dart';
-import '../provider/wallet_provider.dart';
-import 'dio.dart';
 
 final _apiService = AppInterceptor(showLoader: false).dio;
 final notificationController = GetX.Get.find<NotificationController>();
 
 handleBackgroundAppRequest({
   required UserModel user,
-  required AuthProvider authProvider,
-  required WalletProvider walletProvider,
-  required TransactionProvider transactionProvider,
-  required OfferProvider offerProvider,
-  required SubscriptionProvider subscriptionProvider,
-  required NotificationProvider notificationProvider
+  // required AuthProvider authProvider,
+  // required WalletProvider walletProvider,
+  // required TransactionProvider transactionProvider,
+  // required OfferProvider offerProvider,
+  // required SubscriptionProvider subscriptionProvider,
+  // required NotificationProvider notificationProvider
 }) async {
-  NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-  NoLoaderService.instance.getMyBids(offerProvider: offerProvider, days: '', currency: '', onSuccess: (){}, onFailure: (){});
-  NoLoaderService.instance.getMyOffers(offerProvider: offerProvider, days: '', currency: '', onSuccess: () {}, onFailure: () {});
-  NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
-  NoLoaderService.instance.getDefaultWallet(walletProvider: walletProvider, transactionProvider: transactionProvider);
-  NoLoaderService.instance.getBankList(walletProvider: walletProvider);
-  NoLoaderService.instance.getLocalBank(walletProvider: walletProvider);
-  NoLoaderService.instance.getSubscriptions(provider: subscriptionProvider, currency: '', onSuccess: (){});
-  NoLoaderService.instance.getTransactions(transactionProvider: transactionProvider);
-  NoLoaderService.instance.getUserNotification(provider: notificationProvider, onSuccess: () {});
+  // NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  // NoLoaderService.instance.getMyBids(offerProvider: offerProvider, days: '', currency: '', onSuccess: (){}, onFailure: (){});
+  // NoLoaderService.instance.getMyOffers(offerProvider: offerProvider, days: '', currency: '', onSuccess: () {}, onFailure: () {});
+  // NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
+  // NoLoaderService.instance.getDefaultWallet(walletProvider: walletProvider, transactionProvider: transactionProvider);
+  // NoLoaderService.instance.getBankList(walletProvider: walletProvider);
+  // NoLoaderService.instance.getLocalBank(walletProvider: walletProvider);
+  // NoLoaderService.instance.getSubscriptions(provider: subscriptionProvider, currency: '', onSuccess: (){});
+  // NoLoaderService.instance.getTransactions(transactionProvider: transactionProvider);
+  // NoLoaderService.instance.getUserNotification(provider: notificationProvider, onSuccess: () {});
 }
 
 class NoLoaderService {
@@ -160,1428 +155,1428 @@ class NoLoaderService {
 
   // All
 
-  getAllOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['sortByAmount'] = 'sortByAmount';
-    List<OfferEntity> offers = [];
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveOffers(offers);
-        offerProvider.saveAllOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-      print(error);
-    });
-  }
-
-  getAllNewOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveAllNewOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getAllTrendingOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['trending'] = 'trending';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveAllTrendingOffers(offers);
-      }
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  // usd
-
-  getUsdOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['sortByAmount'] = 'sortByAmount';
-    queryParameters['currency'] = 'USD';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveOffers(offers);
-        offerProvider.saveUsdOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getUsdNewOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['currency'] = 'USD';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveUsdNewOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getUsdTrendingOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['trending'] = 'trending';
-    queryParameters['currency'] = 'USD';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveUsdTrendingOffers(offers);
-      }
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  // usd
-
-  getNgnOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['sortByAmount'] = 'sortByAmount';
-    queryParameters['currency'] = 'NGN';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveOffers(offers);
-        offerProvider.saveNgnOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getNgnNewOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['currency'] = 'NGN';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveNgnNewOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getNgnTrendingOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['trending'] = 'trending';
-    queryParameters['currency'] = 'NGN';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveNgnTrendingOffers(offers);
-      }
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  // usd
-
-  getGbpOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['sortByAmount'] = 'sortByAmount';
-    queryParameters['currency'] = 'GBP';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveOffers(offers);
-        offerProvider.saveGbpOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getGbpNewOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['currency'] = 'GBP';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveGbpNewOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getGbpTrendingOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['trending'] = 'trending';
-    queryParameters['currency'] = 'GBP';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveGbpTrendingOffers(offers);
-      }
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  // usd
-
-  getCadOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['sortByAmount'] = 'sortByAmount';
-    queryParameters['currency'] = 'CAD';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveOffers(offers);
-        offerProvider.saveCadOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getCadNewOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['currency'] = 'CAD';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveCadNewOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getCadTrendingOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['trending'] = 'trending';
-    queryParameters['currency'] = 'CAD';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveCadTrendingOffers(offers);
-      }
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  // usd
-
-  getEurOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['sortByAmount'] = 'sortByAmount';
-    queryParameters['currency'] = 'EUR';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveOffers(offers);
-        offerProvider.saveEurOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getEurNewOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['currency'] = 'EUR';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveEurNewOffers(offers);
-      }
-
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getEurTrendingOffers({
-    required OfferProvider offerProvider,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-
-    final queryParameters = <String, dynamic>{};
-    queryParameters['trending'] = 'trending';
-    queryParameters['currency'] = 'EUR';
-    List<OfferEntity> offers = [];
-
-    _getAllOffers(queryParameters).then((response) {
-      var data = response.data;
-
-      OfferDetailsEntity offerDetails = OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      offerProvider.saveOfferDetails(offerDetails);
-
-      var content = offerDetails.content;
-
-      for (var item in content!) {
-        offers.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveEurTrendingOffers(offers);
-      }
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getOfferById({
-    required OfferProvider offerProvider,
-    required String id,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-    handleShowCustomToast(message: 'Fetching offer details ...', time: Duration(minutes: 25));
-    _getOfferById(id).then((response) async {
-      var item = response.data;
-      OfferEntity offerDetails = OfferEntity(
-          id: item['id'],
-          debitedCurrency: item['debitedCurrency'],
-          creditedCurrency: item['creditedCurrency'],
-          amount: item['amount'],
-          rate: item['rate'],
-          expireIn: item['expireIn'],
-          expireCountDown: item['expireCountDown'],
-          views: item['views'],
-          negotiatorRate: item['negotiatorRate'],
-          negotiatorAmount: item['negotiatorAmount'],
-          negotiationAccepted: item['negotiationAccepted'],
-          negotiatorId: item['negotiatorId'],
-          isActive: item['isActive'],
-          status: item['status'],
-          createdDate: item['createdDate'],
-          lastModifiedDate: item['lastModifiedDate']
-      );
-      offerProvider.saveOffersById(offerDetails);
-
-      await getAllOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await getUsdOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await getNgnOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await getGbpOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await getCadOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await getEurOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await getAllNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getUsdNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getNgnNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getGbpNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getCadNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getEurNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getAllTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getUsdTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getNgnTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getGbpTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getCadTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await getEurTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      onSuccess();
-      handleShowCustomToast(message: 'Successful', time: Duration(milliseconds: 200));
-    }).catchError((error) {
-      handleShowCustomToast(message: handleApiFormatError(error));
-      onFailure();
-    });
-  }
-
-  getAllNegotiatedOOffers({
-    required OfferProvider offerProvider,
-  }) {
-    handleShowCustomToast(message: 'Fetching Offers ...', time: Duration(minutes: 25));
-    List<OfferEntity> negotiations = [];
-
-    _getAllNegotiatedOffers().then((response) {
-      var data = response.data;
-
-      NegotiatedOffersEntity negotiatedOffers = NegotiatedOffersEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-
-      var content = negotiatedOffers.content;
-
-      for (var item in content) {
-        negotiations.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveNegotiations(negotiations);
-      }
-      handleShowCustomToast(message: 'Successful', time: Duration(milliseconds: 200));
-
-    });
-  }
-
-  getMyOffers({
-    required OfferProvider offerProvider,
-    required String days,
-    required String currency,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-    List<OfferEntity> negotiations = [];
-    _getMyOffers(days, currency).then((response) {
-      var data = response.data;
-
-      NegotiatedOffersEntity negotiatedOffers = NegotiatedOffersEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-
-      var content = negotiatedOffers.content;
-
-      for (var item in content!) {
-        negotiations.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveMyOffers(negotiations);
-      }
-      onSuccess();
-
-    }).catchError((error) {
-      onFailure();
-    });
-  }
-
-  getMyBids({
-    required OfferProvider offerProvider,
-    required String days,
-    required String currency,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-    List<OfferEntity> negotiations = [];
-    _getMyBids(days, currency).then((response) {
-      var data = response.data;
-      NegotiatedOffersEntity bids = NegotiatedOffersEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      var content = bids.content;
-      for (var item in content!) {
-        negotiations.add(OfferEntity(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            expireCountDown: item['expireCountDown'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-        offerProvider.saveMyBids(negotiations);
-      }
-      print('value ${content.length}');
-      onSuccess();
-    }).catchError((error) {
-      print('checking $error');
-      onFailure();
-    });
-  }
-
-  getMyOfferById({
-    required OfferProvider offerProvider,
-    required String id,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-    _getMyOfferById(id).then((response) async {
-      var item = response.data;
-      OfferEntity myOffer = OfferEntity(
-          id: item['id'],
-          debitedCurrency: item['debitedCurrency'],
-          creditedCurrency: item['creditedCurrency'],
-          amount: item['amount'],
-          rate: item['rate'],
-          expireIn: item['expireIn'],
-          expireCountDown: item['expireCountDown'],
-          views: item['views'],
-          negotiatorRate: item['negotiatorRate'],
-          negotiatorAmount: item['negotiatorAmount'],
-          negotiationAccepted: item['negotiationAccepted'],
-          negotiatorId: item['negotiatorId'],
-          isActive: item['isActive'],
-          status: item['status'],
-          createdDate: item['createdDate'],
-          lastModifiedDate: item['lastModifiedDate']
-      );
-      offerProvider.saveMyOffer(myOffer);
-      onSuccess();
-    }).catchError((error) {
-      print('newly found error $error');
-      handleShowCustomToast(message: handleApiFormatError(error));
-      onFailure();
-    });
-  }
-
-  getMyBidsById({
-    required OfferProvider offerProvider,
-    required String id,
-    required VoidCallback onSuccess,
-    required VoidCallback onFailure,
-  }) {
-    handleShowCustomToast(message: 'Fetching Bid details ...', time: Duration(minutes: 25));
-    _getMyBidsById(id).then((response) async {
-      var item = response.data;
-      OfferEntity myBid = OfferEntity(
-          id: item['id'],
-          debitedCurrency: item['debitedCurrency'],
-          creditedCurrency: item['creditedCurrency'],
-          amount: item['amount'],
-          rate: item['rate'],
-          expireIn: item['expireIn'],
-          expireCountDown: item['expireCountDown'],
-          views: item['views'],
-          negotiatorRate: item['negotiatorRate'],
-          negotiatorAmount: item['negotiatorAmount'],
-          negotiationAccepted: item['negotiationAccepted'],
-          negotiatorId: item['negotiatorId'],
-          isActive: item['isActive'],
-          status: item['status'],
-          createdDate: item['createdDate'],
-          lastModifiedDate: item['lastModifiedDate']
-      );
-      offerProvider.saveMyBid(myBid);
-      onSuccess();
-      handleShowCustomToast(message: 'Successful', time: Duration(milliseconds: 200));
-    }).catchError((error) {
-      print('newly found error $error');
-      handleShowCustomToast(message: handleApiFormatError(error));
-      onFailure();
-    });
-  }
-
-  deleteOffer({required String id, required OfferProvider offerProvider, required String days, required String currency}) {
-    _deleteOffer(id).then((response) async {
-      await getMyOffers(offerProvider: offerProvider, days: days, currency: currency, onSuccess: () {}, onFailure: () {});
-      handleShowCustomToast(message: response.data);
-    }).catchError((error) {
-      handleShowCustomToast(message: handleApiFormatError(error));
-    });
-  }
-
-  deleteBid({required String id, required OfferProvider offerProvider, required String days, required String currency}) {
-    _deleteBid(id).then((response) async {
-      await getMyOffers(offerProvider: offerProvider, days: days, currency: currency, onSuccess: () {}, onFailure: () {});
-      handleShowCustomToast(message: response.data);
-    }).catchError((error) {
-      handleShowCustomToast(message: handleApiFormatError(error));
-    });
-  }
-
-  
-  // wallet function
-
-  defaultWallet({
-    required WalletProvider walletProvider,
-    required String walletId,
-    required TransactionProvider transactionProvider
-  }) {
-    _defaultWallet({'walletId': walletId})
-        .then((response) async {
-      await getDefaultWallet(transactionProvider: transactionProvider, walletProvider: walletProvider);
-
-      print('objectjjj');
-    }).catchError((error) {
-      print('object..');
-      handleShowCustomToast(message: handleApiFormatError(error));
-      // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
-    });
-  }
-  
-  getWallets({
-    required WalletProvider walletProvider,
-    required String currency,
-    required TransactionProvider transactionProvider
-  }) {
-    List<GetWalletModel> wallets = [];
-    _getWallet(currency: currency).then((response) async {
-      await getTransactions(transactionProvider: transactionProvider);
-      var data = response.data;
-      for (var item in data) {
-        wallets.add(GetWalletModel(
-            id: item['id'],
-            currency: item['currency'],
-            balance: item['balance'],
-            isActive: item['isActive'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']
-        ));
-      }
-      walletProvider.saveWallets(wallets);
-    });
-  }
-
-  getDefaultWallet({
-    required WalletProvider walletProvider,
-    required TransactionProvider transactionProvider
-  }) {
-    _getDefaultWallet().then((response) async {
-      await getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: '');
-      var item = response.data;
-      DefaultWalletModel defaultWallet = DefaultWalletModel(
-          id: item['id'],
-          currency: item['currency'],
-          balance: item['balance'],
-          isActive: item['isActive'],
-          pendingWithdrawals: item['pendingWithdrawals'],
-          createdDate: item['createdDate'],
-          lastModifiedDate: item['lastModifiedDate']
-      );
-      walletProvider.setDefaultWallet(defaultWallet);
-    });
-  }
-
-  getLocalBank({
-    required WalletProvider walletProvider
-  }) {
-    List<GetBankAccountModel> bankAccounts = [];
-    _getLocalBank().then((response) {
-      var data = response.data;
-      for (var item in data) {
-        bankAccounts.add(GetBankAccountModel(
-            id: item['id'],
-            accountNumber: item['accountNumber'],
-            accountName: item['accountName'],
-            bankName: item['bankName'],
-            currency: item['currency'],
-            type: item['type'],
-            bankCode: item['bankCode'],
-            recipientCode: item['recipientCode'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate']));
-        walletProvider.saveBankAccounts(bankAccounts);
-      }
-    });
-  }
-
-  getBankList({required WalletProvider walletProvider}) {
-    List<BankListModel> bankList = [];
-    _getBankList().then((response) {
-      var result = response.data;
-
-      BankListEntity bankListModel = BankListEntity(
-        status: result['status'],
-        message: result['message'],
-        data: result['data'],
-      );
-
-      final data = bankListModel.data;
-
-      for (var item in data) {
-        bankList.add(BankListModel(
-          id: item['id'],
-          name: item['name'],
-          slug: item['slug'],
-          code: item['code'],
-          longCode: item['longCode'],
-          gateway: item['gateway'],
-          pay_with_bank: item['pay_with_bank'],
-          supports_transfer: item['supports_transfer'],
-          active: item['active'],
-          country: item['country'],
-          currency: item['currency'],
-          type: item['type'],
-          is_deleted: item['is_deleted'],
-          createdAt: item['createdAt'],
-          updatedAt: item['updatedAt'],
-        ));
-      }
-      walletProvider.saveBankList(bankList);
-    });
-  }
+  // getAllOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['sortByAmount'] = 'sortByAmount';
+  //   List<OfferEntity> offers = [];
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveOffers(offers);
+  //       offerProvider.saveAllOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //     print(error);
+  //   });
+  // }
+  //
+  // getAllNewOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveAllNewOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getAllTrendingOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['trending'] = 'trending';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveAllTrendingOffers(offers);
+  //     }
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // // usd
+  //
+  // getUsdOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['sortByAmount'] = 'sortByAmount';
+  //   queryParameters['currency'] = 'USD';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveOffers(offers);
+  //       offerProvider.saveUsdOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getUsdNewOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['currency'] = 'USD';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveUsdNewOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getUsdTrendingOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['trending'] = 'trending';
+  //   queryParameters['currency'] = 'USD';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveUsdTrendingOffers(offers);
+  //     }
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // // usd
+  //
+  // getNgnOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['sortByAmount'] = 'sortByAmount';
+  //   queryParameters['currency'] = 'NGN';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveOffers(offers);
+  //       offerProvider.saveNgnOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getNgnNewOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['currency'] = 'NGN';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveNgnNewOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getNgnTrendingOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['trending'] = 'trending';
+  //   queryParameters['currency'] = 'NGN';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveNgnTrendingOffers(offers);
+  //     }
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // // usd
+  //
+  // getGbpOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['sortByAmount'] = 'sortByAmount';
+  //   queryParameters['currency'] = 'GBP';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveOffers(offers);
+  //       offerProvider.saveGbpOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getGbpNewOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['currency'] = 'GBP';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveGbpNewOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getGbpTrendingOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['trending'] = 'trending';
+  //   queryParameters['currency'] = 'GBP';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveGbpTrendingOffers(offers);
+  //     }
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // // usd
+  //
+  // getCadOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['sortByAmount'] = 'sortByAmount';
+  //   queryParameters['currency'] = 'CAD';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveOffers(offers);
+  //       offerProvider.saveCadOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getCadNewOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['currency'] = 'CAD';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveCadNewOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getCadTrendingOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['trending'] = 'trending';
+  //   queryParameters['currency'] = 'CAD';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveCadTrendingOffers(offers);
+  //     }
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // // usd
+  //
+  // getEurOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['sortByAmount'] = 'sortByAmount';
+  //   queryParameters['currency'] = 'EUR';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveOffers(offers);
+  //       offerProvider.saveEurOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getEurNewOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['currency'] = 'EUR';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveEurNewOffers(offers);
+  //     }
+  //
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getEurTrendingOffers({
+  //   required OfferProvider offerProvider,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //
+  //   final queryParameters = <String, dynamic>{};
+  //   queryParameters['trending'] = 'trending';
+  //   queryParameters['currency'] = 'EUR';
+  //   List<OfferEntity> offers = [];
+  //
+  //   _getAllOffers(queryParameters).then((response) {
+  //     var data = response.data;
+  //
+  //     OfferDetailsEntity offerDetails = OfferDetailsEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     offerProvider.saveOfferDetails(offerDetails);
+  //
+  //     var content = offerDetails.content;
+  //
+  //     for (var item in content!) {
+  //       offers.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveEurTrendingOffers(offers);
+  //     }
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getOfferById({
+  //   required OfferProvider offerProvider,
+  //   required String id,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //   handleShowCustomToast(message: 'Fetching offer details ...', time: Duration(minutes: 25));
+  //   _getOfferById(id).then((response) async {
+  //     var item = response.data;
+  //     OfferEntity offerDetails = OfferEntity(
+  //         id: item['id'],
+  //         debitedCurrency: item['debitedCurrency'],
+  //         creditedCurrency: item['creditedCurrency'],
+  //         amount: item['amount'],
+  //         rate: item['rate'],
+  //         expireIn: item['expireIn'],
+  //         expireCountDown: item['expireCountDown'],
+  //         views: item['views'],
+  //         negotiatorRate: item['negotiatorRate'],
+  //         negotiatorAmount: item['negotiatorAmount'],
+  //         negotiationAccepted: item['negotiationAccepted'],
+  //         negotiatorId: item['negotiatorId'],
+  //         isActive: item['isActive'],
+  //         status: item['status'],
+  //         createdDate: item['createdDate'],
+  //         lastModifiedDate: item['lastModifiedDate']
+  //     );
+  //     offerProvider.saveOffersById(offerDetails);
+  //
+  //     await getAllOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
+  //     await getUsdOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
+  //     await getNgnOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
+  //     await getGbpOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
+  //     await getCadOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
+  //     await getEurOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
+  //     await getAllNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getUsdNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getNgnNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getGbpNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getCadNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getEurNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getAllTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getUsdTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getNgnTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getGbpTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getCadTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     await getEurTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+  //     onSuccess();
+  //     handleShowCustomToast(message: 'Successful', time: Duration(milliseconds: 200));
+  //   }).catchError((error) {
+  //     handleShowCustomToast(message: handleApiFormatError(error));
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getAllNegotiatedOOffers({
+  //   required OfferProvider offerProvider,
+  // }) {
+  //   handleShowCustomToast(message: 'Fetching Offers ...', time: Duration(minutes: 25));
+  //   List<OfferEntity> negotiations = [];
+  //
+  //   _getAllNegotiatedOffers().then((response) {
+  //     var data = response.data;
+  //
+  //     NegotiatedOffersEntity negotiatedOffers = NegotiatedOffersEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //
+  //     var content = negotiatedOffers.content;
+  //
+  //     for (var item in content) {
+  //       negotiations.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveNegotiations(negotiations);
+  //     }
+  //     handleShowCustomToast(message: 'Successful', time: Duration(milliseconds: 200));
+  //
+  //   });
+  // }
+  //
+  // getMyOffers({
+  //   required OfferProvider offerProvider,
+  //   required String days,
+  //   required String currency,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //   List<OfferEntity> negotiations = [];
+  //   _getMyOffers(days, currency).then((response) {
+  //     var data = response.data;
+  //
+  //     NegotiatedOffersEntity negotiatedOffers = NegotiatedOffersEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //
+  //     var content = negotiatedOffers.content;
+  //
+  //     for (var item in content!) {
+  //       negotiations.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveMyOffers(negotiations);
+  //     }
+  //     onSuccess();
+  //
+  //   }).catchError((error) {
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getMyBids({
+  //   required OfferProvider offerProvider,
+  //   required String days,
+  //   required String currency,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //   List<OfferEntity> negotiations = [];
+  //   _getMyBids(days, currency).then((response) {
+  //     var data = response.data;
+  //     NegotiatedOffersEntity bids = NegotiatedOffersEntity(
+  //         totalPages: data['totalPages'],
+  //         payloadSize: data['payloadSize'],
+  //         hasNext: data['hasNext'],
+  //         content: data['content'],
+  //         currentPage: data['currentPage'],
+  //         skippedRecords: data['skippedRecords'],
+  //         totalRecords: data['totalRecords']
+  //     );
+  //     var content = bids.content;
+  //     for (var item in content!) {
+  //       negotiations.add(OfferEntity(
+  //           id: item['id'],
+  //           debitedCurrency: item['debitedCurrency'],
+  //           creditedCurrency: item['creditedCurrency'],
+  //           amount: item['amount'],
+  //           rate: item['rate'],
+  //           expireIn: item['expireIn'],
+  //           expireCountDown: item['expireCountDown'],
+  //           views: item['views'],
+  //           negotiatorRate: item['negotiatorRate'],
+  //           negotiatorAmount: item['negotiatorAmount'],
+  //           negotiationAccepted: item['negotiationAccepted'],
+  //           negotiatorId: item['negotiatorId'],
+  //           isActive: item['isActive'],
+  //           status: item['status'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //       offerProvider.saveMyBids(negotiations);
+  //     }
+  //     print('value ${content.length}');
+  //     onSuccess();
+  //   }).catchError((error) {
+  //     print('checking $error');
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getMyOfferById({
+  //   required OfferProvider offerProvider,
+  //   required String id,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //   _getMyOfferById(id).then((response) async {
+  //     var item = response.data;
+  //     OfferEntity myOffer = OfferEntity(
+  //         id: item['id'],
+  //         debitedCurrency: item['debitedCurrency'],
+  //         creditedCurrency: item['creditedCurrency'],
+  //         amount: item['amount'],
+  //         rate: item['rate'],
+  //         expireIn: item['expireIn'],
+  //         expireCountDown: item['expireCountDown'],
+  //         views: item['views'],
+  //         negotiatorRate: item['negotiatorRate'],
+  //         negotiatorAmount: item['negotiatorAmount'],
+  //         negotiationAccepted: item['negotiationAccepted'],
+  //         negotiatorId: item['negotiatorId'],
+  //         isActive: item['isActive'],
+  //         status: item['status'],
+  //         createdDate: item['createdDate'],
+  //         lastModifiedDate: item['lastModifiedDate']
+  //     );
+  //     offerProvider.saveMyOffer(myOffer);
+  //     onSuccess();
+  //   }).catchError((error) {
+  //     print('newly found error $error');
+  //     handleShowCustomToast(message: handleApiFormatError(error));
+  //     onFailure();
+  //   });
+  // }
+  //
+  // getMyBidsById({
+  //   required OfferProvider offerProvider,
+  //   required String id,
+  //   required VoidCallback onSuccess,
+  //   required VoidCallback onFailure,
+  // }) {
+  //   handleShowCustomToast(message: 'Fetching Bid details ...', time: Duration(minutes: 25));
+  //   _getMyBidsById(id).then((response) async {
+  //     var item = response.data;
+  //     OfferEntity myBid = OfferEntity(
+  //         id: item['id'],
+  //         debitedCurrency: item['debitedCurrency'],
+  //         creditedCurrency: item['creditedCurrency'],
+  //         amount: item['amount'],
+  //         rate: item['rate'],
+  //         expireIn: item['expireIn'],
+  //         expireCountDown: item['expireCountDown'],
+  //         views: item['views'],
+  //         negotiatorRate: item['negotiatorRate'],
+  //         negotiatorAmount: item['negotiatorAmount'],
+  //         negotiationAccepted: item['negotiationAccepted'],
+  //         negotiatorId: item['negotiatorId'],
+  //         isActive: item['isActive'],
+  //         status: item['status'],
+  //         createdDate: item['createdDate'],
+  //         lastModifiedDate: item['lastModifiedDate']
+  //     );
+  //     offerProvider.saveMyBid(myBid);
+  //     onSuccess();
+  //     handleShowCustomToast(message: 'Successful', time: Duration(milliseconds: 200));
+  //   }).catchError((error) {
+  //     print('newly found error $error');
+  //     handleShowCustomToast(message: handleApiFormatError(error));
+  //     onFailure();
+  //   });
+  // }
+  //
+  // deleteOffer({required String id, required OfferProvider offerProvider, required String days, required String currency}) {
+  //   _deleteOffer(id).then((response) async {
+  //     await getMyOffers(offerProvider: offerProvider, days: days, currency: currency, onSuccess: () {}, onFailure: () {});
+  //     handleShowCustomToast(message: response.data);
+  //   }).catchError((error) {
+  //     handleShowCustomToast(message: handleApiFormatError(error));
+  //   });
+  // }
+  //
+  // deleteBid({required String id, required OfferProvider offerProvider, required String days, required String currency}) {
+  //   _deleteBid(id).then((response) async {
+  //     await getMyOffers(offerProvider: offerProvider, days: days, currency: currency, onSuccess: () {}, onFailure: () {});
+  //     handleShowCustomToast(message: response.data);
+  //   }).catchError((error) {
+  //     handleShowCustomToast(message: handleApiFormatError(error));
+  //   });
+  // }
+  //
+  //
+  // // wallet function
+  //
+  // defaultWallet({
+  //   required WalletProvider walletProvider,
+  //   required String walletId,
+  //   required TransactionProvider transactionProvider
+  // }) {
+  //   _defaultWallet({'walletId': walletId})
+  //       .then((response) async {
+  //     await getDefaultWallet(transactionProvider: transactionProvider, walletProvider: walletProvider);
+  //
+  //     print('objectjjj');
+  //   }).catchError((error) {
+  //     print('object..');
+  //     handleShowCustomToast(message: handleApiFormatError(error));
+  //     // showErrorAlertHelper(errorMessage: handleApiFormatError(error));
+  //   });
+  // }
+  //
+  // getWallets({
+  //   required WalletProvider walletProvider,
+  //   required String currency,
+  //   required TransactionProvider transactionProvider
+  // }) {
+  //   List<GetWalletModel> wallets = [];
+  //   _getWallet(currency: currency).then((response) async {
+  //     await getTransactions(transactionProvider: transactionProvider);
+  //     var data = response.data;
+  //     for (var item in data) {
+  //       wallets.add(GetWalletModel(
+  //           id: item['id'],
+  //           currency: item['currency'],
+  //           balance: item['balance'],
+  //           isActive: item['isActive'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //     }
+  //     walletProvider.saveWallets(wallets);
+  //   });
+  // }
+  //
+  // getDefaultWallet({
+  //   required WalletProvider walletProvider,
+  //   required TransactionProvider transactionProvider
+  // }) {
+  //   _getDefaultWallet().then((response) async {
+  //     await getWallets(transactionProvider: transactionProvider, walletProvider: walletProvider, currency: '');
+  //     var item = response.data;
+  //     DefaultWalletModel defaultWallet = DefaultWalletModel(
+  //         id: item['id'],
+  //         currency: item['currency'],
+  //         balance: item['balance'],
+  //         isActive: item['isActive'],
+  //         pendingWithdrawals: item['pendingWithdrawals'],
+  //         createdDate: item['createdDate'],
+  //         lastModifiedDate: item['lastModifiedDate']
+  //     );
+  //     walletProvider.setDefaultWallet(defaultWallet);
+  //   });
+  // }
+
+  // getLocalBank({
+  //   required WalletProvider walletProvider
+  // }) {
+  //   List<GetBankAccountModel> bankAccounts = [];
+  //   _getLocalBank().then((response) {
+  //     var data = response.data;
+  //     for (var item in data) {
+  //       bankAccounts.add(GetBankAccountModel(
+  //           id: item['id'],
+  //           accountNumber: item['accountNumber'],
+  //           accountName: item['accountName'],
+  //           bankName: item['bankName'],
+  //           currency: item['currency'],
+  //           type: item['type'],
+  //           bankCode: item['bankCode'],
+  //           recipientCode: item['recipientCode'],
+  //           createdDate: item['createdDate'],
+  //           lastModifiedDate: item['lastModifiedDate']));
+  //       walletProvider.saveBankAccounts(bankAccounts);
+  //     }
+  //   });
+  // }
+  //
+  // getBankList({required WalletProvider walletProvider}) {
+  //   List<BankListModel> bankList = [];
+  //   _getBankList().then((response) {
+  //     var result = response.data;
+  //
+  //     BankListEntity bankListModel = BankListEntity(
+  //       status: result['status'],
+  //       message: result['message'],
+  //       data: result['data'],
+  //     );
+  //
+  //     final data = bankListModel.data;
+  //
+  //     for (var item in data) {
+  //       bankList.add(BankListModel(
+  //         id: item['id'],
+  //         name: item['name'],
+  //         slug: item['slug'],
+  //         code: item['code'],
+  //         longCode: item['longCode'],
+  //         gateway: item['gateway'],
+  //         pay_with_bank: item['pay_with_bank'],
+  //         supports_transfer: item['supports_transfer'],
+  //         active: item['active'],
+  //         country: item['country'],
+  //         currency: item['currency'],
+  //         type: item['type'],
+  //         is_deleted: item['is_deleted'],
+  //         createdAt: item['createdAt'],
+  //         updatedAt: item['updatedAt'],
+  //       ));
+  //     }
+  //     walletProvider.saveBankList(bankList);
+  //   });
+  // }
 
   
   // subscribe function
@@ -1677,44 +1672,44 @@ class NoLoaderService {
 
   // Notification function
 
-  getUserNotification({
-    required NotificationProvider provider,
-    required VoidCallback onSuccess
-  }) {
-    List<GetUserNotification> notification = [];
-    _getUserNotifications()
-        .then((response) {
-      var data = response.data;
+  // getUserNotification({
+  //   required NotificationProvider provider,
+  //   required VoidCallback onSuccess
+  // }) {
+  //   List<GetUserNotification> notification = [];
+  //   _getUserNotifications()
+  //       .then((response) {
+  //     var data = response.data;
+  //
+  //     for (var item in data) {
+  //       notification.add(GetUserNotification(
+  //         id: item['id'],
+  //         description: item['description'],
+  //         read: item['read'],
+  //         delivered: item['delivered'],
+  //         type: item['type'],
+  //         offerId: item['offerId'],
+  //         createdDate: item['createdDate'],
+  //         lastModifiedDate: item['lastModifiedDate']
+  //       ));
+  //     }
+  //     provider.saveUserNotifications(notification);
+  //     onSuccess();
+  //   });
+  // }
 
-      for (var item in data) {
-        notification.add(GetUserNotification(
-          id: item['id'],
-          description: item['description'],
-          read: item['read'],
-          delivered: item['delivered'],
-          type: item['type'],
-          offerId: item['offerId'],
-          createdDate: item['createdDate'],
-          lastModifiedDate: item['lastModifiedDate']
-        ));
-      }
-      provider.saveUserNotifications(notification);
-      onSuccess();
-    });
-  }
-
-  getNotificationId({
-    required NotificationProvider provider,
-    required String id,
-    // required VoidCallback onSuccess
-  }) {
-    _getNotificationsId(id)
-        .then((response) async {
-          print('The true ${response}');
-
-      // print(data);
-      await getUserNotification(provider: provider, onSuccess: (){});
-      // onSuccess();
-    });
-  }
+  // getNotificationId({
+  //   required NotificationProvider provider,
+  //   required String id,
+  //   // required VoidCallback onSuccess
+  // }) {
+  //   _getNotificationsId(id)
+  //       .then((response) async {
+  //         print('The true ${response}');
+  //
+  //     // print(data);
+  //     await getUserNotification(provider: provider, onSuccess: (){});
+  //     // onSuccess();
+  //   });
+  // }
 }

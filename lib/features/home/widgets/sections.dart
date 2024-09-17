@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pouch/features/home/widgets/section_widget.dart';
 import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
@@ -17,12 +14,12 @@ import '../../subscription/screens/subscribe.dart';
 
 class LinkSectionWidget extends StatelessWidget {
   final bool darkMode;
-  const LinkSectionWidget({super.key, required this.darkMode});
+  final controller = Get.find<NavigationController>();
+  LinkSectionWidget({super.key, required this.darkMode});
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final controller = Get.put(NavigationController());
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 30),
         child: Row(
@@ -48,7 +45,7 @@ class LinkSectionWidget extends StatelessWidget {
                       const SizedBox(height: TSizes.xl),
                       SectionWidgetContainer(
                           onTap: () {
-                            Get.to(() => const PaymentOptionScreen());
+                            Get.to(() => PaymentOptionScreen());
                           },
                           icon: Icon(Icons.payments_outlined, size: 30, color: TColors.primary,),
                           darkMode: darkMode,
@@ -79,7 +76,7 @@ class LinkSectionWidget extends StatelessWidget {
                     const SizedBox(height: TSizes.xl),
                     SectionWidgetContainer(
                         onTap: () {
-                          Get.to(() => const WithdrawalScreen());
+                          Get.to(() => WithdrawalScreen());
                         },
                         icon: Icon(Icons.credit_score_outlined, size: 30, color: TColors.primary,),
                         darkMode: darkMode,
@@ -97,7 +94,7 @@ class LinkSectionWidget extends StatelessWidget {
                   const SizedBox(height: TSizes.sm),
                   SectionWidgetContainer(
                       onTap: () {
-                        Get.to(() => const SubscribeScreen());
+                        Get.to(() => SubscribeScreen());
                       },
                       icon: Icon(Icons.unsubscribe_outlined, size: 30, color: TColors.primary,),
                       darkMode: darkMode,

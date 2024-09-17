@@ -16,10 +16,10 @@ Map<String, WidgetBuilder> offerRoute = {
   OFFER_DETAILS_SCREEN: (context) => AuthGuard(
     widget: OfferDetailsScreen(),
   ),
-  ACCEPT_REVIEW_DETAILS_SCREEN: (context) => const AuthGuard(
+  ACCEPT_REVIEW_DETAILS_SCREEN: (context) => AuthGuard(
     widget: AcceptReviewDetailsScreen(),
   ),
-  ACCEPT_SUCCESS_SCREEN: (context) => const AuthGuard(
+  ACCEPT_SUCCESS_SCREEN: (context) => AuthGuard(
     widget: AcceptReviewDetailsScreen(),
   ),
   CREATE_OFFER_SCREEN: (context) => AuthGuard(

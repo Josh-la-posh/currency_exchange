@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pouch/features/withdrawals/routes/names.dart';
-import 'package:pouch/features/withdrawals/screens/withdrawal_success.dart';
 import '../../../data/routes/guard_route.dart';
 import '../screens/withdrawal.dart';
 
 
 Map<String, WidgetBuilder> withdrawRoute = {
-  WITHDRAWAL_SCREEN_ROUTE: (context) => const AuthGuard(
+  WITHDRAWAL_SCREEN_ROUTE: (context) => AuthGuard(
     widget: WithdrawalScreen(),
   ),
 };

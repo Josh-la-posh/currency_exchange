@@ -1,19 +1,18 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/subscription/controller/subscription_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/data/provider/subscription_provider.dart';
-import 'package:pouch/features/subscription/apis/api.dart';
 import 'package:pouch/features/subscription/models/subscribeEnity.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
 
 class SubscriptionItem extends StatelessWidget {
+  final controller = Get.find<SubscriptionController>();
   final SubscriptionEntity item;
   SubscriptionItem({
     required this.item,
@@ -44,7 +43,7 @@ class SubscriptionItem extends StatelessWidget {
                           width: 60,
                           child: ElevatedButton(
                             onPressed: () {
-                              SubscriptionService.instance.deleteSubscription(id: item.id.toString(), subscriptionProvider: provider);
+                              controller.deleteSubscription(id: item.id.toString());
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(

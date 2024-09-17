@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:pouch/data/provider/wallet_provider.dart';
-import 'package:pouch/features/wallet/apis/api.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:pouch/features/wallet/models/get_bank_account.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/texts.dart';
@@ -11,8 +11,8 @@ import '../../../../utils/constants/sizes.dart';
 
 class BankAccountItem extends StatelessWidget {
   final GetBankAccountModel item;
-  final WalletProvider provider;
-  const BankAccountItem({super.key, required this.item, required this.provider});
+  final walletController = Get.find<WalletController>();
+  BankAccountItem({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,11 @@ class BankAccountItem extends StatelessWidget {
       children: [
         SizedBox(
           height: TSizes.textReviewHeight * 1.4,
-          // padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
           child: Slidable(
             key: ValueKey(item.id),
             endActionPane: ActionPane(
                 extentRatio: 0.2,
                 motion: const ScrollMotion(),
-                // dismissible: DismissiblePane(onDismissed: (){}),
                 children: [
                   Builder(
                       builder: (cont) {
@@ -36,7 +34,8 @@ class BankAccountItem extends StatelessWidget {
                           child: ElevatedButton(
                               onPressed: () {
                                 Slidable.of(cont)!.close();
-                                WalletServices.instance.deleteLocalAccount(id: item.id, walletProvider: provider);
+                                walletController.deleteLocalBankAccount(id: item.id.toString());
+                                // WalletServices.instance.deleteLocalAccount(id: item.id, walletProvider: provider);
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -78,11 +77,6 @@ class BankAccountItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Container(
-                  //   height: 27,
-                  //   width: 27,
-                  //   color: Colors.black,
-                  // ),
                   SizedBox(width: 10,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

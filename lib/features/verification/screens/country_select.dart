@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/features/verification/controller/verification_controller.dart';
 import 'package:pouch/features/verification/screens/identity_verification_type.dart';
 import 'package:country_picker/country_picker.dart';
 
@@ -10,8 +11,7 @@ import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
 class CountrySelectionPage extends StatelessWidget {
-  Country? country;
-  CountrySelectionPage({super.key, this.country});
+  final verificationController = Get.find<VerificationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class CountrySelectionPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineLarge,
                         children: <TextSpan> [
                           TextSpan(
-                              text: country?.countryCode,
+                              text: verificationController.selectedCountry.value?.countryCode,
                               style: TextStyle(
                                 fontSize: 18,
                                 // color: TColors.textPrimaryO80
@@ -104,7 +104,7 @@ class CountrySelectionPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineLarge,
                         children: <TextSpan> [
                           TextSpan(
-                              text: '+${country?.phoneCode}',
+                              text: '+${verificationController.selectedCountry.value?.phoneCode}',
                               style: TextStyle(
                                 fontSize: 18,
                                 // color: TColors.textPrimaryO80
@@ -141,7 +141,7 @@ class CountrySelectionPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.headlineLarge,
                         children: <TextSpan> [
                           TextSpan(
-                              text: country?.name.toString(),
+                              text: verificationController.selectedCountry.value?.name.toString(),
                               style: TextStyle(
                                 fontSize: 18,
                                 // color: TColors.textPrimaryO80
@@ -155,13 +155,14 @@ class CountrySelectionPage extends StatelessWidget {
             const SizedBox(height: TSizes.defaultSpace * 3,),
             TElevatedButton(
                 onTap: (){
-                  Get.to(() => IdentityVerificationTypeScreen(country: country));
+                  Get.to(() => IdentityVerificationTypeScreen());
                 },
                 buttonText: 'Proceed'
             ),
             SizedBox(height: 20,),
             TElevatedButton(
                 onTap: (){
+                  verificationController.selectedCountry.value = null;
                   Get.back();
                 },
                 buttonText: 'Back'

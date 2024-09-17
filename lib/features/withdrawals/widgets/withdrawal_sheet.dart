@@ -1,27 +1,21 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/data/provider/transaction_provider.dart';
-import 'package:pouch/features/wallet/apis/api.dart';
-import 'package:pouch/features/withdrawals/apis/api.dart';
-import 'package:pouch/features/withdrawals/screens/withdrawal_success.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-
 import '../../../data/provider/wallet_provider.dart';
+import '../../wallet/controller/wallet_controller.dart';
 
 class WithdrawalConfirmSheet extends StatelessWidget {
+  final walletController = Get.find<WalletController>();
   final String amount;
-  const WithdrawalConfirmSheet({super.key, required this.amount});
+  WithdrawalConfirmSheet({super.key, required this.amount});
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    final provider = Provider.of<WalletProvider>(context);
-    final transactionProvider = Provider.of<TransactionProvider>(context);
-    final item = provider.selectedWithdrawalAccount;
+    final item = walletController.selectedWithdrawalAccount.value;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: TSizes.defaultSpace * 1.5),
@@ -126,7 +120,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                                 ),
                                 children: <TextSpan> [
                                   TextSpan(
-                                    text: '${provider.defaultWallet!.currency}',
+                                    text: '${walletController.defaultWallet.value.currency}',
                                   ),
                                   TextSpan(
                                     text: ' Wallet',
@@ -182,7 +176,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                           ),
                           children: <TextSpan> [
                             TextSpan(
-                              text: item?.accountName,
+                              text: item.accountName,
                             )
                           ]
                       )
@@ -205,7 +199,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                                 ),
                                 children: <TextSpan> [
                                   TextSpan(
-                                    text: item?.bankName,
+                                    text: item.bankName,
                                   )
                                 ]
                             )
@@ -221,7 +215,7 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                               ),
                               children: <TextSpan> [
                                 TextSpan(
-                                  text: item?.accountNumber,
+                                  text: item.accountNumber,
                                 )
                               ]
                           )
@@ -281,18 +275,15 @@ class WithdrawalConfirmSheet extends StatelessWidget {
             SizedBox(height: TSizes.defaultSpace,),
             Container(
               padding: EdgeInsets.all(TSizes.defaultSpace * 0.5),
-                child: TElevatedButton(
-                    onTap: (){
-                      WalletServices.instance.transferLocalBank(
-                          amount: amount,
-                          currency: provider.selectedWithdrawalAccount!.currency,
-                          bankId: provider.selectedWithdrawalAccount!.id,
-                          transactionProvider: transactionProvider,
-                          walletProvider: provider,
+                child: Obx(() => TElevatedButton(
+                    onTap: walletController.isLoading.value ? null : (){
+                      walletController.transferToLocalBank(
+                          bankId: walletController.selectedWithdrawalAccount.value.id.toString(),
+                          amount: int.parse(amount),
                       );
                     },
-                    buttonText: 'Confirm'
-                )
+                    buttonText: walletController.isLoading.value ? 'Loading ...' : 'Confirm'
+                ))
             )
           ],
         ),

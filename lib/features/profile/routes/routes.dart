@@ -8,13 +8,13 @@ import '../screens/bank_account/bank_account.dart';
 
 
 Map<String, WidgetBuilder> profileRoutes = {
-  PROFILE_SCREEN_ROUTE: (context) => const AuthGuard(widget: ProfileScreen()),
-  BANK_ACCOUNT_SCREEN_ROUTE: (context) => const AuthGuard(
+  PROFILE_SCREEN_ROUTE: (context) => AuthGuard(widget: ProfileScreen()),
+  BANK_ACCOUNT_SCREEN_ROUTE: (context) => AuthGuard(
     widget: BankAccountScreen()),
-  ADD_BANK_ACCOUNT_SCREEN_ROUTE: (context) => const AuthGuard(
+  ADD_BANK_ACCOUNT_SCREEN_ROUTE: (context) => AuthGuard(
     widget: AddBankAccountScreen(),
   ),
-  CHANGE_PASSWORD_SCREEN_ROUTE: (context) => const AuthGuard(
+  CHANGE_PASSWORD_SCREEN_ROUTE: (context) => AuthGuard(
     widget: ChangePasswordScreen(),
   ),
 };

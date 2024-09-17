@@ -10,7 +10,7 @@ import 'all_new_market_list.dart';
 import 'all_trending_market_list.dart';
 
 class AllMarketScreen extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
 
   Widget _buildTab({
     required String label,
@@ -44,9 +44,6 @@ class AllMarketScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (offerController.allOffers.isEmpty) {
-      offerController.fetchAllOffers();
-    }
     final darkMode = THelperFunctions.isDarkMode(context);
     final double availableHeight =
         THelperFunctions.screenHeight() - kBottomNavigationBarHeight - 70;

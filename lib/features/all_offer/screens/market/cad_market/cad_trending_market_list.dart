@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import '../../../../../utils/layouts/list_layout.dart';
 import '../../../controllers/offer_controller.dart';
@@ -9,16 +8,19 @@ import '../../../widgets/offer_item.dart';
 import 'package:pouch/utils/shimmer/order_shimmer.dart';
 
 class CadTrendingMarketList extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
 
   @override
   Widget build(BuildContext context) {
+    if (offerController.trendingCadOffers.isEmpty) {
+      offerController.fetchTrendingCadOffers();
+    }
     return Obx(() {
-      if (offerController.isLoading.value && offerController.trendingCadOffers.isEmpty) {
+      if (offerController.isCadTrendingOffersLoading.value && offerController.trendingCadOffers.isEmpty) {
         return OrderShimmer();
       } else {
         return CustomRefreshIndicator(
-          onRefresh: () => offerController.fetchOffersByCurrency(currency: 'CAD'),
+          onRefresh: () => offerController.fetchTrendingCadOffers(),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(

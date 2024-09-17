@@ -252,19 +252,62 @@ class THelperFunctions {
     overlayEntry.remove();
   }
 
-  static String moneyFormatter(String amount) {
+  static String moneyFormatter(String? amount) {
     final formatter = NumberFormat("#,##0.00");
-    double money = double.parse(amount);
-    String result = formatter.format(money);
-    return result;
+
+    if (amount == null || amount.isEmpty) {
+      return formatter.format(0);
+    }
+
+    try {
+      // Parse the string to double
+      double money = double.parse(amount);
+      // Format the parsed double value
+      return formatter.format(money);
+    } catch (e) {
+      print('Error parsing amount: $e');
+      return formatter.format(0); // Fallback to "0.00" in case of an error
+    }
   }
 
-  static String formatRate(String rate) {
-    String formattedRate = rate.toString();
-    if (formattedRate.contains('.')) {
-      formattedRate = formattedRate.replaceAll(RegExp(r'0*$'), ''); // Remove trailing zeros
-      formattedRate = formattedRate.replaceAll(RegExp(r'\.$'), ''); // Remove the trailing dot if any
+  static String formatRate(String? rate) {
+    // If rate is null or empty, return "0.00"
+    if (rate == null || rate.isEmpty) {
+      return '0.00';
     }
+
+    // Try parsing the rate to a double
+    double parsedRate;
+    try {
+      parsedRate = double.parse(rate);
+    } catch (e) {
+      // In case of parsing error, return "0.00"
+      return '0.00';
+    }
+
+    // Convert to a string with up to 2 decimal places
+    String formattedRate = parsedRate.toStringAsFixed(2);
+
+    // Remove trailing zeros and the decimal point if necessary
+    if (formattedRate.endsWith('.00')) {
+      formattedRate = formattedRate.substring(0, formattedRate.length - 3);
+    } else if (formattedRate.endsWith('0')) {
+      formattedRate = formattedRate.replaceAll(RegExp(r'0+$'), '');
+    }
+
     return formattedRate;
   }
+
+  // static String formatRate(String? rate) {
+  //   String formattedRate = rate.toString();
+  //   if (rate == null || rate.isEmpty) {
+  //     formattedRate = '0.00';
+  //   } else {
+  //     if (formattedRate.contains('.')) {
+  //       formattedRate = formattedRate.replaceAll(RegExp(r'0*$'), '');
+  //       formattedRate = formattedRate.replaceAll(RegExp(r'\.$'), '');
+  //     }
+  //   }
+  //   return formattedRate;
+  // }
 }

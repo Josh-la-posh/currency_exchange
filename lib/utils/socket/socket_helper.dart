@@ -6,22 +6,19 @@ import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../data/modules/app_navigator.dart';
 import '../../data/modules/session_manager.dart';
+import '../../data/modules/storage_session_controller.dart';
 import '../../data/provider/notificaton_provider.dart';
 
-final NotificationController notificationController = Get.put(NotificationController());
-
 class SocketManager {
-  NotificationProvider notificationProvider = Provider.of<NotificationProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false
-  );
+  final notificationController = Get.find<NotificationController>();
+  final userSessionController = Get.find<UserSessionController>();
 
   static final SocketManager singleton = SocketManager._internal();
   SocketManager._internal();
   static SocketManager get shared => singleton;
 
   void initSocket() async {
-    String? token = await UserSession.instance.getAccessToken();
+    String? token = await userSessionController.getAccessToken();
     IO.Socket socket = IO.io('https://api-uat.mypouch.me', <String, dynamic> {
       'transports': ['websocket'],
       'autoConnect': true,
@@ -66,7 +63,6 @@ class SocketManager {
     socket.on("notification", (data) {
       if (kDebugMode) {
         print("UpdateSocket ----------------------");
-        notificationProvider.updateNotificationLength(data);
         notificationController.notificationLength(data);
         print('helloooooo $data');
       }

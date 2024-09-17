@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/colors.dart';
@@ -8,7 +7,7 @@ import '../../../utils/constants/sizes.dart';
 import '../models/offer.dart';
 
 class OfferItem extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
   final OfferEntity item;
   OfferItem({
     super.key,

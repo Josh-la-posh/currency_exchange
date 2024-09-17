@@ -1,18 +1,18 @@
 
 class GetBankAccountModel {
-  String id, accountNumber, accountName, bankName, currency, type, bankCode, recipientCode, createdDate, lastModifiedDate;
+  String? id, accountNumber, accountName, bankName, currency, type, bankCode, recipientCode, createdDate, lastModifiedDate;
 
   GetBankAccountModel({
-    required this.id,
-    required this.accountNumber,
-    required this.accountName,
-    required this.bankName,
-    required this.currency,
-    required this.type,
-    required this.bankCode,
-    required this.recipientCode,
-    required this.createdDate,
-    required this.lastModifiedDate
+    this.id,
+    this.accountNumber,
+    this.accountName,
+    this.bankName,
+    this.currency,
+    this.type,
+    this.bankCode,
+    this.recipientCode,
+    this.createdDate,
+    this.lastModifiedDate
   });
 
   factory GetBankAccountModel.fromJson(Map<String, dynamic> json) {

@@ -1,72 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/floating_button.dart';
-import 'package:pouch/features/subscription/apis/api.dart';
+import 'package:pouch/features/subscription/controller/subscription_controller.dart';
 import 'package:pouch/features/subscription/screens/add_subscription.dart';
-import 'package:pouch/features/subscription/widgets/subscription_list.dart';
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/provider/auth_provider.dart';
-import '../../../data/provider/subscription_provider.dart';
-import '../../../data/provider/verification_provider.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
+import '../../../utils/layouts/list_layout.dart';
 import '../widgets/no_subscription.dart';
+import '../widgets/subscription_item.dart';
 
-class SubscribeScreen extends StatefulWidget {
-  const SubscribeScreen({super.key});
-
-  @override
-  State<SubscribeScreen> createState() => _SubscribeScreenState();
-}
-
-class _SubscribeScreenState extends State<SubscribeScreen> {
-  late SubscriptionProvider subscriptionProvider;
-  late AuthProvider authProvider;
-  late VerificationProvider verificationProvider;
-
-  bool isLoading = false;
-  @override
-  void initState() {
-    super.initState();
-    subscriptionProvider = Provider.of<SubscriptionProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-        listen: false
-    );
-    authProvider = Provider.of<AuthProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-        listen: false
-    );
-    verificationProvider = Provider.of<VerificationProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-        listen: false
-    );
-    if (subscriptionProvider.subscriptions.isEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-      NoLoaderService.instance.getSubscriptions(
-          provider: subscriptionProvider,
-          currency: '',
-          onSuccess: () {
-              setState(() {
-                Future.delayed(
-                  Duration(seconds: 2),
-                    () => setState(() {
-                      isLoading = false;
-                    })
-                );
-              });
-          }
-      );
-    }
-    if (authProvider.user?.isVerified == false) {
-      setState(() {
-        verificationProvider.showVerifyModal = true;
-      });
-    }
-  }
+class SubscribeScreen extends StatelessWidget {
+  final controller = Get.put(SubscriptionController());
+  SubscribeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -79,16 +25,46 @@ class _SubscribeScreenState extends State<SubscribeScreen> {
         title: Text('Subscribe', style: Theme.of(context).textTheme.titleMedium),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: isLoading == true
-            ? const NoSubscriptionScreen()
-            // : subscriptionProvider.subscriptions.isEmpty
-            // ? const NoSubscriptionScreen()
-            : SubscriptionList(),
-      ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return CircularProgressIndicator();
+        }
+        if (controller.subscriptions.isEmpty) {
+          return NoSubscriptionScreen();
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: TSizes.defaultSpace,),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 0.8),
+              child: RichText(
+                text: TextSpan(
+                  style: Theme.of(context).textTheme.labelMedium,
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: 'Here are the list of offers you have subscribed to:',
+                      style: TextStyle(fontSize: 15),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: TSizes.defaultSpace,),
+            TListLayout(
+              itemCount: controller.subscriptions.length,
+              itemBuilder: (_, index) {
+                final item = controller.subscriptions[index];
+
+                return SubscriptionItem(item: item);
+              },
+            ),
+          ],
+        );
+      }),
       floatingActionButton: TFloatingButton(
         onPressed: () {
-          Get.to(() => const AddSubscriptionScreen());
+          Get.to(() => AddSubscriptionScreen());
         },
       ),
     );

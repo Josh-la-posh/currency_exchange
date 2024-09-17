@@ -7,15 +7,16 @@ import 'package:pouch/features/verification/screens/verification_process.dart';
 import 'package:pouch/features/verification/screens/verify_page.dart';
 import 'package:pouch/features/verification/screens/verify_success.dart';
 
+import '../../../data/routes/guard_route.dart';
 import '../screens/identity_verification.dart';
 
-
+// AuthGuard(widget: VerificationPage())
 Map<String, WidgetBuilder> verifyRoute = {
-  VERIFICATION_PAGE_SCREEN: (context) => VerificationPage(),
-  VERIFICATION_PROCESS_SCREEN: (context) => const VerificationProcess(),
-  COUNTRY_SELECTION_SCREEN: (context) => CountrySelectionPage(),
-  IDENTITY_VERIFICATION_TYPE_SCREEN: (context) => IdentityVerificationTypeScreen(),
-  IDENTITY_VERIFICATION_SCREEN: (context) => IdentityVerificationScreen(),
-  VERIFICATION_SUCCESS_SCREEN: (context) => const VerificationSuccessScreen(),
-  VERIFICATION_IN_PROGRESS_SCREEN: (context) => const VerificationInProgressScreen()
+  VERIFICATION_PAGE_SCREEN: (context) => AuthGuard(widget: VerificationPage()),
+  VERIFICATION_PROCESS_SCREEN: (context) => AuthGuard(widget: VerificationProcess()),
+  COUNTRY_SELECTION_SCREEN: (context) => AuthGuard(widget: CountrySelectionPage()),
+  IDENTITY_VERIFICATION_TYPE_SCREEN: (context) => AuthGuard(widget: IdentityVerificationTypeScreen()),
+  IDENTITY_VERIFICATION_SCREEN: (context) => AuthGuard(widget: IdentityVerificationScreen()),
+  VERIFICATION_SUCCESS_SCREEN: (context) => AuthGuard(widget: VerificationSuccessScreen()),
+  VERIFICATION_IN_PROGRESS_SCREEN: (context) => AuthGuard(widget: VerificationInProgressScreen())
 };

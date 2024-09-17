@@ -1,38 +1,26 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/features/wallet/apis/api.dart';
+import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/provider/transaction_provider.dart';
-import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/enums.dart';
 import '../../all_offer/decimal_formatter.dart';
 
-class UssdFundingScreen extends StatefulWidget {
-  const UssdFundingScreen({super.key});
-
-  @override
-  State<UssdFundingScreen> createState() => _UssdFundingScreenState();
-}
-
-class _UssdFundingScreenState extends State<UssdFundingScreen> {
-
+class UssdFundingScreen extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
-  String _amount = '';
-
+  final controller = Get.find<WalletController>();
+  UssdFundingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var transactionProvider = Provider.of<TransactionProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-    var walletProvider = Provider.of<WalletProvider>(context);
     final darkMode = THelperFunctions.isDarkMode(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
@@ -45,43 +33,33 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // BankList(walletProvider: walletProvider),
-
                 RichText(
-                    text: TextSpan(
-                        style: TextStyle(
-                            color: darkMode ? Colors.white : Colors.black,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                            fontFamily: 'Roboto'
-                        ),
-                        children: const <TextSpan> [
-                          TextSpan(
-                            text: 'SELECT YOUR USSD CODE PROVIDER',
-                          ),
-                        ]
-                    )
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: darkMode ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      fontFamily: 'Roboto',
+                    ),
+                    children: const <TextSpan>[
+                      TextSpan(text: 'SELECT YOUR USSD CODE PROVIDER'),
+                    ],
+                  ),
                 ),
-
-                SizedBox(height: 20,),
-
-                // Nigeria bank dropdown
-
-                Container(
+                const SizedBox(height: 20),
+                Obx(() => Container(
                   decoration: BoxDecoration(
-                      border: Border.all(
-                          color: TColors.secondaryBorder30),
-                      borderRadius: const BorderRadius.all(Radius.circular(TSizes.borderRadiusSm))
+                    border: Border.all(color: TColors.secondaryBorder30),
+                    borderRadius: const BorderRadius.all(Radius.circular(TSizes.borderRadiusSm)),
                   ),
                   child: DropdownButtonFormField<Bank>(
                     validator: TValidator.bankValidator,
                     decoration: InputDecoration(
-                      fillColor: darkMode ? TColors.timeLineBorder : TColors.textFieldBackground
+                      fillColor: darkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
                     ),
                     autofocus: false,
                     isExpanded: true,
-                    value: walletProvider.selectedNigBank,
-                    // underline: const SizedBox(),
+                    value: controller.selectedNigBanks.value,
                     icon: RotatedBox(
                       quarterTurns: 3,
                       child: Padding(
@@ -94,19 +72,19 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                       ),
                     ),
                     onChanged: (val) {
-                      walletProvider.setSelectedNigBank(val!);
+                      controller.setSelectedNigBank(val!);
                       formKey.currentState?.validate();
                     },
                     items: [
-                      for (final item in walletProvider.nigBanks)
+                      for (final item in controller.nigBanks)
                         DropdownMenuItem<Bank>(
                           value: item,
                           child: SizedBox(
                             child: Row(
                               children: [
                                 Text(
-                                    getBankName(item),
-                                    style: Theme.of(context).textTheme.bodyMedium
+                                  getBankName(item),
+                                  style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                               ],
                             ),
@@ -114,97 +92,74 @@ class _UssdFundingScreenState extends State<UssdFundingScreen> {
                         ),
                     ],
                   ),
-                ),
-
+                )),
                 const SizedBox(height: TSizes.defaultSpace * 2),
                 Container(
                   width: double.infinity,
                   alignment: Alignment.centerLeft,
-                  // padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                  //     boxShadow: [
-                  //       BoxShadow(
-                  //           color: TColors.black.withOpacity(0.1),
-                  //           offset: const Offset(1.32,1.87),
-                  //           blurRadius: 1.94,
-                  //           spreadRadius: 1.94
-                  //       ),
-                  //       BoxShadow(
-                  //           color: const Color(0xFFFDF6FF).withOpacity(0.5),
-                  //           offset: const Offset(0.0,0.0),
-                  //           blurRadius: 0,
-                  //           spreadRadius: 0
-                  //       ),
-                  //       BoxShadow(
-                  //           color: Colors.white.withOpacity(0.8),
-                  //           offset: const Offset(0,0.0),
-                  //           blurRadius: 1.8,
-                  //           spreadRadius: 0
-                  //       ),
-                  //     ]
-                  ),
-                  child:
-                  Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: darkMode ? Colors.white : Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: const <TextSpan> [
-                                TextSpan(
-                                  text: 'Amount',
-                                ),
-                              ]
-                          )
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: darkMode ? Colors.white : Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                            fontFamily: 'Roboto',
+                          ),
+                          children: const <TextSpan>[
+                            TextSpan(text: 'Amount'),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10),
                       TextFormField(
                         validator: TValidator.numValidator,
                         style: Theme.of(context).textTheme.bodyMedium,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
                           DecimalTextInputFormatter(decimalRange: 2),
-                          // Apply the formatter here
                           FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                         ],
                         onChanged: (val) {
-                          _amount = val;
+                          controller.setAmount(val);
                           formKey.currentState?.validate();
                         },
-                        onSaved: (val) {
-                          setState(() {
-                            _amount = val as String;
-                          });
-                        },
-
-                      ),
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          border: OutlineInputBorder(),
+                          hintText: 'Amount',
+                        ),
+                      )
                     ],
                   ),
                 ),
-                const SizedBox(height: TSizes.defaultSpace * 4,),
+                const SizedBox(height: TSizes.defaultSpace * 4),
                 Center(
                   child: SizedBox(
-                      width: 200,
-                      child: TElevatedButton(onTap: (){
+                    width: 200,
+                    child: Obx(() => TElevatedButton(
+                      onTap: controller.isLoading.value ? null : () {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
-                          WalletServices.instance.fundWalletNairaUssd(
-                              walletProvider: walletProvider,
-                              transactionProvider: transactionProvider,
-                              amount: _amount,
-                              currency: 'NGN',
-                              bank: getBankName(walletProvider.selectedNigBank)
+                          controller.fundWalletViaNairaUssd(
+                              amount: controller.amount.value,
+                              bank: getBankName(controller.selectedNigBanks.value)
                           );
+                          // WalletServices.instance.fundWalletNairaUssd(
+                          //   walletProvider: walletProvider,
+                          //   transactionProvider: Get.find<TransactionProvider>(),
+                          //   amount: amount.value,
+                          //   currency: 'NGN',
+                          //   bank: getBankName(selectedBank.value!)
+                          // );
                         }
-                      }, buttonText: 'Continue')
+                      },
+                      buttonText: controller.isLoading.value ? 'Loading' : 'Continue',
+                    )),
                   ),
-                )
+                ),
               ],
             ),
           ),

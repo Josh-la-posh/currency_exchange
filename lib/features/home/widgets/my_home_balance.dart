@@ -2,32 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/provider/offer_provider.dart';
-import 'package:pouch/data/provider/transaction_provider.dart';
-import 'package:pouch/features/wallet/apis/api.dart';
-import 'package:pouch/features/wallet/models/default_wallet_model.dart';
-import 'package:pouch/utils/constants/texts.dart';
-import 'package:pouch/utils/shared/notification/snackbar.dart';
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/modules/background_task.dart';
-import '../../../data/provider/wallet_provider.dart';
-import '../../../utils/constants/colors.dart';
+import 'package:pouch/features/home/controller/home_controller.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
-import '../../wallet/controller/wallet_controller.dart';
 
 class HomeBalanceWidget extends StatelessWidget {
-  final WalletController walletController = Get.put(WalletController());
-  final HelperFunctionsController helperFunctionsController = Get.put(HelperFunctionsController());
+  final controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
     final width = MediaQuery.of(context).size.width;
-    if (walletController.defaultWallet.value.balance == null) {
-      walletController.fetchingDefaultWallet();
+    if (controller.walletController.defaultWallet.value.balance == null) {
+      controller.walletController.fetchingDefaultWallet();
     }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
@@ -62,8 +49,8 @@ class HomeBalanceWidget extends StatelessWidget {
                   SizedBox(
                     // width: 15,
                     child: IconButton(
-                        onPressed: () => walletController.showWalletBalance.value = !walletController.showWalletBalance.value,
-                        icon: walletController.showWalletBalance.value == false
+                        onPressed: () => controller.walletController.showWalletBalance.value = !controller.walletController.showWalletBalance.value,
+                        icon: controller.walletController.showWalletBalance.value == false
                             ? Icon(Icons.visibility_off_outlined, color: Colors.white, size: 17,)
                             : Icon(Icons.visibility_outlined, color: Colors.white, size: 17,)
                     ),
@@ -79,11 +66,11 @@ class HomeBalanceWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                              text: walletController.isDefaultWalletLoading.value
+                              text: controller.walletController.isDefaultWalletLoading.value
                                   ? '---'
-                                  : walletController.defaultWallet.value.balance == null
+                                  : controller.walletController.defaultWallet.value.balance == null
                                   ? '---'
-                                  : '${walletController.showWalletBalance.value == false ? '*****' : helperFunctionsController.moneyFormatter(walletController.defaultWallet.value.balance.toString())} ',
+                                  : '${controller.walletController.showWalletBalance.value == false ? '*****' : controller.helperFunctionsController.moneyFormatter(controller.walletController.defaultWallet.value.balance.toString())} ',
                               style: TextStyle(
                                   fontSize: width > 400 ? 28 : 20,
                                   fontWeight: TSizes.fontWeightXl,
@@ -99,11 +86,11 @@ class HomeBalanceWidget extends StatelessWidget {
                           children: <TextSpan> [
                             TextSpan(
                               text:
-                              walletController.isDefaultWalletLoading.value
+                              controller.walletController.isDefaultWalletLoading.value
                                   ? ''
-                                  : walletController.defaultWallet.value.balance == null
+                                  : controller.walletController.defaultWallet.value.balance == null
                                   ? ''
-                                  : '${walletController.showWalletBalance.value == false ? '' : walletController.defaultWallet.value.currency}',
+                                  : '${controller.walletController.showWalletBalance.value == false ? '' : controller.walletController.defaultWallet.value.currency}',
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: TSizes.fontWeightLg,
@@ -116,7 +103,7 @@ class HomeBalanceWidget extends StatelessWidget {
                   Spacer(),
                   IconButton(
                     onPressed: (){
-                      walletController.fetchingDefaultWallet();
+                      controller.walletController.fetchingDefaultWallet();
                     },
                     icon: Icon(Icons.refresh, size: 20, color: darkMode ? Colors.white : Colors.white,),
                   ),

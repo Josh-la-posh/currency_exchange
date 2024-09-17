@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
-import 'package:pouch/common/widgets/custom_shapes/currency_widget_with_back.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 
 import '../../../utils/constants/colors.dart';
@@ -14,7 +10,7 @@ import '../controllers/create_offer_controller.dart';
 import '../widgets/create_offer_form.dart';
 
 class CreateOfferScreen extends StatelessWidget {
-  final CreateOfferController createOfferController = Get.put(CreateOfferController());
+  final  createOfferController = Get.find<CreateOfferController>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +21,10 @@ class CreateOfferScreen extends StatelessWidget {
         backgroundColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         surfaceTintColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         leading: IconButton(
-          onPressed: (){Get.back();},
+          onPressed: (){
+            createOfferController.clearForm();
+            Get.back();
+            },
           icon: const Icon(Icons.arrow_back),
           style: IconButton.styleFrom(
               foregroundColor: Colors.grey,

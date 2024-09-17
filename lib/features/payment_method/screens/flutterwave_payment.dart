@@ -1,38 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/features/home/routes/names.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/provider/auth_provider.dart';
-import 'package:pouch/data/provider/wallet_provider.dart';
-import 'package:pouch/features/wallet/routes/names.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/provider/transaction_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/navigation_menu.dart';
-import '../../transaction/apis/api.dart';
-import '../../wallet/apis/api.dart';
+import '../../wallet/controller/wallet_controller.dart';
 
 class FlutterwavePaymentScreen extends StatelessWidget {
-  const FlutterwavePaymentScreen({super.key});
+  final walletController = Get.find<WalletController>();
+  final controller = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
-    var authProvider = Provider.of<AuthProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-    var walletProvider = Provider.of<WalletProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-    var transactionProvider = Provider.of<TransactionProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
     final darkMode = THelperFunctions.isDarkMode(context);
-
-    final controller = Get.put(NavigationController());
-    final item = walletProvider.flutterwaveModel;
+    final item = walletController.flutterwaveDetails.value;
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
@@ -60,7 +43,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                           ),
                           children: <TextSpan> [
                             TextSpan(
-                              text: '${authProvider.user?.email}',
+                              text: '${walletController.authController.user.value.email}',
                             )
                           ]
                       )
@@ -76,7 +59,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                           ),
                           children: <TextSpan> [
                             TextSpan(
-                              text: 'Pay NGN ${item?.transfer_amount.toString()}',
+                              text: 'Pay NGN ${item.transfer_amount.toString()}',
                             ),
                           ]
                       )
@@ -100,7 +83,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                           text: 'Please make a transfer to ',
                         ),
                         TextSpan(
-                          text: ' ${item?.transfer_bank}',
+                          text: ' ${item.transfer_bank}',
                           style: TextStyle(
                             fontWeight: FontWeight.w700
                           )
@@ -146,7 +129,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                             ),
                             children: <TextSpan> [
                               TextSpan(
-                                text: 'NGN ${item?.transfer_amount}',
+                                text: 'NGN ${item.transfer_amount}',
                               )
                             ]
                         )
@@ -194,7 +177,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                                 ),
                                 children: <TextSpan> [
                                   TextSpan(
-                                    text: '${item?.transfer_account}',
+                                    text: '${item.transfer_account}',
                                   )
                                 ]
                             )
@@ -247,7 +230,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                             ),
                             children: <TextSpan> [
                               TextSpan(
-                                text: '${item?.transfer_bank}',
+                                text: '${item.transfer_bank}',
                               )
                             ]
                         )
@@ -286,8 +269,10 @@ class FlutterwavePaymentScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
               child: GestureDetector(
                 onTap: () async {
-                  await NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
-                  AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                  await walletController.fetchWallets(currency: '');
+                  controller.selectedIndex.value = 3;
+                  Get.offAll(() => NavigationMenu());
+                  // AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                 },
                 child: Container(
                   width: double.infinity,

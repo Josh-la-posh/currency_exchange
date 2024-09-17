@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/models/offer.dart';
 import 'package:pouch/features/negotiation_offer/screen/negotiation_accept_reject.dart';
-import 'package:pouch/features/negotiation_offer/widget/negotiation_list.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
-import '../../all_offer/models/negotiate_offer_model.dart';
 import '../../transaction/icons/svg.dart';
 
 class NegotiationItem extends StatelessWidget {

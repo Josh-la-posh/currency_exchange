@@ -1,8 +1,4 @@
 import 'package:dio/dio.dart';
-
-import 'package:dio/dio.dart';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 String handleApiFormatError(dynamic error) {
@@ -39,7 +35,7 @@ String handleApiFormatError(dynamic error) {
         return 'Something went wrong, please try again later.';
       }
     } else {
-      return 'No response from server, check your network connectivity.';
+      return 'An unexpected error occurred';
     }
   } catch (e, stackTrace) {
     // Log the error and stack trace for debugging
@@ -52,7 +48,7 @@ String handleApiFormatError(dynamic error) {
     } else if (e != null && e.toString().isNotEmpty) {
       return 'Unexpected error occurred: ${e.toString()}';
     } else {
-      return 'An unknown error occurred.';
+      return 'An unexpected error occurred.';
     }
   }
 }

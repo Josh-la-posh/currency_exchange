@@ -1,22 +1,22 @@
 import 'package:pouch/features/transaction/models/transaction_entity.dart';
 
 class GetFcyAccountEntity {
-  final int currentPage;
-  final int skippedRecords;
-  final int totalPages;
-  final bool hasNext;
-  final List content;
-  final int payloadSize;
-  final int totalRecords;
+  int? currentPage;
+  int? skippedRecords;
+  int? totalPages;
+  bool? hasNext;
+  List? content;
+  int? payloadSize;
+  int? totalRecords;
 
   GetFcyAccountEntity({
-    required this.currentPage,
-    required this.skippedRecords,
-    required this.totalPages,
-    required this.hasNext,
-    required this.content,
-    required this.payloadSize,
-    required this.totalRecords,
+     this.currentPage,
+     this.skippedRecords,
+     this.totalPages,
+     this.hasNext,
+     this.content,
+     this.payloadSize,
+     this.totalRecords,
   });
 
   factory GetFcyAccountEntity.fromJson(Map<String, dynamic> json) => GetFcyAccountEntity(

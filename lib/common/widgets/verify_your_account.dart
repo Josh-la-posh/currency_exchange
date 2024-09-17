@@ -11,7 +11,7 @@ import '../../utils/constants/sizes.dart';
 import '../../utils/helpers/helper_functions.dart';
 
 class VerifyYourAccountWidget extends StatelessWidget {
-  final AuthController authController = Get.put(AuthController());
+  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

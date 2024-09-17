@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/features/home/screens/home.dart';
-import 'package:pouch/features/verification/icons/svg.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
@@ -131,7 +129,7 @@ class VerificationInProgressScreen extends StatelessWidget {
               height: 40,
               child: TElevatedButton(
                   onTap: () {
-                    Get.to(() => const NavigationMenu());
+                    Get.to(() => NavigationMenu());
 
                   },
                   buttonText: 'Go To Dashboard'

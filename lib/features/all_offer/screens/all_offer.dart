@@ -1,19 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/features/all_offer/screens/market/all_market/all_market.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/modules/app_navigator.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/utils/constants/enums.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import 'package:pouch/utils/shared/notification/snackbar.dart';
 import '../../../common/widgets/buttons/floating_button.dart';
-import '../../../data/provider/auth_provider.dart';
-import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
@@ -25,36 +15,10 @@ import 'market/ngn_market/ngn_market.dart';
 import 'market/usd_market/usd_market.dart';
 
 class AllOfferScreen extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
-
-  // OfferProvider offerProvider = Provider.of<OfferProvider>(
-  //   AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-  //   listen: false
-  // );
-
-  // AuthProvider authProvider = Provider.of<AuthProvider>(
-  //     AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-  //     listen: false
-  // );
-
-
-
-  // NoLoaderService.instance.getAllOffers(
-  // offerProvider: offerProvider,
-  // onFailure: (){},
-  // onSuccess: (){}
-  // );
-  // if (offerProvider.offers.isEmpty) {
-  // NoLoaderService.instance.getAllOffers(
-  // offerProvider: offerProvider,
-  // onFailure: (){},
-  // onSuccess: (){}
-  // );
-  // }
+  final controller = Get.put(OfferController());
   @override
   Widget build(BuildContext context) {
-    offerController.fetchAllOffers();
-    var authProvider = Provider.of<AuthProvider>(context);
+    controller.fetchAllOffers();
     final darkMode = THelperFunctions.isDarkMode(context);
     return DefaultTabController(
       length: 6,
@@ -111,7 +75,7 @@ class AllOfferScreen extends StatelessWidget {
         ),
         floatingActionButton: TFloatingButton(
           onPressed: (){
-            if (authProvider.user?.isVerified == true) {
+            if (controller.authController.user.value.isVerified == true) {
               Get.snackbar('Verification', 'Please verify your account');
             } else {
               Get.to(() => CreateOfferScreen());

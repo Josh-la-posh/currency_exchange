@@ -1,69 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:pouch/features/authentication/screens/add_details/add_address_detail.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/modules/app_navigator.dart';
-import 'package:pouch/data/modules/session_manager.dart';
-import 'package:pouch/data/provider/auth_provider.dart';
 import 'package:pouch/features/authentication/screens/login/widgets/login_form.dart';
 import 'package:pouch/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:pouch/utils/layouts/auth_layout.dart';
+import '../../controllers/auth_form_controller.dart';
 
-import '../../../home/routes/names.dart';
+class LoginScreen extends StatelessWidget {
+  final authFormController = Get.put(AuthFormController());
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final formKey = GlobalKey<FormState>();
-  String? _email;
-  String? _password;
-  bool _rememberMe = false;
-  bool isLoading = true;
-
-  var authProvider = Provider.of<AuthProvider>(
-    AppNavigator.instance.navigatorKey.currentContext as BuildContext
-  );
-
-  @override
-  void initState() {
-    UserSession.instance.getRememberMeHandler((email, password, enabled) {
-      if (enabled == true) {
-        setState(() {
-          _email = email;
-          _password = null;
-          _rememberMe = true;
-          isLoading = false;
-        });
-      } else {
-        _email = null;
-        _password = null;
-        _rememberMe = false;
-        isLoading = false;
-      }
-    });
-
-    UserSession.instance.isLoginBool().then((value) {
-      if (value == true && authProvider.user != null) {
-        if (authProvider.user?.address == null) {
-          Get.to(() => AddAddressDetail(
-              email: _email.toString(),
-              password: _password.toString(),
-              rememberMe: _rememberMe
-          ));
-        } else {
-          AppNavigator.instance
-              .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-        }
-      }
-    });
-    super.initState();
-  }
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -71,12 +16,9 @@ class _LoginScreenState extends State<LoginScreen> {
       onTap: () {
         Get.to(() => const OnboardingScreen());
       },
-        heading: 'Log In',
-        title: 'Welcome Back!',
-        child: LoginForm(
-            email: _email,
-            password: _password,
-            rememberMe: _rememberMe));
+      heading: 'Log In',
+      title: 'Welcome Back!',
+      child: LoginForm(),
+    );
   }
 }
-

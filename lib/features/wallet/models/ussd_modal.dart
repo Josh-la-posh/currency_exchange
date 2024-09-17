@@ -1,15 +1,15 @@
 class UssdModel {
-  final String reference;
-  final String status;
-  final String display_text;
-  final String ussd_code;
+  String? reference;
+  String? status;
+  String? display_text;
+  String? ussd_code;
 
 
-  const UssdModel({
-    required this.reference,
-    required this.status,
-    required this.display_text,
-    required this.ussd_code,
+  UssdModel({
+    this.reference,
+    this.status,
+    this.display_text,
+    this.ussd_code,
   });
 
   factory UssdModel.fromJson(Map<String, dynamic> json) => UssdModel(

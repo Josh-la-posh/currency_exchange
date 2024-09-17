@@ -1,21 +1,20 @@
 class FlutterwaveModel {
-  final String transfer_reference;
-  final String transfer_account;
-  final String transfer_bank;
-  final int account_expiration;
-  final String transfer_note;
-  final String transfer_amount;
-  final String mode;
+  String? transfer_reference;
+  String? transfer_account;
+  String? transfer_bank;
+  int? account_expiration;
+  String? transfer_note;
+  String? transfer_amount;
+  String? mode;
 
-
-  const FlutterwaveModel({
-    required this.transfer_reference,
-    required this.transfer_account,
-    required this.transfer_bank,
-    required this.account_expiration,
-    required this.transfer_note,
-    required this.transfer_amount,
-    required this.mode
+  FlutterwaveModel({
+    this.transfer_reference,
+    this.transfer_account,
+    this.transfer_bank,
+    this.account_expiration,
+    this.transfer_note,
+    this.transfer_amount,
+    this.mode
   });
 
   factory FlutterwaveModel.fromJson(Map<String, dynamic> json) => FlutterwaveModel(

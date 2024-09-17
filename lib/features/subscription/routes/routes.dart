@@ -12,8 +12,8 @@ import '../../../data/routes/guard_route.dart';
 
 
 Map<String, WidgetBuilder> subscriptionRoutes = {
-  SUBSCRIPTION_SCREEN_ROUTE: (context) => const AuthGuard(widget: SubscribeScreen()),
-  CREATE_SUBSCRIPTION_SCREEN: (context) => const AuthGuard(
+  SUBSCRIPTION_SCREEN_ROUTE: (context) => AuthGuard(widget: SubscribeScreen()),
+  CREATE_SUBSCRIPTION_SCREEN: (context) => AuthGuard(
     widget: AddSubscriptionScreen(),
   ),
 };

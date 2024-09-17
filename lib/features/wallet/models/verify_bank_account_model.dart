@@ -1,11 +1,11 @@
 class VerifyBankAccountModel {
-  String account_number, account_name;
-  int bank_id;
+  String? account_number, account_name;
+  int? bank_id;
 
   VerifyBankAccountModel({
-    required this.account_number,
-    required this.account_name,
-    required this.bank_id,
+    this.account_number,
+    this.account_name,
+    this.bank_id,
   });
 
   factory VerifyBankAccountModel.fromJson(Map<String, dynamic> json) {

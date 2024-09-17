@@ -1,22 +1,50 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/apis/api.dart';
 import 'package:pouch/features/all_offer/models/create_offer_response.dart';
 import 'package:pouch/features/all_offer/models/offer.dart';
 import 'package:pouch/features/all_offer/models/offer_details_entity.dart';
+import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
+import '../../authentication/controllers/auth_controller.dart';
+import '../../home/controller/home_controller.dart';
 import '../screens/accept_offer_success_page.dart';
 import '../screens/offer_details.dart';
 
 class OfferController extends GetxController {
+  final  authController = Get.find<AuthController>();
+  final helperFunctionsController = Get.put(HelperFunctionsController());
   final isLoading = false.obs;
   final isOfferLoading = false.obs;
   final isMyBidsLoading = false.obs;
   final isMyOffersLoading = false.obs;
+  final isAllOffersLoading = false.obs;
+  final isUsdOffersLoading = false.obs;
+  final isEurOffersLoading = false.obs;
+  final isCadOffersLoading = false.obs;
+  final isGbpOffersLoading = false.obs;
+  final isNgnOffersLoading = false.obs;
+  final isNewOffersLoading = false.obs;
+  final isUsdNewOffersLoading = false.obs;
+  final isEurNewOffersLoading = false.obs;
+  final isCadNewOffersLoading = false.obs;
+  final isGbpNewOffersLoading = false.obs;
+  final isNgnNewOffersLoading = false.obs;
+  final isTrendingOffersLoading = false.obs;
+  final isUsdTrendingOffersLoading = false.obs;
+  final isEurTrendingOffersLoading = false.obs;
+  final isCadTrendingOffersLoading = false.obs;
+  final isGbpTrendingOffersLoading = false.obs;
+  final isNgnTrendingOffersLoading = false.obs;
+  final isNegotiationOfferLoading = false.obs;
   final showAcceptOfferMsg = false.obs;
   final showRejectOfferMsg = false.obs;
+  var showErrorText = false.obs;
   // final isNewOfferLoading = false.obs;
   // final isTrendingOfferLoading = false.obs;
   // final isAllUsdLoading = false.obs;
@@ -61,15 +89,22 @@ class OfferController extends GetxController {
   final myOffers = <OfferEntity>[].obs;
   final myBids = <OfferEntity>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchAllOffers();
-    refreshHomePage();
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   fetchAllOffers();
+  //   refreshHomePage();
+  // }
+
+  void showErrorMessage() {
+    showErrorText.value = true;
+    Timer(Duration(seconds: 3), () {
+      showErrorText.value = false;
+    });
   }
 
   Future<void> refreshHomePage() async {
-    await fetchTrendingOffers();
+    await fetchAllOffers();
     await fetchMyBids(days: '', currency: '');
     await fetchMyOffers(days: '', currency: '');
   }
@@ -92,31 +127,29 @@ class OfferController extends GetxController {
       queryParameters['expireIn'] = expireIn != 'Never' ? int.parse(expireIn.toString()) : 0;
 
       final response = await OfferService.instance.creatingOffer(queryParameters);
-      var item = response.data;
-      createOfferResponse(CreateOfferResponse(
-          id: item['id'],
-          debitedCurrency: item['debitedCurrency'],
-          creditedCurrency: item['creditedCurrency'],
-          amount: item['amount'],
-          rate: item['rate'],
-          expireIn: item['expireIn'],
-          views: item['views'],
-          negotiatorRate: item['negotiatorRate'],
-          negotiatorAmount: item['negotiatorAmount'],
-          negotiationAccepted: item['negotiationAccepted'],
-          negotiatorId: item['negotiatorId'],
-          isActive: item['isActive'],
-          status: item['status'],
-          createdDate: item['createdDate'],
-          lastModifiedDate: item['lastModifiedDate'],
-          expireCountDown: item['expireCountDown']
-      ));
-
-      await fetchOffersByCurrency(currency: debitedCurrency);
-      await fetchNewOffersByCurrency(currency: debitedCurrency);
-      await fetchTrendingOffersByCurrency(currency: debitedCurrency);
-      await onSuccess();
-      Get.offAndToNamed('/create-success-screen');
+     if (response.statusCode == 200 || response.statusCode == 201) {
+       var item = response.data;
+       createOfferResponse(CreateOfferResponse(
+           id: item['id'],
+           debitedCurrency: item['debitedCurrency'],
+           creditedCurrency: item['creditedCurrency'],
+           amount: item['amount'],
+           rate: item['rate'],
+           expireIn: item['expireIn'],
+           views: item['views'],
+           negotiatorRate: item['negotiatorRate'],
+           negotiatorAmount: item['negotiatorAmount'],
+           negotiationAccepted: item['negotiationAccepted'],
+           negotiatorId: item['negotiatorId'],
+           isActive: item['isActive'],
+           status: item['status'],
+           createdDate: item['createdDate'],
+           lastModifiedDate: item['lastModifiedDate'],
+           expireCountDown: item['expireCountDown']
+       ));
+       await onSuccess();
+       Get.offAndToNamed('/create-success-screen');
+     }
     } catch (err) {
       print('Wahala dey town');
     } finally {
@@ -131,21 +164,19 @@ class OfferController extends GetxController {
     required VoidCallback onSuccess
   }) async {
     try {
-      isLoading(true);
+      isNegotiationOfferLoading(true);
       final response = await OfferService.instance.acceptingOrRejectingOffer(
           id: id,
           data: {'negotiationAccepted': negotiationAccepted}
       );
       var item = response.data;
-
-      await fetchOffersByCurrency(currency: currency);
-      await fetchNewOffersByCurrency(currency: currency);
-      await fetchTrendingOffersByCurrency(currency: currency);
-      onSuccess();
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        onSuccess();
+      }
     } catch (err) {
       print('Wahala dey town');
     } finally {
-      isLoading(false);
+      isNegotiationOfferLoading(false);
     }
   }
 
@@ -154,7 +185,7 @@ class OfferController extends GetxController {
     required String currency,
     required String negotiatorRate,
     required String negotiatorAmount,
-    // required String currency
+    required VoidCallback onSuccess
   }) async {
     try {
       isLoading(true);
@@ -166,11 +197,11 @@ class OfferController extends GetxController {
           }
       );
       var item = response.data;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        onSuccess();
+        Get.snackbar('Success', 'Your bid has been created successfully!!!');
+      }
 
-      await fetchOffersByCurrency(currency: currency);
-      await fetchNewOffersByCurrency(currency: currency);
-      await fetchTrendingOffersByCurrency(currency: currency);
-      Get.snackbar('Success', 'Your bid has been created successfully!!!');
     } catch (err) {
       print('Wahala dey town');
     } finally {
@@ -187,14 +218,13 @@ class OfferController extends GetxController {
     try {
       isLoading(true);
       final response = await OfferService.instance.swappingOffer(id: id);
-
-      await fetchOffersByCurrency(currency: creditedCurrency);
-      await fetchNewOffersByCurrency(currency: creditedCurrency);
-      await fetchTrendingOffersByCurrency(currency: creditedCurrency);
-      Get.to(() => AcceptOfferSuccessPage(
-        amount: amount,
-        creditedCurrency: creditedCurrency,
-      ));
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await fetchAllOffers();
+        Get.to(() => AcceptOfferSuccessPage(
+          amount: amount,
+          creditedCurrency: creditedCurrency,
+        ));
+      }
     } catch (err) {
       print('Wahala dey town');
     } finally {
@@ -206,242 +236,351 @@ class OfferController extends GetxController {
     final queryParameters = <String, dynamic>{};
     queryParameters['sortByAmount'] = 'sortByAmount';
     try {
-      allOffers.isEmpty && isOfferLoading(true);
+      allOffers.isEmpty && isAllOffersLoading(true);
       final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      var data = response.data;
-      offerDetailsEntity(OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      ));
-
-      var contents = offerDetailsEntity.value.content;
-      List<OfferEntity> fetchAOffers = (contents as List)
-          .map((json) => OfferEntity.fromJson(json)).toList();
-      allOffers.assignAll(fetchAOffers);
-
-      await fetchNewOffers();
-      await fetchTrendingOffers();
-
-      print('All offers fetched $allOffers');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var data = response.data;
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        allOffers.assignAll(fetchAOffers);
+      }
     } catch (err) {
       print('Wahala dey town');
     } finally {
-      isOfferLoading(false);
+      isAllOffersLoading(false);
     }
   }
 
-  Future<void> fetchOffersByCurrency({required String currency}) async {
+  Future<void> fetchAllUsdOffers() async {
     final queryParameters = <String, dynamic>{};
     queryParameters['sortByAmount'] = 'sortByAmount';
-    queryParameters['currency'] = currency;
-
+    queryParameters['currency'] = 'USD';
     try {
-      isOfferLoading(true);
+      isUsdOffersLoading(true);
       final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      var data = response.data;
-      offerDetailsEntity(OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      ));
-      var contents = offerDetailsEntity.value.content;
-      List<OfferEntity> fetchAOffers = (contents as List)
-          .map((json) => OfferEntity.fromJson(json)).toList();
-
-      switch (currency) {
-        case 'USD':
-          allUsdOffers.assignAll(fetchAOffers);
-          break;
-        case 'NGN':
-          allNgnOffers.assignAll(fetchAOffers);
-          break;
-        case 'GBP':
-          allGbpOffers.assignAll(fetchAOffers);
-          break;
-        case 'CAD':
-          allCadOffers.assignAll(fetchAOffers);
-          break;
-        default:
-          allEurOffers.assignAll(fetchAOffers);
-          break;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        allUsdOffers.assignAll(fetchAOffers);
       }
-
-      await fetchNewOffersByCurrency(currency: currency);
-      await fetchTrendingOffersByCurrency(currency: currency);
-
-      print('All offers fetched $allOffers');
     } catch (err) {
       print('Wahala dey town');
     } finally {
-      isOfferLoading(false);
+      isUsdOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchAllNgnOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['sortByAmount'] = 'sortByAmount';
+    queryParameters['currency'] = 'NGN';
+    try {
+      isNgnOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        allNgnOffers.assignAll(fetchAOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isNgnOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchAllCadOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['sortByAmount'] = 'sortByAmount';
+    queryParameters['currency'] = 'CAD';
+    try {
+      isCadOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        allCadOffers.assignAll(fetchAOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isCadOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchAllEurOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['sortByAmount'] = 'sortByAmount';
+    queryParameters['currency'] = 'EUR';
+    try {
+      isEurOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        allEurOffers.assignAll(fetchAOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isEurOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchAllGbpOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['sortByAmount'] = 'sortByAmount';
+    queryParameters['currency'] = 'GBP';
+    try {
+      isGbpOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        allGbpOffers.assignAll(fetchAOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isGbpOffersLoading(false);
     }
   }
 
   Future<void> fetchNewOffers() async {
     final queryParameters = <String, dynamic>{};
-
     try {
-      isOfferLoading(true);
+      isNewOffersLoading(true);
       final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      var data = response.data;
-      offerDetailsEntity(OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      ));
-
-      var contents = offerDetailsEntity.value.content;
-      List<OfferEntity> fetchAOffers = (contents as List)
-          .map((json) => OfferEntity.fromJson(json)).toList();
-
-      newOffers.assignAll(fetchAOffers);
-      print('All new offers fetched');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        newOffers.assignAll(fetchAOffers);
+      }
     } catch (err) {
       print('Wahala dey town');
     } finally {
-      isOfferLoading(false);
+      isNewOffersLoading(false);
     }
   }
 
-  Future<void> fetchNewOffersByCurrency({required String currency}) async {
+  Future<void> fetchNewUsdOffers() async {
     final queryParameters = <String, dynamic>{};
-    queryParameters['currency'] = currency;
-
+    queryParameters['currency'] = 'USD';
     try {
-      isOfferLoading(true);
+      isUsdNewOffersLoading(true);
       final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      var data = response.data;
-      offerDetailsEntity(OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      ));
-
-      var contents = offerDetailsEntity.value.content;
-      List<OfferEntity> fetchAllOffers = (contents as List)
-          .map((json) => OfferEntity.fromJson(json)).toList();
-
-      switch (currency) {
-        case 'USD':
-          newUsdOffers.assignAll(fetchAllOffers);
-          break;
-        case 'NGN':
-          newNgnOffers.assignAll(fetchAllOffers);
-          break;
-        case 'GBP':
-          newGbpOffers.assignAll(fetchAllOffers);
-          break;
-        case 'CAD':
-          newCadOffers.assignAll(fetchAllOffers);
-          break;
-        default:
-          newEurOffers.assignAll(fetchAllOffers);
-          break;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        newUsdOffers.assignAll(fetchAllOffers);
       }
-
-      print('All new offers fetched');
     } catch (err) {
       print('Wahala dey town');
     } finally {
-      isOfferLoading(false);
+      isUsdNewOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchNewNgnOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['currency'] = 'NGN';
+    try {
+      isNgnNewOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        newNgnOffers.assignAll(fetchAllOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isNgnNewOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchNewCadOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['currency'] = 'CAD';
+    try {
+      isCadNewOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        newCadOffers.assignAll(fetchAllOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isCadNewOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchNewEurOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['currency'] = 'EUR';
+    try {
+      isEurNewOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        newEurOffers.assignAll(fetchAllOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isEurNewOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchNewGbpOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['currency'] = 'GBP';
+    try {
+      isGbpNewOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        newGbpOffers.assignAll(fetchAllOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isGbpNewOffersLoading(false);
     }
   }
 
   Future<void> fetchTrendingOffers() async {
     final queryParameters = <String, dynamic>{};
     queryParameters['trending'] = 'trending';
-
     try {
-      isOfferLoading(true);
+      isTrendingOffersLoading(true);
       final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      var data = response.data;
-      offerDetailsEntity(OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      ));
-
-      var contents = offerDetailsEntity.value.content;
-      List<OfferEntity> fetchAllOffers = (contents as List)
-          .map((json) => OfferEntity.fromJson(json)).toList();
-
-      trendingOffers.assignAll(fetchAllOffers);
-
-      print('All trending offers fetched');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        trendingOffers.assignAll(fetchAllOffers);
+      }
     } catch (err) {
       print('Wahala dey town');
     } finally {
-      isOfferLoading(false);
+      isTrendingOffersLoading(false);
     }
   }
 
-  Future<void> fetchTrendingOffersByCurrency({required String currency}) async {
+  Future<void> fetchTrendingUsdOffers() async {
     final queryParameters = <String, dynamic>{};
     queryParameters['trending'] = 'trending';
-    queryParameters['currency'] = currency;
-
+    queryParameters['currency'] = 'USD';
     try {
-      isOfferLoading(true);
+      isUsdTrendingOffersLoading(true);
       final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      var data = response.data;
-      offerDetailsEntity(OfferDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      ));
-
-      var contents = offerDetailsEntity.value.content;
-      List<OfferEntity> fetchAllOffers = (contents as List)
-          .map((json) => OfferEntity.fromJson(json)).toList();
-
-      switch (currency) {
-        case 'USD':
-          trendingUsdOffers.assignAll(fetchAllOffers);
-          break;
-        case 'NGN':
-          trendingNgnOffers.assignAll(fetchAllOffers);
-          break;
-        case 'GBP':
-          trendingGbpOffers.assignAll(fetchAllOffers);
-          break;
-        case 'CAD':
-          trendingCadOffers.assignAll(fetchAllOffers);
-          break;
-        default:
-          trendingEurOffers.assignAll(fetchAllOffers);
-          break;
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        trendingUsdOffers.assignAll(fetchAllOffers);
       }
-
-      print('All trending offers fetched');
     } catch (err) {
       print('Wahala dey town');
     } finally {
-      isOfferLoading(false);
+      isUsdTrendingOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchTrendingNgnOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['trending'] = 'trending';
+    queryParameters['currency'] = 'NGN';
+    try {
+      isNgnTrendingOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        trendingNgnOffers.assignAll(fetchAllOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isNgnTrendingOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchTrendingCadOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['trending'] = 'trending';
+    queryParameters['currency'] = 'CAD';
+    try {
+      isCadTrendingOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        trendingCadOffers.assignAll(fetchAllOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isCadTrendingOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchTrendingEurOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['trending'] = 'trending';
+    queryParameters['currency'] = 'EUR';
+    try {
+      isEurTrendingOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        trendingEurOffers.assignAll(fetchAllOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isEurTrendingOffersLoading(false);
+    }
+  }
+
+  Future<void> fetchTrendingGbpOffers() async {
+    final queryParameters = <String, dynamic>{};
+    queryParameters['trending'] = 'trending';
+    queryParameters['currency'] = 'GBP';
+    try {
+      isGbpTrendingOffersLoading(true);
+      final response = await OfferService.instance.fetchAllOffers(queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var contents = response.data['content'];
+        List<OfferEntity> fetchAllOffers = (contents as List)
+            .map((json) => OfferEntity.fromJson(json)).toList();
+        trendingGbpOffers.assignAll(fetchAllOffers);
+      }
+    } catch (err) {
+      print('Wahala dey town');
+    } finally {
+      isGbpTrendingOffersLoading(false);
     }
   }
 
@@ -454,6 +593,7 @@ class OfferController extends GetxController {
       isFetchOfferByIdLoading(true);
       Get.to(() => OfferDetailsScreen());
       final response = await OfferService.instance.fetchOfferById(id);
+      print(response);
       var item = response.data;
       offerById(OfferEntity(
           id: item['id'],
@@ -473,11 +613,9 @@ class OfferController extends GetxController {
           createdDate: item['createdDate'],
           lastModifiedDate: item['lastModifiedDate']
       ));
-
-      // print('Offer by id fetched $offerById');
       print('Offer by id fetched ${offerById.value.amount}');
+      print('The real value is ${offerById.value.id}');
       await fetchAllOffers();
-      await fetchOffersByCurrency(currency: currency);
       onSuccess();
     } catch (err) {
       print('Wahala dey town');
@@ -488,10 +626,9 @@ class OfferController extends GetxController {
 
   Future<void> fetchAllNegotiatedOffers() async {
     try {
-      isLoading(true);
+      negotiatedOffers.isEmpty && isNegotiationOfferLoading(true);
       final response = await OfferService.instance.fetchAllNegotiatedOffers();
       var data = response.data;
-
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
@@ -500,7 +637,7 @@ class OfferController extends GetxController {
     } catch (err) {
       print('Wahala dey town');
     } finally {
-      isLoading(false);
+      isNegotiationOfferLoading(false);
     }
   }
 
@@ -512,13 +649,12 @@ class OfferController extends GetxController {
       isMyOffersLoading(true);
       final response = await OfferService.instance.fetchMyOffers(days, currency);
       var data = response.data;
-
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       myOffers.assignAll(fetchAllNegotiation);
     } catch (err) {
-      print('Wahala dey town $err');
+      print('Wahala dey for offer $err');
     } finally {
       isMyOffersLoading(false);
     }
@@ -532,13 +668,12 @@ class OfferController extends GetxController {
       isMyBidsLoading(true);
       final response = await OfferService.instance.fetchMyBids(days, currency);
       var data = response.data;
-
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       myBids.assignAll(fetchAllNegotiation);
     } catch (err) {
-      print('Wahala dey town');
+      print('Wahala dey for bid $err');
     } finally {
       isMyBidsLoading(false);
     }
@@ -546,7 +681,7 @@ class OfferController extends GetxController {
 
   Future<void> fetchMyOffersById({required String id, required VoidCallback onSuccess}) async {
     try {
-      isLoading(true);
+      Get.snackbar('', 'Fetching data ...', backgroundColor: Colors.yellow);
       final response = await OfferService.instance.fetchMyOffersById(id);
       var item = response.data;
       myOfferById(OfferEntity(
@@ -572,7 +707,7 @@ class OfferController extends GetxController {
     } catch (err) {
       print('Wahala dey town, $err');
     } finally {
-      isLoading(false);
+      // Get.closeAllSnackbars();
     }
   }
 
@@ -617,7 +752,7 @@ class OfferController extends GetxController {
       await fetchMyOffers(days: days, currency: currency);
       Get.snackbar('Success', response.data);
     } catch (e) {
-      Get.snackbar('Error`', 'Something went wrong');
+      // Get.snackbar('Error`', 'Something went wrong');
     } finally {
       isMyOffersLoading(false);
     }

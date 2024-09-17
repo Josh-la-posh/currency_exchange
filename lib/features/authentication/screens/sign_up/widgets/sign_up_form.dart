@@ -1,57 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
 import 'package:pouch/features/authentication/routes/names.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';
-import '../../../../../common/widgets/country_picker/country_picker.dart';
-import '../../../../../data/provider/auth_provider.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
-import '../../../apis/api.dart';
-import '../../email_verify/email_verify.dart';
+import '../../../controllers/auth_form_controller.dart';
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
-
-  @override
-  State<SignUpForm> createState() => _SignUpFormState();
-}
-
-class _SignUpFormState extends State<SignUpForm> {
+class SignUpForm extends StatelessWidget {
+  final authFormController = Get.find<AuthFormController>();
   final formKey = GlobalKey<FormState>();
-  bool obscurePasswordText = true;
-  bool obscureConPasswordText = true;
-
-  // Form input values
-  String firstName = '';
-  String lastName = '';
-  String email = '';
-  String phoneNo = '';
-  String password = '';
-  String confirmPass = '';
-  bool acceptTerms = false;
-
-  late AuthProvider authProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    authProvider = Provider.of<AuthProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-        listen: false);
-  }
 
   @override
   Widget build(BuildContext context) {
-    final darkMode = THelperFunctions.isDarkMode(context);
-
     return Column(
       children: [
         Form(
@@ -70,9 +36,9 @@ class _SignUpFormState extends State<SignUpForm> {
                 const SizedBox(height: TSizes.spaceBtwInputFields),
                 _buildConfirmPasswordField(context),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
-                _buildTermsAndConditions(),
+                _buildTermsAndConditions(context),
                 const SizedBox(height: TSizes.spaceBtwElements),
-                _buildSubmitButton(context),
+                _buildSubmitButton(context, formKey),
               ],
             ),
           ),
@@ -90,10 +56,8 @@ class _SignUpFormState extends State<SignUpForm> {
           child: _buildTextField(
             context: context,
             label: 'First Name',
-            onChanged: (value) {
-              firstName = value;
-            },
-            validator: TValidator.validateName,
+            controller: authFormController.firstName,
+            validator: TValidator.emptyFieldValidator,
           ),
         ),
         const SizedBox(width: TSizes.lg),
@@ -101,10 +65,8 @@ class _SignUpFormState extends State<SignUpForm> {
           child: _buildTextField(
             context: context,
             label: 'Last Name',
-            onChanged: (value) {
-              lastName = value;
-            },
-            validator: TValidator.validateName,
+            controller: authFormController.lastName,
+            validator: TValidator.emptyFieldValidator,
           ),
         ),
       ],
@@ -115,9 +77,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return _buildTextField(
       context: context,
       label: 'Email',
-      onChanged: (value) {
-        email = value;
-      },
+      controller: authFormController.email,
       validator: TValidator.validateEmail,
       keyboardType: TextInputType.emailAddress,
     );
@@ -130,6 +90,7 @@ class _SignUpFormState extends State<SignUpForm> {
         Text('Phone Number', style: Theme.of(context).textTheme.labelMedium),
         const SizedBox(height: TSizes.sm),
         IntlPhoneField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           initialCountryCode: 'NG',
           style: Theme.of(context).textTheme.labelMedium,
           pickerDialogStyle: PickerDialogStyle(
@@ -142,9 +103,9 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
           ),
           onChanged: (value) {
-            phoneNo = value.completeNumber;
+            authFormController.phoneNo.text = value.completeNumber;
+            print(authFormController.phoneNo.text);
           },
-          onSaved: (value) => phoneNo = value?.completeNumber ?? '',
           keyboardType: TextInputType.phone,
         ),
       ],
@@ -152,57 +113,41 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   Widget _buildPasswordField(BuildContext context) {
-    return _buildTextField(
+    return Obx(() => _buildTextField(
       context: context,
       label: 'Password',
-      onChanged: (value) {
-        password = value;
-      },
+      controller: authFormController.password,
       validator: TValidator.validatePassword,
-      obscureText: obscurePasswordText,
+      obscureText: authFormController.obscurePassword.value,
       suffixIcon: _buildToggleVisibilityIcon(
-        obscureText: obscurePasswordText,
-        onPressed: () {
-          setState(() {
-            obscurePasswordText = !obscurePasswordText;
-          });
-        },
+          obscureText: authFormController.obscurePassword.value,
+          onPressed: () => authFormController.toggleObscurePassword()
       ),
-    );
+    ));
   }
 
   Widget _buildConfirmPasswordField(BuildContext context) {
-    return _buildTextField(
+    return Obx(() => _buildTextField(
+      controller: authFormController.confirmPass,
       context: context,
       label: 'Confirm Password',
-      onChanged: (value) {
-        confirmPass = value;
-      },
-      validator: (value) => TValidator.validateConfirmPassword(value, password),
-      obscureText: obscureConPasswordText,
+      validator: (value) => TValidator.validateConfirmPassword(value, authFormController.password.text),
+      obscureText: authFormController.obscureConPassword.value,
       suffixIcon: _buildToggleVisibilityIcon(
-        obscureText: obscureConPasswordText,
-        onPressed: () {
-          setState(() {
-            obscureConPasswordText = !obscureConPasswordText;
-          });
-        },
+          obscureText: authFormController.obscureConPassword.value,
+          onPressed: () => authFormController.toggleObscureConPassword()
       ),
-    );
+    ));
   }
 
-  Widget _buildTermsAndConditions() {
+  Widget _buildTermsAndConditions(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Checkbox(
-          value: acceptTerms,
-          onChanged: (value) {
-            setState(() {
-              acceptTerms = value ?? false;
-            });
-          },
-        ),
+        Obx(() => Checkbox(
+          value: authFormController.acceptTerms.value,
+          onChanged: (value) => authFormController.acceptTerms.value = !authFormController.acceptTerms.value,
+        )),
         Expanded(
           child: Text(
             'I understand pouch Terms of Use',
@@ -213,35 +158,19 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  Widget _buildSubmitButton(BuildContext context) {
+  Widget _buildSubmitButton(BuildContext context, GlobalKey<FormState> formKey) {
     return SizedBox(
       height: 48,
-      child: acceptTerms
-          ? TElevatedButton(
-        onTap: () {
-          if (formKey.currentState!.validate()) {
-            formKey.currentState!.save();
-            AuthService.instance.createAccount(
-              firstName: firstName,
-              lastName: lastName,
-              email: email,
-              phoneNumber: phoneNo,
-              password: password,
-              onSuccess: () {
-                Get.to(() => EmailVerificationScreen(
-                  email: email,
-                  password: password,
-                ));
-              },
-            );
-          }
-        },
-        buttonText: 'Sign Up',
-      )
-          : ElevatedButton(
-        onPressed: null,
-        child: Center(child: Text('Sign Up')),
-      ),
+      child: Obx(() => TElevatedButton(
+        onTap: authFormController.acceptTerms.value
+            ? (authFormController.isLoading.value
+            ? null
+            : () => authFormController.submitSignUpForm(formKey: formKey))
+            : null,
+        buttonText: authFormController.isLoading.value
+            ? 'Signing in ...'
+            : 'Sign Up',
+      )),
     );
   }
 
@@ -262,7 +191,7 @@ class _SignUpFormState extends State<SignUpForm> {
   Widget _buildTextField({
     required BuildContext context,
     required String label,
-    required Function(String) onChanged,
+    required TextEditingController controller,
     required String? Function(String?) validator,
     TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
@@ -273,15 +202,14 @@ class _SignUpFormState extends State<SignUpForm> {
       children: [
         Text(label, style: Theme.of(context).textTheme.labelMedium),
         const SizedBox(height: TSizes.sm),
-        SizedBox(
-          child: TextFormField(
-            style: Theme.of(context).textTheme.labelMedium,
-            onChanged: onChanged,
-            validator: validator,
-            keyboardType: keyboardType,
-            obscureText: obscureText,
-            decoration: InputDecoration(suffixIcon: suffixIcon),
-          ),
+        TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: controller,
+          style: Theme.of(context).textTheme.labelMedium,
+          validator: validator,
+          keyboardType: keyboardType,
+          obscureText: obscureText,
+          decoration: InputDecoration(suffixIcon: suffixIcon),
         ),
       ],
     );

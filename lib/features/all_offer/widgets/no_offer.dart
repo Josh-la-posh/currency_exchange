@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';

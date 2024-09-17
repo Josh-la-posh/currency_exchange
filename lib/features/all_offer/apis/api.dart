@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/data/provider/transaction_provider.dart';
@@ -265,24 +264,7 @@ class OfferService {
       offerProvider.saveOfferResponse(offerResponse);
 
       // await getAllOffers(offerProvider: offerProvider, currency: '', date: '');
-      await NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getUsdOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getNgnOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getGbpOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getCadOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getEurOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getAllNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getUsdNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getNgnNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getGbpNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getCadNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getEurNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getAllTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getUsdTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getNgnTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getGbpTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getCadTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getEurTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+      
       offerProvider.resetCreateOfferDetails();
       AppNavigator.instance
           .removeAllNavigateToNavHandler(CREATE_SUCCESS_SCREEN);
@@ -307,25 +289,7 @@ class OfferService {
         data: {'negotiationAccepted': negotiationAccepted}
     ).then((response) async {
       await getAllNegotiatedOOffers(offerProvider: offerProvider);
-      await NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getUsdOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getNgnOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getGbpOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getCadOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getEurOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getAllNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getUsdNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getNgnNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getGbpNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getCadNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getEurNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getAllTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getUsdTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getNgnTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getGbpTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getCadTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getEurTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
+      
       onSuccess();
     }).catchError((error) {
       print(error.toString());
@@ -349,24 +313,7 @@ class OfferService {
           'negotiatorRate': negotiatorRate,
           'negotiatorAmount': negotiatorAmount})
     .then((response) async {
-      await NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getUsdOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getNgnOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getGbpOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getCadOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getEurOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getAllNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getUsdNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getNgnNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getGbpNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getCadNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getEurNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getAllTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getUsdTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getNgnTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getGbpTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getCadTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getEurTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
+      
       await getAllNegotiatedOOffers(offerProvider: offerProvider);
       Future.delayed(
           Duration(seconds: 2),
@@ -394,26 +341,8 @@ class OfferService {
 
   }) {
     _swapOffer(id: id).then((response) async {
-      await NoLoaderService.instance.getAllOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getUsdOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getNgnOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getGbpOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getCadOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getEurOffers(offerProvider: offerProvider, onFailure: (){}, onSuccess: (){});
-      await NoLoaderService.instance.getAllNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getUsdNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getNgnNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getGbpNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getCadNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getEurNewOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getAllTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getUsdTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getNgnTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getGbpTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getCadTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
-      await NoLoaderService.instance.getEurTrendingOffers(offerProvider: offerProvider, onSuccess: (){}, onFailure: (){});
       await NoLoaderService.instance.getTransactions(transactionProvider: transactionProvider);
-      await NoLoaderService.instance.getWallets(walletProvider: walletProvider, currency: '', transactionProvider: transactionProvider);
+      
       Get.to(() => AcceptOfferSuccessPage(
         amount: amount,
         creditedCurrency: creditedCurrency,

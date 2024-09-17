@@ -1,59 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/provider/wallet_provider.dart';
+import 'package:get/get.dart';
 import 'package:pouch/features/wallet/models/get_bank_account.dart';
-
-import '../../../data/modules/app_navigator.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../../features/wallet/controller/wallet_controller.dart';
 
-class AccountWidget extends StatefulWidget {
+class AccountWidget extends StatelessWidget {
   final bool darkMode;
   final GetBankAccountModel item;
-  const AccountWidget({
-    super.key,
-    required this.darkMode, required this.item
-  });
 
-  @override
-  State<AccountWidget> createState() => _AccountWidgetState();
-}
+  AccountWidget({
+    Key? key,
+    required this.darkMode,
+    required this.item,
+  }) : super(key: key);
 
-class _AccountWidgetState extends State<AccountWidget> {
-  var provider = Provider.of<WalletProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false);
-  bool isSelected = false;
+  final WalletController walletController = Get.find<WalletController>();
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
     return Column(
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.only(top: 12, bottom: 12, right: width > 400 ? 20 : 0, left: width > 400 ? TSizes.defaultSpace * 1.5 : 10),
+          padding: EdgeInsets.only(
+            top: 12,
+            bottom: 12,
+            right: width > 400 ? 20 : 0,
+            left: width > 400 ? TSizes.defaultSpace * 1.5 : 10,
+          ),
           decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              boxShadow: [
-                BoxShadow(
-                  color: TColors.black.withOpacity(0.3),
-                  offset: const Offset(2.3,3.87),
-                ),
-                BoxShadow(
-                    color: Colors.white.withOpacity(0.85),
-                    offset: const Offset(0.0,0.0),
-                    blurRadius: 0,
-                    spreadRadius: 0
-                ),
-                BoxShadow(
-                    color: const Color(0xFFD0CDE1).withOpacity(0.31),
-                    offset: const Offset(0.0,0.0),
-                    blurRadius: 0,
-                    spreadRadius: 0
-                ),
-              ]
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            boxShadow: [
+              BoxShadow(
+                color: TColors.black.withOpacity(0.3),
+                offset: const Offset(2.3, 3.87),
+              ),
+              BoxShadow(
+                color: Colors.white.withOpacity(0.85),
+                offset: const Offset(0.0, 0.0),
+                blurRadius: 0,
+                spreadRadius: 0,
+              ),
+              BoxShadow(
+                color: const Color(0xFFD0CDE1).withOpacity(0.31),
+                offset: const Offset(0.0, 0.0),
+                blurRadius: 0,
+                spreadRadius: 0,
+              ),
+            ],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,44 +60,44 @@ class _AccountWidgetState extends State<AccountWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Image(image: AssetImage(TImages.withdrawIcon)),
-                  const SizedBox(width: 10,),
+                  const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
-                          text: TextSpan(
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(0.43),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: width > 400 ? 18 : 14,
-                                  fontFamily: 'Roboto'
-                              ),
-                              children: <TextSpan> [
-                                TextSpan(
-                                  text: widget.item.bankName,
-                                ),
-                              ]
-                          )
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.43),
+                            fontWeight: FontWeight.w600,
+                            fontSize: width > 400 ? 18 : 14,
+                            fontFamily: 'Roboto',
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: item.bankName,
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: TSizes.md,),
+                      const SizedBox(height: TSizes.md),
                       SizedBox(
                         width: width * 0.2,
                         child: FittedBox(
                           fit: BoxFit.fill,
                           child: RichText(
-                              text: TextSpan(
-                                  style: TextStyle(
-                                      color: Colors.black.withOpacity(0.43),
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
-                                      fontFamily: 'Roboto'
-                                  ),
-                                  children: <TextSpan> [
-                                    TextSpan(
-                                      text: widget.item.accountNumber,
-                                    ),
-                                  ]
-                              )
+                            text: TextSpan(
+                              style: TextStyle(
+                                color: Colors.black.withOpacity(0.43),
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                fontFamily: 'Roboto',
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: item.accountNumber,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -107,24 +105,18 @@ class _AccountWidgetState extends State<AccountWidget> {
                   ),
                 ],
               ),
-              Checkbox(
-                  value: provider.selectedWithdrawalAccount?.id == widget.item.id,
-                  onChanged: (val){
-                    provider.saveWithdrawalBank(widget.item);
-                    if (provider.selectedWithdrawalAccount?.id == widget.item.id) {
-                      setState(() {
-                        isSelected = true;
-                      });
-                    } else {
-                      setState(() {
-                        isSelected = false;
-                      });
-                    }
-                  })
+              Obx(() => Checkbox(
+                value: walletController.selectedWithdrawalAccount.value.id == item.id,
+                onChanged: (val) {
+                  if (val != null && val) {
+                    walletController.saveWithdrawalBank(item);
+                  }
+                },
+              )),
             ],
           ),
         ),
-        SizedBox(height: 20,)
+        const SizedBox(height: 20),
       ],
     );
   }

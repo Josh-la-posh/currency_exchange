@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/utils/shimmer/order_shimmer.dart';
 import '../../../../../utils/layouts/list_layout.dart';
 import '../../../../../utils/shared/refresh_indicator/refresh_indicator.dart';
@@ -9,16 +8,19 @@ import '../../../widgets/no_offer.dart';
 import '../../../widgets/offer_item.dart';
 
 class UsdNewMarketList extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
 
   @override
   Widget build(BuildContext context) {
+    if (offerController.newUsdOffers.isEmpty) {
+      offerController.fetchNewUsdOffers();
+    }
     return Obx(() {
       if (offerController.isOfferLoading.value && offerController.newUsdOffers.isEmpty) {
         return OrderShimmer();
       } else {
         return CustomRefreshIndicator(
-          onRefresh: () => offerController.fetchOffersByCurrency(currency: 'USD'),
+          onRefresh: () => offerController.fetchNewUsdOffers(),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Column(

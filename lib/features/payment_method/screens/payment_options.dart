@@ -2,48 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/payment_method/screens/foreign_deposit.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/features/payment_method/screens/ussd_funding.dart';
+import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../common/widgets/buttons/elevated_button.dart';
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/validators/validation.dart';
 import '../../all_offer/decimal_formatter.dart';
-import '../../wallet/apis/api.dart';
 
-class PaymentOptionScreen extends StatefulWidget {
-  const PaymentOptionScreen({super.key});
+class PaymentOptionScreen extends StatelessWidget {
+  PaymentOptionScreen({Key? key}) : super(key: key);
 
-  @override
-  State<PaymentOptionScreen> createState() => _PaymentOptionScreenState();
-}
-
-class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
-  late WalletProvider walletProvider;
-  String _amount = '';
-
-  @override
-  void initState() {
-    super.initState();
-    walletProvider = Provider.of<WalletProvider>(
-      AppNavigator.instance.navigatorKey.currentContext as BuildContext,
-      listen: false,
-    );
-    if (walletProvider.bankList.isEmpty) {
-      WalletServices.instance.getBankList(walletProvider: walletProvider);
-    }
-  }
+  final controller = Get.find<WalletController>();
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    final walletProvider = Provider.of<WalletProvider>(context);
-
     return Scaffold(
       appBar: AppBar(leading: const BackButton()),
       body: SingleChildScrollView(
@@ -53,7 +30,7 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
           children: [
             _buildTitle(context, 'Funding method'),
             const SizedBox(height: TSizes.defaultSpace),
-            _buildPaymentOptions(context, walletProvider, darkMode),
+            _buildPaymentOptions(context, darkMode),
             const Divider(thickness: 1),
             _buildUSSDOption(context, darkMode),
             const Divider(thickness: 1),
@@ -83,22 +60,20 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
     );
   }
 
-  Widget _buildPaymentOptions(BuildContext context, WalletProvider walletProvider, bool darkMode) {
+  Widget _buildPaymentOptions(BuildContext context, bool darkMode) {
     return Column(
       children: [
-        _buildPaymentOptionTile(
+        Obx(() => _buildPaymentOptionTile(
           context,
           title: 'Bank transfer',
           image: TImages.bankTransfer,
           darkMode: darkMode,
-          isExpanded: walletProvider.showBankTransferOption,
+          isExpanded: controller.showBankTransferOption.value,
           onTap: () {
-            setState(() {
-              walletProvider.setShowBankTransferOption(!walletProvider.showBankTransferOption);
-            });
+            controller.toggleBankTransferOption();
           },
-          child: _buildBankTransferOptions(context, walletProvider),
-        ),
+          child: _buildBankTransferOptions(context),
+        )),
       ],
     );
   }
@@ -134,32 +109,30 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
     );
   }
 
-  Widget _buildBankTransferOptions(BuildContext context, WalletProvider walletProvider) {
+  Widget _buildBankTransferOptions(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2),
       child: Column(
         children: [
           _buildBankTransferOption(context, 'Flutterwave', TImages.flutterwave, () {
             _showAmountDialog(context, 'Enter Amount', () {
-              if (_amount.isEmpty) {
-                walletProvider.showErrorMessage();
+              if (controller.amount.value.isEmpty) {
+                controller.setShowErrorText(true);
               } else {
-                WalletServices.instance.fundWalletNairaTransfer(
-                  amount: _amount,
-                  walletProvider: walletProvider,
-                );
+                controller.setShowErrorText(false);
+                controller.isLoading.value ? null :
+                controller.fundingWalletViaNairaTransfer(amount: controller.amount.value);
               }
             });
           }),
           _buildBankTransferOption(context, 'Paystack', TImages.paystack, () {
             _showAmountDialog(context, 'Enter Amount', () {
-              if (_amount.isEmpty) {
-                walletProvider.showErrorMessage();
+              if (controller.amount.value.isEmpty) {
+                controller.setShowErrorText(true);
               } else {
-                WalletServices.instance.fundWalletNairaPaystack(
-                  amount: _amount,
-                  walletProvider: walletProvider,
-                );
+                controller.setShowErrorText(false);
+                controller.isLoading.value ? null :
+                controller.fundingWalletViaPaystack(amount: controller.amount.value);
               }
             });
           }),
@@ -193,7 +166,8 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
       darkMode: darkMode,
       isExpanded: false,
       onTap: () {
-        Get.to(() => const UssdFundingScreen());
+        controller.amount.value = '';
+        Get.to(() => UssdFundingScreen());
       },
     );
   }
@@ -219,7 +193,8 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
       darkMode: darkMode,
       isExpanded: false,
       onTap: () {
-        Get.to(() => const ForeignFundingScreen());
+        controller.amount.value = '';
+        Get.to(() => ForeignFundingScreen());
       },
     );
   }
@@ -251,44 +226,45 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
   }
 
   void _showAmountDialog(BuildContext context, String title, VoidCallback onContinue) {
-    showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          content: SizedBox(
-            height: 240,
-            width: 200,
-            child: Column(
-              children: [
-                _buildRichText(context, title, fontSize: 16),
-                const SizedBox(height: TSizes.defaultSpace * 1.4),
-                _buildAmountInputField(context),
-                const SizedBox(height: TSizes.sm),
-                Visibility(
-                  visible: walletProvider.showErrorText,
+    controller.amount.value = '';
+    controller.setShowErrorText(false);
+    Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        content: SizedBox(
+          height: 240,
+          width: 200,
+          child: Column(
+            children: [
+              _buildRichText(context, title, fontSize: 16),
+              const SizedBox(height: TSizes.defaultSpace * 1.4),
+              _buildAmountInputField(context),
+              const SizedBox(height: TSizes.sm),
+              Obx(() {
+                return Visibility(
+                  visible: controller.showErrorText.value,
                   child: _buildRichText(
                     context,
                     'Please, enter an amount',
                     fontSize: 10,
                   ),
-                ),
-                const SizedBox(height: TSizes.defaultSpace * 1.4),
-                SizedBox(
-                  height: 40,
-                  width: 140,
-                  child: TElevatedButton(
-                    onTap: onContinue,
-                    buttonText: 'Continue',
-                  ),
-                ),
-              ],
-            ),
+                );
+              }),
+              const SizedBox(height: TSizes.defaultSpace * 1.4),
+              SizedBox(
+                height: 40,
+                width: 140,
+                child: Obx(() => TElevatedButton(
+                  onTap: onContinue,
+                  buttonText: controller.isLoading.value ? 'Loading ...' : 'Continue',
+                )),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -299,19 +275,14 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
       keyboardType: TextInputType.number,
       inputFormatters: [
         DecimalTextInputFormatter(decimalRange: 2),
-        // Apply the formatter here
         FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
       ],
       style: Theme.of(context).textTheme.titleLarge,
       onChanged: (val) {
-        setState(() {
-          _amount = val;
-        });
+        controller.setAmount(val);
       },
       onSaved: (val) {
-        setState(() {
-          _amount = val!;
-        });
+        controller.setAmount(val ?? '');
       },
       decoration: const InputDecoration(
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -319,5 +290,6 @@ class _PaymentOptionScreenState extends State<PaymentOptionScreen> {
         hintText: 'Amount',
       ),
     );
+
   }
 }

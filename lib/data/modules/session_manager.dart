@@ -3,24 +3,18 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:pouch/data/modules/reset_controllers.dart';
 import 'package:pouch/features/authentication/screens/add_details/add_address_detail.dart';
-import 'package:pouch/features/authentication/screens/login/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
 import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/data/provider/subscription_provider.dart';
 import 'package:pouch/data/provider/transaction_provider.dart';
-import 'package:pouch/features/authentication/models/user_model.dart';
 import 'package:pouch/features/authentication/routes/names.dart';
 import 'package:pouch/features/home/routes/names.dart';
 import 'package:pouch/utils/loader.dart';
 import 'package:pouch/utils/local_storage/local_storage.dart';
-import 'package:pouch/utils/shared/notification/snackbar.dart';
 
 import '../../utils/constants/app.dart';
 import '../provider/auth_provider.dart';
-import '../provider/notificaton_provider.dart';
-import '../provider/wallet_provider.dart';
 
 class UserSession {
   static final UserSession _instance = UserSession._();
@@ -47,25 +41,18 @@ class UserSession {
 
   routeUserToHomeIfLoggedIn(
       AuthProvider authProvider,
-      WalletProvider walletProvider,
       TransactionProvider transactionProvider,
-      OfferProvider offerProvider,
       SubscriptionProvider subscriptionProvider,
-      NotificationProvider notificationProvider
       ) async {
     final userJson = _storage.getString(USER_DATA);
     var isLogin = await UserSession.instance.isLoginBool();
     bool canUserGoDashboard = userJson != null && isLogin == true;
     if (canUserGoDashboard) {
-      handleBackgroundAppRequest(
-          user: UserModel.fromJson(json.decode(userJson)),
-          authProvider: authProvider,
-          walletProvider: walletProvider,
-          transactionProvider: transactionProvider,
-          offerProvider: offerProvider,
-          subscriptionProvider: subscriptionProvider,
-          notificationProvider: notificationProvider
-      );
+      // handleBackgroundAppRequest(
+      //     user: UserModel.fromJson(json.decode(userJson)),
+      //     transactionProvider: transactionProvider,
+      //     subscriptionProvider: subscriptionProvider,
+      // );
       if (authProvider.user?.address == null) {
         Get.to(() => AddAddressDetail(
             email: USER_REMEMBER_ME_EMAIL,
@@ -75,8 +62,6 @@ class UserSession {
       } else {
         AppNavigator.instance.navigateToHandler(DASHBOARD_SCREEN_ROUTE);
       }
-          // }
-      // );
     }
   }
 
@@ -97,10 +82,11 @@ class UserSession {
     AppNavigator.instance.resetProviders();
     await resetController.clearData();
     // AppNavigator.instance.removeAllNavigateToNavHandler(AUTH_LOGIN_SCREEN_ROUTE);
-    handleShowCustomToast(
-        message: logoutMessage ??
-            '''You've successfully logged out of pouch.
-We hope to see you again soon.''');
+    Get.snackbar('', "You've successfully logged out of pouch. We hope to see you again soon.");
+//     handleShowCustomToast(
+//         message: logoutMessage ??
+//             '''You've successfully logged out of pouch.
+// We hope to see you again soon.''');
   }
 
   setRememberMeHandler({

@@ -13,17 +13,16 @@ import '../../negotiation_offer/screen/my_offer_detail.dart';
 import '../../negotiation_offer/screen/negotiation_accept_reject.dart';
 
 class NotificationScreen extends StatelessWidget {
-  final NotificationController notificationController = Get.put(NotificationController());
-  final OfferController offerController = Get.put(OfferController());
-  late OfferProvider offerProvider;
+  final notificationController = Get.put(NotificationController());
 
   @override
   Widget build(BuildContext context) {
+    print(notificationController.userNotifications.length);
     if (notificationController.userNotifications.isEmpty) {
       notificationController.fetchNotification();
     }
     if (notificationController.idsArray.isNotEmpty) {
-      notificationController.fetchNotification();
+      notificationController.updateNotification();
     }
     return Scaffold(
       appBar: AppBar(
@@ -31,7 +30,7 @@ class NotificationScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Obx(() {
-        return notificationController.isLoading.value == true
+        return notificationController.isLoading.value
             ? Center(child: CircularProgressIndicator())
             : CustomRefreshIndicator(
             onRefresh: () => notificationController.fetchNotification(),
@@ -67,38 +66,38 @@ class NotificationScreen extends StatelessWidget {
                               print(item.type);
                               if (item.type == 'SWAPPED' || item.type == 'EXPIRED') {
                                 print(item.type);
-                                await offerController.fetchMyOffersById(
+                                await notificationController.offerController.fetchMyOffersById(
                                     id: item.offerId.toString(),
                                     onSuccess: () {
                                       Get.to(() => MyNotificationOfferDetail(), arguments: {
-                                        'item': offerController.myOfferById
+                                        'item': notificationController.offerController.myOfferById
                                       });
                                     }
                                 );
                               } else if (item.type == 'NEGOTIATED') {
                                 print(item.type);
-                                await offerController.fetchMyOffersById(
+                                await notificationController.offerController.fetchMyOffersById(
                                     id: item.offerId.toString(),
                                     onSuccess: () {
-                                      Get.to(() => NegotiationAcceptRejectScreen(item: offerController.myOfferById.value));
+                                      Get.to(() => NegotiationAcceptRejectScreen(item: notificationController.offerController.myOfferById.value));
                                     }
                                 );
                               } else if (item.type == 'ACCEPT-REJECT') {
                                 print(item.type);
-                                await offerController.fetchMyBidsById(
+                                await notificationController.offerController.fetchMyBidsById(
                                     id: item.offerId.toString(),
                                     onSuccess: () {
-                                      Get.to(() => MyBidDetail(), arguments: offerController.myBidById.value);
+                                      Get.to(() => MyBidDetail(), arguments: notificationController.offerController.myBidById.value);
                                     }
                                 );
 
                               } else {
                                 print(item.type);
-                                await offerController.fetchOfferById(
+                                await notificationController.offerController.fetchOfferById(
                                     id: item.offerId.toString(),
                                     currency: '',
                                     onSuccess: () {
-                                      Get.to(() => OfferDetailsScreen());
+                                      // Get.to(() => OfferDetailsScreen());
                                     }
                                 );
                               }

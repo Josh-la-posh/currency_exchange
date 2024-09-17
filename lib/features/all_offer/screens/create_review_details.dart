@@ -1,31 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:pouch/common/widgets/currencyWidget.dart';
 import 'package:pouch/features/all_offer/controllers/create_offer_controller.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/common/widgets/custom_shapes/currency_widget_with_back.dart';
-import 'package:pouch/common/widgets/divider.dart';
-import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/features/home/icons/svg.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/enums.dart';
 import 'package:pouch/utils/constants/sizes.dart';
-import 'package:pouch/utils/helpers/pricing_calculator.dart';
-
 import '../../../utils/helpers/helper_functions.dart';
-import '../apis/api.dart';
 
 class CreateReviewDetailsScreen extends StatelessWidget {
-  final CreateOfferController createOfferController = Get.put(CreateOfferController());
-  final OfferController offerController = Get.put(OfferController());
-  final HelperFunctionsController helperFunctionsController = Get.put(HelperFunctionsController());
+  final createOfferController = Get.find<CreateOfferController>();
+  final offerController = Get.find<OfferController>();
+  final helperFunctionsController = Get.find<HelperFunctionsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +41,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // CurrencyWidget(),
-          // const SizedBox(height: TSizes.spaceBtwSections / 2,),
           Expanded(
             child: SingleChildScrollView(
               padding: EdgeInsets.only(bottom: 100),
@@ -97,7 +83,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     children: const <TextSpan> [
                                       TextSpan(
                                         text: 'I have',
-                                        // style: TextStyle(fontSize: TSizes.fontSize13)
                                       )
                                     ]
                                 )
@@ -201,7 +186,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     children: const <TextSpan> [
                                       TextSpan(
                                         text: 'Expected Returns',
-                                        // style: TextStyle(fontSize: TSizes.fontSize13)
                                       )
                                     ]
                                 )
@@ -235,7 +219,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     children: const <TextSpan> [
                                       TextSpan(
                                         text: 'Expires in',
-                                        // style: TextStyle(fontSize: TSizes.fontSize13)
                                       )
                                     ]
                                 )
@@ -246,9 +229,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                     children: <TextSpan> [
                                       TextSpan(
                                           text: createOfferController.expiryHour.value == 'Never' ? "Don't expire" : '${createOfferController.expiryHour.value} hour',
-                                          // text: '${difference.inHours}h ${difference.inMinutes % 60}m hour',
                                           style: const TextStyle(
-                                            // fontSize: TSizes.fontSize13,
                                               fontWeight: TSizes.fontWeightLg
                                           )
                                       )
@@ -363,7 +344,6 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                         children: const <TextSpan> [
                                           TextSpan(
                                             text: 'Fee',
-                                            // style: TextStyle(fontSize: TSizes.fontSize13)
                                           )
                                         ]
                                     )

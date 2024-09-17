@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/features/wallet/controller/add_bank_controller.dart';
+import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:provider/provider.dart';
-import 'package:pouch/common/widgets/buttons/app_bar.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/common/widgets/buttons/outlined_button.dart';
 import '../../../../data/provider/wallet_provider.dart';
@@ -11,80 +11,65 @@ import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../../../utils/validators/validation.dart';
 import '../../../payment_method/widgets/bank_list.dart';
-import '../../../wallet/apis/api.dart';
 
-class AddBankAccountScreen extends StatefulWidget {
-  const AddBankAccountScreen({super.key});
+class AddBankAccountScreen extends StatelessWidget {
+  final AddBankController addBankController = Get.put(AddBankController());
 
-  @override
-  State<AddBankAccountScreen> createState() => _AddBankAccountScreenState();
-}
-
-class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
-
-  String _accountNumber = '';
-  final formKey = GlobalKey<FormState>();
+  AddBankAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    var walletProvider = Provider.of<WalletProvider>(context);
     final darkMode = THelperFunctions.isDarkMode(context);
-
+    if (addBankController.walletController.bankList.isEmpty) {
+      addBankController.walletController.fetchBankList();
+    }
+    addBankController.walletController.verifyingAccount.value = false;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            walletProvider.bankAccountDetails == null
-                ?  Get.back()
-                : null;
-          },
-          icon: walletProvider.bankAccountDetails == null
-              ? Icon(Icons.keyboard_arrow_left_outlined)
-              : Text(''),
+        leading: Obx(() => IconButton(
+          onPressed: addBankController.walletController.bankAccountDetails.value.account_name == null ?  () {
+            addBankController.clearData();
+            Get.back();
+          } : null,
+          icon: addBankController.walletController.bankAccountDetails.value.account_name == null
+              ? const Icon(Icons.keyboard_arrow_left_outlined)
+              : const Text(''),
           style: IconButton.styleFrom(
               foregroundColor: TColors.primary,
               iconSize: 35
           ),
-        ),
+        )),
         title: Text(
-          ' Add Bank Account',
+          'Add Bank Account',
           style: Theme.of(context).textTheme.titleLarge,
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: Obx(() => SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 2, vertical: TSizes.defaultSpace),
           child: Form(
-            key: formKey,
+            key: addBankController.formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
-
-                if (walletProvider.bankAccountDetails == null)
-                RichText(
-                    text: TextSpan(
-                        style: Theme.of(context).textTheme.bodyMedium,
-                        children: const <TextSpan> [
-                          TextSpan(
-                            text: 'Select Bank Provider',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                            )
-                          ),
-                        ]
-                    )
-                ),
-
+                if (addBankController.walletController.bankAccountDetails.value.account_name == null)
+                  RichText(
+                      text: TextSpan(
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          children: const <TextSpan> [
+                            TextSpan(
+                                text: 'Select Bank Provider',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                )
+                            ),
+                          ]
+                      )
+                  ),
                 const SizedBox(height: TSizes.defaultSpace / 1.7),
-
-
                 // Search bank list
-
-                BankList(walletProvider: walletProvider),
-
+                BankList(),
                 const SizedBox(height: TSizes.defaultSpace),
 
                 // Account number
@@ -109,130 +94,75 @@ class _AddBankAccountScreenState extends State<AddBankAccountScreen> {
                     const SizedBox(height: 10,),
                     TextFormField(
                       validator: TValidator.acctNumValidator,
-                      enabled: walletProvider.bankAccountDetails == null
-                          ? true
-                          : false,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      controller: addBankController.accountNumberController,
+                      enabled: addBankController.walletController.bankAccountDetails.value.account_name == null,
                       style: Theme.of(context).textTheme.bodyMedium,
-                      initialValue: walletProvider.bankAccountDetails == null
-                          ? ''
-                          : walletProvider.bankAccountDetails?.account_number,
-                      onChanged: (val) {
-                        _accountNumber = val;
-                        formKey.currentState?.validate();
-                      },
-                      onSaved: (val) {
-                        setState(() {
-                          _accountNumber = val as String;
-                        });
-                      },
-
                     ),
                   ],
                 ),
-
-
-                if (walletProvider.bankAccountDetails != null)
-                const SizedBox(height: TSizes.defaultSpace),
+                if (addBankController.walletController.bankAccountDetails.value.account_name != null)
+                  const SizedBox(height: TSizes.defaultSpace),
 
                 // Account name
-
-                if (walletProvider.bankAccountDetails != null)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    RichText(
-                        text: TextSpan(
-                            style: TextStyle(
-                                color: darkMode ? Colors.white : Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                fontFamily: 'Roboto'
-                            ),
-                            children: const <TextSpan> [
-                              TextSpan(
-                                text: 'Account Name',
+                if (addBankController.walletController.bankAccountDetails.value.account_name != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RichText(
+                          text: TextSpan(
+                              style: TextStyle(
+                                  color: darkMode ? Colors.white : Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 12,
+                                  fontFamily: 'Roboto'
                               ),
-                            ]
-                        )
-                    ),
-                    const SizedBox(height: 10,),
-                    TextFormField(
-                      enabled: false,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      initialValue: walletProvider.bankAccountDetails?.account_name,
-                      onChanged: (val) {
-                        _accountNumber = val;
-                        formKey.currentState?.validate();
-                      },
-                      onSaved: (val) {
-                        setState(() {
-                          _accountNumber = val as String;
-                        });
-                      },
-
-                    ),
-                  ],
-                ),
+                              children: const <TextSpan> [
+                                TextSpan(
+                                  text: 'Account Name',
+                                ),
+                              ]
+                          )
+                      ),
+                      const SizedBox(height: 10,),
+                      TextFormField(
+                        enabled: false,
+                        initialValue: addBankController.walletController.bankAccountDetails.value.account_name == null
+                            ? ''
+                            : addBankController.walletController.bankAccountDetails.value.account_name,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
+                  ),
 
                 const SizedBox(height: TSizes.defaultSpace * 4,),
 
-
                 // Submit Button
-
                 TElevatedButton(
-                    onTap: () {
-                      final detail = walletProvider.bankAccountDetails;
-                      final bank = walletProvider.selectedBank;
-                      if (formKey.currentState!.validate()) {
-                        formKey.currentState!.save();
-                        if (bank == null) {
-                          walletProvider.showErrorMessage();
-                        } else {
-                          if (detail == null) {
-                            WalletServices.instance.verifyBankAccount(
-                              accountNumber: _accountNumber,
-                              bankCode: bank.code.toString(),
-                              walletProvider: walletProvider
-                            );
-                          } else {
-                            WalletServices.instance.addLocalBank(
-                                accountNumber: detail!.account_number,
-                                accountName: detail!.account_name,
-                                bankName: bank.name.toString(),
-                                bankCode: bank.code.toString(),
-                                walletProvider: walletProvider
-                            );
-                          }
-                        }
-                      }
-                    },
-                    buttonText: walletProvider.bankAccountDetails == null
-                        ? 'Proceed' : 'Submit'
+                    onTap: addBankController.walletController.verifyingAccount.value
+                        ? null
+                        : addBankController.submitForm,
+                    buttonText: addBankController.walletController.bankAccountDetails.value.account_name == null
+                        ? addBankController.walletController.verifyingAccount.value
+                        ? 'Verifying ...'
+                        : 'Proceed'
+                        : 'Submit'
                 ),
 
                 // Cancel Button
-                if (walletProvider.bankAccountDetails != null)
-                const SizedBox(height: TSizes.defaultSpace),
+                if (addBankController.walletController.bankAccountDetails.value.account_name != null)
+                  const SizedBox(height: TSizes.defaultSpace),
 
-                if (walletProvider.bankAccountDetails != null)
-                TOutlinedButton(
-                    onTap: () {
-                      setState(() {
-                        walletProvider.saveBankAccountDetails(null);
-                        _accountNumber = '';
-                        walletProvider.setSelectedBank(null);
-                      });
-                    },
-                    buttonText: 'Cancel'
-                )
-
-
-
+                if (addBankController.walletController.bankAccountDetails.value.account_name != null)
+                  TOutlinedButton(
+                      onTap: () => addBankController.clearData(),
+                      buttonText: 'Cancel'
+                  )
               ],
             ),
           ),
         ),
-      ),
+      )),
     );
   }
 }

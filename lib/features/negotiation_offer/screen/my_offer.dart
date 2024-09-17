@@ -7,37 +7,36 @@ import 'package:pouch/features/negotiation_offer/widget/my_offer_item.dart';
 import 'package:pouch/features/negotiation_offer/widget/no_negotiation.dart';
 import '../../../utils/layouts/list_layout.dart';
 
-class MyOfferScreen extends StatelessWidget {
+class MyOfferScreen extends GetView<OfferController> {
   final bool darkMode;
   String? length;
-  final OfferController offerController = Get.put(OfferController());
   MyOfferScreen({
     super.key, required this.darkMode, this.length
   });
 
   Widget build(BuildContext context) {
     return Obx(() {
-      if (offerController.isMyOffersLoading.value) {
+      if (controller.isMyOffersLoading.value) {
         return OrderShimmer(length: length);
       } else {
         return CustomRefreshIndicator(
-          onRefresh: () => offerController.fetchMyBids(days: '', currency: ''),
+          onRefresh: () => controller.fetchMyBids(days: '', currency: ''),
           child: SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
-                offerController.myOffers.isEmpty
+                controller.myOffers.isEmpty
                     ? LayoutBuilder(builder: (context, constraints) {
                   return const NoNegotiationScreen(title: 'Offer',);
                 })
                     : TListLayout(
                     itemCount: length != null
-                        ? offerController.myOffers.length < int.parse(length!)
-                        ? offerController.myOffers.length
+                        ? controller.myOffers.length < int.parse(length!)
+                        ? controller.myOffers.length
                         : int.parse(length!)
-                        : offerController.myOffers.length,
+                        : controller.myOffers.length,
                     itemBuilder: (_, index) {
-                      final item = offerController.myOffers[index];
+                      final item = controller.myOffers[index];
                       return MyOfferItem(item: item);
                     }
                 )

@@ -5,7 +5,7 @@ import 'names.dart';
 
 
 Map<String, WidgetBuilder> walletRoute = {
-  WALLET_SCREEN_ROUTE: (context) => const AuthGuard(
+  WALLET_SCREEN_ROUTE: (context) => AuthGuard(
     widget: WalletDashboardScreen(),
   ),
 };

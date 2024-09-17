@@ -17,51 +17,50 @@ import '../../all_offer/apis/api.dart';
 import '../widget/negotiation_list.dart';
 
 class NegotiationOfferScreen extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
 
   @override
   Widget build(BuildContext context) {
+    offerController.fetchAllNegotiatedOffers();
     final darkMode = THelperFunctions.isDarkMode(context);
-    return SafeArea(
-      child: Scaffold(
-        // backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          centerTitle: true,
-          title: RichText(
-              text: TextSpan(
-                  style: Theme.of(context).textTheme.labelSmall,
-                  children: const <TextSpan> [
-                    TextSpan(
-                        text: 'Offers Review',
-                        style: TextStyle(fontSize: TSizes.fontSize16, fontWeight: TSizes.fontWeightMd)
-                    )
-                  ]
-              )
-          ),
+    return Scaffold(
+      // backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        centerTitle: true,
+        title: RichText(
+            text: TextSpan(
+                style: Theme.of(context).textTheme.labelSmall,
+                children: const <TextSpan> [
+                  TextSpan(
+                      text: 'Offers Review',
+                      style: TextStyle(fontSize: TSizes.fontSize16, fontWeight: TSizes.fontWeightMd)
+                  )
+                ]
+            )
         ),
-        body: Obx(() {
-          if (offerController.isLoading.value) {
-            return SizedBox(
-                height: 100,
-                child: Center(
-                    child: CircularProgressIndicator()
-                )
-            );
-          } else {
-            return Container(
-              height: THelperFunctions.screenHeight() - TSizes.appBarHeight,
-              child: CustomRefreshIndicator(
-                  onRefresh: () => offerController.fetchAllNegotiatedOffers(),
-                  child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: NegotiationList(darkMode: darkMode))
-              ),
-            );
-          }
-        }),
       ),
+      body: Obx(() {
+        if (offerController.isNegotiationOfferLoading.value) {
+          return SizedBox(
+              height: 100,
+              child: Center(
+                  child: CircularProgressIndicator()
+              )
+          );
+        } else {
+          return Container(
+            height: THelperFunctions.screenHeight() - TSizes.appBarHeight,
+            child: CustomRefreshIndicator(
+                onRefresh: () => offerController.fetchAllNegotiatedOffers(),
+                child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: NegotiationList(darkMode: darkMode))
+            ),
+          );
+        }
+      }),
     );
   }
 }

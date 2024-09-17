@@ -1,21 +1,16 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/custom_time_line.dart';
-import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/layouts/list_layout.dart';
 import '../widgets/success_page.dart';
 
 class CreateOfferSuccessPage extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<OfferProvider>(context);
     return Scaffold(
       body: SuccessScreenWidget(
         text: 'You have successfully created an offer',
@@ -39,7 +34,6 @@ class CreateOfferSuccessPage extends StatelessWidget {
                                           ? 'Now'
                                           : THelperFunctions.getFormattedTime(offerController.createOfferResponse.value.createdDate.toString()),
                                 style: TextStyle(
-                                    // color: TColors.textPrimary.withOpacity(0.6),
                                     height: 1.5
                                 )
                             ),

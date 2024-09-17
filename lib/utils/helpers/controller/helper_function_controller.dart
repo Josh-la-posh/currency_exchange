@@ -104,10 +104,6 @@ class HelperFunctionsController extends GetxController {
     }
   }
 
-  // Additional methods can be refactored similarly
-  // ...
-
-  // Show text for a duration
   Future<void> showTextForDuration(BuildContext context, String text,
       {Duration duration = const Duration(seconds: 3)}) async {
     final overlayState = Overlay.of(context);
@@ -128,25 +124,21 @@ class HelperFunctionsController extends GetxController {
           ),
         ));
 
-    overlayState?.insert(overlayEntry);
+    overlayState.insert(overlayEntry);
     await Future.delayed(duration);
     overlayEntry.remove();
   }
 
-  // Money formatting
-  // String moneyFormatter(String amount) {
-  //   final formatter = NumberFormat("#,##0.00");
-  //   double money = double.parse(amount);
-  //   return formatter.format(money);
-  // }
   String moneyFormatter(String amount) {
-    // Clean the amount by removing any non-numeric or non-dot characters except commas
     String cleanedAmount = amount.replaceAll(RegExp(r'[^\d.,]'), '');
 
-    // Remove commas if present, so we can handle the parsing uniformly
     cleanedAmount = cleanedAmount.replaceAll(',', '');
 
-    // Check if cleanedAmount is empty or invalid
+    if (amount == null || amount.isEmpty) {
+      final formatter = NumberFormat("#,##0.00");
+      return formatter.format(0);
+    }
+
     if (cleanedAmount.isEmpty || cleanedAmount == '.' || cleanedAmount == ',') {
       return '0.00';
     }
@@ -159,13 +151,11 @@ class HelperFunctionsController extends GetxController {
       return '0.00';
     }
 
-    // Format the number with commas for thousands and two decimal places
     final formatter = NumberFormat("#,##0.00");
     return formatter.format(money);
   }
 
 
-  // Dispose of controllers, if necessary
   @override
   void onClose() {
     super.onClose();

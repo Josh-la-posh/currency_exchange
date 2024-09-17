@@ -1,21 +1,21 @@
 class PaystackModel {
-  final String reference;
-  final String status;
-  final String display_text;
-  final String account_name;
-  final String account_number;
-  final Map<String, dynamic> bank;
-  final String account_expires_at;
+  String? reference;
+  String? status;
+  String? display_text;
+  String? account_name;
+  String? account_number;
+  Map<String, dynamic>? bank;
+  String? account_expires_at;
 
 
-  const PaystackModel({
-    required this.reference,
-    required this.status,
-    required this.display_text,
-    required this.account_name,
-    required this.account_number,
-    required this.bank,
-    required this.account_expires_at
+  PaystackModel({
+    this.reference,
+    this.status,
+    this.display_text,
+    this.account_name,
+    this.account_number,
+    this.bank,
+    this.account_expires_at
   });
 
   factory PaystackModel.fromJson(Map<String, dynamic> json) => PaystackModel(

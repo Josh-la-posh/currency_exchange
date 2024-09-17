@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:pouch/features/authentication/apis/api.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';
@@ -82,20 +79,20 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
   }
 
   void handleSendEmailVerificationOTP() {
-    AuthService.instance.generateOtp(
-        email: widget.email,
-        onSuccess: () {
-          _otpTimer!.startTimer();
-          setState(() {
-            canResendOtp = false;
-          });
-        },
-        onFailure: () {
-          setState(() {
-            canResendOtp = true;
-          });
-        }
-    );
+    // AuthService.instance.generateOtp(
+    //     email: widget.email,
+    //     onSuccess: () {
+    //       _otpTimer!.startTimer();
+    //       setState(() {
+    //         canResendOtp = false;
+    //       });
+    //     },
+    //     onFailure: () {
+    //       setState(() {
+    //         canResendOtp = true;
+    //       });
+    //     }
+    // );
   }
 
   @override
@@ -227,11 +224,11 @@ class _ResetPasswordOtpFormState extends State<ResetPasswordOtpForm> {
                               _canSendOtp = true;
                             });
                             if ( _otpCode != '') {
-                              AuthService.instance.resetPassword(
-                                  otp: int.parse(_otpCode!),
-                                  newPassword: _password.toString(),
-                                  onSuccess: handleEmailVerificationSuccess
-                              );
+                              // AuthService.instance.resetPassword(
+                              //     otp: int.parse(_otpCode!),
+                              //     newPassword: _password.toString(),
+                              //     onSuccess: handleEmailVerificationSuccess
+                              // );
                             }
                           }
                           // if (formKey.currentState!.validate()) {

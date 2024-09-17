@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/features/subscription/apis/api.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/enums.dart';
-import 'package:pouch/utils/constants/image_strings.dart';
-import '../../../data/provider/subscription_provider.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../../../utils/validators/validation.dart';
+import '../controller/subscription_controller.dart';
 
-class SubscriptionForm extends StatefulWidget {
-  const SubscriptionForm({super.key});
-
-  @override
-  State<SubscriptionForm> createState() => _SubscriptionFormState();
-}
-
-class _SubscriptionFormState extends State<SubscriptionForm> {
+class SubscriptionForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
+
+  SubscriptionForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<SubscriptionProvider>(context);
+    final controller = Get.find<SubscriptionController>();
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Form(
@@ -34,16 +27,16 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
             'They have',
             style: Theme.of(context).textTheme.labelSmall,
           ),
-          Container(
+          Obx(() => Container(
             decoration: BoxDecoration(
               color: darkMode ? TColors.textPrimary : TColors.textFieldBackground,
-              border: Border.all(color: darkMode ? Colors.black : TColors.secondaryBorder30,),
+              border: Border.all(color: darkMode ? Colors.black : TColors.secondaryBorder30),
               borderRadius: BorderRadius.circular(TSizes.borderRadiusSm),
             ),
             child: DropdownButtonFormField<Currency>(
               dropdownColor: darkMode ? TColors.textPrimary : Colors.white,
               isExpanded: true,
-              value: provider.createSubscription?.debitedCurrency,
+              value: controller.debitedCurrency.value,
               icon: RotatedBox(
                 quarterTurns: 3,
                 child: Padding(
@@ -56,11 +49,10 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                 ),
               ),
               onChanged: (val) {
-                provider.setDebitedCurrency(val as Currency);
-                _formKey.currentState?.validate();
+                controller.setDebitedCurrency(val as Currency);
               },
               items: [
-                for (final item in provider.currencies)
+                for (final item in controller.currencies)
                   DropdownMenuItem<Currency>(
                     value: item,
                     child: Padding(
@@ -73,22 +65,22 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                   ),
               ],
             ),
-          ),
+          )),
           const SizedBox(height: TSizes.spaceBtwInputFields),
           Text(
             'They need',
             style: Theme.of(context).textTheme.labelSmall,
           ),
-          Container(
+          Obx(() => Container(
             decoration: BoxDecoration(
               color: darkMode ? TColors.textPrimary : TColors.textFieldBackground,
-              border: Border.all(color: darkMode ? Colors.black : TColors.secondaryBorder30,),
+              border: Border.all(color: darkMode ? Colors.black : TColors.secondaryBorder30),
               borderRadius: BorderRadius.circular(TSizes.borderRadiusSm),
             ),
             child: DropdownButtonFormField<Currency>(
               dropdownColor: darkMode ? TColors.textPrimary : Colors.white,
               isExpanded: true,
-              value: provider.createSubscription?.creditedCurrency,
+              value: controller.creditedCurrency.value,
               icon: RotatedBox(
                 quarterTurns: 3,
                 child: Padding(
@@ -101,11 +93,10 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                 ),
               ),
               onChanged: (val) {
-                provider.setCreditedCurrency(val!);
-                _formKey.currentState?.validate();
+                controller.setCreditedCurrency(val!);
               },
               items: [
-                for (final item in provider.currencies)
+                for (final item in controller.currencies)
                   DropdownMenuItem<Currency>(
                     value: item,
                     child: Row(
@@ -119,17 +110,17 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                   ),
               ],
             ),
-          ),
+          )),
           const SizedBox(height: TSizes.spaceBtwInputFields),
           Text(
-            'Rate Range per ${getCurrencyName(provider.createSubscription?.debitedCurrency ?? Currency.USD)}',
+            'Rate Range per ${getCurrencyName(controller.debitedCurrency.value ?? Currency.USD)}',
             style: Theme.of(context).textTheme.labelSmall,
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
           Row(
             children: [
               Expanded(
-                child: Container(
+                child: Obx(() => Container(
                   decoration: BoxDecoration(
                     color: darkMode ? TColors.textPrimary : TColors.textFieldBackground,
                     borderRadius: BorderRadius.circular(TSizes.buttonRadius),
@@ -139,15 +130,16 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                     ),
                   ),
                   child: TextFormField(
-                    validator: TValidator.numValidator,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: TValidator.emptyFieldValidator,
                     onChanged: (val) {
-                      provider.setMinRate(val);
+                      controller.setMinRate(val);
                       _formKey.currentState?.validate();
                     },
-                    onSaved: (val) => provider.setMinRate(val!),
-                    keyboardType: TextInputType.phone,
+                    onSaved: (val) => controller.setMinRate(val!),
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      labelText: 'Minimum rate ${provider.createSubscription?.debitedCurrency == Currency.NGN ? '' : getCurrencyName(provider.createSubscription?.debitedCurrency ?? Currency.USD)}',
+                      labelText: 'Minimum rate ${controller.debitedCurrency.value == Currency.NGN ? '' : getCurrencyName(controller.debitedCurrency.value ?? Currency.USD)}',
                       labelStyle: TextStyle(
                         fontSize: TSizes.fontSize11,
                         color: darkMode ? Colors.white : TColors.textPrimary.withOpacity(0.7),
@@ -164,11 +156,11 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                       ),
                     ),
                   ),
-                ),
+                )),
               ),
               const SizedBox(width: TSizes.xl),
               Expanded(
-                child: Container(
+                child: Obx(() => Container(
                   decoration: BoxDecoration(
                     color: darkMode ? TColors.textPrimary : TColors.textFieldBackground,
                     borderRadius: BorderRadius.circular(TSizes.buttonRadius),
@@ -178,15 +170,16 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                     ),
                   ),
                   child: TextFormField(
-                    validator: TValidator.numValidator,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: TValidator.emptyFieldValidator,
                     onChanged: (val) {
-                      provider.setMaxRate(val);
+                      controller.setMaxRate(val);
                       _formKey.currentState?.validate();
                     },
-                    onSaved: (val) => provider.setMaxRate(val!),
-                    keyboardType: TextInputType.phone,
+                    onSaved: (val) => controller.setMaxRate(val!),
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                      labelText: 'Maximum rate ${provider.createSubscription?.debitedCurrency == Currency.NGN ? '' : getCurrencyName(provider.createSubscription?.debitedCurrency ?? Currency.USD)}',
+                      labelText: 'Maximum rate ${controller.debitedCurrency.value == Currency.NGN ? '' : getCurrencyName(controller.debitedCurrency.value ?? Currency.USD)}',
                       labelStyle: TextStyle(
                         fontSize: TSizes.fontSize11,
                         color: darkMode ? Colors.white : TColors.textPrimary.withOpacity(0.7),
@@ -203,26 +196,29 @@ class _SubscriptionFormState extends State<SubscriptionForm> {
                       ),
                     ),
                   ),
-                ),
+                )),
               ),
             ],
           ),
           const SizedBox(height: TSizes.spaceBtwSections * 3),
-          TElevatedButton(
-            onTap: () {
+          Obx(() => TElevatedButton(
+            onTap: controller.isLoading.value ? null : () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
-                SubscriptionService.instance.createSubscription(
-                  subscriptionProvider: provider,
-                  debitedCurrency: getCurrencyName(provider.createSubscription?.debitedCurrency ?? Currency.USD),
-                  creditedCurrency: getCurrencyName(provider.createSubscription?.creditedCurrency ?? Currency.USD),
-                  minRate: provider.createSubscription!.minRate,
-                  maxRate: provider.createSubscription!.maxRate,
+                controller.createSubscription(
+                    debitedCurrency: getCurrencyName(controller.debitedCurrency.value),
+                    creditedCurrency: getCurrencyName(controller.creditedCurrency.value),
+                    minRate: int.parse(controller.minRate.value),
+                    maxRate: int.parse(controller.maxRate.value),
+                    onSuccess: (){
+                      Get.back();
+                      controller.clearForm();
+                    }
                 );
               }
             },
-            buttonText: 'Subscribe',
-          ),
+            buttonText: controller.isLoading.value ? 'Subscribing ...' : 'Subscribe',
+          )),
         ],
       ),
     );

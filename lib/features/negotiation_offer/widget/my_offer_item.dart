@@ -18,8 +18,7 @@ import '../../../utils/constants/texts.dart';
 import '../../all_offer/models/negotiate_offer_model.dart';
 import '../../transaction/icons/svg.dart';
 
-class MyOfferItem extends StatelessWidget {
-  final OfferController offerController = Get.put(OfferController());
+class MyOfferItem extends GetView<OfferController> {
   final OfferEntity item;
   MyOfferItem({
     super.key,
@@ -43,7 +42,7 @@ class MyOfferItem extends StatelessWidget {
                       height: 68,
                       width: 60,
                       child: ElevatedButton(
-                        onPressed: () => offerController.deleteOffer(id: item.id.toString(), currency: '', days: ''),
+                        onPressed: () => controller.deleteOffer(id: item.id.toString(), currency: '', days: ''),
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)

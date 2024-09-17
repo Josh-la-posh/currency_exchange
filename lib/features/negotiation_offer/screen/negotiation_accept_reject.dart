@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
@@ -15,7 +14,7 @@ import '../../all_offer/widgets/success_page.dart';
 
 class NegotiationAcceptRejectScreen extends StatelessWidget {
   final OfferEntity? item;
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
   NegotiationAcceptRejectScreen({super.key, this.item});
 
   @override
@@ -306,12 +305,13 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                           const SizedBox(height: TSizes.spaceBtwSections * 0.3),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                            child: TElevatedButton(onTap: (){
+                            child: TElevatedButton(
+                                onTap: offerController.isNegotiationOfferLoading.value ? null : (){
                               offerController.acceptingOrRejectingOffer(
                                   id: item!.id.toString(),
                                   currency: item!.debitedCurrency.toString(),
                                   negotiationAccepted: true,
-                                  onSuccess: () => offerController.showAcceptOfferMsg.value
+                                  onSuccess: () => offerController.showAcceptOfferMsg.value = true
                               );
                             },
                                 buttonText: 'Accept'),
@@ -322,12 +322,12 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                               height: 48,
                               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: offerController.isNegotiationOfferLoading.value ? null : () {
                                   offerController.acceptingOrRejectingOffer(
                                       id: item!.id.toString(),
                                       currency: item!.debitedCurrency.toString(),
                                       negotiationAccepted: false,
-                                      onSuccess: () => offerController.showRejectOfferMsg.value
+                                      onSuccess: () => offerController.showRejectOfferMsg.value = false
                                   );
                                 },
                                 child: const Text(

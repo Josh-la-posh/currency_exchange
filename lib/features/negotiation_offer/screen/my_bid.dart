@@ -15,7 +15,7 @@ import '../../../utils/layouts/list_layout.dart';
 class MyBidScreen extends StatelessWidget {
   final bool darkMode;
   String? length;
-  final OfferController offerController = Get.put(OfferController());
+  final offerController = Get.find<OfferController>();
   MyBidScreen({
     super.key, required this.darkMode, this.length
   });

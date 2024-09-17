@@ -7,8 +7,6 @@ import 'package:pouch/utils/constants/enums.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/layouts/bottom_sheet_widget.dart';
 import 'package:pouch/utils/layouts/list_layout.dart';
-
-import '../../../data/provider/currency_provider.dart';
 import '../../../utils/constants/colors.dart';
 
 class DateList extends StatelessWidget {

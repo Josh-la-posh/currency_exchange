@@ -1,5 +1,6 @@
 plugins {
     id "com.android.application"
+    id "com.smileidentity.smile-id-android"
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
@@ -88,6 +89,8 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
@@ -116,8 +119,8 @@ flutter {
 }
 
 dependencies {
-//    implementation 'com.smileidentity:smile-id-ui:<latest_version>'
-//    implementation 'com.smileidentity:smile-id-sdk:<latest_version>'
-//    implementation 'com.smileidentity:netjava:<latest_version>'// currently (0.0.8)
+//    implementation 'com.smileidentity:smile-id-ui:1.0.18'
+//    implementation 'com.smileidentity:smile-id-sdk:7.3.35'
+//    implementation 'com.smileidentity:netjava:1.0.5'// currently (0.0.8)
     implementation("androidx.compose.runtime:runtime:$version")
 }

@@ -1,10 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:provider/provider.dart';
-import 'package:pouch/data/provider/transaction_provider.dart';
-import 'package:pouch/features/wallet/apis/api.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
@@ -15,9 +11,11 @@ import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 import '../../home/routes/names.dart';
+import '../../wallet/controller/wallet_controller.dart';
 
 class PaystackPaymentScreen extends StatelessWidget {
   String? amount;
+  final walletController = Get.find<WalletController>();
   PaystackPaymentScreen({super.key, this.amount});
 
   @override
@@ -26,13 +24,11 @@ class PaystackPaymentScreen extends StatelessWidget {
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
     var walletProvider = Provider.of<WalletProvider>(
         AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-    var transactionProvider = Provider.of<TransactionProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
 
     final darkMode = THelperFunctions.isDarkMode(context);
 
     final item = walletProvider.paystackModel;
-    final controller = Get.put(NavigationController());
+    final controller = Get.find<NavigationController>();
 
     return Scaffold(
       backgroundColor: darkMode ? TColors.black : const Color(0xFFE9D9FF).withOpacity(0.9),
@@ -168,9 +164,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                       fontFamily: 'Roboto'
                                   ),
                                   children: <TextSpan> [
-                                    TextSpan(
-                                      text: '${item?.bank['name']}',
-                                    ),
+                                    // TextSpan(
+                                    //   text: '${item?.bank['name']}',
+                                    // ),
                                   ]
                               )
                           ),
@@ -223,9 +219,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                       fontFamily: 'Roboto'
                                   ),
                                   children: <TextSpan> [
-                                    TextSpan(
-                                      text: 'Expires in ${THelperFunctions.getTimeDifference(item!.account_expires_at)}',
-                                    ),
+                                    // TextSpan(
+                                    //   text: 'Expires in ${THelperFunctions.getTimeDifference(item!.account_expires_at)}',
+                                    // ),
                                   ]
                               )
                           ),
@@ -236,9 +232,10 @@ class PaystackPaymentScreen extends StatelessWidget {
                   const SizedBox(height: TSizes.defaultSpace * 4),
                   GestureDetector(
                     onTap: () async {
-                      await NoLoaderService.instance.getWallets(transactionProvider: transactionProvider ,walletProvider: walletProvider, currency: '');
+                      await walletController.fetchWallets(currency: '');
                       controller.selectedIndex.value = 3;
-                      AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                      Get.offAll(() => NavigationMenu());
+                      // AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                     },
                     child: Container(
                       width: double.infinity,

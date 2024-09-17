@@ -22,7 +22,7 @@ handleShowCustomToast({
       key: Key(key),
       dismissDirection: DismissDirection.up,
       behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.only(bottom: THelperFunctions.screenHeight() * 0.9, left: TSizes.defaultSpace, right: TSizes.defaultSpace),
+      margin: EdgeInsets.only(bottom: THelperFunctions.screenHeight() * 0.7, left: TSizes.defaultSpace, right: TSizes.defaultSpace),
       duration: time ?? Duration(seconds: 6),
       padding: const EdgeInsets.all(0),
       backgroundColor: TColors.white,
