@@ -18,8 +18,8 @@ class NoWalletScreen extends StatelessWidget {
           children: [
             const Image(image: AssetImage(TImages.emptyScreen)),
             const SizedBox(height: TSizes.spaceBtwItems,),
-            Text('No Wallet', style: Theme.of(context).textTheme.titleMedium,),
-            Text('You have not created any wallet', style: Theme.of(context).textTheme.labelMedium,),
+            Text('No Account', style: Theme.of(context).textTheme.titleMedium,),
+            Text('You have not added any bank account details', style: Theme.of(context).textTheme.labelMedium,),
           ],
         ),
       ),

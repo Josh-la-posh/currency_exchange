@@ -1,10 +1,13 @@
 import 'package:get/get.dart';
+import 'package:pouch/data/modules/storage_session_controller.dart';
 import 'package:pouch/features/all_offer/controllers/create_offer_controller.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
+import 'package:pouch/features/authentication/screens/login/login.dart';
 import 'package:pouch/features/home/controller/home_controller.dart';
 import 'package:pouch/features/notification/controller/notification_controller.dart';
+import 'package:pouch/features/subscription/controller/subscription_controller.dart';
 import 'package:pouch/features/verification/controller/verification_controller.dart';
 import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
@@ -47,7 +50,6 @@ class ResetControllers {
 
   Future<void> clearData() async {
     try {
-      // _clearControllerData();
       await _clearPersistenceStorage();
 
       Get.delete<NavigationController>(force: true);
@@ -58,11 +60,13 @@ class ResetControllers {
       Get.delete<VerificationController>(force: true);
       Get.delete<CreateOfferController>(force: true);
       Get.delete<AuthFormController>(force: true);
+      Get.delete<SubscriptionController>(force: true);
       Get.delete<HelperFunctionsController>(force: true);
+      Get.find<AuthController>().removeUser();
 
       Get.closeAllSnackbars();
       Get.back(closeOverlays: true);
-      Get.offAllNamed('auth/login');
+      Get.offAll(LoginScreen());
     } catch (e) {
       print('Error during reset: $e');
     }

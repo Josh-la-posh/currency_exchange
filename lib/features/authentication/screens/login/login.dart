@@ -3,13 +3,8 @@ import 'package:get/get.dart';
 import 'package:pouch/features/authentication/screens/login/widgets/login_form.dart';
 import 'package:pouch/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:pouch/utils/layouts/auth_layout.dart';
-import '../../controllers/auth_form_controller.dart';
 
 class LoginScreen extends StatelessWidget {
-  final authFormController = Get.put(AuthFormController());
-
-  LoginScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return AuthLayout(

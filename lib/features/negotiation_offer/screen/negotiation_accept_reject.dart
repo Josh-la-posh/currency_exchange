@@ -14,11 +14,11 @@ import '../../all_offer/widgets/success_page.dart';
 
 class NegotiationAcceptRejectScreen extends StatelessWidget {
   final OfferEntity? item;
-  final offerController = Get.find<OfferController>();
   NegotiationAcceptRejectScreen({super.key, this.item});
 
   @override
   Widget build(BuildContext context) {
+    OfferController offerController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
         appBar: AppBar(
@@ -306,7 +306,7 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                             child: TElevatedButton(
-                                onTap: offerController.isNegotiationOfferLoading.value ? null : (){
+                                onTap: offerController.isAcceptingRejectingOfferLoading.value ? null : (){
                               offerController.acceptingOrRejectingOffer(
                                   id: item!.id.toString(),
                                   currency: item!.debitedCurrency.toString(),
@@ -322,7 +322,7 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                               height: 48,
                               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                               child: ElevatedButton(
-                                onPressed: offerController.isNegotiationOfferLoading.value ? null : () {
+                                onPressed: offerController.isAcceptingRejectingOfferLoading.value ? null : () {
                                   offerController.acceptingOrRejectingOffer(
                                       id: item!.id.toString(),
                                       currency: item!.debitedCurrency.toString(),

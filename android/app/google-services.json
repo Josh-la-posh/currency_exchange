@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "288340283210",
+    "project_id": "pouch-e9c6e",
+    "storage_bucket": "pouch-e9c6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288340283210:android:a367548037de94eb0cbbb3",
+        "android_client_info": {
+          "package_name": "com.example.pouch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzZapdz0t96_Fm1vhhzF7fe6tiXfd0TAE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,6 +6,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
 import 'package:pouch/features/authentication/routes/names.dart';
+import 'package:pouch/features/authentication/screens/login/login.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';
 import '../../../../../utils/constants/colors.dart';
@@ -13,7 +14,7 @@ import '../../../../../utils/constants/sizes.dart';
 import '../../../controllers/auth_form_controller.dart';
 
 class SignUpForm extends StatelessWidget {
-  final authFormController = Get.find<AuthFormController>();
+  AuthFormController authFormController = Get.put(AuthFormController());
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -163,11 +164,11 @@ class SignUpForm extends StatelessWidget {
       height: 48,
       child: Obx(() => TElevatedButton(
         onTap: authFormController.acceptTerms.value
-            ? (authFormController.isLoading.value
+            ? (authFormController.isCreatingAccount.value
             ? null
             : () => authFormController.submitSignUpForm(formKey: formKey))
             : null,
-        buttonText: authFormController.isLoading.value
+        buttonText: authFormController.isCreatingAccount.value
             ? 'Signing in ...'
             : 'Sign Up',
       )),
@@ -178,7 +179,7 @@ class SignUpForm extends StatelessWidget {
     return Center(
       child: TextButton(
         onPressed: () {
-          AppNavigator.instance.navigateToHandler(AUTH_LOGIN_SCREEN_ROUTE);
+          Get.to(() => LoginScreen());
         },
         child: Text(
           'Already signed up? Log In',

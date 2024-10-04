@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/wallet/controller/add_bank_controller.dart';
-import 'package:pouch/features/wallet/controller/wallet_controller.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/common/widgets/buttons/outlined_button.dart';
-import '../../../../data/provider/wallet_provider.dart';
+import '../../../../data/modules/interceptor.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';

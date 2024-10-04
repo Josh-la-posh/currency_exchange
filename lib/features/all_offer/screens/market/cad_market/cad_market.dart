@@ -10,7 +10,8 @@ import 'cad_new_market_list.dart';
 import 'cad_trending_market_list.dart';
 
 class CadMarketScreen extends StatelessWidget {
-  final offerController = Get.find<OfferController>();
+  OfferController offerController = Get.find();
+  // final offerController = Get.find<OfferController>();
 
   Widget _buildTab({
     required String title,

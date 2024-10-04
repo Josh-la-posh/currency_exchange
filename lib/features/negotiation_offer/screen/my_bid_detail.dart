@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 
+import '../../../data/modules/interceptor.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../all_offer/models/offer.dart';
 
 class MyBidDetail extends StatelessWidget {
   final OfferEntity? item = Get.arguments;
+  final AppInterceptor appInterceptor = AppInterceptor();
   MyBidDetail({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final height = THelperFunctions.screenHeight();
-    final width = THelperFunctions.screenWidth();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
@@ -21,7 +21,10 @@ class MyBidDetail extends StatelessWidget {
         backgroundColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         surfaceTintColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         leading: IconButton(
-          onPressed: (){Get.back();},
+          onPressed: (){
+            appInterceptor.cancelOngoingRequest();
+            Get.back();
+            },
           icon: const Icon(Icons.arrow_back),
           style: IconButton.styleFrom(
               foregroundColor: Colors.grey,

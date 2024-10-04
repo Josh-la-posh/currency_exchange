@@ -5,7 +5,7 @@ import '../../../data/modules/storage_session_controller.dart';
 
 class SplashAnimationController extends GetxController with SingleGetTickerProviderMixin {
 
-  final userSessionController = Get.find<UserSessionController>();
+  UserSessionController userSessionController = Get.find();
   late AnimationController animationController;
   late Animation<double> animation;
   var isSplashCompleted = false.obs;
@@ -21,12 +21,6 @@ class SplashAnimationController extends GetxController with SingleGetTickerProvi
     animation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController);
 
     animationController.forward();
-
-    animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        updateSplashCompletion();
-      }
-    });
   }
 
   void updateSplashCompletion() {

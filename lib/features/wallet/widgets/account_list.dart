@@ -4,10 +4,10 @@ import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
 class AccountList extends StatelessWidget {
-  final walletController = Get.find<WalletController>();
 
   @override
   Widget build(BuildContext context) {
+    WalletController walletController = Get.find();
     return Obx(() {
       if (walletController.wallets.isEmpty) {
         return Container(
@@ -49,7 +49,9 @@ class AccountList extends StatelessWidget {
 
                 return GestureDetector(
                   onTap: () {
-                    walletController.creatingDefaultWallet(walletId: item.id.toString());
+                    walletController.isCreatingDefaultWallet.value == false
+                        ? walletController.creatingDefaultWallet(walletId: item.id.toString())
+                        : Get.snackbar('', 'A request is yet to be completed', duration: Duration(seconds: 4));
                   },
                   child: Container(
                     margin: EdgeInsets.only(bottom: 10),

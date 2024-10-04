@@ -5,8 +5,6 @@ import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';
-import 'package:pouch/data/modules/app_navigator.dart';
-import 'package:pouch/features/wallet/apis/api.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/enums.dart';
 import '../../../utils/layouts/navigation_menu.dart';
@@ -15,12 +13,12 @@ import '../../wallet/controller/wallet_controller.dart';
 
 class ForeignFundingScreen extends StatelessWidget {
   ForeignFundingScreen({super.key});
-  final controller = Get.find<WalletController>();
-  final navigationController = Get.find<NavigationController>();
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    WalletController controller = Get.find();
+    NavigationController navigationController = Get.find();
+    final formKey = GlobalKey<FormState>();
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
@@ -142,7 +140,7 @@ class ForeignFundingScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 200,
                     child: Obx(() => TElevatedButton(
-                      onTap: controller.isLoading.value ? null : () {
+                      onTap: controller.isFundingFcy.value ? null : () {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
                           controller.fundingFcy(
@@ -165,7 +163,7 @@ class ForeignFundingScreen extends StatelessWidget {
                           // );
                         }
                       },
-                      buttonText: controller.isLoading.value ? 'Loading ...' : 'Continue',
+                      buttonText: controller.isFundingFcy.value ? 'Loading ...' : 'Continue',
                     )),
                   ),
                 ),

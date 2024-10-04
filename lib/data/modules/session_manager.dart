@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:pouch/data/modules/reset_controllers.dart';
 import 'package:pouch/features/authentication/screens/add_details/add_address_detail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pouch/data/modules/app_navigator.dart';
-import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/data/provider/subscription_provider.dart';
 import 'package:pouch/data/provider/transaction_provider.dart';
 import 'package:pouch/features/authentication/routes/names.dart';

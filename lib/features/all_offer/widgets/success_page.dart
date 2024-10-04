@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/home/routes/names.dart';
 import '../../../common/styles/spacing_styles.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
-import '../../../data/modules/app_navigator.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
@@ -12,7 +10,6 @@ import '../../../utils/layouts/navigation_menu.dart';
 
 
 class SuccessScreenWidget extends StatelessWidget {
-  final controller = Get.find<NavigationController>();
   SuccessScreenWidget({
     super.key,
     required this.text,
@@ -25,6 +22,7 @@ class SuccessScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NavigationController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return SingleChildScrollView(
       padding: TSpacingStyle.homePadding,

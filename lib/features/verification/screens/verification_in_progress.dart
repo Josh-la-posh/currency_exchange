@@ -34,22 +34,7 @@ class VerificationInProgressScreen extends StatelessWidget {
                 )
             ),
             const SizedBox(height: TSizes.defaultSpace),
-            RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    style: Theme.of(context).textTheme.bodySmall,
-                    children: const <TextSpan> [
-                      TextSpan(
-                          text: 'A 60-second timer has begun. Your photo from the chosen document will be used for comparison.',
-                          style: TextStyle(
-                              height: 1.5,
-                              // color: TColors.textPrimaryO80
-                          )
-                      ),
-                    ]
-                )
-            ),
-            SizedBox(height: THelperFunctions.screenHeight() * 0.1),
+            SizedBox(height: THelperFunctions.screenHeight() * 0.15),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace * 2),
               decoration: BoxDecoration(
@@ -130,7 +115,6 @@ class VerificationInProgressScreen extends StatelessWidget {
               child: TElevatedButton(
                   onTap: () {
                     Get.to(() => NavigationMenu());
-
                   },
                   buttonText: 'Go To Dashboard'
               ),

@@ -5,7 +5,7 @@ import 'package:pouch/utils/otp/otp.dart';
 import 'auth_controller.dart';
 
 class EmailVerificationController extends GetxController {
-  final isLoading = false.obs;
+  final isVerifying = false.obs;
   final authController = Get.find<AuthController>();
   final String email;
   final String password;
@@ -36,7 +36,6 @@ class EmailVerificationController extends GetxController {
         formattedTime.value = time;
       },
     );
-    handleSendEmailVerificationOTP();
     _setupFocusListeners();
   }
 
@@ -95,7 +94,7 @@ class EmailVerificationController extends GetxController {
     if (validateForm(formKey)) {
       saveForm(formKey);
       try {
-        isLoading(true);
+        isVerifying(true);
         authController.verifyEmailOtp(
           otpCode: otpCode.value,
           onSuccess: handleEmailVerificationSuccess,
@@ -103,7 +102,7 @@ class EmailVerificationController extends GetxController {
       } catch (e) {
         Get.snackbar("Invalid OTP", e.toString(), snackPosition: SnackPosition.BOTTOM);
       } finally {
-        isLoading(false);
+        isVerifying(false);
       }
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM);
@@ -116,7 +115,7 @@ class EmailVerificationController extends GetxController {
           email: email,
           password: password,
           rememberMe: true,
-          handleEmailNotVerified: (){}
+          handleEmailNotVerified: (){},
       );
     }
   }

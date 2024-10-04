@@ -1,13 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/notification/controller/notification_controller.dart';
-import 'package:provider/provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import '../../data/modules/app_navigator.dart';
-import '../../data/modules/session_manager.dart';
 import '../../data/modules/storage_session_controller.dart';
-import '../../data/provider/notificaton_provider.dart';
 
 class SocketManager {
   final notificationController = Get.find<NotificationController>();
@@ -64,7 +59,6 @@ class SocketManager {
       if (kDebugMode) {
         print("UpdateSocket ----------------------");
         notificationController.notificationLength(data);
-        print('helloooooo $data');
       }
     });
 

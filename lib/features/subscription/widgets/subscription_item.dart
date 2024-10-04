@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/subscription/controller/subscription_controller.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/provider/subscription_provider.dart';
 import 'package:pouch/features/subscription/models/subscribeEnity.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/colors.dart';
@@ -12,7 +10,6 @@ import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
 
 class SubscriptionItem extends StatelessWidget {
-  final controller = Get.find<SubscriptionController>();
   final SubscriptionEntity item;
   SubscriptionItem({
     required this.item,
@@ -21,14 +18,13 @@ class SubscriptionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<SubscriptionProvider>(context);
+    SubscriptionController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         Container(
           height: TSizes.textReviewHeight * 1.4,
           color: darkMode ? TColors.textPrimaryO40 : Colors.white,
-          // padding: const EdgeInsets.only(left: TSizes.defaultSpace / 1.5),
           child: Slidable(
             key: ValueKey(item.id),
             endActionPane: ActionPane(

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:pouch/utils/layouts/navigation_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pouch/features/authentication/models/create_account_model.dart';
@@ -9,6 +11,8 @@ import 'package:pouch/features/authentication/models/password_model.dart';
 import 'package:pouch/features/authentication/models/user_model.dart';
 import 'package:pouch/utils/constants/app.dart';
 import 'package:pouch/utils/local_storage/local_storage.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_darwin/local_auth_darwin.dart';
 
 import '../../../data/modules/storage_session_controller.dart';
 import '../../../utils/responses/handleApiError.dart';
@@ -19,16 +23,17 @@ class AuthController extends GetxController {
   final SharedPreferences _storage = LocalStorage.instance.storage;
   UserSessionController get userSessionController => Get.find<UserSessionController>();
   late StreamSubscription<void> _notificationSubscription;
+  final LocalAuthentication _auth = LocalAuthentication();
 
-  // Observable variables
-  var isLoading = false.obs;
   var user = UserModel().obs;
   var createAccountFormDetails = Rx<CreateAccountModel?>(null);
   var createAccountCanVerifyEmail = RxBool(false);
   var createAccountOtpId = Rx<String?>(null);
-  var isVerifiedDisplay = RxBool(true);
+  var isLoggingIn = false.obs;
+  var isConfirmingVerification = false.obs;
+  var isPasswordResetting = false.obs;
+  var isVerifiedDisplay = false.obs;
   var resetPasswordDetails = Rx<ChangePasswordModel?>(null);
-
 
   @override
   void onInit() {
@@ -46,9 +51,7 @@ class AuthController extends GetxController {
   }
 
   void getIsVerified() {
-    if (user.value.isVerified == false) {
-      isVerifiedDisplay.value = user.value!.isVerified!;
-    }
+      isVerifiedDisplay.value = !user.value.isVerified!;
   }
 
   Future<void> _processUserNotifications() async {
@@ -60,11 +63,8 @@ class AuthController extends GetxController {
 
   Future<void> _getUserSaveData() async {
     final userJson = _storage.getString(USER_DATA);
-    print('now user data $userJson');
     if (userJson != null) {
-      if (user.value == null) {
-        saveUser(UserModel.fromJson(json.decode(userJson)));
-      }
+      saveUser(UserModel.fromJson(json.decode(userJson)));
     }
   }
 
@@ -78,7 +78,8 @@ class AuthController extends GetxController {
     final userJson = json.encode(userInfo?.toJson());
     _storage.setString(USER_DATA, userJson);
     user.value = userInfo!;
-    print('new user value ${user.value.firstName}');
+    print('Userinfo data is ${userInfo.lastLogin}');
+    print('User data is ${user.value.lastLogin}');
     handleCreateAccountCleanups();
   }
 
@@ -122,7 +123,6 @@ class AuthController extends GetxController {
     required VoidCallback onSuccess
   }) async {
     try {
-      isLoading(true);
       final response = await AuthService.instance.createAccount({
         'firstName': firstName,
         'lastName': lastName,
@@ -136,7 +136,6 @@ class AuthController extends GetxController {
     } catch (err) {
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     } finally {
-      isLoading(false);
     }
   }
 
@@ -147,7 +146,6 @@ class AuthController extends GetxController {
     required String password,
   }) async {
     try {
-      isLoading(true);
       final response = await AuthService.instance.updateAddress({
         'postCode': postCode,
         'address': address,
@@ -157,13 +155,12 @@ class AuthController extends GetxController {
             email: email.toLowerCase().trim(),
             password: password,
             rememberMe: true,
-            handleEmailNotVerified: (){}
+            handleEmailNotVerified: (){},
         );
       }
     } catch (err) {
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     } finally {
-      isLoading(false);
     }
   }
 
@@ -173,7 +170,6 @@ class AuthController extends GetxController {
     required VoidCallback onSuccess
   }) async {
     try {
-      isLoading(true);
       final response = await AuthService.instance.changePassword({
         'currentPassword': currentPassword,
         'newPassword': newPassword
@@ -184,7 +180,6 @@ class AuthController extends GetxController {
     } catch (err) {
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     } finally {
-      isLoading(false);
     }
   }
 
@@ -192,12 +187,12 @@ class AuthController extends GetxController {
     required String email,
     required String password,
     required bool rememberMe,
-    required VoidCallback handleEmailNotVerified
+    required VoidCallback handleEmailNotVerified,
   }) async {
     try {
-      isLoading(true);
+      isLoggingIn(true);
       final responseData = await AuthService.instance.currentUserApi();
-        user(UserModel(
+      user(UserModel(
             id: responseData['id'],
             firstName: responseData['firstName'],
             lastName: responseData['lastName'],
@@ -215,66 +210,96 @@ class AuthController extends GetxController {
             emailOtp: responseData['emailOtp'],
             isEmailVerified: responseData['isEmailVerified'],
             otpExpiration: responseData['otpExpiration'],
+            lastLogin: responseData['lastLogin'],
             createdDate: responseData['createdDate'],
             lastModifiedDate: responseData['lastModifiedDate'],
             role: responseData['role']
         ));
 
-        if (rememberMe) {
-          userSessionController.setRememberMeHandler(
+      if (rememberMe) {
+        userSessionController.setRememberMeHandler(
+            email: email.toLowerCase().trim(),
+            password: password,
+            enabled: true
+        );
+      } else {
+        userSessionController.setRememberMeHandler(
+            email: email,
+            password: password
+        );
+      }
+      if (user.value.isEmailVerified != true) {
+        handleEmailNotVerified();
+        removeUser();
+      } else {
+        saveUser(user.value);
+        if (user.value.address == null) {
+          Get.offAll(() => AddAddressDetail(
               email: email.toLowerCase().trim(),
               password: password,
-              enabled: true
-          );
+              rememberMe: rememberMe
+          ));
         } else {
-          userSessionController.setRememberMeHandler(
-              email: email,
-              password: password
-          );
-        }
-
-        print(user.value);
-        if (user.value.isEmailVerified != true) {
-          handleEmailNotVerified();
-          removeUser();
-        } else {
-          saveUser(user.value);
-          print(user.value.isEmailVerified);
-          if (user.value.address == null) {
-            Get.offAll(() => AddAddressDetail(
-                email: email.toLowerCase().trim(),
-                password: password,
-                rememberMe: rememberMe
-            ));
+          final useBiometrics = await userSessionController.getUserBiometrics();
+          if (useBiometrics == true) {
+            bool canAuthWithBiometric = await _auth.canCheckBiometrics;
+            if (canAuthWithBiometric == true) {
+              try {
+                final bool didAuthenticate = await _auth.authenticate(
+                    authMessages: const <AuthMessages>[
+                      AndroidAuthMessages(
+                        signInTitle: 'Biometric authentication required',
+                        cancelButton: 'No thanks'
+                      ),
+                      IOSAuthMessages(
+                        cancelButton: 'No thanks'
+                      )
+                    ],
+                    localizedReason: 'Please authenticate to login',
+                    options: const AuthenticationOptions(
+                        biometricOnly: false
+                    )
+                );
+                if (didAuthenticate) {
+                  Get.offAll(() => NavigationMenu());
+                } else {
+                  print('Authentication didn\'t work');
+                }
+              } on PlatformException catch (e) {
+                print('Authentication error $e');
+                canAuthWithBiometric = false;
+                // Get.offAll(() => NavigationMenu());
+              }
+            }
           } else {
             Get.offAll(() => NavigationMenu());
           }
         }
+      }
     } catch (err) {
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     } finally {
-      isLoading(false);
+      isLoggingIn(false);
     }
   }
 
   Future<void> confirmVerification() async {
     try {
-      isLoading(true);
+      isConfirmingVerification(true);
       final response = await AuthService.instance.confirmVerification();
     } catch (err) {
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     } finally {
-      isLoading(false);
+      isConfirmingVerification(false);
     }
   }
 
   Future<void> generateOtp({
     required String email,
     required VoidCallback onSuccess,
-    VoidCallback? onFailure
+    required VoidCallback onFailure
   }) async {
     try {
-      isLoading(true);
       final response = await AuthService.instance.sendEmailOtpCode({"email": email.toLowerCase().trim()});
       if (response.statusCode == 200 || response.statusCode == 201) {
         onSuccess();
@@ -285,7 +310,6 @@ class AuthController extends GetxController {
       }
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     } finally {
-      isLoading(false);
     }
   }
 
@@ -295,7 +319,7 @@ class AuthController extends GetxController {
     VoidCallback? onFailure
   }) async {
     try {
-      isLoading(true);
+      Get.snackbar('Sending Otp', 'We are sending an a 6 digit code to $email');
       final response = await AuthService.instance.emailVerificationOtp({"email": email.toLowerCase().trim()});
       if (response.statusCode == 200 || response.statusCode == 201) {
         onSuccess();
@@ -306,15 +330,15 @@ class AuthController extends GetxController {
       }
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     } finally {
-      isLoading(false);
+      Get.closeAllSnackbars();
     }
   }
 
-  Future<void> resetPassword({required int otp, required String newPassword, required VoidCallback onSuccess}) async {
+  Future<void> resetPassword({required String otp, required String newPassword, required VoidCallback onSuccess}) async {
     try {
-      isLoading(true);
+      isPasswordResetting(true);
       final response = await AuthService.instance.resetPassword({
-        'otp': otp,
+        'otp': int.parse(otp),
         'newPassword': newPassword
       });
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -324,7 +348,7 @@ class AuthController extends GetxController {
     } catch (err) {
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     } finally {
-      isLoading(false);
+      isPasswordResetting(false);
     }
   }
 
@@ -344,7 +368,7 @@ class AuthController extends GetxController {
     required String email,
     required String password,
     required bool rememberMe,
-    required VoidCallback handleEmailNotVerified
+    required VoidCallback handleEmailNotVerified,
 }) async {
     try {
       final response = await AuthService.instance.loginApi(data: {
@@ -354,14 +378,16 @@ class AuthController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         var token = response.data['access_token'];
+        var refreshToken = response.data['refresh_token'];
         if (response != null && token != '') {
           userSessionController.setToken(token);
+          userSessionController.setRefreshToken(refreshToken);
 
           await fetchCurrentUser(
               email: email.toLowerCase().trim(),
               password: password,
               rememberMe: rememberMe,
-              handleEmailNotVerified: handleEmailNotVerified
+              handleEmailNotVerified: handleEmailNotVerified,
           );
         }
         return token;

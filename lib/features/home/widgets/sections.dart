@@ -14,11 +14,11 @@ import '../../subscription/screens/subscribe.dart';
 
 class LinkSectionWidget extends StatelessWidget {
   final bool darkMode;
-  final controller = Get.find<NavigationController>();
   LinkSectionWidget({super.key, required this.darkMode});
 
   @override
   Widget build(BuildContext context) {
+    NavigationController controller = Get.find();
     final width = MediaQuery.of(context).size.width;
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 30),

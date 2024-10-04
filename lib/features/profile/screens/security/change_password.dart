@@ -4,38 +4,40 @@ import 'package:iconsax/iconsax.dart';
 import 'package:pouch/common/styles/spacing_styles.dart';
 import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../common/widgets/buttons/elevated_button.dart';
-import '../../../utils/constants/colors.dart';
-import '../../../utils/constants/sizes.dart';
-import '../../../utils/validators/validation.dart';
+import '../../../../common/widgets/buttons/elevated_button.dart';
+import '../../../../data/modules/interceptor.dart';
+import '../../../../utils/constants/colors.dart';
+import '../../../../utils/constants/sizes.dart';
+import '../../../../utils/validators/validation.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
-  final controller = Get.put(AuthFormController());
-  final formKey = GlobalKey<FormState>();
-
+  final AppInterceptor appInterceptor = AppInterceptor();
   ChangePasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AuthFormController controller = Get.put(AuthFormController());
+    final formKey = GlobalKey<FormState>();
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
-      backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
+      backgroundColor: darkMode ? TColors.black.withOpacity(0.4) : TColors.white,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
             Get.back();
           },
-          icon: const Icon(Icons.arrow_back_ios_sharp),
+          icon: const Icon(Icons.arrow_back),
           style: IconButton.styleFrom(
-            foregroundColor: TColors.primary,
+            foregroundColor: Colors.grey,
             iconSize: TSizes.iconBackSize,
           ),
           hoverColor: Colors.transparent,
         ),
         title: Text(
           'Change Password',
-          style: Theme.of(context).textTheme.headlineLarge,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         centerTitle: true,
       ),
@@ -86,8 +88,8 @@ class ChangePasswordScreen extends StatelessWidget {
 
                 // Submit Button
                 Obx(() => TElevatedButton(
-                  onTap: () => controller.isLoading.value ? null : controller.submitChangePasswordForm(formKey: formKey),
-                  buttonText: controller.isLoading.value ? 'Updating ...' : 'Proceed',
+                  onTap: () => controller.isPasswordChanging.value ? null : controller.submitChangePasswordForm(formKey: formKey),
+                  buttonText: controller.isPasswordChanging.value ? 'Updating ...' : 'Proceed',
                 )),
               ],
             ),

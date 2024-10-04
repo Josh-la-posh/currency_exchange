@@ -16,7 +16,7 @@ import '../../all_offer/decimal_formatter.dart';
 class PaymentOptionScreen extends StatelessWidget {
   PaymentOptionScreen({Key? key}) : super(key: key);
 
-  final controller = Get.find<WalletController>();
+  WalletController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class PaymentOptionScreen extends StatelessWidget {
                 controller.setShowErrorText(true);
               } else {
                 controller.setShowErrorText(false);
-                controller.isLoading.value ? null :
+                controller.isFundingWalletViaNairaTransfer.value ? null :
                 controller.fundingWalletViaNairaTransfer(amount: controller.amount.value);
               }
             });
@@ -131,7 +131,7 @@ class PaymentOptionScreen extends StatelessWidget {
                 controller.setShowErrorText(true);
               } else {
                 controller.setShowErrorText(false);
-                controller.isLoading.value ? null :
+                controller.isFundingWalletViaPaystack.value ? null :
                 controller.fundingWalletViaPaystack(amount: controller.amount.value);
               }
             });
@@ -256,10 +256,10 @@ class PaymentOptionScreen extends StatelessWidget {
               SizedBox(
                 height: 40,
                 width: 140,
-                child: Obx(() => TElevatedButton(
+                child: TElevatedButton(
                   onTap: onContinue,
-                  buttonText: controller.isLoading.value ? 'Loading ...' : 'Continue',
-                )),
+                  buttonText: 'Continue',
+                ),
               ),
             ],
           ),

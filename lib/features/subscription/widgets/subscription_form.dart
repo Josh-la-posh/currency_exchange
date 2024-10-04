@@ -9,13 +9,11 @@ import '../../../utils/validators/validation.dart';
 import '../controller/subscription_controller.dart';
 
 class SubscriptionForm extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-
-  SubscriptionForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<SubscriptionController>();
+    final _formKey = GlobalKey<FormState>();
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Form(
@@ -202,7 +200,7 @@ class SubscriptionForm extends StatelessWidget {
           ),
           const SizedBox(height: TSizes.spaceBtwSections * 3),
           Obx(() => TElevatedButton(
-            onTap: controller.isLoading.value ? null : () {
+            onTap: controller.isCreatingSubscription.value ? null : () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
                 controller.createSubscription(
@@ -217,7 +215,7 @@ class SubscriptionForm extends StatelessWidget {
                 );
               }
             },
-            buttonText: controller.isLoading.value ? 'Subscribing ...' : 'Subscribe',
+            buttonText: controller.isCreatingSubscription.value ? 'Subscribing ...' : 'Subscribe',
           )),
         ],
       ),

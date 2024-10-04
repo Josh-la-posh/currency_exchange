@@ -6,7 +6,7 @@ import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/validators/validation.dart';
 
 class AddAddressDetail extends StatelessWidget {
-  final controller = Get.put(AuthFormController());
+  AuthFormController controller = Get.put(AuthFormController());
   final formKey = GlobalKey<FormState>();
 
   AddAddressDetail({
@@ -105,7 +105,7 @@ class AddAddressDetail extends StatelessWidget {
                 ),
                 const SizedBox(height: TSizes.defaultSpace * 3),
                 Obx(() {
-                  if (controller.isLoading.value) {
+                  if (controller.isUpdatingAddress.value) {
                     return Center(child: CircularProgressIndicator());
                   } else {
                     return TElevatedButton(

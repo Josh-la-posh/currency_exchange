@@ -1,33 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/features/authentication/controllers/auth_controller.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/features/home/routes/names.dart';
-import 'package:pouch/features/wallet/apis/api.dart';
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/provider/auth_provider.dart';
-import '../../../data/provider/transaction_provider.dart';
-import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 import '../../wallet/controller/wallet_controller.dart';
 import '../../wallet/models/ussd_modal.dart';
-import '../../wallet/routes/names.dart';
 
 class UssdFundingDetailScreen extends StatelessWidget {
-  final walletController = Get.find<WalletController>();
-  final controller = Get.find<NavigationController>();
-  final authController = Get.find<AuthController>();
   final String? amount;
 
   UssdFundingDetailScreen({super.key, this.amount});
 
   @override
   Widget build(BuildContext context) {
+    WalletController walletController = Get.find();
+    NavigationController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     final item = walletController.ussdDetails.value;
     final width = MediaQuery.of(context).size.width;
@@ -64,6 +53,8 @@ class UssdFundingDetailScreen extends StatelessWidget {
   }
 
   Widget _buildReferenceAndEmailSection(BuildContext context, bool darkMode) {
+    WalletController walletController = Get.find();
+    AuthController authController = Get.find();
     final item = walletController.ussdDetails.value;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -9,7 +9,8 @@ class OrderShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace / 2),
       child: ListView.builder(
           itemCount: length != null ? int.parse(length!) : 10,
           physics: const ScrollPhysics(),
@@ -20,7 +21,6 @@ class OrderShimmer extends StatelessWidget {
               highlightColor: Colors.grey[100]!,
               child: Container(
                 height: TSizes.textReviewHeight * 1.4,
-                // padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [

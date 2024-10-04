@@ -11,7 +11,6 @@ import '../icons/svg.dart';
 import '../models/offer.dart';
 
 class AcceptReviewDetailsScreen extends StatelessWidget {
-  final offerController = Get.find<OfferController>();
   final OfferEntity? item;
   AcceptReviewDetailsScreen({
     super.key,
@@ -19,6 +18,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
+    OfferController offerController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       body: Padding(
@@ -356,13 +356,13 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                         const SizedBox(height: TSizes.spaceBtwSections),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                          child: Obx(() => TElevatedButton(onTap: (){
+                          child: Obx(() => TElevatedButton(onTap: offerController.isSwappingLoading.value ? null : (){
                             offerController.swappingOffer(
                                 id: item!.id.toString(),
                                 amount: item!.amount.toString(),
                                 creditedCurrency: item!.debitedCurrency.toString());
                           },
-                              buttonText: offerController.isLoading.value
+                              buttonText: offerController.isSwappingLoading.value
                                   ? 'Loading ...'
                                   : 'Pay ${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString()))} ${item?.creditedCurrency}'
                           )),

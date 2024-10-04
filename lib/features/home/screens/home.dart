@@ -1,13 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
-import 'package:pouch/features/all_offer/screens/all_offer.dart';
 import 'package:pouch/features/home/widgets/app_drawer.dart';
 import 'package:pouch/features/home/widgets/my_bid_offer.dart';
 import 'package:pouch/features/home/widgets/my_offer.dart';
 import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
 import 'package:pouch/features/notification/screens/notification.dart';
+import 'package:pouch/utils/layouts/navigation_menu.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import 'package:pouch/common/widgets/verify_your_account.dart';
 import 'package:pouch/features/home/widgets/my_home_balance.dart';
@@ -20,7 +21,7 @@ import '../../../utils/constants/texts.dart';
 import '../controller/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
-  final controller = Get.put(HomeController());
+  HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +84,7 @@ class HomeScreen extends StatelessWidget {
           ),
           Positioned(
             right: 4,
-            child: Obx(() {
-              return _buildNotificationBadge();
-            }),
+            child: _buildNotificationBadge(),
           ),
         ],
       ),
@@ -93,27 +92,28 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildNotificationBadge() {
-    return Container(
-      width: 18,
-      height: 18,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(9),
-        color: controller.notificationController.idsArray.isNotEmpty
-            ? Colors.red
-            : Colors.transparent,
-      ),
-      child: Center(
-        child: Text(
-          controller.notificationController.idsArray.isNotEmpty
-              ? controller.notificationController.idsArray.length.toString()
-              : '',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 10,
+    return Obx(() {
+      if (controller.notificationController.idsArray.isEmpty) {
+        return SizedBox();
+      } else {
+        return Container(
+          width: 18,
+          height: 18,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(9),
+              color: Colors.red
           ),
-        ),
-      ),
-    );
+          child: Center(
+            child: Text(controller.notificationController.idsArray.length.toString(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 10,
+              ),
+            ),
+          ),
+        );
+      }
+    });
   }
 
   Widget _buildBody(BuildContext context, bool darkMode) {
@@ -169,40 +169,123 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildTabBarSection(bool darkMode) {
-    return Column(
+    return Obx(() => Column(
       children: [
         _buildTabBar(darkMode),
         _buildTabBarView(darkMode),
       ],
-    );
+    ));
   }
 
-  TabBar _buildTabBar(bool darkMode) {
-    return TabBar(
-      isScrollable: true,
-      indicatorColor: TColors.primary,
-      labelColor: darkMode ? Colors.white : Colors.black,
-      unselectedLabelColor: Colors.grey,
-      overlayColor: const MaterialStatePropertyAll(Colors.transparent),
-      labelStyle: TextStyle(
-        fontSize: 16,
-        fontWeight: TSizes.fontWeightMd,
-        fontFamily: TTexts.fontFamily,
+  Widget _buildTabBar(bool darkMode) {
+    return Container(
+      height: 50,
+      decoration: BoxDecoration(
+        color: darkMode ? TColors.textPrimaryO40 : Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: CupertinoColors.secondarySystemFill
+          )
+        )
       ),
-      tabs: const [
-        Tab(text: 'All Offers'),
-        Tab(text: 'My Offers'),
-        Tab(text: 'My Bids'),
-      ],
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          GestureDetector(
+            onTap: () => controller.selectedIndex.value = 0,
+            child: Container(
+              padding: EdgeInsets.only(bottom: 5),
+              margin: EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    width: 3,
+                    color: controller.selectedIndex.value == 0
+                        ? TColors.primary
+                        : Colors.transparent
+                  )
+                )
+              ),
+              child: Text(
+                'All Offers',
+                style: TextStyle(
+                  color: controller.selectedIndex.value == 0
+                      ? darkMode ? Colors.white : Colors.black
+                      : Colors.grey,
+                  fontSize: 14,
+                  fontWeight: TSizes.fontWeightMd,
+                  fontFamily: TTexts.fontFamily,
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => controller.selectedIndex.value = 1,
+            child: Container(
+              padding: EdgeInsets.only(bottom: 5),
+              margin: EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          width: 3,
+                          color: controller.selectedIndex.value == 1
+                              ? TColors.primary
+                              : Colors.transparent
+                      )
+                  )
+              ),
+              child: Text(
+                'My Offers',
+                style: TextStyle(
+                  color: controller.selectedIndex.value == 1
+                      ? darkMode ? Colors.white : Colors.black
+                      : Colors.grey,
+                  fontSize: 14,
+                  fontWeight: TSizes.fontWeightMd,
+                  fontFamily: TTexts.fontFamily,
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () => controller.selectedIndex.value = 2,
+            child: Container(
+              padding: EdgeInsets.only(bottom: 5),
+              margin: EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(
+                          width: 3,
+                          color: controller.selectedIndex.value == 2
+                              ? TColors.primary
+                              : Colors.transparent
+                      )
+                  )
+              ),
+              child: Text(
+                'My Bids',
+                style: TextStyle(
+                  color: controller.selectedIndex.value == 2
+                      ? darkMode ? Colors.white : Colors.black
+                      : Colors.grey,
+                  fontSize: 14,
+                  fontWeight: TSizes.fontWeightMd,
+                  fontFamily: TTexts.fontFamily,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildTabBarView(bool darkMode) {
     return Container(
       color: darkMode ? TColors.textPrimaryO40 : Colors.white,
-      padding: const EdgeInsets.only(bottom: 30.0),
-      height: 390,
-      child: TabBarView(
+      child: IndexedStack(
+        index: controller.selectedIndex.value,
         children: [
           _buildOffersSection(),
           _buildMyOffersSection(darkMode),
@@ -213,13 +296,14 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildOffersSection() {
+    NavigationController navigationController = Get.find();
     return Column(
       children: [
         TrendingOffer(),
         Obx(() => controller.offerController.allOffers.isNotEmpty
             ? _buildMoreButton(() {
           controller.offerController.allOfferIndex.value = 0;
-          Get.to(() => AllOfferScreen());
+          navigationController.selectedIndex.value = 1;
         })
             : const SizedBox.shrink()),
       ],
@@ -230,9 +314,9 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         MyOffer(),
-        Obx(() => controller.offerController.myOffers.isNotEmpty
+        Obx(() => controller.negotiationOfferController.myOffers.isNotEmpty
             ? _buildMoreButton(() {
-          controller.offerController.myOfferIndex.value = 0;
+          controller.negotiationOfferController.myOfferIndex.value = 0;
           Get.to(() => MyBidAndOfferScreen());
         })
             : const SizedBox.shrink()),
@@ -244,9 +328,9 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         MyBidOffer(),
-        Obx(() => controller.offerController.myBids.isNotEmpty
+        Obx(() => controller.negotiationOfferController.myBids.isNotEmpty
             ? _buildMoreButton(() {
-          controller.offerController.myOfferIndex.value = 1;
+          controller.negotiationOfferController.myOfferIndex.value = 1;
           Get.to(() => MyBidAndOfferScreen());
         })
             : const SizedBox.shrink()),

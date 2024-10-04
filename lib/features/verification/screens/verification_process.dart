@@ -8,10 +8,11 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 
 class VerificationProcess extends StatelessWidget {
-  final verificationController = Get.find<VerificationController>();
+
 
   @override
   Widget build(BuildContext context) {
+    VerificationController verificationController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,

@@ -2,20 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_bid_detail.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
-import '../../all_offer/controllers/offer_controller.dart';
 import '../../all_offer/models/offer.dart';
 import '../../transaction/icons/svg.dart';
+import '../controller/negotiation_offer_controller.dart';
 
 class MyBidItem extends StatelessWidget {
-  final offerController = Get.find<OfferController>();
   final OfferEntity item;
+  NegotiationOfferController controller = Get.find();
   MyBidItem({
     super.key,
     required this.item
@@ -38,7 +36,7 @@ class MyBidItem extends StatelessWidget {
                       height: 68,
                       width: 60,
                       child: ElevatedButton(
-                        onPressed: () => offerController.deleteBid(id: item.id.toString(), currency: '', days: ''),
+                        onPressed: () => controller.deleteBid(id: item.id.toString(), currency: '', days: ''),
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)
@@ -76,7 +74,7 @@ class MyBidItem extends StatelessWidget {
           onTap: () {
             Get.to(() => MyBidDetail(), arguments: item);
           },
-          contentPadding: EdgeInsets.symmetric(vertical: TSizes.md, horizontal: TSizes.defaultSpace),
+          contentPadding: EdgeInsets.symmetric(vertical: TSizes.lg, horizontal: TSizes.defaultSpace),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

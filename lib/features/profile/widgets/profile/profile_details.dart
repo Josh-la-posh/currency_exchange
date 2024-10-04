@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:provider/provider.dart';
+import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 
-import '../../../../data/provider/auth_provider.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
-import '../../../verification/screens/verify_page.dart';
 
 
 class ProfileDetailsScreen extends StatelessWidget {
@@ -18,7 +15,7 @@ class ProfileDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var authProvider = Provider.of<AuthProvider>(context);
+    AuthController authController = Get.find();
     return Container(
       color: darkMode ? TColors.textPrimaryO40 : Colors.white,
       padding: EdgeInsets.only(bottom: 15, left: TSizes.defaultSpace * 0.7, right: TSizes.defaultSpace * 0.3),
@@ -39,7 +36,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 22),
                       children: <TextSpan> [
                         TextSpan(
-                            text: THelperFunctions.getInitials(authProvider.user?.lastName ?? 'My', authProvider.user?.firstName ?? 'Pouch'),
+                            text: THelperFunctions.getInitials(authController.user.value.lastName ?? 'My', authController.user.value.firstName ?? 'Pouch'),
                             style: TextStyle(
                                 color: darkMode ? Colors.white : TColors.primary,
                                 fontWeight: FontWeight.w700
@@ -59,7 +56,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelMedium,
                       children: <TextSpan> [
                         TextSpan(
-                            text: '${authProvider.user?.lastName} ${authProvider.user?.firstName}',
+                            text: '${authController.user.value.lastName} ${authController.user.value.firstName}',
                             style: TextStyle(
                                 fontWeight: TSizes.fontWeightMd,
                                 fontSize: 20
@@ -73,7 +70,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelSmall,
                       children: <TextSpan> [
                         TextSpan(
-                            text: authProvider.user?.email,
+                            text: authController.user.value.email,
                             style: TextStyle(
                                 fontSize: TSizes.fontSize14,
                                 fontWeight: FontWeight.w600,

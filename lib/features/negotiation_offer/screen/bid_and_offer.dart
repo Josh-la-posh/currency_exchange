@@ -1,26 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
-import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
-import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
-import 'package:provider/provider.dart';
+import 'package:pouch/features/negotiation_offer/controller/negotiation_offer_controller.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_bid.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_offer.dart';
 import 'package:pouch/utils/constants/sizes.dart';
-import '../../../common/widgets/custom_shapes/currency_widget_with_back.dart';
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/modules/background_task.dart';
-import '../../../data/provider/offer_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/helpers/helper_functions.dart';
-import '../../all_offer/apis/api.dart';
-import '../widget/negotiation_list.dart';
 
-class MyBidAndOfferScreen extends GetView<OfferController> {
+class MyBidAndOfferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    NegotiationOfferController controller = Get.put(NegotiationOfferController());
     if (controller.myOffers.isEmpty) {
       controller.fetchMyOffers(days: '', currency: '');
     }

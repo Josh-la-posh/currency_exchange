@@ -8,10 +8,7 @@ import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 
 class WalletTransactionList extends StatelessWidget {
-  const WalletTransactionList({
-    super.key,
-    required this.darkMode,
-  });
+  const WalletTransactionList({super.key, required this.darkMode,});
 
   final bool darkMode;
 

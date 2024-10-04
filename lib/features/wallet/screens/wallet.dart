@@ -11,10 +11,9 @@ import '../../payment_method/screens/payment_options.dart';
 import '../../withdrawals/screens/withdrawal.dart';
 
 class WalletDashboardScreen extends StatelessWidget {
-  final  controller = Get.put(WalletController());
-
   @override
   Widget build(BuildContext context) {
+    WalletController  controller = Get.find();
     final bool darkMode = THelperFunctions.isDarkMode(context);
     final backgroundColor = darkMode ? Color(0xFF1E1E1E) : Colors.grey[200];
     final borderColor = darkMode ? Color(0xFF2E2E2E).withOpacity(0.1) : Colors.grey[400]?.withOpacity(0.1);

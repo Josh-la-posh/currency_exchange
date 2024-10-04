@@ -5,10 +5,7 @@ import 'package:pouch/features/wallet/widgets/transaction_list.dart';
 import '../../../utils/constants/sizes.dart';
 
 class WalletTransactionHistory extends StatelessWidget {
-  const WalletTransactionHistory({
-    super.key,
-    required this.darkMode,
-  });
+  const WalletTransactionHistory({super.key, required this.darkMode,});
 
   final bool darkMode;
 
@@ -35,7 +32,7 @@ class WalletTransactionHistory extends StatelessWidget {
             ),
             GestureDetector(
               onTap: (){
-                Get.to(() => const TransactionHistoryScreen());
+                Get.to(() => TransactionHistoryScreen());
               },
               child: Row(
                 children: [

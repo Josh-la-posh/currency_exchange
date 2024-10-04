@@ -12,11 +12,11 @@ import '../../../utils/validators/validation.dart';
 import '../icons/svg.dart';
 
 class CreateOfferForm extends StatelessWidget {
-  final createOfferController = Get.find<CreateOfferController>();
-  final helperFunctionsController = Get.find<HelperFunctionsController>();
 
   @override
   Widget build(BuildContext context) {
+    CreateOfferController createOfferController = Get.find();
+    HelperFunctionsController helperFunctionsController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Obx(() => Form(
         key: createOfferController.formKey,
@@ -32,6 +32,10 @@ class CreateOfferForm extends StatelessWidget {
                     style: Theme.of(context).textTheme.labelMedium,
                     validator: TValidator.numValidator,
                     keyboardType: TextInputType.number,
+                    onChanged: (val) {
+                      createOfferController.amountController.text = val;
+                      helperFunctionsController.getStringMultiplication(createOfferController.amountController.text, createOfferController.rateController.text);
+                    },
                     decoration: InputDecoration(
                       suffixIcon: DropdownButton<Currency>(
                         dropdownColor: darkMode ? Colors.black : TColors.white,
@@ -137,6 +141,10 @@ class CreateOfferForm extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelMedium,
                   validator: TValidator.numValidator,
                   keyboardType: TextInputType.number,
+                  onChanged: (val) {
+                    createOfferController.rateController.text = val;
+                    helperFunctionsController.getStringMultiplication(createOfferController.amountController.text, createOfferController.rateController.text);
+                  },
                   decoration: InputDecoration(
                     suffixIcon: Padding(
                       padding: const EdgeInsets.only(right: 14.8),

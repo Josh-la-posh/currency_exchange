@@ -10,7 +10,7 @@ import 'all_new_market_list.dart';
 import 'all_trending_market_list.dart';
 
 class AllMarketScreen extends StatelessWidget {
-  final offerController = Get.find<OfferController>();
+  OfferController offerController = Get.find();
 
   Widget _buildTab({
     required String label,

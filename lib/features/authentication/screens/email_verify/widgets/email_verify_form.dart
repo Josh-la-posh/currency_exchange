@@ -17,7 +17,7 @@ class EmailVerificationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(EmailVerificationController(
+    EmailVerificationController controller = Get.put(EmailVerificationController(
       email: email,
       password: password,
     ));
@@ -101,11 +101,11 @@ class EmailVerificationForm extends StatelessWidget {
       padding: const EdgeInsets.only(top: TSizes.spaceBtwSections - 4),
       child: TElevatedButton(
         onTap: controller.otpControllers.length == 6
-            ? (controller.isLoading.value
+            ? (controller.isVerifying.value
             ? null
             : controller.handleVerifyOtp)
             : null,
-        buttonText: controller.isLoading.value ? 'Verifying...' : 'Confirm',
+        buttonText: controller.isVerifying.value ? 'Verifying...' : 'Confirm',
       ),
     ));
   }

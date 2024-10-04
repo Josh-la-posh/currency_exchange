@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pouch/common/styles/spacing_styles.dart';
-import 'package:pouch/features/authentication/screens/email_verify/widgets/email_verify_form.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/features/authentication/screens/reset_password/widgets/resetPasswordOtpForm.dart';
-import 'package:pouch/features/authentication/screens/reset_password/widgets/reset_password_form.dart';
 import 'package:pouch/utils/layouts/auth_layout.dart';
-import '../../../../common/widgets/buttons/app_bar.dart';
+
+import '../../controllers/reset_password_controller.dart';
 
 class ResetPasswordOtpScreen extends StatelessWidget {
   final String email;
@@ -15,6 +15,10 @@ class ResetPasswordOtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ResetPasswordOtpFormController controller = Get.put(ResetPasswordOtpFormController(
+      sendEmailOtpOnBuild: false,
+      email: email,
+    ));
     return AuthLayout(
         title: '', heading: 'Reset Password',
         child: ResetPasswordOtpForm(email: email)

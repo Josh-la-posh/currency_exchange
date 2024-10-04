@@ -1,16 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/features/home/controller/home_controller.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
 class HomeBalanceWidget extends StatelessWidget {
-  final controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
+    HomeController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     final width = MediaQuery.of(context).size.width;
     if (controller.walletController.defaultWallet.value.balance == null) {

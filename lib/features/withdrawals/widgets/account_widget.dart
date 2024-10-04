@@ -16,10 +16,10 @@ class AccountWidget extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
-  final WalletController walletController = Get.find<WalletController>();
 
   @override
   Widget build(BuildContext context) {
+    WalletController walletController = Get.find();
     final width = MediaQuery.of(context).size.width;
 
     return Column(

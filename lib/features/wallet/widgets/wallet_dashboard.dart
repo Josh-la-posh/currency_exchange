@@ -1,24 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/wallet/controller/wallet_controller.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/data/provider/transaction_provider.dart';
-import 'package:pouch/features/payment_method/screens/payment_options.dart';
-import 'package:pouch/utils/constants/enums.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
-import '../../../utils/constants/sizes.dart';
-import '../../../utils/constants/texts.dart';
 
 class WalletDashboard extends StatelessWidget {
-  final walletController = Get.find<WalletController>();
 
   @override
   Widget build(BuildContext context) {
-
+    WalletController walletController = Get.find();
     if (walletController.defaultWallet.value.balance == null) {
       walletController.fetchingDefaultWallet();
     }
@@ -40,6 +30,7 @@ class WalletDashboard extends StatelessWidget {
   }
 
   Widget _buildBalanceHeader(double width) {
+    WalletController walletController = Get.find();
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 20),
       child: Row(

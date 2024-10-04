@@ -3,6 +3,7 @@ plugins {
     id "com.smileidentity.smile-id-android"
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
+    id "com.google.gms.google-services"
 }
 
 def localProperties = new Properties()
@@ -33,10 +34,8 @@ if (flutterVersionName == null) {
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: "com.google.gms.google-services"
 
-//apply plugin: 'com.android.application'
-//apply plugin: 'com.google.gms.google-services'
-//apply plugin: 'kotlin-android'
 //apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 //def keystoreProperties = new Properties()
@@ -119,4 +118,5 @@ flutter {
 
 dependencies {
     implementation("androidx.compose.runtime:runtime:$version")
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
 }

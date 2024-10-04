@@ -32,7 +32,8 @@ String handleApiFormatError(dynamic error) {
           return cleanErrorMessage(data.toString());
         }
       } else {
-        return 'Something went wrong, please try again later.';
+        return 'No Response from Server';
+        return '';
       }
     } else {
       return 'An unexpected error occurred';

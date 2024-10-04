@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/authentication/controllers/auth_controller.dart';
+import 'package:pouch/features/transaction/controller/transaction_controller.dart';
 import 'package:pouch/features/wallet/apis/api.dart';
 import 'package:pouch/features/wallet/models/bank_list.dart';
 import 'package:pouch/features/wallet/models/fcy_account_entity.dart';
@@ -11,20 +12,32 @@ import 'package:pouch/features/wallet/models/paystack_model.dart';
 import 'package:pouch/features/wallet/models/ussd_modal.dart';
 import 'package:pouch/features/wallet/models/verify_bank_account_model.dart';
 import 'package:pouch/utils/constants/enums.dart';
-
+import '../../../utils/constants/colors.dart';
 import '../../payment_method/screens/flutterwave_payment.dart';
 import '../../payment_method/screens/paystack_payment.dart';
 import '../../payment_method/screens/ussd_funding_detail.dart';
 import '../../withdrawals/screens/withdrawal_success.dart';
 
 class WalletController extends GetxController {
-  final authController = Get.find<AuthController>();
+  AuthController authController = Get.find();
+  TransactionController transactionController = Get.put(TransactionController());
   var showBalance = false.obs;
   var showWalletLists = false.obs;
   var isDefaultWalletLoading = false.obs;
-  var isLoading = false.obs;
+  var isFundingWalletViaNairaTransfer = false.obs;
+  var isCreatingFcy = false.obs;
+  var isFundingFcy = false.obs;
+  var isFundingWalletViaPaystack = false.obs;
+  var isCreatingWallet = false.obs;
+  var isCreatingDefaultWallet = false.obs;
   var isBankLoading = false.obs;
   var verifyingAccount = false.obs;
+  var isTransferToLocalBank = false.obs;
+  var isFundWalletViaNairaUssd = false.obs;
+  var isFundWalletViaNairaBankDirect = false.obs;
+  var isConfirmBirthday = false.obs;
+  var isConfirmingOtp = false.obs;
+  var isLocalBankLoading = false.obs;
   var showWalletBalance = false.obs;
   var selectedWalletCurrency = WalletCurrency.NGN.obs;
   var defaultWallet = GetWalletModel().obs;
@@ -51,8 +64,6 @@ class WalletController extends GetxController {
   void onInit() {
     super.onInit();
     fetchWallets(currency: '');
-    fetchLocalBank();
-    fetchBankList();
   }
 
   void updateShowWalletList() {
@@ -95,7 +106,7 @@ class WalletController extends GetxController {
 
   Future<void> creatingWallet({required String currency, required VoidCallback onSuccess}) async {
     try {
-      isLoading(true);
+      isCreatingWallet(true);
       final response = await WalletServices.instance.createWallet(currency: currency);
       if (response.statusCode == 200 || response.statusCode == 201) {
         await fetchWallets(currency: '');
@@ -107,12 +118,14 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isCreatingWallet(false);
     }
   }
 
   Future<void> creatingDefaultWallet({required String walletId}) async {
     try {
+      Get.snackbar('', 'Setting default wallet', backgroundColor: TColors.primary);
+      isCreatingDefaultWallet(true);
       final response = await WalletServices.instance.createDefaultWallet(walletId: walletId);
       if (response.statusCode == 200 || response.statusCode == 201) {
         await fetchingDefaultWallet();
@@ -121,12 +134,15 @@ class WalletController extends GetxController {
       }
     } catch (err) {
       return null;
+    } finally {
+      Get.closeAllSnackbars();
+      isCreatingDefaultWallet(false);
     }
   }
 
   Future<void> fundingWalletViaNairaTransfer({required String amount}) async {
     try {
-      isLoading(true);
+      isFundingWalletViaNairaTransfer(true);
       final response = await WalletServices.instance.fundWalletViaNairaTransfer(amount: amount);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var item = response.data['meta']['authorization'];
@@ -146,13 +162,13 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isFundingWalletViaNairaTransfer(false);
     }
   }
 
   Future<void> creatingFcy({required String currency, required String accountNumber}) async {
     try {
-      isLoading(true);
+      isCreatingFcy(true);
       final response = await WalletServices.instance.createFcy(currency: currency, accountNumber: accountNumber);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var item = response.data;
@@ -163,13 +179,13 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isCreatingFcy(false);
     }
   }
 
   Future<void> fundingFcy({required String currency, required String amount, required VoidCallback onSuccess}) async {
     try {
-      isLoading(true);
+      isFundingFcy(true);
       final response = await WalletServices.instance.fundFcy(currency: currency, amount: amount);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var item = response.data;
@@ -181,13 +197,13 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isFundingFcy(false);
     }
   }
 
   Future<void> fundingWalletViaPaystack({required String amount}) async {
     try {
-      isLoading(true);
+      isFundingWalletViaPaystack(true);
       final response = await WalletServices.instance.fundWalletViaPaystack(amount: amount);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var item = response.data['data'];
@@ -207,7 +223,7 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isFundingWalletViaPaystack(false);
     }
   }
 
@@ -274,7 +290,7 @@ class WalletController extends GetxController {
     required int amount,
   }) async {
     try {
-      isLoading(true);
+      isTransferToLocalBank(true);
       final response = await WalletServices.instance.transferToLocalBank(
           bankId: bankId,
           amount: amount,
@@ -290,7 +306,7 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isTransferToLocalBank(false);
     }
   }
 
@@ -299,7 +315,7 @@ class WalletController extends GetxController {
     required String bank
   }) async {
     try {
-      isLoading(true);
+      isFundWalletViaNairaUssd(true);
       final response = await WalletServices.instance.fundWalletViaNairaUssd(
           amount: amount,
           bank: bank
@@ -319,7 +335,7 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isFundWalletViaNairaUssd(false);
     }
   }
 
@@ -328,7 +344,7 @@ class WalletController extends GetxController {
     required String bankId,
   }) async {
     try {
-      isLoading(true);
+      isFundWalletViaNairaBankDirect(true);
       final response = await WalletServices.instance.fundWalletViaNairaBankDirect(
           amount: amount,
           bankId: bankId
@@ -342,7 +358,7 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isFundWalletViaNairaBankDirect(false);
     }
   }
 
@@ -351,7 +367,7 @@ class WalletController extends GetxController {
     required String reference
   }) async {
     try {
-      isLoading(true);
+      isConfirmBirthday(true);
       final response = await WalletServices.instance.confirmBirthday(
           birthday: birthday,
           reference: reference
@@ -364,7 +380,7 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isConfirmBirthday(false);
     }
   }
 
@@ -373,7 +389,7 @@ class WalletController extends GetxController {
     required String reference
   }) async {
     try {
-      isLoading(true);
+      isConfirmingOtp(true);
       final response = await WalletServices.instance.confirmingOtp(
           otp: otp,
           reference: reference
@@ -386,7 +402,7 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isConfirmingOtp(false);
     }
   }
 
@@ -399,6 +415,7 @@ class WalletController extends GetxController {
             .map((json) => GetWalletModel.fromJson(json)).toList();
         wallets.assignAll(fetchedWallets);
         await fetchingDefaultWallet();
+        await transactionController.fetchTransactions();
       } else {
         Get.snackbar('Error', 'Failed to fetch wallets: ${response.data['message']}', backgroundColor: Colors.red);
       }
@@ -436,7 +453,7 @@ class WalletController extends GetxController {
 
   Future<void> fetchLocalBank() async {
     try {
-      isBankLoading(true);
+      bankAccounts.isEmpty && isLocalBankLoading(true);
       final response = await WalletServices.instance.fetchLocalBank();
       if (response.statusCode == 200) {
         final data = response.data;
@@ -449,13 +466,12 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isBankLoading(false);
+      isLocalBankLoading(false);
     }
   }
 
   Future<void> fetchFcyAccount({required String currency}) async {
     try {
-      isBankLoading(true);
       final response = await WalletServices.instance.fetchFcyAccount(currency: currency);
       if (response.statusCode == 200) {
         final data = response.data['content'];
@@ -467,13 +483,11 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isBankLoading(false);
     }
   }
 
   Future<void> fetchBankList() async {
     try {
-      isLoading(true);
       final response = await WalletServices.instance.fetchBankList();
       if (response.statusCode == 200) {
         final data = response.data['data'];
@@ -489,13 +503,12 @@ class WalletController extends GetxController {
     } catch (err) {
       print('Error occurred: $err');
     } finally {
-      isLoading(false);
     }
   }
 
   Future<void> deleteFcy({required String id}) async {
     try {
-      isLoading(true);
+      Get.snackbar('', 'Deleting account', backgroundColor: TColors.primary);
       final response = await WalletServices.instance.deleteFcy(id: id);
       if (response.statusCode == 200) {
         await fetchFcyAccount(currency: '');
@@ -505,13 +518,13 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      Get.closeAllSnackbars();
     }
   }
 
   Future<void> deleteLocalBankAccount({required String id}) async {
     try {
-      isLoading(true);
+      Get.snackbar('', 'Deleting local bank', backgroundColor: TColors.primary);
       final response = await WalletServices.instance.deleteLocalBankAccount(id: id);
       if (response.statusCode == 200) {
         await fetchLocalBank();
@@ -522,7 +535,7 @@ class WalletController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      Get.closeAllSnackbars();
     }
   }
 
@@ -540,14 +553,4 @@ class WalletController extends GetxController {
     bankAccounts.clear();
     bankList.clear();
   }
-
-  // String handleApiFormatError(dynamic error) {
-  //   if (error is ApiException) {
-  //     return error.message;
-  //   } else if (error is FormatException) {
-  //     return 'Data format error';
-  //   } else {
-  //     return 'An unexpected error occurred';
-  //   }
-  // }
 }

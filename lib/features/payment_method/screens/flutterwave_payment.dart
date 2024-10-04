@@ -8,12 +8,10 @@ import '../../../utils/layouts/navigation_menu.dart';
 import '../../wallet/controller/wallet_controller.dart';
 
 class FlutterwavePaymentScreen extends StatelessWidget {
-  final walletController = Get.find<WalletController>();
-  final controller = Get.find<NavigationController>();
-
   @override
   Widget build(BuildContext context) {
-
+    WalletController walletController = Get.find();
+    NavigationController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     final item = walletController.flutterwaveDetails.value;
     return Scaffold(
@@ -269,9 +267,10 @@ class FlutterwavePaymentScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
               child: GestureDetector(
                 onTap: () async {
-                  await walletController.fetchWallets(currency: '');
-                  controller.selectedIndex.value = 3;
+                  // controller.selectedIndex.value = 3;
+                  controller.navigateToIndex(3);
                   Get.offAll(() => NavigationMenu());
+                  await walletController.fetchWallets(currency: '');
                   // AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                 },
                 child: Container(

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 
+import '../../../data/modules/interceptor.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../all_offer/models/offer.dart';
 
 class MyOfferDetail extends StatelessWidget {
   final OfferEntity? item = Get.arguments;
+  final AppInterceptor appInterceptor = AppInterceptor();
 
   MyOfferDetail({super.key});
 
@@ -21,6 +23,7 @@ class MyOfferDetail extends StatelessWidget {
         surfaceTintColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         leading: IconButton(
           onPressed: () {
+            appInterceptor.cancelOngoingRequest();
             Get.back();
           },
           icon: const Icon(Icons.arrow_back),

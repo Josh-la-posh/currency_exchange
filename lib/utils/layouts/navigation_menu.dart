@@ -4,13 +4,15 @@ import 'package:pouch/features/all_offer/screens/all_offer.dart';
 import 'package:pouch/features/transaction/screens/history.dart';
 import 'package:pouch/features/home/screens/home.dart';
 import 'package:pouch/features/wallet/screens/wallet.dart';
+import '../../features/all_offer/controllers/offer_controller.dart';
+import '../../features/wallet/controller/wallet_controller.dart';
 import '../constants/colors.dart';
 import '../helpers/helper_functions.dart';
 
 class NavigationMenu extends StatelessWidget {
-  final NavigationController controller = Get.find<NavigationController>();
   @override
   Widget build(BuildContext context) {
+    NavigationController controller = Get.put(NavigationController(), permanent: true);
     return Scaffold(
       bottomNavigationBar: CustomBottomNavigationBar(),
       body: Obx(() => IndexedStack(
@@ -20,6 +22,68 @@ class NavigationMenu extends StatelessWidget {
     );
   }
 }
+
+class NavigationController extends GetxController {
+  final Rx<int> selectedIndex = 0.obs;
+  OfferController offerController = Get.put(OfferController());
+  WalletController walletController = Get.put(WalletController());
+
+  final List<Widget> screens = [
+    HomeScreen(),
+    AllOfferScreen(),
+    TransactionHistoryScreen(),
+    WalletDashboardScreen(),
+  ];
+  void navigateToIndex(int index) {
+    selectedIndex.value = index;
+  }
+}
+
+class CustomBottomNavigationBar extends StatelessWidget {
+  NavigationController controller = Get.find<NavigationController>();
+
+  @override
+  Widget build(BuildContext context) {
+    final darkMode = THelperFunctions.isDarkMode(context);
+    return BottomAppBar(
+      color: darkMode ? TColors.textPrimaryO40 : Colors.white.withOpacity(0.9),
+      child: Obx(() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildNavItem(Icons.home, 0, 'Home'),
+          _buildNavItem(Icons.bar_chart, 1, 'Markets'),
+          _buildNavItem(Icons.access_time_filled_outlined, 2, 'History'),
+          _buildNavItem(Icons.account_balance_wallet, 3, 'Wallet'),
+        ],
+      )),
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, int index, String label) {
+    return GestureDetector(
+      onTap: () => controller.navigateToIndex(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 25,
+            color: controller.selectedIndex.value == index ? TColors.primary : Colors.grey,
+          ),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: controller.selectedIndex.value == index ? TColors.primary : Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
 
 // class NavigationMenu extends GetView<NavigationController> {
 //
@@ -78,61 +142,3 @@ class NavigationMenu extends StatelessWidget {
 //     );
 //   }
 // }
-
-class NavigationController extends GetxController {
-  final Rx<int> selectedIndex = 0.obs;
-
-  final List<Widget> screens = [
-    HomeScreen(),
-    AllOfferScreen(),
-    const TransactionHistoryScreen(),
-    WalletDashboardScreen(),
-  ];
-  void navigateToIndex(int index) {
-    selectedIndex.value = index;
-  }
-}
-
-class CustomBottomNavigationBar extends StatelessWidget {
-  final NavigationController controller = Get.find<NavigationController>();
-
-  @override
-  Widget build(BuildContext context) {
-    final darkMode = THelperFunctions.isDarkMode(context);
-    return BottomAppBar(
-      color: darkMode ? TColors.textPrimaryO40 : Colors.white.withOpacity(0.9),
-      child: Obx(() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildNavItem(Icons.home, 0, 'Home'),
-          _buildNavItem(Icons.bar_chart, 1, 'Markets'),
-          _buildNavItem(Icons.access_time_filled_outlined, 2, 'History'),
-          _buildNavItem(Icons.account_balance_wallet, 3, 'Wallet'),
-        ],
-      )),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, int index, String label) {
-    return GestureDetector(
-      onTap: () => controller.navigateToIndex(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 25,
-            color: controller.selectedIndex.value == index ? TColors.primary : Colors.grey,
-          ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 11,
-              color: controller.selectedIndex.value == index ? TColors.primary : Colors.grey,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

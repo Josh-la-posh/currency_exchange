@@ -3,21 +3,36 @@ import 'package:get/get.dart';
 import 'package:pouch/common/widgets/currencyWidget.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
+import '../../../data/modules/interceptor.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../widgets/negotiation_screen.dart';
 import 'accept_review_details.dart';
 
 class OfferDetailsScreen extends StatelessWidget {
-  final offerController = Get.put(OfferController());
+  final AppInterceptor appInterceptor = AppInterceptor();
 
   @override
   Widget build(BuildContext context) {
+    OfferController offerController = Get.put(OfferController());
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.white,
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            appInterceptor.cancelOngoingRequest();
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back),
+          style: IconButton.styleFrom(
+            foregroundColor: Colors.grey,
+            iconSize: TSizes.iconBackSize,
+          ),
+          hoverColor: Colors.transparent,
+        ),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,7 +45,6 @@ class OfferDetailsScreen extends StatelessWidget {
               if (item.id == null) {
                 return const Center(child: Text("No offer details available."));
               }
-              print('again i say v ${offerController.offerById.value.id}');
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                 child: Column(

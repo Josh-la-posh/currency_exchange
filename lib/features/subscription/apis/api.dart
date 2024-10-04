@@ -1,13 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:pouch/data/modules/background_task.dart';
 import 'package:pouch/data/modules/dio.dart';
-import 'package:pouch/data/provider/subscription_provider.dart';
-import 'package:pouch/features/subscription/models/subscribeEnity.dart';
-import 'package:pouch/features/subscription/models/subscription_details.dart';
-import 'package:pouch/utils/responses/error_dialog.dart';
-import 'package:pouch/utils/responses/handleApiError.dart';
-import 'package:pouch/utils/shared/notification/snackbar.dart';
 
 class SubscriptionService {
   static final SubscriptionService _instance = SubscriptionService._();

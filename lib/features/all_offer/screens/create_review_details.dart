@@ -8,15 +8,17 @@ import 'package:pouch/features/home/icons/svg.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/enums.dart';
 import 'package:pouch/utils/constants/sizes.dart';
+import '../../../data/modules/interceptor.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
 class CreateReviewDetailsScreen extends StatelessWidget {
-  final createOfferController = Get.find<CreateOfferController>();
-  final offerController = Get.find<OfferController>();
-  final helperFunctionsController = Get.find<HelperFunctionsController>();
+  final AppInterceptor appInterceptor = AppInterceptor();
 
   @override
   Widget build(BuildContext context) {
+    CreateOfferController createOfferController = Get.find();
+    OfferController offerController = Get.find();
+    HelperFunctionsController helperFunctionsController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
@@ -24,7 +26,10 @@ class CreateReviewDetailsScreen extends StatelessWidget {
         backgroundColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         surfaceTintColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         leading: IconButton(
-          onPressed: (){Get.back();},
+          onPressed: (){
+            appInterceptor.cancelOngoingRequest();
+            Get.back();
+            },
           icon: const Icon(Icons.arrow_back),
           style: IconButton.styleFrom(
               foregroundColor: Colors.grey,
@@ -374,7 +379,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         child: Obx(() => TElevatedButton(
-                            onTap: (){
+                            onTap: offerController.isCreatingOfferLoading.value ? null : (){
                               offerController.creatingOffer(
                                   debitedCurrency: getCurrencyName(createOfferController.debitedCurrency.value),
                                   creditedCurrency: getCurrencyName(createOfferController.creditedCurrency.value),
@@ -387,7 +392,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                                   }
                               );
                             },
-                            buttonText: offerController.isLoading.value ? 'Paying ...' : 'Pay ${helperFunctionsController.moneyFormatter(createOfferController.amountController.text.toString())} ${getCurrencyName(createOfferController.debitedCurrency.value)}')),
+                            buttonText: offerController.isCreatingOfferLoading.value ? 'Paying ...' : 'Pay ${helperFunctionsController.moneyFormatter(createOfferController.amountController.text.toString())} ${getCurrencyName(createOfferController.debitedCurrency.value)}')),
                       ),
                       const SizedBox(height: TSizes.spaceBtwElements),
                       Row(

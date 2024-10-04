@@ -6,7 +6,6 @@ import '../../../utils/constants/enums.dart';
 import '../screens/create_review_details.dart';
 
 class CreateOfferController extends GetxController {
-  final isLoading = false.obs;
   final TextEditingController amountController = TextEditingController();
   final TextEditingController rateController = TextEditingController();
   final TextEditingController expiryHourController = TextEditingController();
@@ -51,16 +50,16 @@ class CreateOfferController extends GetxController {
   }
 
   void submitForm() {
-    amountController.text == '0' ||
-        rateController.text == '0' ||
-        amountController.text.isEmpty ||
-        rateController.text.isEmpty
-        ? null
-        : (){
+    if (amountController.text == '0' ||
+        rateController.text == '0') {
+      return null;
+    } else {
+      print('Working');
       if (formKey.currentState!.validate()) {
         formKey.currentState!.save();
         Get.to(() => CreateReviewDetailsScreen());
-      }};
+      }
+    }
   }
 
 

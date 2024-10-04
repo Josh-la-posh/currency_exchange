@@ -1,8 +1,4 @@
-import 'package:flutter/material.dart';
 import 'package:pouch/data/modules/dio.dart';
-import 'package:pouch/data/provider/transaction_provider.dart';
-import 'package:pouch/features/transaction/models/transaction_details_entity.dart';
-import 'package:pouch/features/transaction/models/transaction_entity.dart';
 
 
 class TransactionService {
@@ -13,7 +9,7 @@ class TransactionService {
   static TransactionService get instance => _instance;
 
 
-  Future _transactions(){
+  Future fetchTransactions(){
     return apiService.get(
       '/transaction',
     );
@@ -25,46 +21,46 @@ class TransactionService {
     );
   }
 
-  getTransactions({
-    required TransactionProvider transactionProvider,
-}) {
-    List<TransactionEntity> transactions = [];
-
-    _transactions().then((response) {
-      var data = response.data;
-      TransactionsDetailsEntity transactionDetails = TransactionsDetailsEntity(
-          totalPages: data['totalPages'],
-          payloadSize: data['payloadSize'],
-          hasNext: data['hasNext'],
-          content: data['content'],
-          currentPage: data['currentPage'],
-          skippedRecords: data['skippedRecords'],
-          totalRecords: data['totalRecords']
-      );
-      transactionProvider.saveTransactionDetails(transactionDetails);
-      var content = transactionDetails.content;
-        for (var item in content) {
-          transactions.add(TransactionEntity(
-            id: item['id'],
-            transactionId: item['transactionId'],
-            creditedCurrency: item['creditedCurrency'],
-            debitedCurrency: item['debitedCurrency'],
-            description: item['description'],
-            amount: item['amount'],
-            debitedAmount: item['debitedAmount'],
-            transactionType: item['transactionType'],
-            rate: item['rate'],
-            rateDescription: item['rateDescription'],
-            creditedWallet: item['creditedWallet'],
-            debitedWallet: item['debitedWallet'],
-            createdDate: item['createdDate'],
-            status: item['status'],
-            lastModifiedDate: item['lastModifiedDate'],
-          ));
-        }
-        transactionProvider.saveTransactions(transactions);
-    });
-  }
+//   getTransactions({
+//     required TransactionProvider transactionProvider,
+// }) {
+//     List<TransactionEntity> transactions = [];
+//
+//     _transactions().then((response) {
+//       var data = response.data;
+//       TransactionsDetailsEntity transactionDetails = TransactionsDetailsEntity(
+//           totalPages: data['totalPages'],
+//           payloadSize: data['payloadSize'],
+//           hasNext: data['hasNext'],
+//           content: data['content'],
+//           currentPage: data['currentPage'],
+//           skippedRecords: data['skippedRecords'],
+//           totalRecords: data['totalRecords']
+//       );
+//       transactionProvider.saveTransactionDetails(transactionDetails);
+//       var content = transactionDetails.content;
+//         for (var item in content) {
+//           transactions.add(TransactionEntity(
+//             id: item['id'],
+//             transactionId: item['transactionId'],
+//             creditedCurrency: item['creditedCurrency'],
+//             debitedCurrency: item['debitedCurrency'],
+//             description: item['description'],
+//             amount: item['amount'],
+//             debitedAmount: item['debitedAmount'],
+//             transactionType: item['transactionType'],
+//             rate: item['rate'],
+//             rateDescription: item['rateDescription'],
+//             creditedWallet: item['creditedWallet'],
+//             debitedWallet: item['debitedWallet'],
+//             createdDate: item['createdDate'],
+//             status: item['status'],
+//             lastModifiedDate: item['lastModifiedDate'],
+//           ));
+//         }
+//         transactionProvider.saveTransactions(transactions);
+//     });
+//   }
 
 
 }

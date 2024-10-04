@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/utils/constants/enums.dart';
-
+import '../../../utils/constants/colors.dart';
 import '../apis/api.dart';
 import '../models/subscribeEnity.dart';
 
 class SubscriptionController extends GetxController {
-  var isLoading = false.obs;
+  var isCreatingSubscription = false.obs;
+  var isFetchingSubscription = false.obs;
   var subscriptions = <SubscriptionEntity>[].obs;
   var currencies = Currency.values.obs;
   var debitedCurrency = Currency.USD.obs;
@@ -17,7 +18,9 @@ class SubscriptionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchSubscription(currency: '');
+    if (subscriptions.isEmpty) {
+      fetchSubscription(currency: '');
+    }
   }
 
   void setDebitedCurrency(Currency currency) {
@@ -44,7 +47,7 @@ class SubscriptionController extends GetxController {
     required VoidCallback onSuccess
   }) async {
     try {
-      isLoading(true);
+      isCreatingSubscription(true);
       final response = await SubscriptionService.instance.createSubscription({
             'debitedCurrency': debitedCurrency,
             'creditedCurrency': creditedCurrency,
@@ -61,13 +64,13 @@ class SubscriptionController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isCreatingSubscription(false);
     }
   }
 
   Future<void> fetchSubscription({required String currency}) async {
     try {
-      isLoading(true);
+      subscriptions.isEmpty && isFetchingSubscription(true);
       final response = await SubscriptionService.instance.getSubscriptions(currency);
       if (response.statusCode == 200) {
         final data = response.data['content'];
@@ -80,13 +83,13 @@ class SubscriptionController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      isFetchingSubscription(false);
     }
   }
 
   Future<void> deleteSubscription({required String id}) async {
     try {
-      isLoading(true);
+      Get.snackbar('', 'Deleting subscription', backgroundColor: TColors.primary);
       final response = await SubscriptionService.instance.deleteSubscriptions(id);
       if (response.statusCode == 200) {
         await fetchSubscription(currency: '');
@@ -97,7 +100,7 @@ class SubscriptionController extends GetxController {
     } catch (err) {
       return null;
     } finally {
-      isLoading(false);
+      Get.closeAllSnackbars();
     }
   }
 

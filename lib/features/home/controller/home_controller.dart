@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:pouch/data/modules/storage_session_controller.dart';
+import 'package:pouch/features/negotiation_offer/controller/negotiation_offer_controller.dart';
+import '../../../data/firebase/firebase_api.dart';
 import '../../../utils/helpers/controller/helper_function_controller.dart';
 import '../../../utils/socket/socket_helper.dart';
 import '../../all_offer/controllers/offer_controller.dart';
@@ -8,17 +10,14 @@ import '../../notification/controller/notification_controller.dart';
 import '../../wallet/controller/wallet_controller.dart';
 
 class HomeController extends GetxController {
-  final AuthController authController = Get.find<AuthController>();
-  final offerController = Get.put(OfferController());
-  final notificationController = Get.put(NotificationController());
-  final walletController = Get.put(WalletController());
+  AuthController authController = Get.find();
+  UserSessionController userSessionController = Get.find();
+  WalletController walletController = Get.find();
+  NegotiationOfferController negotiationOfferController = Get.put(NegotiationOfferController());
+  OfferController offerController = Get.find();
+  NotificationController notificationController = Get.put(NotificationController());
   final helperFunctionsController = Get.find<HelperFunctionsController>();
-  final userSessionController = Get.find<UserSessionController>();
-  var displayBalance = false.obs;
-  var isOfferLoading = false.obs;
-  var isMyBidLoading = false.obs;
-  var isMyOfferLoading = false.obs;
-
+  final Rx<int> selectedIndex = 0.obs;
 
   @override
   void onReady() {
@@ -29,14 +28,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     _initializeSocket();
-    offerController.fetchAllOffers();
-    offerController.fetchMyBids(days: '', currency: '');
-    offerController.fetchMyOffers(days: '', currency: '');
     super.onInit();
   }
 
   Future<void> _initializeSocket() async {
     String? token = await userSessionController.getAccessToken();
+    await FirebaseApi().initNotifications();
     if (token != null) {
       SocketManager.shared.initSocket();
     } else {
@@ -44,7 +41,10 @@ class HomeController extends GetxController {
     }
   }
 
-  void clearData() {
+  void navigateToIndex(int index) {
+    selectedIndex.value = index;
+  }
 
+  void clearData() {
   }
 }

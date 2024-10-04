@@ -1,49 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/data/provider/transaction_provider.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/transaction/controller/transaction_controller.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
-import '../widgets/transaction_list.dart';
+import '../../../utils/layouts/list_layout.dart';
+import '../widgets/no_transaction.dart';
+import '../widgets/transaction_item.dart';
 
-class TransactionHistoryScreen extends StatefulWidget {
-  const TransactionHistoryScreen({super.key});
-
-  @override
-  State<TransactionHistoryScreen> createState() => _TransactionHistoryScreenState();
-}
-
-class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
-  late final TransactionProvider _transactionProvider;
-
-  @override
-  void initState() {
-    super.initState();
-    _transactionProvider = Provider.of<TransactionProvider>(
-      context,
-      listen: false,
-    );
-
-    if (_transactionProvider.transactions.isEmpty) {
-      _fetchTransactions();
-    }
-  }
-
-  Future<void> _fetchTransactions() async {
-    await NoLoaderService.instance.getTransactions(
-      transactionProvider: _transactionProvider,
-    );
-  }
-
-  Future<void> _refreshTransactions() async {
-    await _fetchTransactions();
-    await Future.delayed(const Duration(seconds: 2));
-  }
+class TransactionHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TransactionController controller = Get.put(TransactionController());
     final darkMode = THelperFunctions.isDarkMode(context);
     final backgroundColor = darkMode ? TColors.textPrimaryO40 : Colors.white;
     final screenHeight = THelperFunctions.screenHeight();
@@ -67,13 +37,34 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
             Expanded(
               child: Container(
                 color: backgroundColor,
-                child: CustomRefreshIndicator(
-                  onRefresh: _refreshTransactions,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    child: const TransactionList(),
-                  ),
-                ),
+                child: Obx(() {
+                  if (controller.isTransactionLoading.value) {
+                    return Center(child: CircularProgressIndicator());
+                  } else {
+                    return CustomRefreshIndicator(
+                      onRefresh: () => controller.fetchTransactions(),
+                      child: Container(
+                        height: THelperFunctions.screenHeight(),
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            children: [
+                              controller.transactions.isEmpty
+                                  ? const NoTransactionScreen()
+                                  : TListLayout(
+                                itemCount: controller.transactions.length,
+                                itemBuilder: (_, index) {
+                                  final item = controller.transactions[index];
+                                  return TransactionItem(item: item);
+                                  },
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                }),
               ),
             ),
           ],

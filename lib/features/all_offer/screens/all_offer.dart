@@ -15,9 +15,9 @@ import 'market/ngn_market/ngn_market.dart';
 import 'market/usd_market/usd_market.dart';
 
 class AllOfferScreen extends StatelessWidget {
-  final controller = Get.put(OfferController());
   @override
   Widget build(BuildContext context) {
+    OfferController controller = Get.find();
     controller.fetchAllOffers();
     final darkMode = THelperFunctions.isDarkMode(context);
     return DefaultTabController(

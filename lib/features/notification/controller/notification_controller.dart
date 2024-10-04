@@ -1,11 +1,13 @@
 import 'package:get/get.dart';
+import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/features/notification/apis/api.dart';
 import 'package:pouch/features/notification/model/get_user_notification.dart';
 
-import '../../all_offer/controllers/offer_controller.dart';
+import '../../negotiation_offer/controller/negotiation_offer_controller.dart';
 
 class NotificationController extends GetxController {
-  final offerController = Get.find<OfferController>();
+  NegotiationOfferController negotiationOfferController = Get.find();
+  OfferController offerController = Get.find();
   var userNotifications = <GetUserNotification>[].obs;
   var idsArray = [].obs;
   var isLoading = false.obs;
@@ -22,7 +24,7 @@ class NotificationController extends GetxController {
         updateNotification();
       }
     } catch (err) {
-      print('Wahala dey toun');
+      print('Wahala getting notifications');
     } finally {
       isLoading(false);
     }
@@ -33,7 +35,7 @@ class NotificationController extends GetxController {
       final response = await NotificationService.instance.fetchNotificationById(id: id);
       await fetchNotification();
     } catch (err) {
-      print('Wahala dey toun');
+      print('Wahala getting notification by id');
     } finally {
     }
   }
@@ -42,16 +44,15 @@ class NotificationController extends GetxController {
     try {
       Map<String, dynamic> requestData = {'ids': idsArray};
       final response = NotificationService.instance.updateNotification(requestData);
-      notificationLength([]);
+      idsArray.clear();
     } catch (e) {
-      print('I don do nonsense ooooooo');
+      print('I don update nonsense notification ooooooo');
     }
   }
 
   void notificationLength(val) {
     List fetchedData = val.map((item) => item['id'].toString()).toList();
     idsArray.assignAll(fetchedData);
-    print('Lookinf good $idsArray');
   }
 
   void saveUserNotifications(val) {

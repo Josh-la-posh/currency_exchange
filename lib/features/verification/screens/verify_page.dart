@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
@@ -13,10 +10,10 @@ import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/layouts/navigation_menu.dart';
 
 class VerificationPage extends StatelessWidget {
-  final verificationController = Get.find<VerificationController>();
 
   @override
   Widget build(BuildContext context) {
+    VerificationController verificationController = Get.put(VerificationController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
        backgroundColor: darkMode ? TColors.black.withOpacity(0.1) : TColors.secondaryBorder,

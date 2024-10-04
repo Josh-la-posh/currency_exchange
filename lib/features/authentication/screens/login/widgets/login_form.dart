@@ -12,7 +12,7 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authFormController = Get.find<AuthFormController>();
+    AuthFormController authFormController = Get.put(AuthFormController());
     final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
@@ -73,8 +73,8 @@ class LoginForm extends StatelessWidget {
 
           // Sign In Button
           Obx(() => TElevatedButton(
-            onTap: authFormController.isLoading.value ? null : () => authFormController.submitLoginForm(formKey: formKey),
-            buttonText: authFormController.isLoading.value ? 'Logging in' : 'Log In',
+            onTap: authFormController.isLoggingIn.value ? null : () => authFormController.submitLoginForm(formKey: formKey),
+            buttonText: authFormController.isLoggingIn.value ? 'Logging in' : 'Log In',
           )),
           const SizedBox(height: TSizes.md),
 

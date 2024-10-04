@@ -11,10 +11,10 @@ import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
 class CountrySelectionPage extends StatelessWidget {
-  final verificationController = Get.find<VerificationController>();
 
   @override
   Widget build(BuildContext context) {
+    VerificationController verificationController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,

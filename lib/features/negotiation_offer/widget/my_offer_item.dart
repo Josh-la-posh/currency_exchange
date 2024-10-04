@@ -1,24 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_offer_detail.dart';
-import 'package:provider/provider.dart';
-import 'package:pouch/data/modules/background_task.dart';
-import 'package:pouch/data/provider/offer_provider.dart';
 import 'package:pouch/features/all_offer/models/offer.dart';
-import 'package:pouch/features/negotiation_offer/screen/negotiation_accept_reject.dart';
-import 'package:pouch/features/negotiation_offer/widget/negotiation_list.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../common/widgets/divider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/texts.dart';
-import '../../all_offer/models/negotiate_offer_model.dart';
 import '../../transaction/icons/svg.dart';
+import '../controller/negotiation_offer_controller.dart';
 
-class MyOfferItem extends GetView<OfferController> {
+class MyOfferItem extends StatelessWidget {
   final OfferEntity item;
   MyOfferItem({
     super.key,
@@ -27,6 +20,7 @@ class MyOfferItem extends GetView<OfferController> {
 
   @override
   Widget build(BuildContext context) {
+    NegotiationOfferController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Container(
       height: TSizes.textReviewHeight * 1.4,

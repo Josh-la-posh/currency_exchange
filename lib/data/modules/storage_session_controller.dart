@@ -20,8 +20,24 @@ class UserSessionController extends GetxController {
     await _storage.setString(USER_SESSION_TOKEN, accessToken);
   }
 
+  Future<void> setRefreshToken(String refreshToken) async {
+    await _storage.setString(USER_REFRESH_TOKEN, refreshToken);
+  }
+
+  Future<void> setUserBiometrics(bool useBiometrics) async {
+    await _storage.setBool(USER_BIOMETRIC_ENABLED, useBiometrics);
+  }
+
   Future<String?> getAccessToken() async {
     return _storage.getString(USER_SESSION_TOKEN);
+  }
+
+  Future<String?> getRefreshToken() async {
+    return _storage.getString(USER_REFRESH_TOKEN);
+  }
+
+  Future<bool?> getUserBiometrics() async {
+    return _storage.getBool(USER_BIOMETRIC_ENABLED);
   }
 
   Future<bool> isLoginBool() async {
@@ -71,7 +87,7 @@ class UserSessionController extends GetxController {
             email: email.toString(),
             password: password.toString(),
             rememberMe: true,
-            handleEmailNotVerified: (){}
+            handleEmailNotVerified: (){},
         );
       } else {
         Get.offAll(() => LoginScreen());
@@ -90,9 +106,9 @@ class UserSessionController extends GetxController {
   }
 
   Future<void> logoutUser({String? logoutMessage = ''}) async {
-    await _storage.remove(USER_SESSION_TOKEN);
+    clearRememberMeHandler();
     await resetController.clearData();
-    Get.snackbar('', "You've successfully logged out of pouch. We hope to see you again soon.");
+    Get.snackbar('', '$logoutMessage');
   }
 
   Future<void> setRememberMeHandler({
@@ -120,5 +136,9 @@ class UserSessionController extends GetxController {
   Future<void> clearRememberMeHandler() async {
     await _storage.remove(USER_REMEMBER_ME_EMAIL);
     await _storage.remove(USER_REMEMBER_ME_PASS);
+    await _storage.remove(USER_REMEMBER_ME_ENABLED);
+    await _storage.setBool(USER_BIOMETRIC_ENABLED, false);
+    await _storage.remove(USER_SESSION_TOKEN);
+    await _storage.remove(USER_REFRESH_TOKEN);
   }
 }

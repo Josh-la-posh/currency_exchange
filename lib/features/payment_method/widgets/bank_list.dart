@@ -7,11 +7,11 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 
 class BankList extends StatelessWidget {
-  final addBankController = Get.find<AddBankController>();
   BankList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AddBankController addBankController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Obx(() => Column(
       crossAxisAlignment: CrossAxisAlignment.start,

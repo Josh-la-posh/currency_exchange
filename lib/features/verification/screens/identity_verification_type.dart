@@ -12,11 +12,11 @@ import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
 class IdentityVerificationTypeScreen extends StatelessWidget {
-  final verificationController = Get.find<VerificationController>();
-  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
+    VerificationController verificationController = Get.find();
+    AuthController authController = Get.find();
     verificationController.fetchSmileData();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
@@ -37,7 +37,10 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
         ),
         centerTitle: true,
         leading: InkWell(
-            onTap: () {Get.back();},
+            onTap: () {
+              verificationController.bvnNumber.value = '';
+              Get.back();
+              },
             child: const Icon(Icons.arrow_back_ios_outlined)
         ),
       ),
@@ -63,7 +66,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
             ),
             const SizedBox(height: TSizes.defaultSpace),
             Obx(() {
-              if (verificationController.isLoading.value) {
+              if (verificationController.isFetchingSmileId.value) {
                 return CircularProgressIndicator();
               } else {
                 return Column(
@@ -75,14 +78,15 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                         _showBvnDialog(context, () {
                           verificationController.validateBvnNumber();
                           if (verificationController.showErrorText.value == false) {
-                            Navigator.of(context).push(
+                            verificationController.isPermissionGranted.value
+                                ? Navigator.of(context).push(
                               MaterialPageRoute<void>(
                                 builder: (BuildContext context) => Scaffold(
                                     body: SmileIDBiometricKYC(
                                       country: 'NG',
                                       idType: id['code'],
                                       idNumber: verificationController.bvnNumber.value,
-                                      userId: authController.user.value?.id,
+                                      userId: authController.user.value.id,
                                       jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
                                       onSuccess: (String? result) {
                                         Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
@@ -100,7 +104,8 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                                       },
                                     )),
                               ),
-                            );
+                            )
+                                : Text('Permission not granted. Requesting permission...');
                           }
                         });
                       } else {
@@ -111,7 +116,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                                   body: SmileIDEnhancedDocumentVerification(
                                     countryCode: verificationController.selectedCountry.value!.countryCode,
                                     documentType: id['code'],
-                                    userId: authController.user.value?.id,
+                                    userId: authController.user.value.id,
                                     captureBothSides: true,
                                     jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
                                     onSuccess: (String? result) {
@@ -138,7 +143,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                                   body: SmileIDEnhancedDocumentVerification(
                                     countryCode: verificationController.selectedCountry.value!.countryCode,
                                     documentType: id['code'],
-                                    userId: authController.user.value?.id,
+                                    userId: authController.user.value.id,
                                     captureBothSides: false,
                                     jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
                                     onSuccess: (String? result) {
@@ -208,6 +213,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
   }
 
   void _showBvnDialog(BuildContext context, VoidCallback onContinue) {
+    VerificationController verificationController = Get.find();
     showDialog(
       context: context,
       builder: (_) {
@@ -266,6 +272,8 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
   }
 
   Widget _buildBvnInputField(BuildContext context) {
+
+    VerificationController verificationController = Get.find();
     return TextFormField(
       focusNode: verificationController.bvnFocusNode,
       textAlign: TextAlign.center,

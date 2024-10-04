@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/data/provider/offer_provider.dart';
-import 'package:pouch/features/home/apis/api.dart';
 import 'package:pouch/data/provider/currency_provider.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/enums.dart';
@@ -109,18 +107,18 @@ class FilterScreen extends StatelessWidget {
               const SizedBox(height: TSizes.spaceBtwSections / 2),
               TElevatedButton(onTap: (){
                 if (provider.filterAll == true) {
-                  OfferService.instance.getAllOffers(
-                      offerProvider: provider,
-                      currency: '',
-                      date: ''
-                  );
+                  // OfferService.instance.getAllOffers(
+                  //     offerProvider: provider,
+                  //     currency: '',
+                  //     date: ''
+                  // );
                   Get.back();
                 } else {
-                  OfferService.instance.getAllOffers(
-                      offerProvider: provider,
-                      currency: getCurrencyName(selectedCurrency),
-                      date: getDateValue(selectedDate)
-                  );
+                  // OfferService.instance.getAllOffers(
+                  //     offerProvider: provider,
+                  //     currency: getCurrencyName(selectedCurrency),
+                  //     date: getDateValue(selectedDate)
+                  // );
                   Get.back();
                 }
                 }, buttonText: 'Apply')

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:pouch/common/widgets/custom_shapes/currency_widget_with_back.dart';
+import 'package:get/get.dart';
+import 'package:pouch/features/subscription/controller/subscription_controller.dart';
 import 'package:pouch/features/subscription/widgets/subscription_form.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import '../../../common/styles/spacing_styles.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
-class AddSubscriptionScreen extends StatelessWidget {
+class AddSubscriptionScreen extends GetView<SubscriptionController> {
   const AddSubscriptionScreen({super.key});
 
   @override

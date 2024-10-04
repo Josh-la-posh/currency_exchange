@@ -6,22 +6,16 @@ import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/constants/texts.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import 'package:provider/provider.dart';
-
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/provider/transaction_provider.dart';
-import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/layouts/navigation_menu.dart';
-import '../../wallet/apis/api.dart';
 
 class WithdrawalSuccessScreen extends StatelessWidget {
-  final walletController = Get.find<WalletController>();
   final String title;
   WithdrawalSuccessScreen({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<NavigationController>();
+    WalletController walletController = Get.find();
+    NavigationController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? Colors.black : Colors.white,

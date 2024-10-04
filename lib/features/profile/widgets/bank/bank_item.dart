@@ -11,11 +11,11 @@ import '../../../../utils/constants/sizes.dart';
 
 class BankAccountItem extends StatelessWidget {
   final GetBankAccountModel item;
-  final walletController = Get.find<WalletController>();
   BankAccountItem({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    WalletController walletController = Get.find();
     return Column(
       children: [
         SizedBox(
@@ -35,7 +35,6 @@ class BankAccountItem extends StatelessWidget {
                               onPressed: () {
                                 Slidable.of(cont)!.close();
                                 walletController.deleteLocalBankAccount(id: item.id.toString());
-                                // WalletServices.instance.deleteLocalAccount(id: item.id, walletProvider: provider);
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(

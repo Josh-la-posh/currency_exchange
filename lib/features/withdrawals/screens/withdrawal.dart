@@ -9,13 +9,15 @@ import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';
+import '../../../data/modules/interceptor.dart';
 import '../../../utils/layouts/list_layout.dart';
 import '../../all_offer/decimal_formatter.dart';
 import '../widgets/account_widget.dart';
 import '../widgets/withdrawal_sheet.dart';
 
 class WithdrawalScreen extends StatelessWidget {
-  final WalletController walletController = Get.find<WalletController>();
+  WalletController walletController = Get.find();
+  final AppInterceptor appInterceptor = AppInterceptor();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   WithdrawalScreen({Key? key}) : super(key: key);
@@ -30,6 +32,9 @@ class WithdrawalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (walletController.bankAccounts.isEmpty) {
+      walletController.fetchLocalBank();
+    }
     walletController.amount.value = '';
     final bool darkMode = THelperFunctions.isDarkMode(context);
     walletController.selectedWithdrawalAccount.value = GetBankAccountModel();
@@ -84,6 +89,7 @@ class WithdrawalScreen extends StatelessWidget {
       leading: BackButton(
         onPressed: () {
           walletController.selectedWithdrawalAccount.value = GetBankAccountModel();
+          appInterceptor.cancelOngoingRequest();
           Get.back();
         },
       ),
@@ -263,12 +269,24 @@ class WithdrawalScreen extends StatelessWidget {
   }
 
   Widget _buildBankList(List banks, bool darkMode) {
-    return TListLayout(
-      itemCount: banks.length,
-      itemBuilder: (_, index) {
-        final item = banks[index];
-        return AccountWidget(item: item, darkMode: darkMode);
-      },
-    );
+    return Obx(() {
+      if (walletController.isLocalBankLoading.value) {
+        return Center(child: CircularProgressIndicator(),);
+      } else {
+        if (walletController.bankAccounts.isEmpty) {
+          return Center(
+            child: Text('No bank account saved.'),
+          );
+        } else {
+          return TListLayout(
+            itemCount: banks.length,
+            itemBuilder: (_, index) {
+              final item = banks[index];
+              return AccountWidget(item: item, darkMode: darkMode);
+            },
+          );
+        }
+      }
+    });
   }
 }

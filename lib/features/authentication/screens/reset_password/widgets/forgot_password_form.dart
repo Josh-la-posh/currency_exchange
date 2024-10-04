@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
 import '../../../../../utils/constants/sizes.dart';
+import '../../../controllers/auth_form_controller.dart';
 
 class ForgetPasswordForm extends StatelessWidget {
   const ForgetPasswordForm({
@@ -11,8 +14,8 @@ class ForgetPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthFormController authFormController = Get.put(AuthFormController());
     final formKey = GlobalKey<FormState>();
-    String? _email;
 
     return Form(
       key: formKey,
@@ -23,34 +26,21 @@ class ForgetPasswordForm extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Email', style: Theme.of(context).textTheme.labelMedium,),
-                SizedBox(
-                  child: TextFormField(
-                    style: Theme.of(context).textTheme.labelMedium,
-                    onChanged: (val) {
-                      _email = val;
-                    },
-                    validator: TValidator.validateEmail,
-                    onSaved: (val) {
-                      _email = val as String;
-                    },
-                  ),
-                )
+                TextFormField(
+                  controller: authFormController.email,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  style: Theme.of(context).textTheme.labelMedium,
+                  validator: TValidator.validateEmail,
+                  decoration: const InputDecoration(),
+                ),
               ],
             ),
             const SizedBox(height: TSizes.spaceBtwSections),
 
-            TElevatedButton(
-                onTap: (){
-                  if (formKey.currentState!.validate()) {
-                    formKey.currentState!.save();
-                    // AuthService.instance.generateOtp(
-                    //     email: _email.toString(), onSuccess: (){
-                    //       Get.to(() => ResetPasswordOtpScreen(email: _email as String,));
-                    //     }
-                    //     );
-                  }
-                  },
-                buttonText: 'Submit')
+            Obx(() => TElevatedButton(
+              onTap: authFormController.isForgotPasswordFormSubmitting.value ? null : () => authFormController.submitForgotPasswordForm(formKey: formKey),
+              buttonText: authFormController.isForgotPasswordFormSubmitting.value ? 'Submitting' : 'Submit',
+            )),
           ],
         )
     );

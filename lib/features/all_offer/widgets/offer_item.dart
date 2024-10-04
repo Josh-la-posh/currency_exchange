@@ -7,7 +7,6 @@ import '../../../utils/constants/sizes.dart';
 import '../models/offer.dart';
 
 class OfferItem extends StatelessWidget {
-  final offerController = Get.find<OfferController>();
   final OfferEntity item;
   OfferItem({
     super.key,
@@ -16,13 +15,14 @@ class OfferItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    OfferController offerController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         ListTile(
           hoverColor: Colors.transparent,
           dense: true,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: TSizes.lg),
           onTap: (){
             offerController.fetchOfferById(id: item.id.toString(), currency: item.debitedCurrency.toString(), onSuccess: () {});
           },

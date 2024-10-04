@@ -1,34 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../data/modules/app_navigator.dart';
-import '../../../data/modules/background_task.dart';
-import '../../../data/provider/auth_provider.dart';
-import '../../../data/provider/wallet_provider.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/layouts/navigation_menu.dart';
-import '../../home/routes/names.dart';
 import '../../wallet/controller/wallet_controller.dart';
 
 class PaystackPaymentScreen extends StatelessWidget {
   String? amount;
-  final walletController = Get.find<WalletController>();
   PaystackPaymentScreen({super.key, this.amount});
 
   @override
   Widget build(BuildContext context) {
-    var authProvider = Provider.of<AuthProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-    var walletProvider = Provider.of<WalletProvider>(
-        AppNavigator.instance.navigatorKey.currentContext as BuildContext);
-
+    WalletController walletController = Get.find();
+    NavigationController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
 
-    final item = walletProvider.paystackModel;
-    final controller = Get.find<NavigationController>();
+    final item = walletController.paystackDetails.value;
 
     return Scaffold(
       backgroundColor: darkMode ? TColors.black : const Color(0xFFE9D9FF).withOpacity(0.9),
@@ -58,7 +47,7 @@ class PaystackPaymentScreen extends StatelessWidget {
                               ),
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${authProvider.user?.email}',
+                                    text: '${walletController.authController.user.value.email}',
                                 )
                               ]
                           )
@@ -204,7 +193,7 @@ class PaystackPaymentScreen extends StatelessWidget {
                                   ),
                                   children: <TextSpan> [
                                     TextSpan(
-                                      text: '${item?.display_text}',
+                                      text: '${item.display_text}',
                                     ),
                                   ]
                               )

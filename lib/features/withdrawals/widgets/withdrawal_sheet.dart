@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
-import '../../../data/provider/wallet_provider.dart';
 import '../../wallet/controller/wallet_controller.dart';
 
 class WithdrawalConfirmSheet extends StatelessWidget {
-  final walletController = Get.find<WalletController>();
   final String amount;
   WithdrawalConfirmSheet({super.key, required this.amount});
 
   @override
   Widget build(BuildContext context) {
+    WalletController walletController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     final item = walletController.selectedWithdrawalAccount.value;
     return SingleChildScrollView(
@@ -45,7 +43,9 @@ class WithdrawalConfirmSheet extends StatelessWidget {
                           )
                       ),
                       IconButton(
-                          onPressed: () {Get.back();},
+                          onPressed: () {
+                            Get.back();
+                            },
                           icon: Icon(Icons.cancel, color: darkMode ? Colors.white : Colors.black, size: 30,)
                       )
                     ],
@@ -276,13 +276,13 @@ class WithdrawalConfirmSheet extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(TSizes.defaultSpace * 0.5),
                 child: Obx(() => TElevatedButton(
-                    onTap: walletController.isLoading.value ? null : (){
+                    onTap: walletController.isTransferToLocalBank.value ? null : (){
                       walletController.transferToLocalBank(
                           bankId: walletController.selectedWithdrawalAccount.value.id.toString(),
                           amount: int.parse(amount),
                       );
                     },
-                    buttonText: walletController.isLoading.value ? 'Loading ...' : 'Confirm'
+                    buttonText: walletController.isTransferToLocalBank.value ? 'Loading ...' : 'Confirm'
                 ))
             )
           ],

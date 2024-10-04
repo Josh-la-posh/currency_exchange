@@ -13,12 +13,12 @@ import '../../../utils/constants/enums.dart';
 import '../../all_offer/decimal_formatter.dart';
 
 class UssdFundingScreen extends StatelessWidget {
-  final formKey = GlobalKey<FormState>();
-  final controller = Get.find<WalletController>();
   UssdFundingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+    WalletController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
@@ -140,23 +140,16 @@ class UssdFundingScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 200,
                     child: Obx(() => TElevatedButton(
-                      onTap: controller.isLoading.value ? null : () {
+                      onTap: controller.isFundWalletViaNairaUssd.value ? null : () {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
                           controller.fundWalletViaNairaUssd(
                               amount: controller.amount.value,
                               bank: getBankName(controller.selectedNigBanks.value)
                           );
-                          // WalletServices.instance.fundWalletNairaUssd(
-                          //   walletProvider: walletProvider,
-                          //   transactionProvider: Get.find<TransactionProvider>(),
-                          //   amount: amount.value,
-                          //   currency: 'NGN',
-                          //   bank: getBankName(selectedBank.value!)
-                          // );
                         }
                       },
-                      buttonText: controller.isLoading.value ? 'Loading' : 'Continue',
+                      buttonText: controller.isFundWalletViaNairaUssd.value ? 'Loading' : 'Continue',
                     )),
                   ),
                 ),

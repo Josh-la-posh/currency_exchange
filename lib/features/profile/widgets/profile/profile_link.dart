@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
@@ -9,12 +10,14 @@ class ProfileLinkWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.onPressed,
-    required this.icon
+    this.icon,
+    this.rightText
   });
 
   String title;
   VoidCallback onPressed;
-  Widget icon;
+  Widget? icon;
+  String? rightText;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,7 @@ class ProfileLinkWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                if (icon != null)
                 SizedBox(
                   height: 29,
                   width: 29,
@@ -50,7 +54,7 @@ class ProfileLinkWidget extends StatelessWidget {
                           TextSpan(
                               text: title,
                               style: TextStyle(
-                                  fontSize: TSizes.fontSize16,
+                                  fontSize: 15,
                                   // fontWeight: FontWeight.w600
                               )
                           )
@@ -60,11 +64,17 @@ class ProfileLinkWidget extends StatelessWidget {
               ],
             ),
             Spacer(),
-            SizedBox(
-                height: 15,
-                width: 15,
-                child: IconRight()
-            )
+            Text(rightText == null ? '' : rightText.toString(), style: TextStyle(
+              color: CupertinoColors.inactiveGray,
+              fontSize: 12,
+            ),),
+            const SizedBox(width: 6),
+            Icon(Icons.arrow_forward, color: CupertinoColors.inactiveGray, size: 13,)
+            // SizedBox(
+            //     height: 15,
+            //     width: 15,
+            //     child: IconRight()
+            // )
           ],
         ),
       ),

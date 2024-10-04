@@ -10,9 +10,9 @@ import 'package:pouch/utils/validators/validation.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 
 class NegotiationScreen extends StatelessWidget {
-  final offerController = Get.find<OfferController>();
-  final controller = Get.find<NavigationController>();
-  final createOfferController = Get.find<CreateOfferController>();
+  OfferController offerController = Get.find();
+  NavigationController controller = Get.find();
+  CreateOfferController createOfferController = Get.put(CreateOfferController());
   final String id;
   final String debitedCurrency;
   final String creditedCurrency;
@@ -74,7 +74,7 @@ class NegotiationScreen extends StatelessWidget {
                   ],
                 ),
                 Obx(() => TElevatedButton(
-                    onTap: offerController.isLoading.value ? null : (){
+                    onTap: offerController.isNegotiatingOfferLoading.value ? null : (){
                       if (createOfferController.formKey.currentState!.validate()) {
                         offerController.negotiatingOffer(
                             id: id,
@@ -87,26 +87,9 @@ class NegotiationScreen extends StatelessWidget {
                               Get.offAll(() => NavigationMenu());
                             }
                         );
-                        // OfferService.instance
-                        //     .negotiateOffer(
-                        //     id: widget.id,
-                        //     negotiatorRate: provider.negotiatorRate,
-                        //     negotiatorAmount: provider.negotiatorAmount,
-                        //     offerProvider: offerProvider,
-                        //     onSuccess: () {
-                        //       widget.controller.selectedIndex.value = 1;
-                        //       AppNavigator.instance
-                        //           .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
-                        //     },
-                        //     onFailure: (){
-                        //       setState(() {
-                        //         isLoading = false;
-                        //       });
-                        //     }
-                        // );
                       }
                     },
-                    buttonText: offerController.isLoading.value ? 'Loading ...' : 'Done'
+                    buttonText: offerController.isNegotiatingOfferLoading.value ? 'Loading ...' : 'Done'
                 ))
               ],
             ),

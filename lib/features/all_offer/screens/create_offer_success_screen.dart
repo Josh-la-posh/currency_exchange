@@ -7,10 +7,10 @@ import 'package:pouch/utils/layouts/list_layout.dart';
 import '../widgets/success_page.dart';
 
 class CreateOfferSuccessPage extends StatelessWidget {
-  final offerController = Get.find<OfferController>();
 
   @override
   Widget build(BuildContext context) {
+    OfferController offerController = Get.find();
     return Scaffold(
       body: SuccessScreenWidget(
         text: 'You have successfully created an offer',

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/data/modules/session_manager.dart';
-import 'package:pouch/features/authentication/screens/login/login.dart';
 
 import '../../../../data/modules/storage_session_controller.dart';
 import '../../../../utils/constants/colors.dart';
@@ -9,12 +7,13 @@ import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 
 class LogoutButton extends StatelessWidget {
-  final UserSessionController userSessionController = Get.find<UserSessionController>();
 
   LogoutButton({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    UserSessionController userSessionController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return SizedBox(
       width: double.infinity,
@@ -53,7 +52,7 @@ class LogoutButton extends StatelessWidget {
                     ListTile(
                       onTap: () {
                         userSessionController.logoutUser(
-                          logoutMessage: 'You have successfully logged out',
+                          logoutMessage: "You've successfully logged out of pouch. We hope to see you again soon.",
                         );
                       },
                       title: SizedBox(

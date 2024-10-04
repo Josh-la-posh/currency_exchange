@@ -5,17 +5,22 @@ import 'package:get/get.dart';
 import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 
 import '../screens/email_verify/email_verify.dart';
+import '../screens/reset_password/reset_password_otp.dart';
 
 class AuthFormController extends GetxController {
-  final authController = Get.find<AuthController>();
-  var isLoading = false.obs;
+  AuthController authController = Get.find();
+  var isLoggingIn = false.obs;
+  var isAddressFetching = false.obs;
+  var isCreatingAccount = false.obs;
+  var isUpdatingAddress = false.obs;
+  var isPasswordChanging = false.obs;
+  var isForgotPasswordFormSubmitting = false.obs;
   var rememberMe = false.obs;
   var obscureOldPassword = true.obs;
   var obscurePassword = true.obs;
   var obscureConPassword = true.obs;
   var showErrorText = false.obs;
   var acceptTerms = false.obs;
-
   final postCode = ''.obs;
   final address = ''.obs;
 
@@ -40,10 +45,11 @@ class AuthFormController extends GetxController {
   }
 
   Future<void> fetchAddressFromPostCode(String postCode) async {
-    isLoading.value = true;
+    isAddressFetching.value = true;
     try {
-      final apiKey = 'AIzaSyBECoO_1MmoGnwVN5zXmjIbaFCIME11fRQ'; // Replace with your Google Maps API key
-      final url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$postCode&key=$apiKey';
+      final apiKey = 'AIzaSyBECoO_1MmoGnwVN5zXmjIbaFCIME11fRQ';
+      // final url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$postCode&key=$apiKey';
+      final url = '';
       final response = await Dio().get(url);
 
       if (response.statusCode == 200) {
@@ -59,7 +65,7 @@ class AuthFormController extends GetxController {
     } catch (error) {
       address.value = 'Failed to fetch address';
     } finally {
-      isLoading.value = false;
+      isAddressFetching.value = false;
     }
   }
 
@@ -100,7 +106,7 @@ class AuthFormController extends GetxController {
     if (validateForm(formKey)) {
       saveForm(formKey);
       try {
-        isLoading(true);
+        isLoggingIn(true);
         await authController.login(
           email: email.text.toString(),
           password: password.text.toString(),
@@ -115,7 +121,7 @@ class AuthFormController extends GetxController {
       } catch (e) {
         Get.snackbar("Login Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
       } finally {
-        isLoading(false);
+        isLoggingIn(false);
       }
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM);
@@ -127,7 +133,7 @@ class AuthFormController extends GetxController {
     if (validateForm(formKey)) {
       saveForm(formKey);
       try {
-        isLoading(true);
+        isCreatingAccount(true);
         await authController.createAccount(
             firstName: firstName.text.toString(),
             lastName: lastName.text.toString(),
@@ -144,7 +150,7 @@ class AuthFormController extends GetxController {
       } catch (e) {
         Get.snackbar("Sign Up Error", e.toString(), snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
       } finally {
-        isLoading(false);
+        isCreatingAccount(false);
       }
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
@@ -156,7 +162,7 @@ class AuthFormController extends GetxController {
     if (validateForm(formKey)) {
       saveForm(formKey);
       try {
-        isLoading(true);
+        isUpdatingAddress(true);
         await authController.updateAddress(
           postCode: postCode.value,
           address: address.value,
@@ -166,7 +172,7 @@ class AuthFormController extends GetxController {
       } catch (e) {
         Get.snackbar("Sign Up Error", e.toString(), snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
       } finally {
-        isLoading(false);
+        isUpdatingAddress(false);
       }
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
@@ -178,7 +184,7 @@ class AuthFormController extends GetxController {
     if (validateForm(formKey)) {
       saveForm(formKey);
       try {
-        isLoading(true);
+        isPasswordChanging(true);
         await authController.changePassword(
             currentPassword: oldPassword.text,
             newPassword: password.text,
@@ -188,12 +194,35 @@ class AuthFormController extends GetxController {
             }
         );
       } catch (e) {
-        Get.snackbar("Sign Up Error", e.toString(), snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
+        Get.snackbar("Change Password Error", e.toString(), snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
       } finally {
-        isLoading(false);
+        isPasswordChanging(false);
       }
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
+    }
+  }
+
+  // Submit the form and handle forgot password
+  Future<void> submitForgotPasswordForm({required GlobalKey<FormState> formKey}) async {
+    if (validateForm(formKey)) {
+      saveForm(formKey);
+      try {
+        isForgotPasswordFormSubmitting(true);
+        await authController.generateOtp(
+            email: email.text.toString(),
+            onSuccess: () {
+            Get.to(() => ResetPasswordOtpScreen(email: email.text));
+          },
+            onFailure: (){}
+        );
+      } catch (e) {
+        Get.snackbar("Login Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
+      } finally {
+        isForgotPasswordFormSubmitting(false);
+      }
+    } else {
+      Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM);
     }
   }
 

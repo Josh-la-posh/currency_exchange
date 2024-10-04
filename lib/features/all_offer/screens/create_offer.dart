@@ -10,10 +10,10 @@ import '../controllers/create_offer_controller.dart';
 import '../widgets/create_offer_form.dart';
 
 class CreateOfferScreen extends StatelessWidget {
-  final  createOfferController = Get.find<CreateOfferController>();
 
   @override
   Widget build(BuildContext context) {
+    CreateOfferController createOfferController = Get.put(CreateOfferController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,

@@ -7,10 +7,10 @@ import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/sizes.dart';
 
 class WalletList extends StatelessWidget {
-  final walletController = Get.find<WalletController>();
 
   @override
   Widget build(BuildContext context) {
+    WalletController walletController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Obx(() {
       if (walletController.showWalletLists.value) {
@@ -29,7 +29,6 @@ class WalletList extends StatelessWidget {
                       margin: EdgeInsets.only(bottom: 8),
                       child: GestureDetector(
                         onTap: (){
-                          print(getWalletCurrencyName(walletController.selectedWalletCurrency.value));
                           walletController.updateSelectedCurrency(currency);
                           walletController.creatingWallet(
                               currency: getWalletCurrencyName(walletController.selectedWalletCurrency.value),
@@ -37,11 +36,6 @@ class WalletList extends StatelessWidget {
                                 walletController.updateShowWalletList();
                               }
                           );
-                          // WalletServices.instance.createWallet(
-                          //     transactionProvider: transactionProvider,
-                          //     walletProvider: walletProvider,
-                          //     currency: getWalletCurrencyName(walletProvider.selectedWalletCurrency)
-                          // );
                         },
                         child: Container(
                           height: 48,
