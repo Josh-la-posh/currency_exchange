@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:provider/provider.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/data/provider/auth_provider.dart';
-import 'package:pouch/data/provider/verification_provider.dart';
 import 'package:pouch/features/verification/screens/verify_page.dart';
 import '../../features/authentication/controllers/auth_controller.dart';
 import '../../utils/constants/colors.dart';

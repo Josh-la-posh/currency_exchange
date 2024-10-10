@@ -79,88 +79,67 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                           verificationController.validateBvnNumber();
                           if (verificationController.showErrorText.value == false) {
                             verificationController.isPermissionGranted.value
-                                ? Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (BuildContext context) => Scaffold(
-                                    body: SmileIDBiometricKYC(
-                                      country: 'NG',
-                                      idType: id['code'],
-                                      idNumber: verificationController.bvnNumber.value,
-                                      userId: authController.user.value.id,
-                                      jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
-                                      onSuccess: (String? result) {
-                                        Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
-                                        String formattedResult = jsonEncode(jsonResult);
-                                        final snackBar = SnackBar(content: Text("Success: $formattedResult"));
-                                        print("Success: $formattedResult");
-                                        Navigator.pop(context);
-                                        Get.to(() => const VerificationInProgressScreen());
+                                ? Get.to(() => Scaffold(
+                                body: SmileIDBiometricKYC(
+                                  country: 'NG',
+                                  idType: id['code'],
+                                  idNumber: verificationController.bvnNumber.value,
+                                  userId: authController.user.value.id,
+                                  jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
+                                  onSuccess: (String? result) {
+                                    Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
+                                    String formattedResult = jsonEncode(jsonResult);
+                                    print('Formatted verificaton result: $formattedResult');
+                                    Get.off(() => const VerificationInProgressScreen());
 
-                                      },
-                                      onError: (String errorMessage) {
-                                        final snackBar = SnackBar(content: Text("Error: $errorMessage"));
-                                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                        Navigator.of(context).pop();
-                                      },
-                                    )),
-                              ),
-                            )
+                                  },
+                                  onError: (String errorMessage) {
+                                    Get.snackbar('Error',"Error: $errorMessage");
+                                    Get.back();
+                                  },
+                                )))
                                 : Text('Permission not granted. Requesting permission...');
                           }
                         });
                       } else {
                         if (id['has_back']) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => Scaffold(
-                                  body: SmileIDEnhancedDocumentVerification(
-                                    countryCode: verificationController.selectedCountry.value!.countryCode,
-                                    documentType: id['code'],
-                                    userId: authController.user.value.id,
-                                    captureBothSides: true,
-                                    jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
-                                    onSuccess: (String? result) {
-                                      // Your success handling logic
-                                      Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
-                                      String formattedResult = jsonEncode(jsonResult);
-                                      final snackBar = SnackBar(content: Text("Success: $formattedResult"));
-                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                      Navigator.of(context).pop();
-                                    },
-                                    onError: (String errorMessage) {
-                                      // Your error handling logic
-                                      final snackBar = SnackBar(content: Text("Error: $errorMessage"));
-                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                      Navigator.of(context).pop();
-                                    },
-                                  )),
-                            ),
-                          );
+                          Get.to(() => Scaffold(
+                              body: SmileIDEnhancedDocumentVerification(
+                                countryCode: verificationController.selectedCountry.value!.countryCode,
+                                documentType: id['code'],
+                                userId: authController.user.value.id,
+                                captureBothSides: true,
+                                jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
+                                onSuccess: (String? result) {
+                                  Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
+                                  String formattedResult = jsonEncode(jsonResult);
+                                  print('verification result: $formattedResult');
+                                  Get.off(() => const VerificationInProgressScreen());
+                                },
+                                onError: (String errorMessage) {
+                                  print('verififcation error: $errorMessage');
+                                  Get.back();
+                                },
+                              )));
                         } else {
-                          Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (BuildContext context) => Scaffold(
-                                  body: SmileIDEnhancedDocumentVerification(
-                                    countryCode: verificationController.selectedCountry.value!.countryCode,
-                                    documentType: id['code'],
-                                    userId: authController.user.value.id,
-                                    captureBothSides: false,
-                                    jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
-                                    onSuccess: (String? result) {
-                                      Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
-                                      String formattedResult = jsonEncode(jsonResult);
-                                      final snackBar = SnackBar(content: Text("Success: $formattedResult"));
-                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                      Navigator.of(context).pop();
-                                    },
-                                    onError: (String errorMessage) {
-                                      final snackBar = SnackBar(content: Text("Error: $errorMessage"));
-                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                      Navigator.of(context).pop();
-                                    },
-                                  )),
-                            ),
-                          );
+                          Get.to(() => Scaffold(
+                              body: SmileIDEnhancedDocumentVerification(
+                                countryCode: verificationController.selectedCountry.value!.countryCode,
+                                documentType: id['code'],
+                                userId: authController.user.value.id,
+                                captureBothSides: false,
+                                jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
+                                onSuccess: (String? result) {
+                                  Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
+                                  String formattedResult = jsonEncode(jsonResult);
+                                  print('verification result: $formattedResult');
+                                  Get.off(() => const VerificationInProgressScreen());
+                                },
+                                onError: (String errorMessage) {
+                                  print('verification error: $errorMessage');
+                                  Get.back();
+                                },
+                              )));
                         }
                       }
                     },

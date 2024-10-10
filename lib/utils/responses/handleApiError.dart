@@ -33,17 +33,14 @@ String handleApiFormatError(dynamic error) {
         }
       } else {
         return 'No Response from Server';
-        return '';
       }
     } else {
       return 'An unexpected error occurred';
     }
   } catch (e, stackTrace) {
-    // Log the error and stack trace for debugging
     debugPrint('Caught error: $e');
     debugPrint('Stack trace: $stackTrace');
 
-    // Provide a more descriptive error message
     if (e is DioException) {
       return 'Failed to parse error response: ${e.message}';
     } else if (e != null && e.toString().isNotEmpty) {
@@ -65,18 +62,3 @@ String cleanErrorMessage(String message) {
   }
   return message;
 }
-
-
-
-// String cleanErrorMessage(String message) {
-//   if (message.contains('DioException') ||
-//       message.contains('https://tools.ietf.org') ||
-//       message.contains('html')) {
-//     return 'Something went wrong, please try again later.';
-//   }
-//   if (message.toLowerCase().contains('internal server error')) {
-//     return 'Internal server error. Please try again later.';
-//   }
-//   return message;
-// }
-

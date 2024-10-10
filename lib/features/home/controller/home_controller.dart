@@ -33,11 +33,11 @@ class HomeController extends GetxController {
 
   Future<void> _initializeSocket() async {
     String? token = await userSessionController.getAccessToken();
-    await FirebaseApi().initNotifications();
+    await FirebaseApi().initPushNotifications();
     if (token != null) {
       SocketManager.shared.initSocket();
     } else {
-      print('WHat have I dont to this socket?');
+      print('WHat have I don\'t to this socket?');
     }
   }
 

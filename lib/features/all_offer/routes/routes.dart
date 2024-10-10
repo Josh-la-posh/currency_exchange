@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pouch/utils/layouts/navigation_menu.dart';
 import '../../../data/routes/guard_route.dart';
 import '../screens/accept_review_details.dart';
 import '../screens/create_offer.dart';
@@ -11,7 +12,7 @@ import 'names.dart';
 
 Map<String, WidgetBuilder> offerRoute = {
   ALL_OFFER_SCREEN_ROUTE: (context) => AuthGuard(
-    widget: AllOfferScreen(),
+    widget: NavigationMenu(),
   ),
   OFFER_DETAILS_SCREEN: (context) => AuthGuard(
     widget: OfferDetailsScreen(),

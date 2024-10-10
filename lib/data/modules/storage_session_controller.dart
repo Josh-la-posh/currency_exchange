@@ -28,6 +28,10 @@ class UserSessionController extends GetxController {
     await _storage.setBool(USER_BIOMETRIC_ENABLED, useBiometrics);
   }
 
+  Future<void> setDeviceToken(String token) async {
+    await _storage.setString(USER_DEVICE_TOKEN, token);
+  }
+
   Future<String?> getAccessToken() async {
     return _storage.getString(USER_SESSION_TOKEN);
   }
@@ -38,6 +42,10 @@ class UserSessionController extends GetxController {
 
   Future<bool?> getUserBiometrics() async {
     return _storage.getBool(USER_BIOMETRIC_ENABLED);
+  }
+
+  Future<String?> getDeviceToken() async {
+    return _storage.getString(USER_DEVICE_TOKEN);
   }
 
   Future<bool> isLoginBool() async {

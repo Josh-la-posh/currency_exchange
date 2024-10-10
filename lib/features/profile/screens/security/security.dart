@@ -69,7 +69,15 @@ class SecurityScreen extends StatelessWidget {
                             color: Colors.grey
                         ),
                       ),
-                      Icon(Icons.phone_android, size: 12,)
+                      Icon(Icons.phone_android, size: 12,),
+                      Text(
+                        authController.user.value.lastLoginDevice.toString(),
+                        style: TextStyle(
+                            fontSize: 11,
+                            fontFamily: TTexts.fontFamily,
+                            color: Colors.grey
+                        ),
+                      )
                     ],
                   ),
                   SizedBox(height: 10),

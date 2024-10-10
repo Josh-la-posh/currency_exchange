@@ -5,6 +5,5 @@ import 'names.dart';
 
 
 Map<String, WidgetBuilder> homeRoute = {
-  // DASHBOARD_SCREEN_ROUTE: (context) => AuthGuard(widget: HomeScreen()),
   DASHBOARD_SCREEN_ROUTE: (context) => AuthGuard(widget: NavigationMenu()),
 };

@@ -78,6 +78,7 @@ class UserModel {
   bool? isEmailVerified;
   String? otpExpiration;
   String? lastLogin;
+  String? lastLoginDevice;
   String? createdDate;
   String? lastModifiedDate;
   Map<String,dynamic>? role;
@@ -101,6 +102,7 @@ class UserModel {
     this.isEmailVerified,
     this.otpExpiration,
     this.lastLogin,
+    this.lastLoginDevice,
     this.createdDate,
     this.lastModifiedDate,
     this.role
@@ -126,6 +128,7 @@ class UserModel {
       'isEmailVerified': isEmailVerified,
       'otpExpiration': otpExpiration,
       'lastLogin': lastLogin,
+      'lastLoginDevice': lastLoginDevice,
       'createdDate': createdDate,
       'lastModifiedDate': lastModifiedDate,
       'role': role
@@ -152,6 +155,7 @@ class UserModel {
       isEmailVerified: json['isEmailVerified'],
       otpExpiration: json['otpExpiration'],
       lastLogin: json['lastLogin'],
+      lastLoginDevice: json['lastLoginDevice'],
       createdDate: json['createdDate'],
       lastModifiedDate: json['lastModifiedDate'],
       role: json['role'],

@@ -1,10 +1,4 @@
-
-
 import 'dart:async';
-
-import 'package:pouch/data/provider/notificaton_provider.dart';
-
-import '../../../data/modules/dio.dart';
 import '../../../data/modules/interceptor.dart';
 
 final _apiService = AppInterceptor(showLoader: false).dio;
@@ -45,116 +39,30 @@ class NotificationService {
 
   Future updateNotification(Object data) async {
     try {
-      final response = await _apiService.put(UPDATE_DELIVERED_NOTIFICATION, data: data);
+      final response = await _apiService.put(
+          UPDATE_DELIVERED_NOTIFICATION, data: data);
       return response;
     } catch (err) {
 
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  Future _sendNotification() {
-    return apiService.post('/notification/send');
+  Future registerDeviceToken(Object data) async {
+    try {
+      final response = await _apiService.post(REGISTERED_DEVICE_TOKEN, data: data);
+      print('the token sent is ${response.data}');
+    } catch (e) {
+      print('register token error $e');
+    }
   }
 
-  Future _registerDeviceToken(Object data) {
-    return apiService.post('/notification/register-device-token', data: data);
-  }
-
-  Future _sendTopic() {
-    return apiService.post('/notification/send/topic');
-  }
-
-  Future _updateDeliveredNotifications(Object data) {
-    return _apiService.put('/notification/update-delivered', data: data);
-  }
-
-  Future _updateDeviceToken(Object data) {
-    return apiService.put('/notification/update-device-token');
-  }
-
-
-  sendNotification({
-    required NotificationProvider notificationProvider,
-  }) {
-    _sendNotification().then((response) async {
-      var data = response.data;
-      print('send notification response $data');
-    }).catchError((error) {
-      print('new error ${error.toString()}');
-      // handleShowCustomToast(message: handleApiFormatError(error));
-    });
-  }
-
-  registerDeviceToken({
-    required NotificationProvider notificationProvider,
-    required String token,
-    required String deviceId,
-  }) {
-    _registerDeviceToken({token, deviceId}).then((response) async {
-      var data = response.data;
-      print('register device response $data');
-    }).catchError((error) {
-      print('new error ${error.toString()}');
-      // handleShowCustomToast(message: handleApiFormatError(error));
-    });
-  }
-
-  sendTopic({
-    required NotificationProvider notificationProvider,
-  }) {
-    _sendTopic().then((response) async {
-      var data = response.data;
-      print('send topic response $data');
-    }).catchError((error) {
-      print('new error ${error.toString()}');
-      // handleShowCustomToast(message: handleApiFormatError(error));
-    });
-  }
-
-  updateDeliveredNotifications({
-    required NotificationProvider notificationProvider,
-    required List<String> ids
-  }) {
-    Map<String, dynamic> requestData = {'ids': ids};
-    _updateDeliveredNotifications(requestData).then((response) async {
-      print('update notification response $response');
-      notificationProvider.updateNotificationLength([]);
-    }).catchError((error) {
-      print('new error ${error.toString()}');
-      // handleShowCustomToast(message: handleApiFormatError(error));
-    });
-  }
-
-  updateDeviceToken({
-    required NotificationProvider notificationProvider,
-    required String token,
-    required String deviceId,
-  }) {
-    _updateDeviceToken({token, deviceId}).then((response) async {
-      var data = response.data;
-      print('update device token response $data');
-    }).catchError((error) {
-      print('new error ${error.toString()}');
-      // handleShowCustomToast(message: handleApiFormatError(error));
-    });
+  Future updateDeviceToken(Object data) async {
+    try {
+      final response = await _apiService.put(UPDATE_DEVICE_TOKEN, data: data);
+      print('the token sent is ${response.data}');
+    } catch (e) {
+      print('register token error $e');
+    }
   }
 
 }

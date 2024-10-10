@@ -8,7 +8,6 @@ import '../../features/authentication/controllers/auth_controller.dart';
 
 class AuthGuard extends StatelessWidget {
   final authController = Get.find<AuthController>();
-  final userSessionController = Get.find<UserSessionController>();
   final Widget widget;
   final bool askIfUserWantToExitApp;
   final bool doNotPopRoute;
@@ -22,7 +21,7 @@ class AuthGuard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    final UserSessionController userSessionController = Get.find<UserSessionController>();
     return Obx(() {
       if (authController.user.value.email == null ||
           userSessionController.isLoginBool() == false) {
@@ -52,7 +51,6 @@ class AuthGuard extends StatelessWidget {
 
       return StreamBuilder<InternetStatus>(
         stream: InternetConnection().onStatusChange,
-        // stream: Connectivity().onConnectivityChanged,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final connectivityResult = snapshot.data;
@@ -96,7 +94,6 @@ class AuthGuard extends StatelessWidget {
 
             return widget;
           } else {
-            // Loading or error state
             return Scaffold(
               backgroundColor: Colors.white,
               body: Center(

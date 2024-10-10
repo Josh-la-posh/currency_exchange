@@ -2,11 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/home/routes/names.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/layouts/navigation_menu.dart';
-
-import '../../../data/modules/app_navigator.dart';
 
 class ErrorBoundary extends StatelessWidget {
   final Widget app;

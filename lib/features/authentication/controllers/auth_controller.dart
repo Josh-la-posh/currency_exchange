@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:pouch/data/firebase/firebase_api.dart';
 import 'package:pouch/utils/layouts/navigation_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pouch/features/authentication/models/create_account_model.dart';
@@ -64,6 +65,7 @@ class AuthController extends GetxController {
   Future<void> _getUserSaveData() async {
     final userJson = _storage.getString(USER_DATA);
     if (userJson != null) {
+      print('Checking if it got here');
       saveUser(UserModel.fromJson(json.decode(userJson)));
     }
   }
@@ -78,8 +80,8 @@ class AuthController extends GetxController {
     final userJson = json.encode(userInfo?.toJson());
     _storage.setString(USER_DATA, userJson);
     user.value = userInfo!;
-    print('Userinfo data is ${userInfo.lastLogin}');
-    print('User data is ${user.value.lastLogin}');
+    print('Userinfo data is ${userInfo.lastLoginDevice}');
+    print('User data is ${user.value.lastLoginDevice}');
     handleCreateAccountCleanups();
   }
 
@@ -151,6 +153,7 @@ class AuthController extends GetxController {
         'address': address,
       });
       if (response.statusCode == 200 || response.statusCode == 201) {
+        await FirebaseApi().registerDeviceToken();
         await login(
             email: email.toLowerCase().trim(),
             password: password,
@@ -193,27 +196,28 @@ class AuthController extends GetxController {
       isLoggingIn(true);
       final responseData = await AuthService.instance.currentUserApi();
       user(UserModel(
-            id: responseData['id'],
-            firstName: responseData['firstName'],
-            lastName: responseData['lastName'],
-            email: responseData['email'],
-            password: responseData['password'],
-            isVerified: responseData['isVerified'],
-            nin: responseData['nin'],
-            country: responseData['country'],
-            address: responseData['address'],
-            postCode: responseData['postCode'],
-            state: responseData['state'],
-            status: responseData['status'],
-            phoneNumber: responseData['phoneNumber'],
-            otp: responseData['otp'],
-            emailOtp: responseData['emailOtp'],
-            isEmailVerified: responseData['isEmailVerified'],
-            otpExpiration: responseData['otpExpiration'],
-            lastLogin: responseData['lastLogin'],
-            createdDate: responseData['createdDate'],
-            lastModifiedDate: responseData['lastModifiedDate'],
-            role: responseData['role']
+          id: responseData['id'],
+          firstName: responseData['firstName'],
+          lastName: responseData['lastName'],
+          email: responseData['email'],
+          password: responseData['password'],
+          isVerified: responseData['isVerified'],
+          nin: responseData['nin'],
+          country: responseData['country'],
+          address: responseData['address'],
+          postCode: responseData['postCode'],
+          state: responseData['state'],
+          status: responseData['status'],
+          phoneNumber: responseData['phoneNumber'],
+          otp: responseData['otp'],
+          emailOtp: responseData['emailOtp'],
+          isEmailVerified: responseData['isEmailVerified'],
+          otpExpiration: responseData['otpExpiration'],
+          lastLogin: responseData['lastLogin'],
+          lastLoginDevice: responseData['lastLoginDevice'],
+          createdDate: responseData['createdDate'],
+          lastModifiedDate: responseData['lastModifiedDate'],
+          role: responseData['role']
         ));
 
       if (rememberMe) {
@@ -248,7 +252,7 @@ class AuthController extends GetxController {
                 final bool didAuthenticate = await _auth.authenticate(
                     authMessages: const <AuthMessages>[
                       AndroidAuthMessages(
-                        signInTitle: 'Biometric authentication required',
+                        signInTitle: 'Authentication required',
                         cancelButton: 'No thanks'
                       ),
                       IOSAuthMessages(
@@ -268,7 +272,6 @@ class AuthController extends GetxController {
               } on PlatformException catch (e) {
                 print('Authentication error $e');
                 canAuthWithBiometric = false;
-                // Get.offAll(() => NavigationMenu());
               }
             }
           } else {
@@ -376,24 +379,27 @@ class AuthController extends GetxController {
         'password': password,
       });
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var token = response.data['access_token'];
-        var refreshToken = response.data['refresh_token'];
-        if (response != null && token != '') {
-          userSessionController.setToken(token);
-          userSessionController.setRefreshToken(refreshToken);
+      // if (response.statusCode == 200 || response.statusCode == 201) {
 
-          await fetchCurrentUser(
-              email: email.toLowerCase().trim(),
-              password: password,
-              rememberMe: rememberMe,
-              handleEmailNotVerified: handleEmailNotVerified,
-          );
-        }
-        return token;
-      } else {
-        Get.snackbar('Error', handleApiFormatError(response), backgroundColor: Colors.red);
-      }
+        print('tojen: $response');
+        // var token = response.data['access_token'];
+        // var refreshToken = response.data['refresh_token'];
+        // if (response != null && token != '') {
+          // userSessionController.setToken(token);
+          // userSessionController.setRefreshToken(refreshToken);
+          // await fetchCurrentUser(
+          //     email: email.toLowerCase().trim(),
+          //     password: password,
+          //     rememberMe: rememberMe,
+          //     handleEmailNotVerified: handleEmailNotVerified,
+          // );
+
+          // await FirebaseApi().updateDeviceToken();
+        // }
+        // return token;
+      // } else {
+      //   Get.snackbar('Error', handleApiFormatError(response), backgroundColor: Colors.red);
+      // }
     } catch (err) {
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     }

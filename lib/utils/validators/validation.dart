@@ -43,7 +43,7 @@ class TValidator {
     }
     
     // Regular expression for email validation
-    final emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    final emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
     if (!emailRegExp.hasMatch(value)) {
       return 'Invalid email address';
@@ -71,8 +71,8 @@ class TValidator {
     }
 
     // Check for minimum password length
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters long.';
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters long.';
     }
 
     // Check for uppercase letters
@@ -86,8 +86,8 @@ class TValidator {
     }
 
     // Check for special characters
-    if (value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      return 'Password cannot have special character.';
+    if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return 'Password must have a special character.';
     }
     return null;
   }
@@ -108,6 +108,7 @@ class TValidator {
     if (value == null || value.isEmpty) {
       return 'Password is required';
     }
+    return null;
   }
 
   static String? otpValidator(String? value) {

@@ -4,8 +4,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/data/modules/app_navigator.dart';
-import 'package:pouch/features/authentication/routes/names.dart';
 import 'package:pouch/features/authentication/screens/login/login.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';

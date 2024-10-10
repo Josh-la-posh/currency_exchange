@@ -136,7 +136,7 @@ class EmailVerificationForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(height: TSizes.defaultSpace),
-        Image.asset('assets/success.png'), // Replace with your image asset
+        Image.asset('assets/logos/success-icon.png'),
         const SizedBox(height: TSizes.spaceBtwElements),
         Text(
           'Your email has been verified successfully. You\'ll be redirected shortly.',

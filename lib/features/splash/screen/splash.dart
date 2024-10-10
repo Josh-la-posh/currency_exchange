@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:pouch/data/modules/userAgent.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import '../controller/splash_controller.dart';
 
@@ -11,6 +12,8 @@ class SplashScreen extends GetView<SplashAnimationController> {
       await Future.delayed(const Duration(seconds: 3), () {
         controller.isSplashCompleted.value = true;
       });
+      // String userAgent = await getUserAgent();
+      // print('user agent: $userAgent');
     });
 
     return Obx(() {

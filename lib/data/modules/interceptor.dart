@@ -45,28 +45,24 @@ class AppInterceptor extends Interceptor {
     dio.interceptors.add(
       QueuedInterceptorsWrapper(
         onRequest: (RequestOptions requestOptions, RequestInterceptorHandler handler) async {
-          // Log the request initiation
           print('onRequest received for path: ${requestOptions.path}');
 
-          // Reset cancelToken before each request
           requestOptions.cancelToken = cancelToken = CancelToken();
 
-          // Check internet connection
           final connectivityResult = await InternetConnection().hasInternetAccess;
           print('Internet connection check: $connectivityResult');
 
           if (connectivityResult) {
-            // Add token to headers
             String? token = await userSessionController.getAccessToken();
+            String userAgent = '';
             requestOptions.headers['Authorization'] = 'Bearer $token';
+            // requestOptions.headers['User-Agent'] = userAgent;
 
-            // Log request details
             THelperFunctions.showDebugMessageInConsole([
               'Request path: ${requestOptions.path}',
               'Request data: ${requestOptions.data}'
             ]);
 
-            // Proceed with the request
             handler.next(requestOptions);
           } else {
             print('No internet connection');
@@ -78,7 +74,6 @@ class AppInterceptor extends Interceptor {
           print('onError called: ${err.message}');
           bool checkIfUserIsLogin = await userSessionController.isLoginBool();
 
-          // Handle request completion
           onProcessingRequestEnds();
 
           if (err.response?.statusCode == 401 && checkIfUserIsLogin) {
