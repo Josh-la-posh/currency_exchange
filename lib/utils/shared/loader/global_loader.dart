@@ -11,9 +11,9 @@ class GlobalAppLoader extends StatelessWidget {
   Widget build(BuildContext context) {
     return GlobalLoaderOverlay(
       useDefaultLoading: false,
-      overlayWidget: const Loader(),
-      overlayColor: TColors.primary,
-      overlayOpacity: 0.7,
+      overlayWidgetBuilder: (progress) => const Loader(),
+      // overlayWidget: const Loader(),
+      overlayColor: TColors.primary.withOpacity(0.7),
       duration: const Duration(seconds: 1),
       child: app,
     );

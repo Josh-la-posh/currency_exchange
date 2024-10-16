@@ -62,7 +62,7 @@ class ProfileScreen extends StatelessWidget {
               bottom: 0,
               left: 10,
               child: Text(
-                'Version: 1.1.0.2',
+                'Version: 1.1.0.3',
                 style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

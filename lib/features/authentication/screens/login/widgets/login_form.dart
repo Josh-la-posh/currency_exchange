@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/features/authentication/screens/reset_password/forgot_password.dart';
@@ -13,6 +14,7 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AuthFormController authFormController = Get.put(AuthFormController());
+    AuthController controller = Get.find();
     final formKey = GlobalKey<FormState>();
     return Form(
       key: formKey,
@@ -74,6 +76,7 @@ class LoginForm extends StatelessWidget {
           // Sign In Button
           Obx(() => TElevatedButton(
             onTap: authFormController.isLoggingIn.value ? null : () => authFormController.submitLoginForm(formKey: formKey),
+            // onTap: () => controller.fetchAddress(),
             buttonText: authFormController.isLoggingIn.value ? 'Logging in' : 'Log In',
           )),
           const SizedBox(height: TSizes.md),

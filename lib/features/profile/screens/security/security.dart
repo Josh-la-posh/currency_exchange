@@ -52,7 +52,7 @@ class SecurityScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Last login time: ${THelperFunctions.getFormattedDate(authController.user.value.lastLogin.toString())}',
+                    'Last login time: ${THelperFunctions.getFormattedDate(authController.user.value.lastLogin.toString())} - ${THelperFunctions.getFormattedTime(authController.user.value.lastLogin.toString())}',
                     style: TextStyle(
                         fontSize: 11,
                         fontFamily: TTexts.fontFamily,
@@ -117,10 +117,10 @@ class SecurityScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ProfileLinkWidget(
-                    title: 'Google 2FA Authentication',
-                    onPressed: () {},
-                  ),
+                  // ProfileLinkWidget(
+                  //   title: 'Google 2FA Authentication',
+                  //   onPressed: () {},
+                  // ),
                   ProfileLinkWidget(
                     title: 'Biometric Authentication',
                     onPressed: () => Get.to(() => BiometricAuthenticationScreen()),

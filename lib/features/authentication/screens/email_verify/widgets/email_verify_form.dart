@@ -139,14 +139,9 @@ class EmailVerificationForm extends StatelessWidget {
         Image.asset('assets/logos/success-icon.png'),
         const SizedBox(height: TSizes.spaceBtwElements),
         Text(
-          'Your email has been verified successfully. You\'ll be redirected shortly.',
+          'Your email has been verified successfully. \n You\'ll be redirected shortly',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelMedium,
-        ),
-        const SizedBox(height: TSizes.defaultSpace),
-        TElevatedButton(
-          onTap: controller.handleLogin,
-          buttonText: 'Please, Log in',
         ),
       ],
     );

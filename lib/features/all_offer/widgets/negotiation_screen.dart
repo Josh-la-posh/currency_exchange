@@ -85,6 +85,7 @@ class NegotiationScreen extends StatelessWidget {
                               createOfferController.rateController.clear();
                               createOfferController.amountController.clear();
                               Get.offAll(() => NavigationMenu());
+                              Get.snackbar('Success', 'Your bid has been created successfully!!!');
                             }
                         );
                       }

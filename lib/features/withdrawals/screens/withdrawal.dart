@@ -43,7 +43,7 @@ class WithdrawalScreen extends StatelessWidget {
       appBar: _buildAppBar(darkMode),
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 0.8),
+        padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 0.8, vertical: 30),
         child: Column(
           children: [
             Expanded(
@@ -51,7 +51,6 @@ class WithdrawalScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: THelperFunctions.screenHeight() * 0.04),
                     _buildBalanceInfo(darkMode),
                     const SizedBox(height: TSizes.defaultSpace * 1.5),
                     _buildAmountSection(darkMode),

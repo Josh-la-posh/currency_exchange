@@ -31,7 +31,7 @@ class CurrencyWidgetWithBack extends StatelessWidget {
             ),
           ),
           // const SizedBox(width: TSizes.spaceBtwElements,),
-          const Expanded(child: CurrencyWidget()),
+          Expanded(child: CurrencyWidget()),
         ],
       ),
     );

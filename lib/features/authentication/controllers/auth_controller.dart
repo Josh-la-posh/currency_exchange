@@ -41,7 +41,6 @@ class AuthController extends GetxController {
     super.onInit();
     _getUserSaveData();
     _notificationSubscription = Stream.periodic(const Duration(minutes: 5)).listen((event) {
-      _processUserNotifications();
     });
   }
 
@@ -55,24 +54,11 @@ class AuthController extends GetxController {
       isVerifiedDisplay.value = !user.value.isVerified!;
   }
 
-  Future<void> _processUserNotifications() async {
-    bool isUserLoggedIn = await userSessionController.isLoginBool();
-    if (isUserLoggedIn) {
-      getUserNotifications();
-    }
-  }
-
   Future<void> _getUserSaveData() async {
     final userJson = _storage.getString(USER_DATA);
     if (userJson != null) {
       print('Checking if it got here');
       saveUser(UserModel.fromJson(json.decode(userJson)));
-    }
-  }
-
-  Future<void> getUserNotifications() async {
-    if (user.value != null) {
-      // NotificationService.instance.getNotifications(user.value!.id, saveNotifications);
     }
   }
 
@@ -114,7 +100,6 @@ class AuthController extends GetxController {
   void setIsVerifiedDisplay(bool val) {
     isVerifiedDisplay.value = val;
   }
-
 
   Future<void> createAccount({
     required String firstName,
@@ -379,30 +364,28 @@ class AuthController extends GetxController {
         'password': password,
       });
 
-      // if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
 
-        print('tojen: $response');
-        // var token = response.data['access_token'];
-        // var refreshToken = response.data['refresh_token'];
-        // if (response != null && token != '') {
-          // userSessionController.setToken(token);
-          // userSessionController.setRefreshToken(refreshToken);
-          // await fetchCurrentUser(
-          //     email: email.toLowerCase().trim(),
-          //     password: password,
-          //     rememberMe: rememberMe,
-          //     handleEmailNotVerified: handleEmailNotVerified,
-          // );
+        var token = response.data['access_token'];
+        var refreshToken = response.data['refresh_token'];
+        if (response != null && token != '') {
+          userSessionController.setToken(token);
+          userSessionController.setRefreshToken(refreshToken);
+          await fetchCurrentUser(
+              email: email.toLowerCase().trim(),
+              password: password,
+              rememberMe: rememberMe,
+              handleEmailNotVerified: handleEmailNotVerified,
+          );
 
-          // await FirebaseApi().updateDeviceToken();
-        // }
-        // return token;
-      // } else {
-      //   Get.snackbar('Error', handleApiFormatError(response), backgroundColor: Colors.red);
-      // }
+          await FirebaseApi().updateDeviceToken();
+        }
+        return token;
+      } else {
+        Get.snackbar('Error', handleApiFormatError(response), backgroundColor: Colors.red);
+      }
     } catch (err) {
       Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
     }
   }
-
 }

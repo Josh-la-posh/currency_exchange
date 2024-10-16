@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' as GetX;
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:pouch/data/modules/storage_session_controller.dart';
+import 'package:pouch/data/modules/userAgent.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../features/authentication/controllers/auth_controller.dart';
 import '../../utils/configs/app_config.dart';
@@ -54,9 +55,10 @@ class AppInterceptor extends Interceptor {
 
           if (connectivityResult) {
             String? token = await userSessionController.getAccessToken();
-            String userAgent = '';
+            String userAgent = await getUserAgent();
+            // print('user agent: $userAgent');
             requestOptions.headers['Authorization'] = 'Bearer $token';
-            // requestOptions.headers['User-Agent'] = userAgent;
+            requestOptions.headers['User-Agent'] = userAgent;
 
             THelperFunctions.showDebugMessageInConsole([
               'Request path: ${requestOptions.path}',

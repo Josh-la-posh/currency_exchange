@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/features/all_offer/screens/market/all_market/all_market.dart';
+import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/buttons/floating_button.dart';
 import '../../../utils/constants/colors.dart';
@@ -18,6 +19,7 @@ class AllOfferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     OfferController controller = Get.find();
+    AuthController authController = Get.find();
     controller.fetchAllOffers();
     final darkMode = THelperFunctions.isDarkMode(context);
     return DefaultTabController(
@@ -75,7 +77,7 @@ class AllOfferScreen extends StatelessWidget {
         ),
         floatingActionButton: TFloatingButton(
           onPressed: (){
-            if (controller.authController.user.value.isVerified == true) {
+            if (authController.user.value.isVerified == true) {
               Get.snackbar('Verification', 'Please verify your account');
             } else {
               Get.to(() => CreateOfferScreen());

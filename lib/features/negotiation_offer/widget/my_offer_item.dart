@@ -23,7 +23,7 @@ class MyOfferItem extends StatelessWidget {
     NegotiationOfferController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Container(
-      height: TSizes.textReviewHeight * 1.4,
+      height: TSizes.textReviewHeight * 1.2,
       child: Slidable(
         key: ValueKey(item.id),
         endActionPane: ActionPane(
@@ -71,7 +71,7 @@ class MyOfferItem extends StatelessWidget {
             ]
         ),
         child: ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: TSizes.lg, horizontal: TSizes.defaultSpace),
+          contentPadding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
           onTap: (){
             Get.to(() => MyOfferDetail(), arguments: item);
           },

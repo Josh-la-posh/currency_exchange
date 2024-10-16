@@ -26,6 +26,7 @@ class EmailVerificationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    showEmailVerifiedSuccess.value = false;
     otpTimer = OtpTimer(
       durationInSeconds: 120,
       onTimerFinish: () {

@@ -93,7 +93,7 @@ class NotificationScreen extends StatelessWidget {
                                         currency: '',
                                         onSuccess: () {
                                           // Get.to(() => OfferDetailsScreen());
-                                        }
+                                        },
                                     );
                                   }
 

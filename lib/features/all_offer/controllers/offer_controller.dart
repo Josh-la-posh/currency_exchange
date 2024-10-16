@@ -1,9 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
-
-import 'package:flutter/animation.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/apis/api.dart';
@@ -12,14 +7,10 @@ import 'package:pouch/features/all_offer/models/offer.dart';
 import 'package:pouch/features/all_offer/models/offer_details_entity.dart';
 import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
 import 'package:pouch/utils/responses/handleApiError.dart';
-import '../../../utils/constants/colors.dart';
-import '../../authentication/controllers/auth_controller.dart';
-import '../../home/controller/home_controller.dart';
 import '../screens/accept_offer_success_page.dart';
 import '../screens/offer_details.dart';
 
 class OfferController extends GetxController {
-  AuthController  authController = Get.find<AuthController>();
   final helperFunctionsController = Get.put(HelperFunctionsController());
   final isCreatingOfferLoading = false.obs;
   final isAcceptingRejectingOfferLoading = false.obs;
@@ -170,7 +161,7 @@ class OfferController extends GetxController {
     required String currency,
     required String negotiatorRate,
     required String negotiatorAmount,
-    required VoidCallback onSuccess
+    required VoidCallback onSuccess,
   }) async {
     try {
       isNegotiatingOfferLoading(true);
@@ -184,7 +175,6 @@ class OfferController extends GetxController {
       var item = response.data;
       if (response.statusCode == 200 || response.statusCode == 201) {
         onSuccess();
-        Get.snackbar('Success', 'Your bid has been created successfully!!!');
       }
 
     } catch (err) {

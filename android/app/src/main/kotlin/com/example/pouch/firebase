@@ -1,0 +1,18 @@
+package com.example.pouch.firebase
+
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import android.util.Log
+
+class MyFirebaseMessagingService : FirebaseMessagingService() {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        // Handle incoming messages
+        Log.d("FCM", "Message received from: ${remoteMessage.from}")
+        // Add your custom logic here
+    }
+
+    override fun onNewToken(token: String) {
+        Log.d("FCM", "New token: $token")
+        // Handle the new token
+    }
+}

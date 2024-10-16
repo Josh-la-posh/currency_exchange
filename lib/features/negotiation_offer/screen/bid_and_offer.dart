@@ -23,7 +23,6 @@ class MyBidAndOfferScreen extends StatelessWidget {
       appBar: AppBar(),
       body: Column(
         children: [
-          CurrencyWidget(),
           Padding(
             padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.defaultSpace, bottom: 10),
             child: Obx(() => Row(

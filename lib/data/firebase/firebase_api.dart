@@ -6,66 +6,108 @@ import 'package:pouch/features/notification/apis/api.dart';
 import '../../features/notification/screens/notification.dart';
 
 class FirebaseApi {
-  UserSessionController userSessionController = Get.find();
+  static final FirebaseApi _instance = FirebaseApi._internal();
+  factory FirebaseApi() => _instance;
+  FirebaseApi._internal();
 
-  // create an instance of Firebase Messaging
-  final _firebaseMessaging = FirebaseMessaging.instance;
+  final UserSessionController userSessionController = Get.find();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initNotifications() async {
-    // request permission from user
-    await _firebaseMessaging.requestPermission();
-
-    // fetch the FCM token for this device
+    await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    await requestPermission();
     final fcmToken = await _firebaseMessaging.getToken();
 
     if (fcmToken != null) {
-      userSessionController.setDeviceToken(fcmToken.toString());
+      userSessionController.setDeviceToken(fcmToken);
     }
-
     print('Token: $fcmToken');
+
+    _firebaseMessaging.onTokenRefresh.listen((newToken) {
+      userSessionController.setDeviceToken(newToken);
+      updateDeviceToken();
+    });
   }
 
-  // function to handle received messages
+  Future<void> requestPermission() async {
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
 
   void handleMessage(RemoteMessage? message) {
     if (message == null) return;
 
-    // navigate to new screen when message is received
-    print('The new message: $message');
-    Get.to(() => NotificationScreen());
-    // Get.toNamed('/notification', arguments: message);
+    print('New message: ${message.data}');
+    if (message.notification != null) {
+      print('Notification title: ${message.notification?.title}');
+      print('Notification body: ${message.notification?.body}');
+    }
+    if (Get.currentRoute != '/notification') {
+      Get.to(() => NotificationScreen(), arguments: message);
+    }
   }
 
-  Future initPushNotifications() async {
-    FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
-    FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+  Future<void> initPushNotifications() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Foreground message received: ${message.messageId}');
+      handleMessage(message);
+    });
+
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+      if (message != null) {
+        print('App launched from notification: ${message.messageId}');
+        handleMessage(message);
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('Notification opened: ${message.messageId}');
+      handleMessage(message);
+    });
   }
 
-  Future registerDeviceToken() async {
+
+  // Future<void> initPushNotifications() async {
+  //   FirebaseMessaging.onMessage.listen(handleMessage);
+  //   FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
+  //   FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
+  // }
+
+  Future<void> registerDeviceToken() async {
     try {
       final token = await userSessionController.getDeviceToken();
       final response = await NotificationService.instance.registerDeviceToken({
         "token": token,
-        // "deviceId": deviceId
       });
-
-      print('register token resposne ${response.data}');
+      print('Register token response: ${response.data}');
     } catch (e) {
-      print('register token error ${e}');
+      print('Register token error: $e');
     }
   }
 
-  Future updateDeviceToken() async {
+  Future<void> updateDeviceToken() async {
     try {
       final token = await userSessionController.getDeviceToken();
       final response = await NotificationService.instance.updateDeviceToken({
         "token": token,
-        // "deviceId": deviceId
       });
-
-      print('register token resposne ${response.data}');
+      print('Update token response: ${response.data}');
     } catch (e) {
-      print('register token error ${e}');
+      print('Update token error: $e');
     }
   }
 }

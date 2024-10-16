@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
+import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/validators/validation.dart';
 
 class AddAddressDetail extends StatelessWidget {
   AuthFormController controller = Get.put(AuthFormController());
+  AuthController authController = Get.find();
   final formKey = GlobalKey<FormState>();
 
   AddAddressDetail({
@@ -22,7 +25,7 @@ class AddAddressDetail extends StatelessWidget {
 
   Widget _buildTextField({
     required String label,
-    required RxString text,
+    required TextEditingController controller,
     required TextInputType keyboardType,
     required Function(String) onSaved,
     required String? Function(String?) validator,
@@ -34,14 +37,15 @@ class AddAddressDetail extends StatelessWidget {
       children: [
         Text(label, style: Get.textTheme.labelMedium),
         SizedBox(
-          child: Obx(() => TextFormField(
-            initialValue: text.value,
+          child: TextFormField(
+            controller: controller,
             keyboardType: keyboardType,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             onChanged: onSaved,
             validator: validator,
             decoration: InputDecoration(suffixIcon: suffix),
             readOnly: isReadOnly,
-          )),
+          ),
         ),
       ],
     );
@@ -81,27 +85,37 @@ class AddAddressDetail extends StatelessWidget {
                 const SizedBox(height: 20),
                 _buildTextField(
                   label: 'Post Code',
-                  text: controller.postCode,
+                  controller: controller.postCode,
                   keyboardType: TextInputType.number,
-                  onSaved: (val) => controller.postCode.value = val,
+                  onSaved: (val) => controller.postCode.text = val,
                   validator: TValidator.emptyFieldValidator,
-                  suffix: IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {
-                      if (controller.postCode.value.isNotEmpty) {
-                        controller.fetchAddressFromPostCode(controller.postCode.value);
-                      }
-                    },
+                  suffix: Container(
+                    margin: EdgeInsets.only(right: 1),
+                    decoration: BoxDecoration(
+                      color: TColors.primary,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(5),
+                        bottomRight: Radius.circular(5)
+                      )
+                    ),
+                    child: IconButton(
+                      icon: Icon(Icons.search),
+                      onPressed: () {
+                        if (controller.postCode.text.isNotEmpty) {
+                          controller.fetchAddress(controller.postCode.text);
+                        }
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 _buildTextField(
                   label: 'Address',
-                  text: controller.address,
+                  controller: controller.generatedAddress,
                   keyboardType: TextInputType.text,
-                  onSaved: (val) => controller.address.value = val,
+                  onSaved: (val) => controller.generatedAddress.text = val,
                   validator: TValidator.emptyFieldValidator,
-                  // isReadOnly: true,
+                  isReadOnly: true,
                 ),
                 const SizedBox(height: TSizes.defaultSpace * 3),
                 Obx(() {

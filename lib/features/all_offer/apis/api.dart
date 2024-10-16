@@ -1,7 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:pouch/utils/responses/handleApiError.dart';
-
 import '../../../data/modules/interceptor.dart';
 
 
@@ -33,7 +29,7 @@ class OfferService {
       final response = await _apiService.post('$OFFER_URL/$CREATE_OFFER_URL', data: queryParameters);
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -42,7 +38,7 @@ class OfferService {
       final response = await _apiService.post('$OFFER_URL/$ACCEPT_REJECT_OFFER_URL/$id', data: data);
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -51,7 +47,7 @@ class OfferService {
       final response = await _apiService.post('$OFFER_URL/$NEGOTIATE_OFFER_URL/$id', data: data);
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -60,7 +56,7 @@ class OfferService {
       final response = await _apiService.post('$OFFER_URL/$SWAP_OFFER_URL/$id');
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -69,7 +65,7 @@ class OfferService {
       final response = await _apiService.get('$OFFER_URL', queryParameters: queryParameters);
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -78,7 +74,7 @@ class OfferService {
       final response = await _apiService.get('$OFFER_URL/$id',);
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -87,7 +83,7 @@ class OfferService {
       final response = await _apiService.get('$OFFER_URL/$ALL_NEGOTIATED_OFFER_URL');
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -96,7 +92,7 @@ class OfferService {
       final response = await _apiService.get('$OFFER_URL/$MY_OFFERS_URL', queryParameters: {'days': days, 'currency': currency});
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -105,7 +101,7 @@ class OfferService {
       final response = await _apiService.get('$OFFER_URL/$MY_BIDS_URL', queryParameters: {'days': days, 'currency': currency});
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -114,7 +110,7 @@ class OfferService {
       final response = await _apiService.get('$OFFER_URL/$MY_OFFER_URL/$id');
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -123,7 +119,7 @@ class OfferService {
       final response = await _apiService.get('$OFFER_URL/$MY_BID_URL/$id');
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -132,7 +128,7 @@ class OfferService {
       final response = await _apiService.delete('$OFFER_URL/$id');
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 
@@ -141,7 +137,7 @@ class OfferService {
       final response = await _apiService.delete('$OFFER_URL/bid/$id');
       return response;
     } catch (e) {
-      Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      print('offer error: ${e.toString()}');
     }
   }
 

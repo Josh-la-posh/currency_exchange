@@ -41,10 +41,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to create wallet: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to create wallet: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -57,10 +57,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to create default wallet: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to create default wallet: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -73,10 +73,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fund wallet via Naira transfer: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund wallet via Naira transfer: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -89,10 +89,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to create FCY account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to create FCY account: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -105,10 +105,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fund FCY account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund FCY account: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -121,10 +121,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fund wallet via Paystack: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund wallet via Paystack: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -147,10 +147,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to add local bank: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to add local bank: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -165,7 +165,7 @@ class WalletServices{
       );
       return response;
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -181,10 +181,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to transfer to local bank: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to transfer to local bank: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -200,10 +200,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fund wallet via Naira USSD: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund wallet via Naira USSD: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -219,10 +219,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fund wallet via Naira bank direct: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund wallet via Naira bank direct: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -238,10 +238,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to confirm birthday: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to confirm birthday: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -257,10 +257,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to confirm OTP: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to confirm OTP: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -268,15 +268,15 @@ class WalletServices{
     try {
       final response = await _apiService.get(
         '$WALLET_URL/$GET_WALLET_URL',
-        data: {'currency': currency},
+        queryParameters: {'currency': currency},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fetch wallets: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch wallets: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -286,10 +286,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fetch default wallet: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch default wallet: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -299,10 +299,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fetch local bank: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch local bank: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -310,15 +310,15 @@ class WalletServices{
     try {
       final response = await _apiService.get(
         '$WALLET_URL/fcy-account',
-        data: {'currency': currency},
+        queryParameters: {'currency': currency},
       );
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to fetch FCY account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch FCY account: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -327,7 +327,25 @@ class WalletServices{
       final response = await _apiService.get('$WALLET_URL/$GET_BANK_LIST_URL');
       return response;
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
+    }
+  }
+
+  Future fetchFxRates({required String currency}) async {
+    try {
+      final response = await _apiService.get(
+        '$WALLET_URL/fx-rates',
+        queryParameters: {
+          'baseCurrency': currency
+        },
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        print('Failed to fetch rates: ${response.data['message']}');
+      }
+    } catch (err) {
+      print(handleApiFormatError(err));
     }
   }
 
@@ -337,10 +355,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to delete FCY: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to delete FCY: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 
@@ -350,10 +368,10 @@ class WalletServices{
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        Get.snackbar('Error', 'Failed to delete local bank account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to delete local bank account: ${response.data['message']}');
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      print(handleApiFormatError(err));
     }
   }
 

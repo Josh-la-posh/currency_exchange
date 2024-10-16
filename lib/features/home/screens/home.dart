@@ -127,18 +127,15 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      child: CustomRefreshIndicator(
-        onRefresh: () => controller.offerController.refreshHomePage(),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              _buildTopSection(darkMode),
-              const SizedBox(height: 8),
-              _buildCurrencySection(darkMode),
-              const SizedBox(height: 8),
-              _buildTabBarSection(darkMode),
-            ],
-          ),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildTopSection(darkMode),
+            const SizedBox(height: 8),
+            _buildCurrencySection(darkMode),
+            const SizedBox(height: 8),
+            _buildTabBarSection(darkMode),
+          ],
         ),
       ),
     );
@@ -164,7 +161,7 @@ class HomeScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15),
       color: darkMode ? TColors.textPrimaryO40 : Colors.white,
-      child: const CurrencyWidget(),
+      child: CurrencyWidget(),
     );
   }
 
@@ -190,7 +187,7 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           GestureDetector(
             onTap: () => controller.selectedIndex.value = 0,

@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 
+import '../apis/address_service.dart';
 import '../screens/email_verify/email_verify.dart';
 import '../screens/reset_password/reset_password_otp.dart';
 
 class AuthFormController extends GetxController {
   AuthController authController = Get.find();
+  final addressService = AddressService();
   var isLoggingIn = false.obs;
   var isAddressFetching = false.obs;
   var isCreatingAccount = false.obs;
@@ -21,8 +22,7 @@ class AuthFormController extends GetxController {
   var obscureConPassword = true.obs;
   var showErrorText = false.obs;
   var acceptTerms = false.obs;
-  final postCode = ''.obs;
-  final address = ''.obs;
+  var showAddressError = false.obs;
 
   final TextEditingController firstName = TextEditingController();
   final TextEditingController lastName = TextEditingController();
@@ -31,6 +31,22 @@ class AuthFormController extends GetxController {
   final TextEditingController password = TextEditingController();
   final TextEditingController oldPassword = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
+  final TextEditingController generatedAddress = TextEditingController();
+  final TextEditingController postCode = TextEditingController();
+
+  @override
+  void onInit() {
+    email.clear();
+    password.clear();
+    firstName.clear();
+    lastName.clear();
+    phoneNo.clear();
+    oldPassword.clear();
+    confirmPass.clear();
+    generatedAddress.clear();
+    postCode.clear();
+    super.onInit();
+  }
 
   @override
   void onClose() {
@@ -41,31 +57,19 @@ class AuthFormController extends GetxController {
     phoneNo.dispose();
     oldPassword.dispose();
     confirmPass.dispose();
+    generatedAddress.dispose();
+    postCode.dispose();
     super.onClose();
   }
 
-  Future<void> fetchAddressFromPostCode(String postCode) async {
-    isAddressFetching.value = true;
-    try {
-      final apiKey = 'AIzaSyBECoO_1MmoGnwVN5zXmjIbaFCIME11fRQ';
-      // final url = 'https://maps.googleapis.com/maps/api/geocode/json?address=$postCode&key=$apiKey';
-      final url = '';
-      final response = await Dio().get(url);
-
-      if (response.statusCode == 200) {
-        final results = response.data['results'];
-        if (results.isNotEmpty) {
-          address.value = results[0]['formatted_address'];
-        } else {
-          address.value = 'No address found';
-        }
-      } else {
-        address.value = 'Error: ${response.statusCode}';
-      }
-    } catch (error) {
-      address.value = 'Failed to fetch address';
-    } finally {
-      isAddressFetching.value = false;
+  void fetchAddress(String postCode) async {
+    final address = await addressService.getAddressFromPostalCode(postCode); // Example postal code
+    if (address != null) {
+      generatedAddress.text = address;
+      showErrorText.value = false;
+      print('Address: ${generatedAddress.text}');
+    } else {
+      generatedAddress.text = '';
     }
   }
 
@@ -164,8 +168,8 @@ class AuthFormController extends GetxController {
       try {
         isUpdatingAddress(true);
         await authController.updateAddress(
-          postCode: postCode.value,
-          address: address.value,
+          postCode: postCode.text,
+          address: generatedAddress.text,
           email: email.text.toString(),
           password: password.text.toString(),
         );
@@ -234,5 +238,7 @@ class AuthFormController extends GetxController {
     phoneNo.clear();
     oldPassword.clear();
     confirmPass.clear();
+    generatedAddress.clear();
+    postCode.clear();
   }
 }
