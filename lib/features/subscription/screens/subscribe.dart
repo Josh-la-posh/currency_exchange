@@ -4,6 +4,7 @@ import 'package:pouch/common/widgets/buttons/floating_button.dart';
 import 'package:pouch/features/subscription/controller/subscription_controller.dart';
 import 'package:pouch/features/subscription/screens/add_subscription.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
+import '../../../data/modules/interceptor.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
@@ -12,6 +13,7 @@ import '../widgets/no_subscription.dart';
 import '../widgets/subscription_item.dart';
 
 class SubscribeScreen extends StatelessWidget {
+  final AppInterceptor appInterceptor = AppInterceptor();
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,20 @@ class SubscribeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            appInterceptor.cancelOngoingRequest(() {
+              controller.resetBoolOnOutgoingRequests();
+            });
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back),
+          style: IconButton.styleFrom(
+            foregroundColor: Colors.grey,
+            iconSize: TSizes.iconBackSize,
+          ),
+          hoverColor: Colors.transparent,
+        ),
         backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
         shadowColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
         title: Text('Subscribe', style: Theme.of(context).textTheme.titleMedium),

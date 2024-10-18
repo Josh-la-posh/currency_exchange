@@ -12,6 +12,8 @@ import 'package:pouch/features/wallet/models/paystack_model.dart';
 import 'package:pouch/features/wallet/models/ussd_modal.dart';
 import 'package:pouch/features/wallet/models/verify_bank_account_model.dart';
 import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/responses/handleApiError.dart';
+import 'package:pouch/utils/shared/error_dialog_response.dart';
 import '../../../utils/constants/colors.dart';
 import '../../payment_method/screens/flutterwave_payment.dart';
 import '../../payment_method/screens/paystack_payment.dart';
@@ -112,11 +114,9 @@ class WalletController extends GetxController {
         await fetchWallets(currency: '');
         onSuccess();
         Get.snackbar('Success', 'Your wallet has been created successfully', backgroundColor: Colors.green);
-      } else {
-        Get.snackbar('Error', 'Failed to create wallet: ${response.data['message']}', backgroundColor: Colors.red);
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isCreatingWallet(false);
     }
@@ -130,10 +130,10 @@ class WalletController extends GetxController {
       if (response.statusCode == 200 || response.statusCode == 201) {
         await fetchingDefaultWallet();
       } else {
-        Get.snackbar('Error', 'Failed to create default wallet: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to create default wallet: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       Get.closeAllSnackbars();
       isCreatingDefaultWallet(false);
@@ -157,10 +157,10 @@ class WalletController extends GetxController {
         ));
         Get.to(() => FlutterwavePaymentScreen());
       } else {
-        Get.snackbar('Error', 'Failed to fund wallet via Naira transfer: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund wallet via Naira transfer: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isFundingWalletViaNairaTransfer(false);
     }
@@ -174,10 +174,10 @@ class WalletController extends GetxController {
         var item = response.data;
         print('created fcy $item');
       } else {
-        Get.snackbar('Error', 'Failed to create FCY account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to create FCY account: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isCreatingFcy(false);
     }
@@ -192,10 +192,10 @@ class WalletController extends GetxController {
         await fetchWallets(currency: '');
         onSuccess();
       } else {
-        Get.snackbar('Error', 'Failed to fund FCY account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund FCY account: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isFundingFcy(false);
     }
@@ -218,10 +218,10 @@ class WalletController extends GetxController {
         ));
         Get.to(() => PaystackPaymentScreen());
       } else {
-        Get.snackbar('Error', 'Failed to fund wallet via Paystack: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund wallet via Paystack: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isFundingWalletViaPaystack(false);
     }
@@ -249,10 +249,10 @@ class WalletController extends GetxController {
         onSubmit();
         Get.back();
       } else {
-        Get.snackbar('Error', 'Failed to add local bank: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to add local bank: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       verifyingAccount(false);
     }
@@ -276,10 +276,10 @@ class WalletController extends GetxController {
             bank_id: data['bank_id']
         ));
       } else {
-        Get.snackbar('Error', 'Failed to verify bank account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to verify bank account: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       verifyingAccount(false);
     }
@@ -301,10 +301,10 @@ class WalletController extends GetxController {
         selectedWithdrawalAccount.value = GetBankAccountModel();
         Get.to(() => WithdrawalSuccessScreen(title: title,));
       } else {
-        Get.snackbar('Error', 'Failed to transfer to local bank: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to transfer to local bank: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isTransferToLocalBank(false);
     }
@@ -330,10 +330,10 @@ class WalletController extends GetxController {
         ));
         Get.to(() => UssdFundingDetailScreen(amount: amount,));
       } else {
-        Get.snackbar('Error', 'Failed to fund wallet via USSD: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund wallet via USSD: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isFundWalletViaNairaUssd(false);
     }
@@ -353,10 +353,10 @@ class WalletController extends GetxController {
         await fetchWallets(currency: '');
         Get.snackbar('Pending', 'Your transaction is in progress', backgroundColor: Colors.yellowAccent);
       } else {
-        Get.snackbar('Error', 'Failed to fund wallet via Naira Bank Direct: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fund wallet via Naira Bank Direct: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isFundWalletViaNairaBankDirect(false);
     }
@@ -375,10 +375,10 @@ class WalletController extends GetxController {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.snackbar('Pending', 'Your request is in progress', backgroundColor: Colors.yellowAccent);
       } else {
-        Get.snackbar('Error', 'Failed to confirm birthday: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to confirm birthday: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isConfirmBirthday(false);
     }
@@ -397,10 +397,10 @@ class WalletController extends GetxController {
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.snackbar('Pending', 'Your request is in progress', backgroundColor: Colors.yellowAccent);
       } else {
-        Get.snackbar('Error', 'Failed to confirm OTP: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to confirm OTP: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isConfirmingOtp(false);
     }
@@ -417,10 +417,10 @@ class WalletController extends GetxController {
         await fetchingDefaultWallet();
         await transactionController.fetchTransactions();
       } else {
-        Get.snackbar('Error', 'Failed to fetch wallets: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch wallets: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isDefaultWalletLoading(false);
     }
@@ -442,10 +442,10 @@ class WalletController extends GetxController {
             lastModifiedDate: data['lastModifiedDate']
         ));
       } else {
-        Get.snackbar('Error', 'Failed to fetch default wallet: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch default wallet: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isDefaultWalletLoading(false);
     }
@@ -461,10 +461,10 @@ class WalletController extends GetxController {
             .map((json) => GetBankAccountModel.fromJson(json)).toList();
         bankAccounts.assignAll(fetchedBankAccounts);
       } else {
-        Get.snackbar('Error', 'Failed to fetch local bank accounts: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch local bank accounts: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isLocalBankLoading(false);
     }
@@ -478,10 +478,10 @@ class WalletController extends GetxController {
         List<GetFcyAccountEntity> fetchedFcyAccounts = (data as List)
             .map((json) => GetFcyAccountEntity.fromJson(json)).toList();
       } else {
-        Get.snackbar('Error', 'Failed to fetch FCY accounts: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch FCY accounts: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
     }
   }
@@ -495,10 +495,8 @@ class WalletController extends GetxController {
         List<BankListModel> fetchedBankLists = (data as List)
             .map((json) => BankListModel.fromJson(json)).toList();
         bankList.assignAll(fetchedBankLists);
-        print('Da bankLise $fetchedBankLists');
-        print('Da bankLise $bankList');
       } else {
-        Get.snackbar('Error', 'Failed to fetch bank list: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to fetch bank list: ${response.data['message']}');
       }
     } catch (err) {
       print('Error occurred: $err');
@@ -513,10 +511,10 @@ class WalletController extends GetxController {
       if (response.statusCode == 200) {
         await fetchFcyAccount(currency: '');
       } else {
-        Get.snackbar('Error', 'Failed to delete FCY account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to delete FCY account: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       Get.closeAllSnackbars();
     }
@@ -530,13 +528,31 @@ class WalletController extends GetxController {
         await fetchLocalBank();
         Get.snackbar('Success', 'Bank account deleted successfully', backgroundColor: Colors.green);
       } else {
-        Get.snackbar('Error', 'Failed to delete bank account: ${response.data['message']}', backgroundColor: Colors.red);
+        print('Failed to delete bank account: ${response.data['message']}');
       }
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       Get.closeAllSnackbars();
     }
+  }
+
+  void resetBoolOnOutgoingRequest() {
+    isDefaultWalletLoading.value = false;
+    isFundingWalletViaNairaTransfer.value = false;
+    isCreatingFcy.value = false;
+    isFundingFcy.value = false;
+    isFundingWalletViaPaystack.value = false;
+    isCreatingWallet.value = false;
+    isCreatingDefaultWallet.value = false;
+    isBankLoading.value = false;
+    verifyingAccount.value = false;
+    isTransferToLocalBank.value = false;
+    isFundWalletViaNairaUssd.value = false;
+    isFundWalletViaNairaBankDirect.value = false;
+    isConfirmBirthday.value = false;
+    isConfirmingOtp.value = false;
+    isLocalBankLoading.value = false;
   }
 
   void clearData() {

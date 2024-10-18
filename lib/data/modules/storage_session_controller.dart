@@ -5,7 +5,6 @@ import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/features/authentication/screens/login/login.dart';
 import 'package:pouch/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pouch/utils/loader.dart';
 import 'package:pouch/utils/local_storage/local_storage.dart';
 import '../../utils/constants/app.dart';
 
@@ -105,14 +104,6 @@ class UserSessionController extends GetxController {
     }
   }
 
-  Future<bool> checkAuthOnboardingScreenStatus() async {
-    return _storage.getBool(HIDE_AUTH_ONBOARDING_SCREEN) ?? false;
-  }
-
-  Future<void> disableAuthOnboardingScreen() async {
-    await _storage.setBool(HIDE_AUTH_ONBOARDING_SCREEN, true);
-  }
-
   Future<void> logoutUser({String? logoutMessage = ''}) async {
     clearRememberMeHandler();
     await resetController.clearData();
@@ -129,23 +120,10 @@ class UserSessionController extends GetxController {
     await _storage.setString(USER_REMEMBER_ME_PASS, password);
   }
 
-  Future<void> getRememberMeHandler(
-      Function(String? email, String? password, bool? enabled) getUserPreviousDetails
-      ) async {
-    handleShowLoader();
-    getUserPreviousDetails(
-      _storage.getString(USER_REMEMBER_ME_EMAIL),
-      _storage.getString(USER_REMEMBER_ME_PASS),
-      _storage.getBool(USER_REMEMBER_ME_ENABLED),
-    );
-    handleHideLoader();
-  }
-
   Future<void> clearRememberMeHandler() async {
     await _storage.remove(USER_REMEMBER_ME_EMAIL);
     await _storage.remove(USER_REMEMBER_ME_PASS);
     await _storage.remove(USER_REMEMBER_ME_ENABLED);
-    await _storage.setBool(USER_BIOMETRIC_ENABLED, false);
     await _storage.remove(USER_SESSION_TOKEN);
     await _storage.remove(USER_REFRESH_TOKEN);
   }

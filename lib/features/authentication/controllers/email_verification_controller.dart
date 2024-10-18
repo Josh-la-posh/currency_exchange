@@ -5,28 +5,25 @@ import 'package:pouch/utils/otp/otp.dart';
 import 'auth_controller.dart';
 
 class EmailVerificationController extends GetxController {
-  final isVerifying = false.obs;
   final authController = Get.find<AuthController>();
-  final String email;
-  final String password;
-  final VoidCallback? onSuccess;
   final formKey = GlobalKey<FormState>();
   final List<TextEditingController> otpControllers =
   List.generate(6, (_) => TextEditingController());
   final List<FocusNode> focusNodes = List.generate(6, (_) => FocusNode());
-  RxString otpCode = ''.obs;
-  RxBool showEmailVerifiedSuccess = false.obs;
-  RxBool canResendOtp = false.obs;
-  RxString formattedTime = '0'.obs;
-  late OtpTimer otpTimer;
+  OtpTimer? otpTimer;
+  var otpCode = ''.obs;
+  var showEmailVerifiedSuccess = false.obs;
+  var canResendOtp = false.obs;
+  var formattedTime = '0'.obs;
+  var isVerifying = false.obs;
+
+  final bool sendEmailOtpOnBuild;
+  final String email;
+  final String password;
+  final VoidCallback? onSuccess;
 
   EmailVerificationController(
-      {required this.email, required this.password, this.onSuccess});
-
-  @override
-  void onInit() {
-    super.onInit();
-    showEmailVerifiedSuccess.value = false;
+      {required this.sendEmailOtpOnBuild, required this.email, required this.password, this.onSuccess}) {
     otpTimer = OtpTimer(
       durationInSeconds: 120,
       onTimerFinish: () {
@@ -37,12 +34,22 @@ class EmailVerificationController extends GetxController {
         formattedTime.value = time;
       },
     );
+    if (sendEmailOtpOnBuild) {
+      handleSendEmailVerificationOTP();
+    } else {
+      otpTimer?.startTimer();
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
     _setupFocusListeners();
   }
 
   @override
   void onClose() {
-    otpTimer.stopTimer();
+    otpTimer?.stopTimer();
     otpControllers.forEach((controller) => controller.dispose());
     focusNodes.forEach((node) => node.dispose());
     super.onClose();
@@ -62,12 +69,10 @@ class EmailVerificationController extends GetxController {
     authController.emailVerificationOtp(
       email: email,
       onSuccess: () {
-        otpTimer.startTimer();
+        otpTimer?.startTimer();
         canResendOtp.value = false;
       },
-      onFailure: () {
-        canResendOtp.value = true;
-      },
+      onFailure: () => canResendOtp.value = true,
     );
   }
 
@@ -81,9 +86,29 @@ class EmailVerificationController extends GetxController {
     }
   }
 
-  void handleOtpChanged() {
+  // void handleOtpChanged() {
+  //   otpCode.value = otpControllers.map((controller) => controller.text).join();
+  // }
+
+  void handleOtpChanged(int index, String value) {
+    if (value.length > 1) {
+      print('The value is: $value');
+      for (int i = 0; i < value.length && i < 6; i++) {
+        otpControllers[i].text = value[i];
+        if (i < focusNodes.length - 1) {
+          focusNodes[i + 1].requestFocus();
+        }
+      }
+      FocusScope.of(Get.context!).requestFocus(focusNodes[5]);
+    } else {
+      if (value.isEmpty && index > 0) {
+        focusNodes[index - 1].requestFocus();
+      }
+    }
     otpCode.value = otpControllers.map((controller) => controller.text).join();
+    print('the value is: ${otpCode.value}');
   }
+
 
   void handleEmailVerificationSuccess() {
     showEmailVerifiedSuccess.value = true;
@@ -115,7 +140,7 @@ class EmailVerificationController extends GetxController {
       authController.login(
           email: email,
           password: password,
-          rememberMe: true,
+          rememberMe: false,
           handleEmailNotVerified: (){},
       );
     }

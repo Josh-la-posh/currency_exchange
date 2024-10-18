@@ -6,9 +6,9 @@ import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:pouch/data/firebase/firebase_api.dart';
 import 'package:pouch/utils/layouts/navigation_menu.dart';
+import 'package:pouch/utils/shared/error_dialog_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pouch/features/authentication/models/create_account_model.dart';
-import 'package:pouch/features/authentication/models/password_model.dart';
 import 'package:pouch/features/authentication/models/user_model.dart';
 import 'package:pouch/utils/constants/app.dart';
 import 'package:pouch/utils/local_storage/local_storage.dart';
@@ -31,10 +31,8 @@ class AuthController extends GetxController {
   var createAccountCanVerifyEmail = RxBool(false);
   var createAccountOtpId = Rx<String?>(null);
   var isLoggingIn = false.obs;
-  var isConfirmingVerification = false.obs;
   var isPasswordResetting = false.obs;
   var isVerifiedDisplay = false.obs;
-  var resetPasswordDetails = Rx<ChangePasswordModel?>(null);
 
   @override
   void onInit() {
@@ -89,14 +87,6 @@ class AuthController extends GetxController {
     createAccountOtpId.value = null;
   }
 
-  void saveResetPasswordDetails(ChangePasswordModel resetDetails) {
-    resetPasswordDetails.value = resetDetails;
-  }
-
-  void clearResetPasswordDetails() {
-    resetPasswordDetails.value = null;
-  }
-
   void setIsVerifiedDisplay(bool val) {
     isVerifiedDisplay.value = val;
   }
@@ -121,7 +111,7 @@ class AuthController extends GetxController {
         onSuccess();
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
     }
   }
@@ -211,11 +201,6 @@ class AuthController extends GetxController {
             password: password,
             enabled: true
         );
-      } else {
-        userSessionController.setRememberMeHandler(
-            email: email,
-            password: password
-        );
       }
       if (user.value.isEmailVerified != true) {
         handleEmailNotVerified();
@@ -271,16 +256,16 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> confirmVerification() async {
-    try {
-      isConfirmingVerification(true);
-      final response = await AuthService.instance.confirmVerification();
-    } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
-    } finally {
-      isConfirmingVerification(false);
-    }
-  }
+  // Future<void> confirmVerification() async {
+  //   try {
+  //     isConfirmingVerification(true);
+  //     final response = await AuthService.instance.confirmVerification();
+  //   } catch (err) {
+  //     Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+  //   } finally {
+  //     isConfirmingVerification(false);
+  //   }
+  // }
 
   Future<void> generateOtp({
     required String email,

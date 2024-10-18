@@ -6,66 +6,49 @@ import 'package:pouch/utils/constants/sizes.dart';
 import '../../../controllers/email_verification_controller.dart';
 
 class EmailVerificationForm extends StatelessWidget {
-  final String email;
-  final String password;
-
-  EmailVerificationForm({
-    Key? key,
-    required this.email,
-    required this.password,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    EmailVerificationController controller = Get.put(EmailVerificationController(
-      email: email,
-      password: password,
-    ));
-
-    return Obx(
-          () => Form(
-        key: controller.formKey,
-        child: controller.showEmailVerifiedSuccess.isTrue
-            ? _buildSuccessView(context, controller)
-            : _buildOtpForm(context, controller),
+    EmailVerificationController controller = Get.find();
+    return Form(
+      key: controller.formKey,
+      child: Obx(() => controller.showEmailVerifiedSuccess.isTrue
+          ? _buildSuccessView(context)
+          : Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichText(
+            text: TextSpan(
+              text: 'Enter the six digit pin sent to ',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 16),
+              children: [
+                TextSpan(
+                  text: controller.email,
+                  style: const TextStyle(fontWeight: TSizes.fontWeightLg),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: TSizes.defaultSpace),
+          _buildOtpInputField(),
+          _buildConfirmButton(context),
+        ],
+      )
       ),
     );
   }
 
-  Widget _buildOtpForm(BuildContext context, EmailVerificationController controller) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        RichText(
-          text: TextSpan(
-            text: 'Enter the six digit pin sent to ',
-            style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 16),
-            children: [
-              TextSpan(
-                text: controller.email,
-                style: const TextStyle(fontWeight: TSizes.fontWeightLg),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: TSizes.defaultSpace),
-        _buildOtpInputField(controller),
-        _buildConfirmButton(context, controller),
-        _buildResendOtpButton(controller),
-      ],
-    );
-  }
-
-  Widget _buildOtpInputField(EmailVerificationController controller) {
+  Widget _buildOtpInputField() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(6, (index) {
-        return _buildOtpBox(index, controller);
+        return _buildOtpBox(index);
       }),
     );
   }
 
-  Widget _buildOtpBox(int index, EmailVerificationController controller) {
+  Widget _buildOtpBox(int index) {
+    EmailVerificationController controller = Get.find();
     return SizedBox(
       width: 40,
       child: TextFormField(
@@ -85,7 +68,10 @@ class EmailVerificationForm extends StatelessWidget {
           border: OutlineInputBorder(),
         ),
         onChanged: (value) {
-          controller.handleOtpChanged();
+          controller.handleOtpChanged(index, value);
+          // if (value.isNotEmpty && index < 5) {
+          //   controller.focusNodes[index + 1].requestFocus();
+          // }
           if (value.isEmpty && index > 0) {
             controller.focusNodes[index - 1].requestFocus();
           }
@@ -96,21 +82,41 @@ class EmailVerificationForm extends StatelessWidget {
     );
   }
 
-  Widget _buildConfirmButton(BuildContext context, EmailVerificationController controller) {
-    return Obx(() => Padding(
+  Widget _buildConfirmButton(BuildContext context) {
+    EmailVerificationController controller = Get.find();
+    return Padding(
       padding: const EdgeInsets.only(top: TSizes.spaceBtwSections - 4),
-      child: TElevatedButton(
-        onTap: controller.otpControllers.length == 6
-            ? (controller.isVerifying.value
-            ? null
-            : controller.handleVerifyOtp)
-            : null,
-        buttonText: controller.isVerifying.value ? 'Verifying...' : 'Confirm',
+      child: Column(
+        children: [
+          TElevatedButton(
+            onTap: controller.isVerifying.value
+                ? null
+                : controller.handleVerifyOtp,
+            buttonText: controller.isVerifying.isTrue ? 'Verifying...' : 'Confirm',
+          ),
+          Center(
+            child: TextButton(
+              onPressed: controller.canResendOtp.isFalse
+                  ? null
+                  : controller.handleSendEmailVerificationOTP,
+              style: const ButtonStyle(
+                padding: MaterialStatePropertyAll(EdgeInsets.fromLTRB(4, 0, 0, 0)),
+              ),
+              child: Text(
+                controller.canResendOtp.isFalse
+                    ? 'Resend OTP in ${controller.formattedTime.value}s'
+                    : 'Resend OTP',
+                style: const TextStyle(fontSize: 13),
+              ),
+            ),
+          )
+        ],
       ),
-    ));
+    );
   }
 
-  Widget _buildResendOtpButton(EmailVerificationController controller) {
+  Widget _buildResendOtpButton() {
+    EmailVerificationController controller = Get.find();
     return Center(
       child: TextButton(
         onPressed: controller.canResendOtp.isTrue
@@ -130,7 +136,7 @@ class EmailVerificationForm extends StatelessWidget {
   }
 
   Widget _buildSuccessView(
-      BuildContext context, EmailVerificationController controller) {
+      BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,

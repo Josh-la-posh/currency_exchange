@@ -171,6 +171,12 @@ class NegotiationOfferController extends GetxController {
     }
   }
 
+  void resetBoolOnOngoingRequest() {
+    isMyBidsLoading.value = false;
+    isMyOffersLoading.value = false;
+    isNegotiatedOfferLoading.value = false;
+  }
+
   void clearData() {
     myOfferById.value = OfferEntity();
     myBidById.value = OfferEntity();

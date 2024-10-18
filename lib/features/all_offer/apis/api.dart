@@ -1,3 +1,6 @@
+import 'package:pouch/utils/responses/handleApiError.dart';
+import 'package:pouch/utils/shared/error_dialog_response.dart';
+
 import '../../../data/modules/interceptor.dart';
 
 
@@ -13,7 +16,6 @@ const MY_BIDS_URL = 'me/my-bids';
 const MY_BID_URL = 'me/my-bid';
 
 final _apiService = AppInterceptor(showLoader: false).dio;
-final apiService = AppInterceptor(showLoader: true).dio;
 
 class OfferService {
   static final OfferService _instance = OfferService._();
@@ -25,134 +27,67 @@ class OfferService {
   // post requests
 
   Future creatingOffer(Map<String, dynamic> queryParameters) async {
-    try {
-      final response = await _apiService.post('$OFFER_URL/$CREATE_OFFER_URL', data: queryParameters);
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.post('$OFFER_URL/$CREATE_OFFER_URL', data: queryParameters);
+    return response;
   }
 
   Future acceptingOrRejectingOffer({required String id, required Object data}) async {
-    try {
-      final response = await _apiService.post('$OFFER_URL/$ACCEPT_REJECT_OFFER_URL/$id', data: data);
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.post('$OFFER_URL/$ACCEPT_REJECT_OFFER_URL/$id', data: data);
+    return response;
   }
 
   Future negotiatingOffer({required String id, required Object data}) async {
-    try {
-      final response = await _apiService.post('$OFFER_URL/$NEGOTIATE_OFFER_URL/$id', data: data);
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.post('$OFFER_URL/$NEGOTIATE_OFFER_URL/$id', data: data);
+    return response;
   }
 
   Future swappingOffer({required String id}) async {
-    try {
-      final response = await _apiService.post('$OFFER_URL/$SWAP_OFFER_URL/$id');
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.post('$OFFER_URL/$SWAP_OFFER_URL/$id');
+    return response;
   }
 
   Future fetchAllOffers(Map<String, dynamic> queryParameters) async {
-    try {
-      final response = await _apiService.get('$OFFER_URL', queryParameters: queryParameters);
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.get('$OFFER_URL', queryParameters: queryParameters);
+    return response;
   }
 
   Future fetchOfferById(String id) async {
-    try {
-      final response = await _apiService.get('$OFFER_URL/$id',);
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.get('$OFFER_URL/$id',);
+    return response;
   }
 
   Future fetchAllNegotiatedOffers() async {
-    try {
-      final response = await _apiService.get('$OFFER_URL/$ALL_NEGOTIATED_OFFER_URL');
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.get('$OFFER_URL/$ALL_NEGOTIATED_OFFER_URL');
+    return response;
   }
 
   Future fetchMyOffers(String days, String currency) async {
-    try {
-      final response = await _apiService.get('$OFFER_URL/$MY_OFFERS_URL', queryParameters: {'days': days, 'currency': currency});
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.get('$OFFER_URL/$MY_OFFERS_URL', queryParameters: {'days': days, 'currency': currency});
+    return response;
   }
 
   Future fetchMyBids(String days, String currency) async {
-    try {
-      final response = await _apiService.get('$OFFER_URL/$MY_BIDS_URL', queryParameters: {'days': days, 'currency': currency});
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.get('$OFFER_URL/$MY_BIDS_URL', queryParameters: {'days': days, 'currency': currency});
+    return response;
   }
 
   Future fetchMyOffersById(String id) async {
-    try {
-      final response = await _apiService.get('$OFFER_URL/$MY_OFFER_URL/$id');
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.get('$OFFER_URL/$MY_OFFER_URL/$id');
+    return response;
   }
 
   Future fetchMyBidsById(String id) async {
-    try {
-      final response = await _apiService.get('$OFFER_URL/$MY_BID_URL/$id');
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.get('$OFFER_URL/$MY_BID_URL/$id');
+    return response;
   }
 
   Future deleteOffer(String id) async {
-    try {
-      final response = await _apiService.delete('$OFFER_URL/$id');
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.delete('$OFFER_URL/$id');
+    return response;
   }
 
   Future deleteBid(String id) async {
-    try {
-      final response = await _apiService.delete('$OFFER_URL/bid/$id');
-      return response;
-    } catch (e) {
-      print('offer error: ${e.toString()}');
-    }
+    final response = await _apiService.delete('$OFFER_URL/bid/$id');
+    return response;
   }
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
 }

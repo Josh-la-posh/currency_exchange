@@ -111,6 +111,11 @@ class SubscriptionController extends GetxController {
     maxRate.value = '';
   }
 
+  void resetBoolOnOutgoingRequests() {
+    isCreatingSubscription.value = false;
+    isFetchingSubscription.value = false;
+  }
+
   void clearData() {
     subscriptions.clear();
   }

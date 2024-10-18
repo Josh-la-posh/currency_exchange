@@ -4,10 +4,13 @@ import 'package:pouch/features/notification/controller/notification_controller.d
 import 'package:pouch/features/notification/screens/notification_offer_details.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
+import '../../../data/modules/interceptor.dart';
+import '../../../utils/constants/sizes.dart';
 import '../../negotiation_offer/screen/my_bid_detail.dart';
 import '../../negotiation_offer/screen/negotiation_accept_reject.dart';
 
 class NotificationScreen extends StatelessWidget {
+  final AppInterceptor appInterceptor = AppInterceptor();
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +23,20 @@ class NotificationScreen extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            appInterceptor.cancelOngoingRequest(() {
+              notificationController.isLoading(false);
+            });
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back),
+          style: IconButton.styleFrom(
+            foregroundColor: Colors.grey,
+            iconSize: TSizes.iconBackSize,
+          ),
+          hoverColor: Colors.transparent,
+        ),
         title: Text('Notifications'),
         centerTitle: true,
       ),

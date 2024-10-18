@@ -5,10 +5,12 @@ import 'package:pouch/features/negotiation_offer/controller/negotiation_offer_co
 import 'package:pouch/features/negotiation_offer/screen/my_bid.dart';
 import 'package:pouch/features/negotiation_offer/screen/my_offer.dart';
 import 'package:pouch/utils/constants/sizes.dart';
+import '../../../data/modules/interceptor.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/helpers/helper_functions.dart';
 
 class MyBidAndOfferScreen extends StatelessWidget {
+  final AppInterceptor appInterceptor = AppInterceptor();
   @override
   Widget build(BuildContext context) {
     NegotiationOfferController controller = Get.put(NegotiationOfferController());
@@ -20,7 +22,24 @@ class MyBidAndOfferScreen extends StatelessWidget {
     }
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            appInterceptor.cancelOngoingRequest(() {
+              controller.resetBoolOnOngoingRequest();
+            });
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back),
+          style: IconButton.styleFrom(
+            foregroundColor: Colors.grey,
+            iconSize: TSizes.iconBackSize,
+          ),
+          hoverColor: Colors.transparent,
+        ),
+        title: Text('My Offers'),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
           Padding(

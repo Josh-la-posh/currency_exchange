@@ -26,8 +26,8 @@ class SplashScreen extends GetView<SplashAnimationController> {
             child: Image.asset(
               'assets/logos/swappr-splash-logo.png',
               fit: BoxFit.contain,
-              width: 90,
-              height: 90,
+              width: 150,
+              height: 150,
             ),
           ),
         ),

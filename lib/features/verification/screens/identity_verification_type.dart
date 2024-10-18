@@ -98,6 +98,9 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                                     Get.back();
                                   },
                                 )))
+                            // Navigator.of(context).push(
+                            //     MaterialPageRoute<void>(
+                            //         builder: (BuildContext context) => ))
                                 : Text('Permission not granted. Requesting permission...');
                           }
                         });
@@ -117,7 +120,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                                   Get.off(() => const VerificationInProgressScreen());
                                 },
                                 onError: (String errorMessage) {
-                                  print('verififcation error: $errorMessage');
+                                  print('erification error: $errorMessage');
                                   Get.back();
                                 },
                               )));

@@ -18,7 +18,6 @@ class CurrencyController extends GetxController {
     try {
       final response = await WalletServices.instance.fetchFxRates(currency: currency);
       if (response.statusCode == 200) {
-        print('New resposne is: ${response.data}');
         final rates = response.data['conversion_rates'] as Map<String, dynamic>;
         currencyRates.value = rates.entries
             .map((entry) => {'currency': entry.key, 'rate': entry.value})

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:pouch/data/modules/storage_session_controller.dart';
 import 'package:pouch/features/all_offer/controllers/create_offer_controller.dart';
 import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
+import 'package:pouch/features/authentication/controllers/address_controller.dart';
 import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
 import 'package:pouch/features/authentication/screens/login/login.dart';
@@ -14,34 +14,10 @@ import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
 import 'package:pouch/utils/layouts/navigation_menu.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ResetControllers {
-  // void _clearControllerData() {
-    // Get.lazyPut<AuthFormController>(() => AuthFormController());
+import '../../features/authentication/controllers/change_password_controller.dart';
+import '../../features/authentication/controllers/forgot_password_controller.dart';
 
-  //   final controllers = [
-  //     Get.find<HomeController>(),
-  //     Get.find<OfferController>(),
-  //     Get.find<NotificationController>(),
-  //     Get.find<WalletController>(),
-  //     Get.find<AuthController>(),
-  //     Get.find<AuthFormController>(),
-  //     Get.find<NavigationController>(),
-  //     Get.find<VerificationController>(),
-  //     Get.find<CreateOfferController>(),
-  //     Get.find<HelperFunctionsController>(),
-  //   ];
-  //
-  //   for (var controller in controllers) {
-  //     if (controller is HomeController) controller.clearData();
-  //     if (controller is OfferController) controller.clearData();
-  //     if (controller is NotificationController) controller.clearData();
-  //     if (controller is WalletController) controller.clearData();
-  //     if (controller is AuthController) controller.removeUser();
-  //     if (controller is VerificationController) controller.clearData();
-  //     if (controller is CreateOfferController) controller.clearForm();
-  //     if (controller is AuthFormController) controller.clearData();
-  //   }
-  // }
+class ResetControllers {
 
   Future<void> _clearPersistenceStorage() async {
     final prefs = await SharedPreferences.getInstance();
@@ -50,7 +26,7 @@ class ResetControllers {
 
   Future<void> clearData() async {
     try {
-      await _clearPersistenceStorage();
+      // await _clearPersistenceStorage();
 
       Get.delete<NavigationController>(force: true);
       Get.delete<HomeController>(force: true);
@@ -60,8 +36,11 @@ class ResetControllers {
       Get.delete<VerificationController>(force: true);
       Get.delete<CreateOfferController>(force: true);
       Get.delete<AuthFormController>(force: true);
+      Get.delete<ForgotPasswordFormController>(force: true);
+      Get.delete<ChangePasswordController>(force: true);
       Get.delete<SubscriptionController>(force: true);
       Get.delete<HelperFunctionsController>(force: true);
+      Get.delete<AddressFormController>(force: true);
       Get.find<AuthController>().removeUser();
 
       Get.closeAllSnackbars();

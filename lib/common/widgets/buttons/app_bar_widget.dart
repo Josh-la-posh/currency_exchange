@@ -23,7 +23,6 @@ class AppBarWidget extends StatelessWidget {
       children: [
         IconButton(
           onPressed: onTap != null ? onTap : (){
-            appInterceptor.cancelOngoingRequest();
             Get.back();
             },
           icon: const Icon(Icons.arrow_back_ios_sharp),

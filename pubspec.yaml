@@ -48,7 +48,6 @@ dependencies:
   carousel_slider: ^5.0.0
   flutter_local_notifications: ^17.2.3
 
-
   #------------------- ./ PACKAGES END ---------------#
 
 dev_dependencies:

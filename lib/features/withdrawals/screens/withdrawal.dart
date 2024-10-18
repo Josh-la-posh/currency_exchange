@@ -88,7 +88,9 @@ class WithdrawalScreen extends StatelessWidget {
       leading: BackButton(
         onPressed: () {
           walletController.selectedWithdrawalAccount.value = GetBankAccountModel();
-          appInterceptor.cancelOngoingRequest();
+          appInterceptor.cancelOngoingRequest(() {
+            walletController.resetBoolOnOutgoingRequest();
+          });
           Get.back();
         },
       ),

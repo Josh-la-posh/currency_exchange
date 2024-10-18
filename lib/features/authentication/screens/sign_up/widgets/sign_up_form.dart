@@ -4,15 +4,15 @@ import 'package:iconsax/iconsax.dart';
 import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
+import 'package:pouch/features/authentication/controllers/registration_form_controller.dart';
 import 'package:pouch/features/authentication/screens/login/login.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
-import '../../../controllers/auth_form_controller.dart';
 
 class SignUpForm extends StatelessWidget {
-  AuthFormController authFormController = Get.put(AuthFormController());
+  RegistrationFormController registrationFormController = Get.put(RegistrationFormController());
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -55,7 +55,7 @@ class SignUpForm extends StatelessWidget {
           child: _buildTextField(
             context: context,
             label: 'First Name',
-            controller: authFormController.firstName,
+            controller: registrationFormController.firstName,
             validator: TValidator.emptyFieldValidator,
           ),
         ),
@@ -64,7 +64,7 @@ class SignUpForm extends StatelessWidget {
           child: _buildTextField(
             context: context,
             label: 'Last Name',
-            controller: authFormController.lastName,
+            controller: registrationFormController.lastName,
             validator: TValidator.emptyFieldValidator,
           ),
         ),
@@ -76,7 +76,7 @@ class SignUpForm extends StatelessWidget {
     return _buildTextField(
       context: context,
       label: 'Email',
-      controller: authFormController.email,
+      controller: registrationFormController.email,
       validator: TValidator.validateEmail,
       keyboardType: TextInputType.emailAddress,
     );
@@ -102,8 +102,8 @@ class SignUpForm extends StatelessWidget {
             ),
           ),
           onChanged: (value) {
-            authFormController.phoneNo.text = value.completeNumber;
-            print(authFormController.phoneNo.text);
+            registrationFormController.phoneNo.text = value.completeNumber;
+            print(registrationFormController.phoneNo.text);
           },
           keyboardType: TextInputType.phone,
         ),
@@ -115,26 +115,26 @@ class SignUpForm extends StatelessWidget {
     return Obx(() => _buildTextField(
       context: context,
       label: 'Password',
-      controller: authFormController.password,
+      controller: registrationFormController.password,
       validator: TValidator.validatePassword,
-      obscureText: authFormController.obscurePassword.value,
+      obscureText: registrationFormController.obscurePassword.value,
       suffixIcon: _buildToggleVisibilityIcon(
-          obscureText: authFormController.obscurePassword.value,
-          onPressed: () => authFormController.toggleObscurePassword()
+          obscureText: registrationFormController.obscurePassword.value,
+          onPressed: () => registrationFormController.toggleObscurePassword()
       ),
     ));
   }
 
   Widget _buildConfirmPasswordField(BuildContext context) {
     return Obx(() => _buildTextField(
-      controller: authFormController.confirmPass,
+      controller: registrationFormController.confirmPass,
       context: context,
       label: 'Confirm Password',
-      validator: (value) => TValidator.validateConfirmPassword(value, authFormController.password.text),
-      obscureText: authFormController.obscureConPassword.value,
+      validator: (value) => TValidator.validateConfirmPassword(value, registrationFormController.password.text),
+      obscureText: registrationFormController.obscureConPassword.value,
       suffixIcon: _buildToggleVisibilityIcon(
-          obscureText: authFormController.obscureConPassword.value,
-          onPressed: () => authFormController.toggleObscureConPassword()
+          obscureText: registrationFormController.obscureConPassword.value,
+          onPressed: () => registrationFormController.toggleObscureConPassword()
       ),
     ));
   }
@@ -143,14 +143,21 @@ class SignUpForm extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Obx(() => Checkbox(
-          value: authFormController.acceptTerms.value,
-          onChanged: (value) => authFormController.acceptTerms.value = !authFormController.acceptTerms.value,
+        Obx(() => Transform.scale(
+          scale: 1.2,
+          child: Checkbox(
+            value: registrationFormController.acceptTerms.value,
+            onChanged: (value) => registrationFormController.acceptTerms.value = !registrationFormController.acceptTerms.value,
+          ),
         )),
         Expanded(
-          child: Text(
-            'I understand pouch Terms of Use',
-            style: Theme.of(context).textTheme.labelMedium,
+          child: InkWell(
+            splashColor: Colors.transparent,
+            onTap: () => registrationFormController.acceptTerms.value = !registrationFormController.acceptTerms.value,
+            child: Text(
+              'I understand pouch Terms of Use',
+              style: Theme.of(context).textTheme.labelMedium,
+            ),
           ),
         ),
       ],
@@ -161,12 +168,12 @@ class SignUpForm extends StatelessWidget {
     return SizedBox(
       height: 48,
       child: Obx(() => TElevatedButton(
-        onTap: authFormController.acceptTerms.value
-            ? (authFormController.isCreatingAccount.value
+        onTap: registrationFormController.acceptTerms.value
+            ? (registrationFormController.isCreatingAccount.value
             ? null
-            : () => authFormController.submitSignUpForm(formKey: formKey))
+            : () => registrationFormController.submitSignUpForm(formKey: formKey))
             : null,
-        buttonText: authFormController.isCreatingAccount.value
+        buttonText: registrationFormController.isCreatingAccount.value
             ? 'Signing in ...'
             : 'Sign Up',
       )),

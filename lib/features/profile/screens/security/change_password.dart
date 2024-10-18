@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pouch/common/styles/spacing_styles.dart';
-import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../../common/widgets/buttons/elevated_button.dart';
 import '../../../../data/modules/interceptor.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/validators/validation.dart';
+import '../../../authentication/controllers/change_password_controller.dart';
 
 class ChangePasswordScreen extends StatelessWidget {
   final AppInterceptor appInterceptor = AppInterceptor();
@@ -16,7 +16,7 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthFormController controller = Get.put(AuthFormController());
+    ChangePasswordController controller = Get.put(ChangePasswordController());
     final formKey = GlobalKey<FormState>();
     final darkMode = THelperFunctions.isDarkMode(context);
 

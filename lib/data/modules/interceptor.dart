@@ -4,6 +4,7 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 import 'package:pouch/data/modules/storage_session_controller.dart';
 import 'package:pouch/data/modules/userAgent.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
+import 'package:pouch/utils/shared/error_dialog_response.dart';
 import '../../features/authentication/controllers/auth_controller.dart';
 import '../../utils/configs/app_config.dart';
 
@@ -18,7 +19,9 @@ class AppInterceptor extends Interceptor {
   final Duration connectTimeout;
   final Duration receiveTimeout;
   final Duration sendTimeout;
-  static CancelToken cancelToken = CancelToken();
+
+  // Global CancelToken for all requests
+  static CancelToken globalCancelToken = CancelToken();
 
   final UserSessionController userSessionController = GetX.Get.find<UserSessionController>();
   final authController = GetX.Get.find<AuthController>();
@@ -31,9 +34,9 @@ class AppInterceptor extends Interceptor {
     this.onProcessingRequestEnds = _doNothingFn,
     this.onProcessingRequestStart = _doNothingFn,
     this.noInternetConnection = _doNothingFn,
-    this.connectTimeout = const Duration(minutes: 2),
-    this.receiveTimeout = const Duration(minutes: 2),
-    this.sendTimeout = const Duration(minutes: 2),
+    this.connectTimeout = const Duration(seconds: 30),
+    this.receiveTimeout = const Duration(seconds: 30),
+    this.sendTimeout = const Duration(seconds: 30),
   }) {
     dio.options = BaseOptions(
       baseUrl: API_BASE_URL,
@@ -47,8 +50,7 @@ class AppInterceptor extends Interceptor {
       QueuedInterceptorsWrapper(
         onRequest: (RequestOptions requestOptions, RequestInterceptorHandler handler) async {
           print('onRequest received for path: ${requestOptions.path}');
-
-          requestOptions.cancelToken = cancelToken = CancelToken();
+          requestOptions.cancelToken = globalCancelToken;
 
           final connectivityResult = await InternetConnection().hasInternetAccess;
           print('Internet connection check: $connectivityResult');
@@ -56,7 +58,7 @@ class AppInterceptor extends Interceptor {
           if (connectivityResult) {
             String? token = await userSessionController.getAccessToken();
             String userAgent = await getUserAgent();
-            // print('user agent: $userAgent');
+
             requestOptions.headers['Authorization'] = 'Bearer $token';
             requestOptions.headers['User-Agent'] = userAgent;
 
@@ -67,9 +69,9 @@ class AppInterceptor extends Interceptor {
 
             handler.next(requestOptions);
           } else {
-            print('No internet connection');
             noInternetConnection();
-            _handleNoInternetConnection(requestOptions, handler);
+            showErrorAlertHelper(errorMessage: 'Check your internet connection and try again');
+            cancelAndRefresh();
           }
         },
         onError: (DioException err, ErrorInterceptorHandler handler) async {
@@ -79,13 +81,11 @@ class AppInterceptor extends Interceptor {
           onProcessingRequestEnds();
 
           if (err.response?.statusCode == 401 && checkIfUserIsLogin) {
-            print('Authentication error. Trying to refresh token');
             if (retryCount < maxRetry) {
               retryCount++;
               await refreshToken();
 
               try {
-                // Retry the failed request
                 handler.resolve(await _retry(err.requestOptions));
               } on DioException catch (e) {
                 handler.next(e);
@@ -93,7 +93,7 @@ class AppInterceptor extends Interceptor {
               return;
             } else {
               retryCount = 0;
-              cancelToken.cancel('Session expired, Outgoing requests terminated');
+              globalCancelToken.cancel('Session expired, Outgoing requests terminated');
               THelperFunctions.showDebugMessageInConsole(['Session expired, Outgoing requests terminated']);
               await userSessionController.logoutUser(
                 logoutMessage: "Session expired. Please login.",
@@ -114,7 +114,6 @@ class AppInterceptor extends Interceptor {
             'Response data: ${res.data != null ? res.data : ''}'
           ]);
 
-          // Handle request completion
           onProcessingRequestEnds();
           handler.resolve(res);
         },
@@ -122,18 +121,17 @@ class AppInterceptor extends Interceptor {
     );
   }
 
-  // Function to cancel ongoing requests
-  void cancelOngoingRequest() {
-    if (!cancelToken.isCancelled) {
-      print('Request cancelled by the user');
-      cancelToken.cancel('Request was cancelled by the user.');
-      cancelToken = CancelToken(); // Reset the cancel token for future requests
+  // Cancel all ongoing requests
+  void cancelOngoingRequest(Function endLoadingState) {
+    if (!globalCancelToken.isCancelled) {
+      globalCancelToken.cancel('Request was cancelled by the user.');
+      endLoadingState();
+      globalCancelToken = CancelToken();
     }
   }
 
   // Handle token refresh
   Future<String?> refreshToken() async {
-    print('Trying to refresh token');
     String? refreshToken = await userSessionController.getRefreshToken();
     if (refreshToken != null) {
       try {
@@ -172,21 +170,23 @@ class AppInterceptor extends Interceptor {
         options: options);
   }
 
-  // Handle no internet connection
-  void _handleNoInternetConnection(RequestOptions requestOptions, RequestInterceptorHandler handler) async {
-    print('Handling no internet connection');
-    bool isConnected = await InternetConnection().hasInternetAccess;
+  // Refresh Dio instance to reset configurations
+  void refreshDioInstance() {
+    print('Refreshing Dio instance');
+    dio = Dio(BaseOptions(
+      baseUrl: API_BASE_URL,
+      connectTimeout: connectTimeout,
+      contentType: 'application/json',
+      receiveTimeout: receiveTimeout,
+      sendTimeout: sendTimeout,
+    ));
 
-    if (isConnected) {
-      print('Restoring connection and retrying request');
-      handler.resolve(await _retry(requestOptions));
-    } else {
-      print('Couldn\'t restore connection, rejecting request');
-      handler.reject(DioError(
-        requestOptions: requestOptions,
-        type: DioErrorType.connectionError,
-        error: 'No internet connection. Please try again.',
-      ));
-    }
+    dio.interceptors.add(this);
+  }
+
+  // Combine cancel all requests and refresh Dio
+  void cancelAndRefresh() {
+    cancelOngoingRequest(() {});
+    refreshDioInstance();
   }
 }

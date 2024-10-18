@@ -22,7 +22,6 @@ class MyBidDetail extends StatelessWidget {
         surfaceTintColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         leading: IconButton(
           onPressed: (){
-            appInterceptor.cancelOngoingRequest();
             Get.back();
             },
           icon: const Icon(Icons.arrow_back),

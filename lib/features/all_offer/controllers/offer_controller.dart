@@ -7,6 +7,7 @@ import 'package:pouch/features/all_offer/models/offer.dart';
 import 'package:pouch/features/all_offer/models/offer_details_entity.dart';
 import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
 import 'package:pouch/utils/responses/handleApiError.dart';
+import 'package:pouch/utils/shared/error_dialog_response.dart';
 import '../screens/accept_offer_success_page.dart';
 import '../screens/offer_details.dart';
 
@@ -127,7 +128,7 @@ class OfferController extends GetxController {
        Get.offAndToNamed('/create-success-screen');
      }
     } catch (err) {
-      print('Wahala for creating offer');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isCreatingOfferLoading(false);
     }
@@ -150,7 +151,7 @@ class OfferController extends GetxController {
         onSuccess();
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isAcceptingRejectingOfferLoading(false);
     }
@@ -178,7 +179,7 @@ class OfferController extends GetxController {
       }
 
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isNegotiatingOfferLoading(false);
     }
@@ -188,7 +189,6 @@ class OfferController extends GetxController {
     required String id,
     required String amount,
     required String creditedCurrency
-    // required String currency
   }) async {
     try {
       isSwappingLoading(true);
@@ -201,7 +201,7 @@ class OfferController extends GetxController {
         ));
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isSwappingLoading(false);
     }
@@ -212,7 +212,6 @@ class OfferController extends GetxController {
     queryParameters['sortByAmount'] = 'sortByAmount';
     try {
       allOffers.isEmpty && isAllOffersLoading(true);
-      print('checking');
       final response = await OfferService.instance.fetchAllOffers(queryParameters);
       if (response.statusCode == 200 || response.statusCode == 201) {
         var data = response.data;
@@ -220,11 +219,9 @@ class OfferController extends GetxController {
         List<OfferEntity> fetchAOffers = (contents as List)
             .map((json) => OfferEntity.fromJson(json)).toList();
         allOffers.assignAll(fetchAOffers);
-      } else {
-        print('The response from all offer is ${response.statusCode}');
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isAllOffersLoading(false);
     }
@@ -244,7 +241,7 @@ class OfferController extends GetxController {
         allUsdOffers.assignAll(fetchAOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isUsdOffersLoading(false);
     }
@@ -264,7 +261,7 @@ class OfferController extends GetxController {
         allNgnOffers.assignAll(fetchAOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isNgnOffersLoading(false);
     }
@@ -284,7 +281,7 @@ class OfferController extends GetxController {
         allCadOffers.assignAll(fetchAOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isCadOffersLoading(false);
     }
@@ -304,7 +301,7 @@ class OfferController extends GetxController {
         allEurOffers.assignAll(fetchAOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isEurOffersLoading(false);
     }
@@ -324,7 +321,7 @@ class OfferController extends GetxController {
         allGbpOffers.assignAll(fetchAOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isGbpOffersLoading(false);
     }
@@ -342,7 +339,7 @@ class OfferController extends GetxController {
         newOffers.assignAll(fetchAOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isNewOffersLoading(false);
     }
@@ -361,7 +358,7 @@ class OfferController extends GetxController {
         newUsdOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isUsdNewOffersLoading(false);
     }
@@ -380,7 +377,7 @@ class OfferController extends GetxController {
         newNgnOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isNgnNewOffersLoading(false);
     }
@@ -399,7 +396,7 @@ class OfferController extends GetxController {
         newCadOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isCadNewOffersLoading(false);
     }
@@ -418,7 +415,7 @@ class OfferController extends GetxController {
         newEurOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isEurNewOffersLoading(false);
     }
@@ -437,7 +434,7 @@ class OfferController extends GetxController {
         newGbpOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isGbpNewOffersLoading(false);
     }
@@ -456,7 +453,7 @@ class OfferController extends GetxController {
         trendingOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isTrendingOffersLoading(false);
     }
@@ -476,7 +473,7 @@ class OfferController extends GetxController {
         trendingUsdOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isUsdTrendingOffersLoading(false);
     }
@@ -496,7 +493,7 @@ class OfferController extends GetxController {
         trendingNgnOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isNgnTrendingOffersLoading(false);
     }
@@ -516,7 +513,7 @@ class OfferController extends GetxController {
         trendingCadOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isCadTrendingOffersLoading(false);
     }
@@ -536,7 +533,7 @@ class OfferController extends GetxController {
         trendingEurOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isEurTrendingOffersLoading(false);
     }
@@ -556,7 +553,7 @@ class OfferController extends GetxController {
         trendingGbpOffers.assignAll(fetchAllOffers);
       }
     } catch (err) {
-      print('Wahala dey town');
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isGbpTrendingOffersLoading(false);
     }
@@ -573,7 +570,6 @@ class OfferController extends GetxController {
       print(('I want to load offer'));
       final response = await OfferService.instance.fetchOfferById(id);
       print(response);
-      print(('I finally want to load offer'));
       var item = response.data;
       offerById(OfferEntity(
           id: item['id'],
@@ -596,10 +592,41 @@ class OfferController extends GetxController {
       await fetchAllOffers();
       onSuccess();
     } catch (err) {
-      Get.snackbar('Error`', handleApiFormatError(err), backgroundColor: Colors.redAccent);
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isFetchOfferByIdLoading(false);
     }
+  }
+
+  void resetBoolForOutgoingRequests() {
+    isCreatingOfferLoading.value = false;
+    isAcceptingRejectingOfferLoading.value = false;
+    isSwappingLoading.value = false;
+    isNegotiatingOfferLoading.value = false;
+    isOfferLoading.value = false;
+    isAllOffersLoading.value = false;
+    isUsdOffersLoading.value = false;
+    isEurOffersLoading.value = false;
+    isCadOffersLoading.value = false;
+    isGbpOffersLoading.value = false;
+    isNgnOffersLoading.value = false;
+    isNewOffersLoading.value = false;
+    isUsdNewOffersLoading.value = false;
+    isEurNewOffersLoading.value = false;
+    isCadNewOffersLoading.value = false;
+    isGbpNewOffersLoading.value = false;
+    isNgnNewOffersLoading.value = false;
+    isTrendingOffersLoading.value = false;
+    isUsdTrendingOffersLoading.value = false;
+    isEurTrendingOffersLoading.value = false;
+    isCadTrendingOffersLoading.value = false;
+    isGbpTrendingOffersLoading.value = false;
+    isNgnTrendingOffersLoading.value = false;
+    showAcceptOfferMsg.value = false;
+    showRejectOfferMsg.value = false;
+    isOfferDeleting.value = false;
+    showErrorText.value = false;
+    isFetchOfferByIdLoading.value = false;
   }
 
   void clearData() {

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:pouch/features/authentication/controllers/forgot_password_controller.dart';
 import 'package:pouch/utils/validators/validation.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
 import '../../../../../utils/constants/sizes.dart';
-import '../../../controllers/auth_form_controller.dart';
 
 class ForgetPasswordForm extends StatelessWidget {
   const ForgetPasswordForm({
@@ -14,20 +13,19 @@ class ForgetPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthFormController authFormController = Get.put(AuthFormController());
+    ForgotPasswordFormController forgotPasswordFormController = Get.put(ForgotPasswordFormController());
     final formKey = GlobalKey<FormState>();
 
     return Form(
       key: formKey,
         child: Column(
           children: [
-            /// Email
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Email', style: Theme.of(context).textTheme.labelMedium,),
                 TextFormField(
-                  controller: authFormController.email,
+                  controller: forgotPasswordFormController.email,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   style: Theme.of(context).textTheme.labelMedium,
                   validator: TValidator.validateEmail,
@@ -38,8 +36,8 @@ class ForgetPasswordForm extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwSections),
 
             Obx(() => TElevatedButton(
-              onTap: authFormController.isForgotPasswordFormSubmitting.value ? null : () => authFormController.submitForgotPasswordForm(formKey: formKey),
-              buttonText: authFormController.isForgotPasswordFormSubmitting.value ? 'Submitting' : 'Submit',
+              onTap: forgotPasswordFormController.isForgotPasswordFormSubmitting.value ? null : () => forgotPasswordFormController.submitForgotPasswordForm(formKey: formKey),
+              buttonText: forgotPasswordFormController.isForgotPasswordFormSubmitting.value ? 'Submitting' : 'Submit',
             )),
           ],
         )

@@ -22,7 +22,9 @@ class OfferDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            appInterceptor.cancelOngoingRequest();
+            appInterceptor.cancelOngoingRequest(() {
+              offerController.resetBoolForOutgoingRequests();
+            });
             Get.back();
           },
           icon: const Icon(Icons.arrow_back),
@@ -37,6 +39,7 @@ class OfferDetailsScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CurrencyWidget(),
+          SizedBox(height: 15),
           Obx(() {
             if (offerController.isFetchOfferByIdLoading.value) {
               return const Center(child: CircularProgressIndicator());
