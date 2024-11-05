@@ -5,6 +5,7 @@ import 'package:pouch/utils/helpers/helper_functions.dart';
 
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
+import '../../../verification/screens/verify_page.dart';
 
 
 class ProfileDetailsScreen extends StatelessWidget {
@@ -73,13 +74,55 @@ class ProfileDetailsScreen extends StatelessWidget {
                             text: authController.user.value.email,
                             style: TextStyle(
                                 fontSize: TSizes.fontSize14,
-                                fontWeight: FontWeight.w600,
+                                // fontWeight: FontWeight.w600,
                                 height: 1.2
                             )
                         )
                       ]
                   )
               ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: authController.user.value.isVerified == true
+                    ? null
+                    : () => Get.to(() => VerificationPage()),
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: TColors.primary,
+                    ),
+                    borderRadius: BorderRadius.circular(11)
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(authController.user.value.isVerified == true
+                          ? Icons.verified
+                          : Icons.verified_user_outlined,
+                        color: TColors.primary, size: 13),
+                      SizedBox(width: 5),
+                      RichText(
+                          text: TextSpan(
+                              style: Theme.of(context).textTheme.labelSmall,
+                              children: <TextSpan> [
+                                TextSpan(
+                                    text: authController.user.value.isVerified == true
+                                        ? 'Verified ID'
+                                        : 'Verify now',
+                                    style: TextStyle(
+                                        fontSize: TSizes.fontSize11,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1.2,
+                                        color: TColors.primary,
+                                    )
+                                )
+                              ]
+                          )
+                      )
+                    ],
+                  ),
+                ),
+              )
             ],
           )
         ],

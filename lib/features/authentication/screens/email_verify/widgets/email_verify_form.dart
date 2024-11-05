@@ -69,9 +69,6 @@ class EmailVerificationForm extends StatelessWidget {
         ),
         onChanged: (value) {
           controller.handleOtpChanged(index, value);
-          // if (value.isNotEmpty && index < 5) {
-          //   controller.focusNodes[index + 1].requestFocus();
-          // }
           if (value.isEmpty && index > 0) {
             controller.focusNodes[index - 1].requestFocus();
           }
@@ -89,9 +86,7 @@ class EmailVerificationForm extends StatelessWidget {
       child: Column(
         children: [
           TElevatedButton(
-            onTap: controller.isVerifying.value
-                ? null
-                : controller.handleVerifyOtp,
+            onTap: controller.handleVerifyOtp,
             buttonText: controller.isVerifying.isTrue ? 'Verifying...' : 'Confirm',
           ),
           Center(
@@ -115,28 +110,8 @@ class EmailVerificationForm extends StatelessWidget {
     );
   }
 
-  Widget _buildResendOtpButton() {
+  Widget _buildSuccessView(BuildContext context) {
     EmailVerificationController controller = Get.find();
-    return Center(
-      child: TextButton(
-        onPressed: controller.canResendOtp.isTrue
-            ? controller.handleSendEmailVerificationOTP
-            : null,
-        style: const ButtonStyle(
-          padding: MaterialStatePropertyAll(EdgeInsets.fromLTRB(4, 0, 0, 0)),
-        ),
-        child: Text(
-          controller.canResendOtp.isTrue
-              ? 'Resend OTP'
-              : 'Resend OTP in ${controller.formattedTime.value}s',
-          style: const TextStyle(fontSize: 13),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSuccessView(
-      BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -149,6 +124,13 @@ class EmailVerificationForm extends StatelessWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelMedium,
         ),
+        SizedBox(height: 40),
+        Text(
+          'If not redirected, please, click the button below',
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.labelMedium,
+        ),
+        TElevatedButton(onTap: controller.handleLogin, buttonText: 'Proceed')
       ],
     );
   }

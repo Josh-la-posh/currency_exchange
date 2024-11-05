@@ -32,11 +32,11 @@ class AccountList extends StatelessWidget {
               'My Accounts',
               style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 14),
             ),
-            if (walletController.wallets.isNotEmpty && walletController.defaultWallet.value.currency == null)
-              Text(
-                'Please, select a default wallet below',
-                style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 12, color: Colors.red),
-              ),
+            // if (walletController.wallets.isNotEmpty && walletController.defaultWallet.value.currency == null)
+            //   Text(
+            //     'Please, select a default wallet below',
+            //     style: Theme.of(context).textTheme.labelSmall?.copyWith(fontSize: 12, color: Colors.red),
+            //   ),
             SizedBox(height: 5),
             ListView.builder(
               itemCount: walletController.wallets.length,

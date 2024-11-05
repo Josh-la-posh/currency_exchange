@@ -28,11 +28,6 @@ class ProfileScreen extends StatelessWidget {
                   ProfileDetailsScreen(darkMode: darkMode),
                   const SizedBox(height: 8),
                   ProfileLinkWidget(
-                    onPressed: () => Get.to(() => VerificationPage()),
-                    title: 'Identity Verification',
-                    icon: Icon(Icons.perm_identity, size: 23, color: TColors.primary),
-                  ),
-                  ProfileLinkWidget(
                     onPressed: () => Get.to(() => BankAccountScreen()),
                     title: 'Bank Account',
                     icon: BankIcon(),

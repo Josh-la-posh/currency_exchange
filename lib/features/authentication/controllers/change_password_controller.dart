@@ -1,10 +1,11 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
+import 'package:pouch/utils/responses/handleApiError.dart';
+
+import '../../../utils/shared/error_dialog_response.dart';
+import '../apis/api.dart';
 
 class ChangePasswordController extends GetxController {
-  AuthController authController = Get.find();
   var isPasswordChanging = false.obs;
   var obscureOldPassword = true.obs;
   var obscurePassword = true.obs;
@@ -14,13 +15,13 @@ class ChangePasswordController extends GetxController {
   final TextEditingController oldPassword = TextEditingController();
   final TextEditingController confirmPass = TextEditingController();
 
-  @override
-  void onInit() {
-    password.clear();
-    oldPassword.clear();
-    confirmPass.clear();
-    super.onInit();
-  }
+  // @override
+  // void onInit() {
+  //   password.clear();
+  //   oldPassword.clear();
+  //   confirmPass.clear();
+  //   super.onInit();
+  // }
 
   @override
   void onClose() {
@@ -60,24 +61,28 @@ class ChangePasswordController extends GetxController {
     if (validateForm(formKey)) {
       saveForm(formKey);
       try {
-        isPasswordChanging(true);
-        await authController.changePassword(
-            currentPassword: oldPassword.text,
-            newPassword: password.text,
-            onSuccess: () {
-              Get.snackbar('Success', 'Password Changed Successfully!!!', backgroundColor: Colors.green);
-              clearData();
-            }
-        );
+        // isPasswordChanging.value = true;
+        final response = await AuthService.instance.changePassword({
+          'currentPassword': oldPassword.text,
+          'newPassword': password.text,
+        });
+
+        if (response?.statusCode == 200 || response?.statusCode == 201) {
+          Get.snackbar('Success', 'Password Changed Successfully!!!', backgroundColor: Colors.green);
+        } else {
+          print('Failed to change password. Please try again.');
+        }
       } catch (e) {
-        Get.snackbar("Change Password Error", e.toString(), snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
+        print('Failed to change password. Please try again.');
+        showErrorAlertHelper(errorMessage: handleApiFormatError(e));
       } finally {
-        isPasswordChanging(false);
+        isPasswordChanging.value = false;
       }
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
     }
   }
+
 
   void clearData() {
     password.clear();

@@ -35,40 +35,38 @@ class WalletDashboardScreen extends StatelessWidget {
             Expanded(
               child: CustomRefreshIndicator(
                 onRefresh: () => controller.fetchWallets(currency: ''),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      WalletDashboard(),
-                      SizedBox(height: 15),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildActionContainer(
-                            context,
-                            Icons.payments_outlined,
-                            'Deposit',
-                                () => Get.to(() => PaymentOptionScreen()),
-                          ),
-                          _buildActionContainer(
-                            context,
-                            Icons.add_card,
-                            'Withdraw',
-                                () => Get.to(() => WithdrawalScreen()),
-                          ),
-                          _buildActionContainer(
-                            context,
-                            Icons.add_card_outlined,
-                            'Add Wallet',
-                            controller.updateShowWalletList,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15),
-                      WalletList(),
-                      AccountList(),
-                      SizedBox(height: 50),
-                    ],
-                  ),
+                child: ListView(
+                  children: [
+                    WalletDashboard(),
+                    SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildActionContainer(
+                          context,
+                          Icons.payments_outlined,
+                          'Deposit',
+                              () => Get.to(() => PaymentOptionScreen()),
+                        ),
+                        _buildActionContainer(
+                          context,
+                          Icons.add_card,
+                          'Withdraw',
+                              () => Get.to(() => WithdrawalScreen()),
+                        ),
+                        _buildActionContainer(
+                          context,
+                          Icons.add_card_outlined,
+                          'Add Wallet',
+                          controller.updateShowWalletList,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    WalletList(),
+                    AccountList(),
+                    SizedBox(height: 50),
+                  ],
                 ),
               ),
             ),

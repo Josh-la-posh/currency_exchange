@@ -21,7 +21,8 @@ class AuthService {
   }
 
   Future changePassword(Object data) async{
-    return apiService.post('/users/change-password', data: data);
+    final response = await _apiService.post('/users/change-password', data: data);
+    return response;
   }
 
   Future sendEmailOtpCode(Object data) {

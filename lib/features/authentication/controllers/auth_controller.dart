@@ -142,24 +142,24 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> changePassword({
-    required String currentPassword,
-    required String newPassword,
-    required VoidCallback onSuccess
-  }) async {
-    try {
-      final response = await AuthService.instance.changePassword({
-        'currentPassword': currentPassword,
-        'newPassword': newPassword
-      });
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-      }
-    } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
-    } finally {
-    }
-  }
+  // Future<void> changePassword({
+  //   required String currentPassword,
+  //   required String newPassword,
+  //   required VoidCallback onSuccess
+  // }) async {
+  //   try {
+  //     final response = await AuthService.instance.changePassword({
+  //       'currentPassword': currentPassword,
+  //       'newPassword': newPassword
+  //     });
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       onSuccess();
+  //     }
+  //   } catch (err) {
+  //     Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+  //   } finally {
+  //   }
+  // }
 
   Future<void> fetchCurrentUser({
     required String email,
@@ -281,7 +281,7 @@ class AuthController extends GetxController {
       if (onFailure != null) {
         onFailure();
       }
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
     }
   }
@@ -301,7 +301,7 @@ class AuthController extends GetxController {
       if (onFailure != null) {
         onFailure();
       }
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       Get.closeAllSnackbars();
     }
@@ -319,7 +319,7 @@ class AuthController extends GetxController {
         Get.snackbar('Success', 'Password reset successful', backgroundColor: Colors.green);
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isPasswordResetting(false);
     }
@@ -333,7 +333,7 @@ class AuthController extends GetxController {
         onSuccess();
       }
     } catch (err) {
-      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     }
   }
 

@@ -4,7 +4,7 @@ class AddressService {
   final Dio _dio = Dio();
   final String _apiKey = 'AIzaSyALj1kekJvTeiUeTQhmq1VAOjUP6_ICBJk';
 
-  Future<String?> getAddressFromPostalCode(String postalCode) async {
+  Future<List?> getAddressFromPostalCode(String postalCode) async {
     try {
       final response = await _dio.get(
         'https://maps.googleapis.com/maps/api/geocode/json',
@@ -19,8 +19,7 @@ class AddressService {
       if (response.statusCode == 200) {
         final results = response.data['results'];
         if (results.isNotEmpty) {
-          final formattedAddress = results.first['formatted_address'];
-          print('The available response is: $formattedAddress');
+          final formattedAddress = results.first['address_components'];
           return formattedAddress;
         } else {
           print('No address found for this postal code.');

@@ -50,7 +50,7 @@ class AppInterceptor extends Interceptor {
       QueuedInterceptorsWrapper(
         onRequest: (RequestOptions requestOptions, RequestInterceptorHandler handler) async {
           print('onRequest received for path: ${requestOptions.path}');
-          requestOptions.cancelToken = globalCancelToken;
+          // requestOptions.cancelToken = globalCancelToken;
 
           final connectivityResult = await InternetConnection().hasInternetAccess;
           print('Internet connection check: $connectivityResult');
@@ -70,7 +70,7 @@ class AppInterceptor extends Interceptor {
             handler.next(requestOptions);
           } else {
             noInternetConnection();
-            showErrorAlertHelper(errorMessage: 'Check your internet connection and try again');
+            // showErrorAlertHelper(errorMessage: 'Check your internet connection and try again');
             cancelAndRefresh();
           }
         },
@@ -99,6 +99,8 @@ class AppInterceptor extends Interceptor {
                 logoutMessage: "Session expired. Please login.",
               );
             }
+          } else if (err.response?.statusCode == 401 && !checkIfUserIsLogin){
+            userSessionController.logoutUser();
           } else {
             THelperFunctions.showDebugMessageInConsole([
               'Error: ${err.response?.statusCode} ${err.toString()} ${err.response?.data}'
@@ -144,6 +146,10 @@ class AppInterceptor extends Interceptor {
             await userSessionController.setRefreshToken(newRefreshToken);
             return newToken;
           }
+        } else {
+          await userSessionController.logoutUser(
+            logoutMessage: "Session expired. Please login.",
+          );
         }
       } catch (e) {
         print('Error while refreshing token: $e');

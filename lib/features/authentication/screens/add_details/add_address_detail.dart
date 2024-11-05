@@ -33,6 +33,7 @@ class AddAddressDetail extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: Get.textTheme.labelMedium),
+        SizedBox(height: 5),
         SizedBox(
           child: TextFormField(
             controller: controller,
@@ -66,7 +67,7 @@ class AddAddressDetail extends StatelessWidget {
               children: [
                 RichText(
                   text: TextSpan(
-                    text: 'Address Details',
+                    text: 'Residential Address Details',
                     style: Get.textTheme.bodyLarge!.copyWith(
                       fontWeight: TSizes.fontWeightLg,
                     ),
@@ -75,18 +76,73 @@ class AddAddressDetail extends StatelessWidget {
                 const SizedBox(height: 30),
                 RichText(
                   text: TextSpan(
-                    text: 'Enter your address details',
+                    text: 'Please, Select your region',
                     style: Get.textTheme.labelMedium,
                   ),
                 ),
+                SizedBox(height: 5),
+                DropdownButtonFormField<String>(
+                  // validator: TValidator.bankValidator,
+                  decoration: InputDecoration(
+                    fillColor: Get.isDarkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
+                  ),
+                  autofocus: false,
+                  isExpanded: true,
+                  value: controller.selectedRegion.value,
+                  icon: RotatedBox(
+                    quarterTurns: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 14.8),
+                      child: Icon(
+                        Icons.arrow_back_ios_rounded,
+                        size: 15,
+                        color: Get.isDarkMode ? TColors.white : TColors.textPrimary.withOpacity(0.8),
+                      ),
+                    ),
+                  ),
+                  onChanged: (val) {
+                    controller.updateSelectedRegion(val!);
+                    if (controller.selectedRegion.value == 'Nigeria' || controller.selectedRegion.value == 'Others') {
+                      controller.isAddressEdited.value = true;
+                    } else {
+                      controller.isAddressEdited.value = false;
+                    }
+                  },
+                  items: [
+                    for (final item in controller.countryList)
+                      DropdownMenuItem<String>(
+                        value: item,
+                        child: SizedBox(
+                          child: Row(
+                            children: [
+                              Text(
+                                item,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
                 const SizedBox(height: 20),
                 _buildTextField(
-                  label: 'Post Code',
+                  label: 'Number & Street name',
+                  controller: controller.address,
+                  keyboardType: TextInputType.text,
+                  onSaved: (val) => controller.address.text = val,
+                  validator: TValidator.emptyFieldValidator,
+                  isReadOnly: false,
+                ),
+                const SizedBox(height: 20),
+                Obx(() => _buildTextField(
+                  label: controller.selectedRegion.value == 'Nigeria' || controller.selectedRegion.value == 'Others'
+                      ? 'Zip or Postal Code (optional)' : 'Zip or Postal Code',
                   controller: controller.postCode,
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                   onSaved: (val) {
                     controller.postCode.text = val;
-                    if (val.length > 4) {
+                    if (val.length > 1) {
                       controller.fetchAddress(controller.postCode.text);
                     }
                   },
@@ -94,11 +150,11 @@ class AddAddressDetail extends StatelessWidget {
                   suffix: Container(
                     margin: EdgeInsets.only(right: 1),
                     decoration: BoxDecoration(
-                      color: TColors.primary,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(5),
-                        bottomRight: Radius.circular(5)
-                      )
+                        color: TColors.primary,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(5),
+                            bottomRight: Radius.circular(5)
+                        )
                     ),
                     child: IconButton(
                       icon: Icon(Icons.search),
@@ -109,13 +165,31 @@ class AddAddressDetail extends StatelessWidget {
                       },
                     ),
                   ),
-                ),
+                )),
                 const SizedBox(height: 20),
                 Obx(() => _buildTextField(
-                  label: 'Address',
-                  controller: controller.generatedAddress,
+                  label: 'Town or City',
+                  controller: controller.city,
                   keyboardType: TextInputType.text,
-                  onSaved: (val) => controller.generatedAddress.text = val,
+                  onSaved: (val) => controller.city.text = val,
+                  validator: TValidator.emptyFieldValidator,
+                  isReadOnly: controller.isAddressEdited.isTrue ? false : true,
+                )),
+                const SizedBox(height: 20),
+                Obx(() => _buildTextField(
+                  label: 'State or Province',
+                  controller: controller.state,
+                  keyboardType: TextInputType.text,
+                  onSaved: (val) => controller.state.text = val,
+                  validator: TValidator.emptyFieldValidator,
+                  isReadOnly: controller.isAddressEdited.isTrue ? false : true,
+                )),
+                const SizedBox(height: 20),
+                Obx(() => _buildTextField(
+                  label: 'Country',
+                  controller: controller.country,
+                  keyboardType: TextInputType.text,
+                  onSaved: (val) => controller.country.text = val,
                   validator: TValidator.emptyFieldValidator,
                   isReadOnly: controller.isAddressEdited.isTrue ? false : true,
                 )),
@@ -131,25 +205,25 @@ class AddAddressDetail extends StatelessWidget {
                   }
                 }),
                 const SizedBox(height: 20),
-                TextButton(
-                    onPressed: () {
-                      controller.isAddressEdited.value = !controller.isAddressEdited.value;
-                      print('The new is ${controller.isAddressEdited.value}');
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.transparent,
-                      padding: EdgeInsets.zero
-                    ),
-                    child: Text(
-                      'Enter your address manually',
-                      style: Get.textTheme.labelMedium?.copyWith(
-                        color: TColors.primary,
-                        decoration: TextDecoration.underline,
-                        decorationColor: TColors.primary,
-                        decorationThickness: 1.5,
-                      )
-                    )
-                )
+                // TextButton(
+                //     onPressed: () {
+                //       controller.isAddressEdited.value = !controller.isAddressEdited.value;
+                //       print('The new is ${controller.isAddressEdited.value}');
+                //     },
+                //     style: TextButton.styleFrom(
+                //       backgroundColor: Colors.transparent,
+                //       padding: EdgeInsets.zero
+                //     ),
+                //     child: Text(
+                //       'Enter your address manually',
+                //       style: Get.textTheme.labelMedium?.copyWith(
+                //         color: TColors.primary,
+                //         decoration: TextDecoration.underline,
+                //         decorationColor: TColors.primary,
+                //         decorationThickness: 1.5,
+                //       )
+                //     )
+                // )
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
@@ -153,9 +154,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                       fontFamily: 'Roboto'
                                   ),
                                   children: <TextSpan> [
-                                    // TextSpan(
-                                    //   text: '${item?.bank['name']}',
-                                    // ),
+                                    TextSpan(
+                                      text: '${item.bank?['name']}',
+                                    ),
                                   ]
                               )
                           ),
@@ -173,13 +174,19 @@ class PaystackPaymentScreen extends StatelessWidget {
                                       ),
                                       children: <TextSpan> [
                                         TextSpan(
-                                          text: '${item?.account_number}',
+                                          text: '${item.account_number}',
                                         ),
                                       ]
                                   )
                               ),
                               const SizedBox(width: TSizes.lg),
-                              const Image(image: AssetImage(TImages.transferFile))
+                              IconButton(
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(text: item.account_number.toString()));
+                                    Get.snackbar('Success', 'Text copied to clipboard');
+                                  },
+                                  icon: Image(image: AssetImage(TImages.transferFile))
+                              )
                             ],
                           ),
                           const SizedBox(height: TSizes.md,),
@@ -208,9 +215,9 @@ class PaystackPaymentScreen extends StatelessWidget {
                                       fontFamily: 'Roboto'
                                   ),
                                   children: <TextSpan> [
-                                    // TextSpan(
-                                    //   text: 'Expires in ${THelperFunctions.getTimeDifference(item!.account_expires_at)}',
-                                    // ),
+                                    TextSpan(
+                                      text: 'Expires in ${THelperFunctions.getFormattedDate(item.account_expires_at.toString())} - ${THelperFunctions.getFormattedTime(item.account_expires_at.toString())}',
+                                    ),
                                   ]
                               )
                           ),

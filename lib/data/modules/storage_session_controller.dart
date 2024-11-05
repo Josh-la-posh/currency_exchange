@@ -120,6 +120,11 @@ class UserSessionController extends GetxController {
     await _storage.setString(USER_REMEMBER_ME_PASS, password);
   }
 
+  Future<void> removeToken() async {
+    await _storage.remove(USER_SESSION_TOKEN);
+    await _storage.remove(USER_REFRESH_TOKEN);
+  }
+
   Future<void> clearRememberMeHandler() async {
     await _storage.remove(USER_REMEMBER_ME_EMAIL);
     await _storage.remove(USER_REMEMBER_ME_PASS);

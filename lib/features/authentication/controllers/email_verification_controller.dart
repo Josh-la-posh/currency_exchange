@@ -117,6 +117,9 @@ class EmailVerificationController extends GetxController {
   }
 
   void handleVerifyOtp() {
+    if (isVerifying.isTrue) {
+      return;
+    }
     if (validateForm(formKey)) {
       saveForm(formKey);
       try {

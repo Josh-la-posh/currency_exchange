@@ -22,7 +22,7 @@ class HomeBalanceWidget extends StatelessWidget {
             color: Color(0xFF4B0082),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.lg, top: TSizes.md, bottom: TSizes.xl),
+          padding: const EdgeInsets.only(left: TSizes.defaultSpace, right: TSizes.xl, top: TSizes.md, bottom: TSizes.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -56,7 +56,7 @@ class HomeBalanceWidget extends StatelessWidget {
                 ],
               ),
               Obx(() => Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   RichText(
@@ -99,12 +99,18 @@ class HomeBalanceWidget extends StatelessWidget {
                       )
                   ),
                   Spacer(),
-                  IconButton(
-                    onPressed: (){
-                      controller.walletController.fetchingDefaultWallet();
-                    },
-                    icon: Icon(Icons.refresh, size: 20, color: darkMode ? Colors.white : Colors.white,),
-                  ),
+                  SizedBox(
+                    height: 25,
+                    width: 25,
+                    child: controller.walletController.isDefaultWalletLoading.isTrue
+                        ? CircularProgressIndicator()
+                        : IconButton(
+                      onPressed: (){
+                        controller.walletController.fetchingDefaultWallet();
+                      },
+                      icon: Icon(Icons.refresh, size: 20, color: darkMode ? Colors.white : Colors.white,),
+                    ),
+                  )
                 ],
               ))
             ],

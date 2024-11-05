@@ -26,6 +26,9 @@ class ChangePasswordScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
+            appInterceptor.cancelOngoingRequest(() {
+              controller.isPasswordChanging(false);
+            });
             Get.back();
           },
           icon: const Icon(Icons.arrow_back),
@@ -58,7 +61,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   isObscure: controller.obscureOldPassword,
                   onToggle: controller.toggleObscureOldPassword,
                   onChanged: (value) => controller.oldPassword.text = value,
-                  validator: TValidator.validatePassword,
+                  validator: TValidator.emptyFieldValidator,
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
 
@@ -88,7 +91,7 @@ class ChangePasswordScreen extends StatelessWidget {
 
                 // Submit Button
                 Obx(() => TElevatedButton(
-                  onTap: () => controller.isPasswordChanging.value ? null : controller.submitChangePasswordForm(formKey: formKey),
+                  onTap: () => controller.submitChangePasswordForm(formKey: formKey),
                   buttonText: controller.isPasswordChanging.value ? 'Updating ...' : 'Proceed',
                 )),
               ],

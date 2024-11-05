@@ -13,15 +13,23 @@ class AddressFormController extends GetxController {
   var showAddressError = false.obs;
   var isUpdatingAddress = false.obs;
   var isAddressEdited = false.obs;
+  List<String> countryList = ['Nigeria', 'America', 'Europe', 'Others'];
+  var selectedRegion = 'America'.obs;
 
-  final TextEditingController generatedAddress = TextEditingController();
+  final TextEditingController address = TextEditingController();
+  final TextEditingController city = TextEditingController();
+  final TextEditingController state = TextEditingController();
+  final TextEditingController country = TextEditingController();
   final TextEditingController postCode = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
 
   @override
   void onInit() {
-    generatedAddress.clear();
+    address.clear();
+    city.clear();
+    state.clear();
+    country.clear();
     postCode.clear();
     email.clear();
     password.clear();
@@ -30,7 +38,10 @@ class AddressFormController extends GetxController {
 
   @override
   void onClose() {
-    generatedAddress.dispose();
+    city.dispose();
+    state.dispose();
+    country.dispose();
+    address.dispose();
     postCode.dispose();
     email.dispose();
     password.dispose();
@@ -38,14 +49,28 @@ class AddressFormController extends GetxController {
   }
 
   void fetchAddress(String postCode) async {
-    final address = await addressService.getAddressFromPostalCode(postCode); // Example postal code
+    List? address = await addressService.getAddressFromPostalCode(postCode);
     if (address != null) {
-      generatedAddress.text = address;
+      print('Thew resulted: $address');
+      address.forEach((val) {
+        if ((val['types'].contains('locality') && val['types'].contains('political')) || val['types'].contains('postal_town')) {
+          city.text = val['long_name'];
+        } else if (val['types'].contains('administrative_area_level_1') && val['types'].contains('political')) {
+          state.text = val['long_name'];
+        } else if (val['types'].contains('country') && val['types'].contains('political')) {
+          country.text = val['long_name'];
+        }
+      });
       showErrorText.value = false;
-      print('Address: ${generatedAddress.text}');
+      print('Address: ${city.text} and ${state.text}');
     } else {
-      generatedAddress.text = '';
+      city.text = '';
+      state.text = '';
     }
+  }
+
+  void updateSelectedRegion(val) {
+    selectedRegion.value = val;
   }
 
   void showErrorMessage() {
@@ -75,7 +100,7 @@ class AddressFormController extends GetxController {
         isUpdatingAddress(true);
         await authController.updateAddress(
           postCode: postCode.text,
-          address: generatedAddress.text,
+          address: '${address.text}, ${city.text}, ${state.text}. ${country.text}',
           email: email.text,
           password: password.text,
         );
@@ -90,7 +115,10 @@ class AddressFormController extends GetxController {
   }
 
   void clearData() {
-    generatedAddress.clear();
+    address.clear();
+    city.clear();
+    state.clear();
+    country.clear();
     postCode.clear();
     email.clear();
     password.clear();

@@ -91,6 +91,12 @@ class THelperFunctions {
     return timeDifference;
   }
 
+  static DateTime milliSecondToDate(String milliSecondString) {
+    int milli = int.parse(milliSecondString);
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(milli);
+    return dateTime;
+  }
+
   static String millisecondConversion(String milliSecondString) {
     String time;
     int milliseconds = int.parse(milliSecondString);

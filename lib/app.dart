@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:pouch/features/splash/routes/names.dart';
 import 'package:pouch/utils/bindings/root_bindings.dart';
 import 'package:pouch/utils/shared/error_boundary/error_boundary.dart';
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
           routes: routes,
           initialBinding: RootBindings(),
           debugShowCheckedModeBanner: false,
-          home: const OnboardingScreen(),
+          home: const OnboardingScreen()
         ),
       ),
     );

@@ -216,7 +216,7 @@ class WalletController extends GetxController {
             bank: item['bank'],
             account_expires_at: item['account_expires_at']
         ));
-        Get.to(() => PaystackPaymentScreen());
+        Get.to(() => PaystackPaymentScreen(amount: amount));
       } else {
         print('Failed to fund wallet via Paystack: ${response.data['message']}');
       }
@@ -428,7 +428,7 @@ class WalletController extends GetxController {
 
   Future<void> fetchingDefaultWallet() async {
     try {
-      defaultWallet.value.balance == null && isDefaultWalletLoading(true);
+      isDefaultWalletLoading(true);
       final response = await WalletServices.instance.fetchDefaultWallet();
       if (response.statusCode == 200) {
         final data = response.data;
@@ -445,7 +445,7 @@ class WalletController extends GetxController {
         print('Failed to fetch default wallet: ${response.data['message']}');
       }
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      // showErrorAlertHelper(errorMessage: handleApiFormatError(err));
     } finally {
       isDefaultWalletLoading(false);
     }

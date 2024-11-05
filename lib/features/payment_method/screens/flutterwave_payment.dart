@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/colors.dart';
@@ -14,6 +15,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
     NavigationController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     final item = walletController.flutterwaveDetails.value;
+    print('The result is: ${item.account_expiration}');
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
@@ -142,7 +144,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
               color: Colors.black.withOpacity(0.14),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 1.3, vertical: TSizes.defaultSpace * 1.3),
+              padding: const EdgeInsets.only(left: TSizes.defaultSpace * 1.3, top: TSizes.defaultSpace * 1.3, bottom: TSizes.defaultSpace * 1.3),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -156,13 +158,13 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                           ),
                           children: const <TextSpan> [
                             TextSpan(
-                              text: 'Account Number',
+                              text: 'Account No',
                             )
                           ]
                       )
                   ),
                   SizedBox(
-                    width: 120,
+                    // width: 150,
                     child: Row(
                       children: [
                         RichText(
@@ -181,9 +183,12 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                             )
                         ),
                         SizedBox(width: 10,),
-                        SizedBox(
-                            width: 18,
-                            child: Image(image: AssetImage(TImages.transferFile))
+                        IconButton(
+                            onPressed: () {
+                              Clipboard.setData(ClipboardData(text: item.transfer_account.toString()));
+                              Get.snackbar('Success', 'Text copied to clipboard');
+                            },
+                            icon: Image(image: AssetImage(TImages.transferFile))
                         )
                       ],
                     ),
@@ -243,23 +248,45 @@ class FlutterwavePaymentScreen extends StatelessWidget {
               color: Colors.black.withOpacity(0.14),
             ),
             SizedBox(height: TSizes.xl,),
-            Container(
-              width: double.infinity,
-              child: RichText(
-                textAlign: TextAlign.center,
-                  text: TextSpan(
-                      style: TextStyle(
-                          color: darkMode ? Colors.white : Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                          fontFamily: 'Roboto'
-                      ),
-                      children: <TextSpan> [
-                        TextSpan(
-                          text: 'The Account Expire in ${THelperFunctions.millisecondConversion(item!.account_expiration.toString())}',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 1.3, vertical: TSizes.defaultSpace * 1.3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  RichText(
+                      text: TextSpan(
+                          style: TextStyle(
+                              color: darkMode ? Colors.white : Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              fontFamily: 'Roboto'
+                          ),
+                          children: const <TextSpan> [
+                            TextSpan(
+                              text: 'Expires at',
+                            )
+                          ]
+                      )
+                  ),
+                  SizedBox(
+                    // width: 120,
+                    child: RichText(
+                        text: TextSpan(
+                            style: TextStyle(
+                                color: darkMode ? Colors.white : Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                fontFamily: 'Roboto'
+                            ),
+                            children: <TextSpan> [
+                              TextSpan(
+                                text: '${THelperFunctions.getFormattedDate(THelperFunctions.milliSecondToDate(item.account_expiration.toString()).toString())} ${THelperFunctions.getFormattedTime(THelperFunctions.milliSecondToDate(item.account_expiration.toString()).toString())}',
+                              )
+                            ]
                         )
-                      ]
-                  )
+                    ),
+                  ),
+                ],
               ),
             ),
             SizedBox(height: TSizes.defaultSpace * 2),
