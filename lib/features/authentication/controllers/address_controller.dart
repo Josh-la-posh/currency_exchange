@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 
+import '../../../data/firebase/firebase_api.dart';
+import '../../../utils/responses/handleApiError.dart';
 import '../apis/address_service.dart';
+import '../apis/api.dart';
 
 class AddressFormController extends GetxController {
   AuthController authController = Get.find();
@@ -98,14 +101,24 @@ class AddressFormController extends GetxController {
       saveForm(formKey);
       try {
         isUpdatingAddress(true);
-        await authController.updateAddress(
-          postCode: postCode.text,
-          address: '${address.text}, ${city.text}, ${state.text}. ${country.text}',
-          email: email.text,
-          password: password.text,
-        );
+        final response = await AuthService.instance.updateAddress({
+          'postCode': postCode.text,
+          'address':
+              '${address.text}, ${city.text}, ${state.text}. ${country.text}',
+          'email': email.text,
+          'password': password.text,
+        });
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          await FirebaseApi().registerDeviceToken();
+          await authController.login(
+            email: email.text.toLowerCase().trim(),
+            password: password.text,
+            rememberMe: true,
+            handleEmailNotVerified: (){},
+          );
+        }
       } catch (e) {
-        Get.snackbar("Sign Up Error", e.toString(), snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
+        Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.red);
       } finally {
         isUpdatingAddress(false);
       }

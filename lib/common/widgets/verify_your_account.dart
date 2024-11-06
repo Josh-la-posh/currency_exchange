@@ -8,10 +8,10 @@ import '../../utils/constants/sizes.dart';
 import '../../utils/helpers/helper_functions.dart';
 
 class VerifyYourAccountWidget extends StatelessWidget {
-  final authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
+    final AuthController authController = Get.find<AuthController>();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Stack(
       children: [

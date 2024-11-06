@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/utils/otp/otp.dart';
 
+import '../../../utils/responses/handleApiError.dart';
+import '../../../utils/shared/error_dialog_response.dart';
+import '../apis/api.dart';
 import 'auth_controller.dart';
 
 class EmailVerificationController extends GetxController {
@@ -55,6 +58,39 @@ class EmailVerificationController extends GetxController {
     super.onClose();
   }
 
+  Future<void> emailVerificationOtp({
+    required String email,
+    required VoidCallback onSuccess,
+    VoidCallback? onFailure
+  }) async {
+    try {
+      Get.snackbar('Sending Otp', 'We are sending an a 6 digit code to $email');
+      final response = await AuthService.instance.emailVerificationOtp({"email": email.toLowerCase().trim()});
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        onSuccess();
+      }
+    } catch (err) {
+      if (onFailure != null) {
+        onFailure();
+      }
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+    } finally {
+      Get.closeAllSnackbars();
+    }
+  }
+
+  Future<void> verifyEmailOtp({required String otpCode,required VoidCallback onSuccess}) async {
+    final intOtp = int.parse(otpCode);
+    try {
+      final response = await AuthService.instance.confirmEmailOtp({"emailOtp": intOtp});
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        onSuccess();
+      }
+    } catch (err) {
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+    }
+  }
+
   // Validate the form
   bool validateForm(formKey) {
     return formKey.currentState?.validate() ?? false;
@@ -66,7 +102,7 @@ class EmailVerificationController extends GetxController {
   }
 
   void handleSendEmailVerificationOTP() {
-    authController.emailVerificationOtp(
+    emailVerificationOtp(
       email: email,
       onSuccess: () {
         otpTimer?.startTimer();
@@ -124,7 +160,7 @@ class EmailVerificationController extends GetxController {
       saveForm(formKey);
       try {
         isVerifying(true);
-        authController.verifyEmailOtp(
+        verifyEmailOtp(
           otpCode: otpCode.value,
           onSuccess: handleEmailVerificationSuccess,
         );

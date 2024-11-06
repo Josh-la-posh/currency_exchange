@@ -15,7 +15,7 @@ class AcceptOfferSuccessPage extends StatelessWidget {
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
         body: SuccessScreenWidget(
-          text: 'You have successfully being credited with ${amount} ${creditedCurrency}.',
+          text: 'You have been successfully credited with ${amount} ${creditedCurrency}.',
           child: TListLayout(
               itemCount: 3,
               itemBuilder: (_, index) => MyTimeLine(

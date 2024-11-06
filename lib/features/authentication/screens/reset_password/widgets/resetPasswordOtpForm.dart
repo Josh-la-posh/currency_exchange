@@ -125,13 +125,12 @@ class ResetPasswordOtpForm extends StatelessWidget {
 
   Widget buildActionButton(BuildContext context) {
     ResetPasswordOtpFormController controller = Get.find();
-    AuthController authController = Get.find();
     return Padding(
       padding: const EdgeInsets.only(top: TSizes.spaceBtwSections - 4),
       child: Column(
         children: [
           TElevatedButton(
-            onTap: authController.isPasswordResetting.value
+            onTap: controller.isPasswordResetting.value
                 ? null
                 : () {
               if (controller.password.value == controller.confirmPass.value) {
@@ -139,7 +138,7 @@ class ResetPasswordOtpForm extends StatelessWidget {
                   formKey.currentState!.save();
                   controller.canSendOtp.value = true;
                   if (controller.otpCode.isNotEmpty) {
-                    authController.resetPassword(
+                    controller.resetPassword(
                         otp: controller.otpCode.value,
                         newPassword: controller.password.value,
                         onSuccess: () => controller.handleEmailVerificationSuccess(),
@@ -150,7 +149,7 @@ class ResetPasswordOtpForm extends StatelessWidget {
                 controller.canSendOtp.value = false;
               }
             },
-            buttonText: authController.isPasswordResetting.isTrue ? 'Confirming ...' : 'Confirm',
+            buttonText: controller.isPasswordResetting.isTrue ? 'Confirming ...' : 'Confirm',
           ),
           const SizedBox(height: TSizes.lg),
           if (controller.canSendOtp.isTrue)

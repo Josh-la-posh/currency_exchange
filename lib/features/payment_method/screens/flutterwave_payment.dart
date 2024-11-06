@@ -296,7 +296,8 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                 onTap: () async {
                   // controller.selectedIndex.value = 3;
                   controller.navigateToIndex(3);
-                  Get.offAll(() => NavigationMenu());
+                  Get.to(() => NavigationMenu());
+                  // Get.offAll(() => NavigationMenu());
                   await walletController.fetchWallets(currency: '');
                   // AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                 },

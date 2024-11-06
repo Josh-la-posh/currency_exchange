@@ -1,7 +1,5 @@
-import 'package:get/get.dart';
 import 'package:pouch/data/modules/dio.dart';
 import '../../../data/modules/interceptor.dart';
-import '../../../data/modules/storage_session_controller.dart';
 
 final _apiService = AppInterceptor(showLoader: false).dio;
 class AuthService {
@@ -10,8 +8,6 @@ class AuthService {
   AuthService._();
 
   static AuthService get instance => _instance;
-  
-  final userSessionController = Get.find<UserSessionController>();
 
   // Post requests
 

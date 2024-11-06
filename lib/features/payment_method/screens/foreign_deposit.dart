@@ -148,7 +148,8 @@ class ForeignFundingScreen extends StatelessWidget {
                               amount: controller.amount.value,
                               onSuccess: () {
                                 navigationController.selectedIndex.value = 3;
-                                Get.offAll(() => NavigationMenu());
+                                Get.to(() => NavigationMenu());
+                                // Get.offAll(() => NavigationMenu());
                               }
 
                           );

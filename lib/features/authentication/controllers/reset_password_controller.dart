@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../utils/otp/otp.dart';
+import '../../../utils/responses/handleApiError.dart';
+import '../../../utils/shared/error_dialog_response.dart';
+import '../apis/api.dart';
 import 'auth_controller.dart';
 
 class ResetPasswordOtpFormController extends GetxController {
@@ -15,6 +18,7 @@ class ResetPasswordOtpFormController extends GetxController {
   OtpTimer? otpTimer;
   var formattedTime = '0'.obs;
   var canResendOtp = false.obs;
+  var isPasswordResetting = false.obs;
 
   final bool sendEmailOtpOnBuild;
   final String email;
@@ -38,9 +42,43 @@ class ResetPasswordOtpFormController extends GetxController {
     }
   }
 
+  Future<void> generateOtp({
+    required String email,
+    required VoidCallback onSuccess,
+    required VoidCallback onFailure
+  }) async {
+    try {
+      final response = await AuthService.instance.sendEmailOtpCode({"email": email.toLowerCase().trim()});
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        onSuccess();
+      }
+    } catch (err) {
+      onFailure();
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+    } finally {
+    }
+  }
+
+  Future<void> resetPassword({required String otp, required String newPassword, required VoidCallback onSuccess}) async {
+    try {
+      isPasswordResetting(true);
+      final response = await AuthService.instance.resetPassword({
+        'otp': int.parse(otp),
+        'newPassword': newPassword
+      });
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        onSuccess();
+        Get.snackbar('Success', 'Password reset successful', backgroundColor: Colors.green);
+      }
+    } catch (err) {
+      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+    } finally {
+      isPasswordResetting(false);
+    }
+  }
+
   void handleSendEmailVerificationOTP() {
-    print('copy that');
-    authController.generateOtp(
+    generateOtp(
         email: email,
         onSuccess: () {
           Get.snackbar('', 'Otp sent', backgroundColor: Colors.green);

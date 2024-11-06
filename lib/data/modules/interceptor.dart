@@ -24,7 +24,6 @@ class AppInterceptor extends Interceptor {
   static CancelToken globalCancelToken = CancelToken();
 
   final UserSessionController userSessionController = GetX.Get.find<UserSessionController>();
-  final authController = GetX.Get.find<AuthController>();
 
   int retryCount = 0;
   final int maxRetry = 3;

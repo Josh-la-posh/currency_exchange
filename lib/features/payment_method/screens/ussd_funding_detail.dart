@@ -36,13 +36,15 @@ class UssdFundingDetailScreen extends StatelessWidget {
               _buildActionButton(context, "Proceed to Wallet", darkMode, () async {
                 await walletController.fetchWallets(currency: '');
                 controller.selectedIndex.value = 3;
-                Get.offAll(() => NavigationMenu());
+                Get.to(() => NavigationMenu());
+                // Get.offAll(() => NavigationMenu());
               }),
               const SizedBox(height: TSizes.defaultSpace),
               _buildActionButton(context, "Proceed to Dashboard", darkMode, () async {
                 await walletController.fetchWallets(currency: '');
                 controller.selectedIndex.value = 0;
-                Get.offAll(() => NavigationMenu());
+                Get.to(() => NavigationMenu());
+                // Get.offAll(() => NavigationMenu());
                 // AppNavigator.instance.removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
               }),
             ],

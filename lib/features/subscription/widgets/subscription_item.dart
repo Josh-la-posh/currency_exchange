@@ -110,7 +110,7 @@ class SubscriptionItem extends StatelessWidget {
                                         style: TextStyle(color: Color(0xFF5ABFE4))
                                     ),
                                     TextSpan(
-                                        text: '${item.debitedCurrency} // ${item.creditedCurrency}',
+                                        text: '${item.creditedCurrency} // ${item.debitedCurrency}',
                                         style: TextStyle(fontSize: TSizes.fontSize12, color: Color(0xFF5ABFE4))
                                     ),
                                   ]
@@ -179,7 +179,7 @@ class SubscriptionItem extends StatelessWidget {
                                             style: TextStyle( color: TColors.primary)
                                         ),
                                         TextSpan(
-                                            text: '${item.debitedCurrency} // ${item.creditedCurrency}',
+                                            text: '${item.creditedCurrency} // ${item.debitedCurrency}',
                                             style: TextStyle(fontSize: TSizes.fontSize12, color: TColors.primary)
                                         ),
                                       ]

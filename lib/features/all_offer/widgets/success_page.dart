@@ -64,7 +64,8 @@ class SuccessScreenWidget extends StatelessWidget {
                 child: TElevatedButton(
                     onTap: onTap != null ? onTap : (){
                       controller.selectedIndex.value = 1;
-                      Get.offAll(() => NavigationMenu());
+                      Get.to(() => NavigationMenu());
+                      // Get.offAll(() => NavigationMenu());
                       // AppNavigator.instance
                       //     .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
                       },

@@ -52,7 +52,8 @@ class WithdrawalSuccessScreen extends StatelessWidget {
                 onTap: () async {
                   await walletController.fetchWallets(currency: '');
                   controller.selectedIndex.value = 3;
-                  Get.offAll(() => NavigationMenu());
+                  Get.to(() => NavigationMenu());
+                  // Get.offAll(() => NavigationMenu());
                 },
                 child: Container(
                   alignment: Alignment.center,
@@ -91,7 +92,8 @@ class WithdrawalSuccessScreen extends StatelessWidget {
                 onTap: () async {
                   await walletController.fetchWallets(currency: '');
                   controller.selectedIndex.value = 0;
-                  Get.offAll(() => NavigationMenu());
+                  Get.to(() => NavigationMenu());
+                  // Get.offAll(() => NavigationMenu());
                 },
                 child: Container(
                   alignment: Alignment.center,

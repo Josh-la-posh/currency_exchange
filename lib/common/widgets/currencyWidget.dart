@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../controller/currency_rate_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class CurrencyWidget extends StatelessWidget {
-  final CurrencyController _controller = Get.put(CurrencyController());
-  AuthController auth = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    final CurrencyController _controller = Get.put(CurrencyController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Container(
       color: darkMode ? Colors.black : TColors.primary.withOpacity(0.3),

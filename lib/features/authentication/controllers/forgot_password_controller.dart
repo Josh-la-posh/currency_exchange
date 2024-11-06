@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
+import '../../../utils/responses/handleApiError.dart';
+import '../../../utils/shared/error_dialog_response.dart';
+import '../apis/api.dart';
 import '../screens/reset_password/reset_password_otp.dart';
 
 class ForgotPasswordFormController extends GetxController {
-  AuthController authController = Get.find();
   var isPasswordChanging = false.obs;
   var isForgotPasswordFormSubmitting = false.obs;
   var obscureOldPassword = true.obs;
@@ -42,15 +43,12 @@ class ForgotPasswordFormController extends GetxController {
       saveForm(formKey);
       try {
         isForgotPasswordFormSubmitting(true);
-        await authController.generateOtp(
-            email: email.text.toString(),
-            onSuccess: () {
-              Get.to(() => ResetPasswordOtpScreen(email: email.text));
-            },
-            onFailure: (){}
-        );
+        final response = await AuthService.instance.sendEmailOtpCode({"email": email.text.toLowerCase().trim()});
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Get.to(() => ResetPasswordOtpScreen(email: email.text));
+        }
       } catch (e) {
-        Get.snackbar("Error", e.toString(), snackPosition: SnackPosition.BOTTOM);
+        showErrorAlertHelper(errorMessage: handleApiFormatError(e));
       } finally {
         isForgotPasswordFormSubmitting(false);
       }

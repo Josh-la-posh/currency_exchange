@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
+import 'package:pouch/data/modules/storage_session_controller.dart';
+import '../../../utils/responses/handleApiError.dart';
+import '../../../utils/shared/error_dialog_response.dart';
+import '../apis/api.dart';
 import '../screens/email_verify/email_verify.dart';
 
 class RegistrationFormController extends GetxController {
-  AuthController authController = Get.find();
+  UserSessionController userSessionController = Get.find();
   var isCreatingAccount = false.obs;
   var rememberMe = false.obs;
   var obscurePassword = true.obs;
@@ -21,7 +24,7 @@ class RegistrationFormController extends GetxController {
 
   @override
   void onInit() {
-    authController.userSessionController.clearRememberMeHandler();
+    userSessionController.clearRememberMeHandler();
     clearData();
     super.onInit();
   }
@@ -63,21 +66,21 @@ class RegistrationFormController extends GetxController {
       saveForm(formKey);
       try {
         isCreatingAccount(true);
-        await authController.createAccount(
-          firstName: firstName.text.toString(),
-          lastName: lastName.text.toString(),
-          email: email.text.toString(),
-          phoneNumber: phoneNo.text.toString(),
-          password: password.text.toString(),
-          onSuccess: () {
-            Get.to(() => EmailVerificationScreen(
-              email: email.text.toString(),
-              password: password.text.toString(),
-            ));
-          },
-        );
+        final response = await AuthService.instance.createAccount({
+          'firstName': firstName.text.toString(),
+          'lastName': lastName.text.toString(),
+          'email': email.text.toString(),
+          'phoneNumber': phoneNo.text.toString(),
+          'password': password.text.toString(),
+        });
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Get.to(() => EmailVerificationScreen(
+            email: email.text.toString(),
+            password: password.text.toString(),
+          ));
+        }
       } catch (e) {
-        Get.snackbar("Sign Up Error", e.toString(), snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
+        showErrorAlertHelper(errorMessage: handleApiFormatError(e));
       } finally {
         isCreatingAccount(false);
       }
