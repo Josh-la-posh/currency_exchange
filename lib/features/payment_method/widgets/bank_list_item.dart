@@ -4,7 +4,7 @@ import 'package:pouch/features/wallet/models/bank_list.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 
 import '../../../utils/helpers/helper_functions.dart';
-import '../../wallet/controller/wallet_controller.dart';
+import '../../wallet/controller/bank_controller.dart';
 
 class BankListItem extends StatelessWidget {
   final BankListModel bankDetail;
@@ -12,12 +12,12 @@ class BankListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
+    final BankController bankController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return ListTile(
         onTap: () {
-          walletController.selectedBank(bankDetail);
-          walletController.filteredBanks.clear();
+          bankController.selectedBank(bankDetail);
+          bankController.filteredBanks.clear();
         },
         contentPadding: const EdgeInsets.symmetric(horizontal: 0),
         title: Row(
@@ -41,7 +41,7 @@ class BankListItem extends StatelessWidget {
                   )
               ),
             ),
-            if (walletController.selectedBank.value == bankDetail)
+            if (bankController.selectedBank.value == bankDetail)
             const SizedBox(
                 height: 36,
                 width: 36,

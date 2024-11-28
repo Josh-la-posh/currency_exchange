@@ -9,7 +9,6 @@ import 'package:pouch/features/home/widgets/my_offer.dart';
 import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
 import 'package:pouch/features/notification/screens/notification.dart';
 import 'package:pouch/utils/layouts/navigation_menu.dart';
-import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import 'package:pouch/common/widgets/verify_your_account.dart';
 import 'package:pouch/features/home/widgets/my_home_balance.dart';
 import 'package:pouch/features/home/widgets/sections.dart';
@@ -18,10 +17,16 @@ import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/texts.dart';
+import '../../all_offer/controllers/offer_controller.dart';
+import '../../negotiation_offer/controller/negotiation_offer_controller.dart';
+import '../../notification/controller/notification_controller.dart';
 import '../controller/home_controller.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeController controller = Get.put(HomeController());
+  final HomeController controller = Get.put(HomeController());
+  final NegotiationOfferController negotiationOfferController = Get.put(NegotiationOfferController());
+  final NotificationController notificationController = Get.put(NotificationController());
+  final OfferController offerController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +98,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildNotificationBadge() {
     return Obx(() {
-      if (controller.notificationController.idsArray.isEmpty) {
+      if (notificationController.idsArray.isEmpty) {
         return SizedBox();
       } else {
         return Container(
@@ -104,7 +109,7 @@ class HomeScreen extends StatelessWidget {
               color: Colors.red
           ),
           child: Center(
-            child: Text(controller.notificationController.idsArray.length.toString(),
+            child: Text(notificationController.idsArray.length.toString(),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 10,
@@ -147,7 +152,7 @@ class HomeScreen extends StatelessWidget {
       width: double.infinity,
       child: Column(
         children: [
-          Obx(() => controller.authController.isVerifiedDisplay.value
+          Obx(() => controller.userSessionController.isVerifiedDisplay.value
               ? VerifyYourAccountWidget()
               : const SizedBox.shrink()),
           HomeBalanceWidget(),
@@ -297,9 +302,9 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         TrendingOffer(),
-        Obx(() => controller.offerController.allOffers.isNotEmpty
+        Obx(() => offerController.allOffers.isNotEmpty
             ? _buildMoreButton(() {
-          controller.offerController.allOfferIndex.value = 0;
+          offerController.allOfferIndex.value = 0;
           navigationController.selectedIndex.value = 1;
         })
             : const SizedBox.shrink()),
@@ -311,9 +316,9 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         MyOffer(),
-        Obx(() => controller.negotiationOfferController.myOffers.isNotEmpty
+        Obx(() => negotiationOfferController.myOffers.isNotEmpty
             ? _buildMoreButton(() {
-          controller.negotiationOfferController.myOfferIndex.value = 0;
+          negotiationOfferController.myOfferIndex.value = 0;
           Get.to(() => MyBidAndOfferScreen());
         })
             : const SizedBox.shrink()),
@@ -325,9 +330,9 @@ class HomeScreen extends StatelessWidget {
     return Column(
       children: [
         MyBidOffer(),
-        Obx(() => controller.negotiationOfferController.myBids.isNotEmpty
+        Obx(() => negotiationOfferController.myBids.isNotEmpty
             ? _buildMoreButton(() {
-          controller.negotiationOfferController.myOfferIndex.value = 1;
+          negotiationOfferController.myOfferIndex.value = 1;
           Get.to(() => MyBidAndOfferScreen());
         })
             : const SizedBox.shrink()),

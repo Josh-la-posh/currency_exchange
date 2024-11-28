@@ -11,13 +11,15 @@ class ProfileLinkWidget extends StatelessWidget {
     required this.title,
     required this.onPressed,
     this.icon,
-    this.rightText
+    this.rightText,
+    required this.hasChildren
   });
 
   String title;
   VoidCallback onPressed;
   Widget? icon;
   String? rightText;
+  bool hasChildren;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +71,7 @@ class ProfileLinkWidget extends StatelessWidget {
               fontSize: 12,
             ),),
             const SizedBox(width: 6),
+            if (hasChildren == true)
             Icon(Icons.arrow_forward, color: CupertinoColors.inactiveGray, size: 13,)
             // SizedBox(
             //     height: 15,

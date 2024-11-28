@@ -1,30 +1,134 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:pouch/data/modules/inactivity_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/firebase/firebase_api.dart';
+import '../../../data/modules/storage_session_controller.dart';
+import '../../../utils/constants/app.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_darwin/local_auth_darwin.dart';
+import '../../../utils/layouts/navigation_menu.dart';
+import '../../../utils/local_storage/local_storage.dart';
+import '../../../utils/responses/handleApiError.dart';
+import '../apis/api.dart';
+import '../models/user_model.dart';
+import '../screens/add_details/add_address_detail.dart';
 import '../screens/email_verify/email_verify.dart';
 
 class AuthFormController extends GetxController {
-  AuthController authController = Get.find();
+  UserSessionController userSessionController = Get.find<UserSessionController>();
+  final SharedPreferences _storage = LocalStorage.instance.storage;
+  final LocalAuthentication _auth = LocalAuthentication();
   var isLoggingIn = false.obs;
   var rememberMe = false.obs;
   var obscurePassword = true.obs;
-
-  final TextEditingController email = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  var email = ''.obs;
+  var password = ''.obs;
 
   @override
   void onInit() {
-    email.clear();
-    password.clear();
+    _getUserSaveData();
+    email.value = '';
+    password.value = '';
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    email.dispose();
-    password.dispose();
-    super.onClose();
+  Future<void> fetchCurrentUser({
+    required String email,
+    required String password,
+    required bool rememberMe,
+    required VoidCallback handleEmailNotVerified,
+  }) async {
+    try {
+      isLoggingIn(true);
+      final responseData = await AuthService.instance.currentUserApi();
+      userSessionController.user(UserModel(
+          id: responseData['id'],
+          firstName: responseData['firstName'],
+          lastName: responseData['lastName'],
+          email: responseData['email'],
+          password: responseData['password'],
+          isVerified: responseData['isVerified'],
+          nin: responseData['nin'],
+          country: responseData['country'],
+          address: responseData['address'],
+          postCode: responseData['postCode'],
+          state: responseData['state'],
+          status: responseData['status'],
+          phoneNumber: responseData['phoneNumber'],
+          otp: responseData['otp'],
+          emailOtp: responseData['emailOtp'],
+          isEmailVerified: responseData['isEmailVerified'],
+          otpExpiration: responseData['otpExpiration'],
+          lastLogin: responseData['lastLogin'],
+          lastLoginDevice: responseData['lastLoginDevice'],
+          createdDate: responseData['createdDate'],
+          lastModifiedDate: responseData['lastModifiedDate'],
+          role: responseData['role']
+      ));
+      userSessionController.setRememberMeHandler(
+          email: email.toLowerCase().trim(),
+          password: password,
+          enabled: true
+      );
+      saveUser(userSessionController.user.value);
+      if (userSessionController.user.value.isEmailVerified != true) {
+        handleEmailNotVerified();
+      } else if (userSessionController.user.value.address == null) {
+        Get.offAll(() => AddAddressDetail(
+            email: email.toLowerCase().trim(),
+            password: password
+        ));
+      } else {
+        Get.offAll(() => NavigationMenu());
+        InactivityService.instance.startMonitoring();
+      }
+    } catch (err) {
+
+      print('the error is from here $err');
+      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+    } finally {
+      isLoggingIn(false);
+    }
+  }
+
+  Future<void> login({
+    required String email,
+    required String password,
+    required bool rememberMe,
+    required VoidCallback handleEmailNotVerified,
+  }) async {
+    try {
+      final response = await AuthService.instance.loginApi(data: {
+        'email': email.toLowerCase().trim(),
+        'password': password,
+      });
+      if (response.statusCode == 200) {
+        var token = response.data['access_token'];
+        var refreshToken = response.data['refresh_token'];
+        if (response != null && token != '') {
+          userSessionController.setToken(token);
+          userSessionController.setRefreshToken(refreshToken);
+          await fetchCurrentUser(
+            email: email.toLowerCase().trim(),
+            password: password,
+            rememberMe: rememberMe,
+            handleEmailNotVerified: handleEmailNotVerified,
+          );
+
+          // await FirebaseApi().updateDeviceToken();
+        }
+        return token;
+      } else {
+        Get.snackbar('Error', handleApiFormatError(response), backgroundColor: Colors.red);
+      }
+    } catch (err) {
+      Get.snackbar('Error', handleApiFormatError(err), backgroundColor: Colors.red);
+    }
   }
 
   // Toggle password visibility
@@ -48,14 +152,15 @@ class AuthFormController extends GetxController {
       saveForm(formKey);
       try {
         isLoggingIn(true);
-        await authController.login(
-          email: email.text.toString(),
-          password: password.text.toString(),
+        userSessionController.removeUser();
+        await login(
+          email: email.value.toString(),
+          password: password.value.toString(),
           rememberMe: true,
           handleEmailNotVerified: () {
             Get.to(EmailVerificationScreen(
-              email: email.text.toString(),
-              password: password.text.toString(),
+              email: email.value.toString(),
+              password: password.value.toString(),
             ));
           },
         );
@@ -69,8 +174,64 @@ class AuthFormController extends GetxController {
     }
   }
 
-  void clearData() {
-    email.clear();
-    password.clear();
+  Future<void> loginWithBiometric() async {
+    final email = _storage.getString(USER_REMEMBER_ME_EMAIL);
+    final password = _storage.getString(USER_REMEMBER_ME_PASS);
+    print('The new email is ${email} $password');
+    final useBiometrics = await userSessionController.getUserBiometrics();
+    if (email != null) {
+      if (useBiometrics == true) {
+        bool canAuthWithBiometric = await _auth.canCheckBiometrics;
+        if (canAuthWithBiometric == true) {
+          try {
+            final bool didAuthenticate = await _auth.authenticate(
+                authMessages: const <AuthMessages>[
+                  AndroidAuthMessages(
+                      signInTitle: 'Authentication required',
+                      cancelButton: 'No thanks'
+                  ),
+                  IOSAuthMessages(
+                      cancelButton: 'No thanks'
+                  )
+                ],
+                localizedReason: 'Please authenticate to login',
+                options: const AuthenticationOptions(
+                    biometricOnly: false
+                )
+            );
+            if (didAuthenticate) {
+              login(
+                email: email.toString(),
+                password: password.toString(),
+                rememberMe: true,
+                handleEmailNotVerified: (){},
+              );
+            } else {
+              print('Authentication didn\'t work');
+            }
+          } on PlatformException catch (e) {
+            print('Authentication error $e');
+            canAuthWithBiometric = false;
+          }
+        }
+      } else {
+        Get.snackbar('Error', 'Biometric has not been set');
+      }
+    } else {
+      Get.snackbar('', 'Login to continue');
+    }
+  }
+
+  Future<void> _getUserSaveData() async {
+    final userJson = _storage.getString(USER_DATA);
+    if (userJson != null) {
+      saveUser(UserModel.fromJson(json.decode(userJson)));
+    }
+  }
+
+  void saveUser(UserModel? userInfo) {
+    final userJson = json.encode(userInfo?.toJson());
+    _storage.setString(USER_DATA, userJson);
+    userSessionController.user.value = userInfo!;
   }
 }

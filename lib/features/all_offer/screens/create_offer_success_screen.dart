@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/common/widgets/custom_time_line.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/layouts/list_layout.dart';
+import '../models/create_offer_response.dart';
 import '../widgets/success_page.dart';
 
 class CreateOfferSuccessPage extends StatelessWidget {
+  final CreateOfferResponse createOfferResponse;
+  const CreateOfferSuccessPage({super.key, required this.createOfferResponse});
 
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
+    // final CreateOfferController createOfferController = Get.find();
     return Scaffold(
       body: SuccessScreenWidget(
         text: 'You have successfully created an offer',
@@ -29,10 +30,10 @@ class CreateOfferSuccessPage extends StatelessWidget {
                             TextSpan(
                                 text: index == 3
                                     ? ''
-                                    : THelperFunctions.getFormattedTime(offerController.createOfferResponse.value.createdDate.toString()) ==
+                                    : THelperFunctions.getFormattedTime(createOfferResponse.createdDate.toString()) ==
                                         THelperFunctions.getFormattedTime(DateTime.now().toString())
                                           ? 'Now'
-                                          : THelperFunctions.getFormattedTime(offerController.createOfferResponse.value.createdDate.toString()),
+                                          : THelperFunctions.getFormattedTime(createOfferResponse.createdDate.toString()),
                                 style: TextStyle(
                                     height: 1.5
                                 )

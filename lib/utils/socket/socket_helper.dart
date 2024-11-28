@@ -5,7 +5,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../../data/modules/storage_session_controller.dart';
 
 class SocketManager {
-  final notificationController = Get.find<NotificationController>();
+  final NotificationController notificationController = Get.put(NotificationController());
   final userSessionController = Get.find<UserSessionController>();
 
   static final SocketManager singleton = SocketManager._internal();
@@ -59,13 +59,13 @@ class SocketManager {
       if (kDebugMode) {
         print("UpdateSocket ----------------------");
         notificationController.notificationLength(data);
+        print('The data foun cand be called: $data');
       }
     });
 
     socket.on("disconnect", (data) {
       if (kDebugMode) {
         print("Socket disconnect");
-        print(data);
       }
     });
   }

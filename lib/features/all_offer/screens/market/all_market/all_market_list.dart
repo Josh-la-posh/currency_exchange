@@ -12,10 +12,7 @@ class AllMarketList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
-    if (offerController.allOffers.isEmpty) {
-      offerController.fetchAllOffers();
-    }
+    final OfferController offerController = Get.put(OfferController());
     return Obx(() {
       if (offerController.isAllOffersLoading.value) {
         return OrderShimmer();

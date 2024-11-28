@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/features/authentication/screens/login/login.dart';
 
 import '../../../../../common/widgets/buttons/elevated_button.dart';
@@ -18,7 +17,7 @@ class ResetPasswordOtpForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ResetPasswordOtpFormController controller = Get.find();
+  final ResetPasswordOtpFormController controller = Get.find();
     return Form(
       key: formKey,
       child: Obx(() => controller.showEmailVerifiedSuccess.isFalse
@@ -41,7 +40,7 @@ class ResetPasswordOtpForm extends StatelessWidget {
   }
 
   Widget buildPasswordField() {
-    ResetPasswordOtpFormController controller = Get.find();
+  final ResetPasswordOtpFormController controller = Get.find();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,7 +63,7 @@ class ResetPasswordOtpForm extends StatelessWidget {
   }
 
   Widget buildConfirmPasswordField() {
-    ResetPasswordOtpFormController controller = Get.find();
+  final ResetPasswordOtpFormController controller = Get.find();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -91,7 +90,7 @@ class ResetPasswordOtpForm extends StatelessWidget {
   }
 
   Widget buildOtpInput() {
-    ResetPasswordOtpFormController controller = Get.find();
+  final ResetPasswordOtpFormController controller = Get.find();
     return Column(
       children: [
         const SizedBox(height: TSizes.spaceBtwSections),
@@ -124,7 +123,7 @@ class ResetPasswordOtpForm extends StatelessWidget {
   }
 
   Widget buildActionButton(BuildContext context) {
-    ResetPasswordOtpFormController controller = Get.find();
+  final ResetPasswordOtpFormController controller = Get.find();
     return Padding(
       padding: const EdgeInsets.only(top: TSizes.spaceBtwSections - 4),
       child: Column(

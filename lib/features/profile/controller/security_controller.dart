@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:pouch/data/modules/storage_session_controller.dart';
 
 class SecurityController extends GetxController {
-  UserSessionController userSessionController = Get.find();
+final UserSessionController userSessionController = Get.find();
   var useBiometric = false.obs;
 
   @override

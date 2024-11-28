@@ -18,7 +18,7 @@ class SubscriptionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SubscriptionController controller = Get.find();
+    final SubscriptionController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       children: [

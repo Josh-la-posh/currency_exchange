@@ -6,11 +6,16 @@ import 'package:pouch/features/notification/model/get_user_notification.dart';
 import '../../negotiation_offer/controller/negotiation_offer_controller.dart';
 
 class NotificationController extends GetxController {
-  NegotiationOfferController negotiationOfferController = Get.find();
-  OfferController offerController = Get.find();
   var userNotifications = <GetUserNotification>[].obs;
   var idsArray = [].obs;
   var isLoading = false.obs;
+
+  @override
+  void onClose() {
+    userNotifications.clear();
+    idsArray.clear();
+    super.onClose();
+  }
 
   Future<void> fetchNotification() async {
     try {
@@ -56,11 +61,5 @@ class NotificationController extends GetxController {
   }
 
   void saveUserNotifications(val) {
-    // userNotification.add
-  }
-
-  void clearData() {
-    userNotifications.clear();
-    idsArray.clear();
   }
 }

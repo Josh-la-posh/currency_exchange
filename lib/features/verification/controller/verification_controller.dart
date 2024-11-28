@@ -28,6 +28,12 @@ class VerificationController extends GetxController {
   @override
   void onClose() {
     bvnFocusNode.dispose();
+    canSkip.value = false;
+    selectedCountry.value = null;
+    shouldSkipDisplay.value = false;
+    idTypes.clear();
+    bvnNumber.value = '';
+    showErrorText.value = false;
     super.onClose();
   }
 

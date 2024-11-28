@@ -22,7 +22,7 @@ class SuccessScreenWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NavigationController controller = Get.find();
+    final NavigationController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return SingleChildScrollView(
       padding: TSpacingStyle.homePadding,
@@ -63,11 +63,9 @@ class SuccessScreenWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                 child: TElevatedButton(
                     onTap: onTap != null ? onTap : (){
-                      controller.selectedIndex.value = 1;
+                      // Get.to(() => NavigationMenu());
                       Get.to(() => NavigationMenu());
-                      // Get.offAll(() => NavigationMenu());
-                      // AppNavigator.instance
-                      //     .removeAllNavigateToNavHandler(DASHBOARD_SCREEN_ROUTE);
+                      controller.selectedIndex.value = 1;
                       },
                     buttonText: 'Done'),
               )

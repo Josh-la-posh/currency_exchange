@@ -1,89 +1,82 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
+import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
+import 'package:pouch/utils/layouts/navigation_menu.dart';
 
 import '../../../data/firebase/firebase_api.dart';
+import '../../../data/modules/storage_session_controller.dart';
 import '../../../utils/responses/handleApiError.dart';
 import '../apis/address_service.dart';
 import '../apis/api.dart';
 
 class AddressFormController extends GetxController {
-  AuthController authController = Get.find();
+  UserSessionController userSessionController = Get.find<UserSessionController>();
+  final AuthFormController authFormController = Get.put(AuthFormController());
   final addressService = AddressService();
+
   var isAddressFetching = false.obs;
   var showErrorText = false.obs;
   var showAddressError = false.obs;
   var isUpdatingAddress = false.obs;
   var isAddressEdited = false.obs;
-  List<String> countryList = ['Nigeria', 'America', 'Europe', 'Others'];
+  var isCountrySelected = false.obs;
+  var cityIsEmpty = false.obs;
+
+  List<String> countryList = ['Africa', 'America', 'Europe', 'Others'];
   var selectedRegion = 'America'.obs;
 
-  final TextEditingController address = TextEditingController();
-  final TextEditingController city = TextEditingController();
-  final TextEditingController state = TextEditingController();
-  final TextEditingController country = TextEditingController();
-  final TextEditingController postCode = TextEditingController();
-  final TextEditingController email = TextEditingController();
-  final TextEditingController password = TextEditingController();
+  var email = ''.obs;
+  var password = ''.obs;
+  var country = ''.obs;
+  var postCode = ''.obs;
+  var city = ''.obs;
+  var state = ''.obs;
+
+  // final TextEditingController address = TextEditingController();
+  late TextEditingController address;
+
 
   @override
   void onInit() {
-    address.clear();
-    city.clear();
-    state.clear();
-    country.clear();
-    postCode.clear();
-    email.clear();
-    password.clear();
+    postCode.value = '';
+    address = TextEditingController();
+    country.value = '';
+    city.value = '';
+    state.value = '';
     super.onInit();
   }
 
   @override
   void onClose() {
-    city.dispose();
-    state.dispose();
-    country.dispose();
-    address.dispose();
-    postCode.dispose();
-    email.dispose();
-    password.dispose();
     super.onClose();
+    address.dispose();
   }
 
   void fetchAddress(String postCode) async {
+
     List? address = await addressService.getAddressFromPostalCode(postCode);
     if (address != null) {
-      print('Thew resulted: $address');
       address.forEach((val) {
         if ((val['types'].contains('locality') && val['types'].contains('political')) || val['types'].contains('postal_town')) {
-          city.text = val['long_name'];
+          city.value = val['long_name'];
         } else if (val['types'].contains('administrative_area_level_1') && val['types'].contains('political')) {
-          state.text = val['long_name'];
+          state.value = val['long_name'];
         } else if (val['types'].contains('country') && val['types'].contains('political')) {
-          country.text = val['long_name'];
+          country.value = val['long_name'];
         }
       });
+      cityIsEmpty.value = false;
       showErrorText.value = false;
-      print('Address: ${city.text} and ${state.text}');
     } else {
-      city.text = '';
-      state.text = '';
+      showErrorText.value = false;
+      Get.snackbar("Error", "Unable to fetch address details.");
     }
   }
 
   void updateSelectedRegion(val) {
     selectedRegion.value = val;
   }
-
-  void showErrorMessage() {
-    showErrorText.value = true;
-    Timer(Duration(seconds: 3), () {
-      showErrorText.value = false;
-    });
-  }
-
-
 
   // Validate the form
   bool validateForm(formKey) {
@@ -99,41 +92,42 @@ class AddressFormController extends GetxController {
   Future<void> submitAddressForm({required GlobalKey<FormState> formKey}) async {
     if (validateForm(formKey)) {
       saveForm(formKey);
-      try {
-        isUpdatingAddress(true);
-        final response = await AuthService.instance.updateAddress({
-          'postCode': postCode.text,
-          'address':
-              '${address.text}, ${city.text}, ${state.text}. ${country.text}',
-          'email': email.text,
-          'password': password.text,
-        });
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          await FirebaseApi().registerDeviceToken();
-          await authController.login(
-            email: email.text.toLowerCase().trim(),
-            password: password.text,
-            rememberMe: true,
-            handleEmailNotVerified: (){},
+      if (country.value != '') {
+        try {
+          isUpdatingAddress(true);
+          final responseData = await AuthService.instance.updateAddress({
+            'postCode': postCode.value.trim(),
+            'address':
+            '${address.text.trim()}, ${city.value.trim()}, ${state.value.trim()}. ${country.value.trim()}'
+          });
+          authFormController.login(
+              email: email.value,
+              password: password.value,
+              rememberMe: true,
+              handleEmailNotVerified: () {}
           );
+          await FirebaseApi().registerDeviceToken();
+          Get.offAll(NavigationMenu());
+        } catch (e) {
+          print('The error $e');
+          Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.red);
+        } finally {
+          isUpdatingAddress(false);
         }
-      } catch (e) {
-        Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.red);
-      } finally {
-        isUpdatingAddress(false);
+      } else {
+        throw Exception('Form validation failed');
       }
     } else {
+      cityIsEmpty.value = true;
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
     }
   }
 
   void clearData() {
+    postCode.value = '';
     address.clear();
-    city.clear();
-    state.clear();
-    country.clear();
-    postCode.clear();
-    email.clear();
-    password.clear();
+    city.value = '';
+    state.value = '';
+    country.value = '';
   }
 }

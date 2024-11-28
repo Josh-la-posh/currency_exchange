@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
+import '../controllers/tradingOfferController.dart';
 import '../models/offer.dart';
 
 class OfferItem extends StatelessWidget {
@@ -15,7 +15,7 @@ class OfferItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
+  final TradingOfferController tradingOfferController = Get.put(TradingOfferController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
@@ -24,7 +24,7 @@ class OfferItem extends StatelessWidget {
           dense: true,
           contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: TSizes.lg),
           onTap: (){
-            offerController.fetchOfferById(id: item.id.toString(), currency: item.debitedCurrency.toString(), onSuccess: () {});
+            tradingOfferController.fetchOfferById(id: item.id.toString(), currency: item.debitedCurrency.toString(), onSuccess: () {});
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

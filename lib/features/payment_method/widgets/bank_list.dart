@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/payment_method/widgets/bank_list_item.dart';
-import 'package:pouch/features/wallet/controller/add_bank_controller.dart';
+import 'package:pouch/features/wallet/controller/bank_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -11,13 +11,13 @@ class BankList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AddBankController addBankController = Get.find();
+    final BankController bankController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Obx(() => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Search bar
-        if (addBankController.walletController.bankAccountDetails.value.account_name == null)
+        if (bankController.bankAccountDetails.value.account_name == null)
           Container(
               width: double.infinity,
               alignment: Alignment.center,
@@ -54,17 +54,17 @@ class BankList extends StatelessWidget {
                     hintText: 'Search bank ...'
                 ),
                 style: Theme.of(context).textTheme.labelMedium,
-                onChanged: (text) => addBankController.walletController.filterBanks(text),
+                onChanged: (text) => bankController.filterBanks(text),
               )
           ),
 
 
-        if (addBankController.walletController.bankAccountDetails.value.account_number == null)
+        if (bankController.bankAccountDetails.value.account_number == null)
           const SizedBox(height: TSizes.sm,),
 
         // Error text
         Visibility(
-          visible: addBankController.showErrorText.value,
+          visible: bankController.showErrorText.value,
           child: RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
@@ -81,14 +81,14 @@ class BankList extends StatelessWidget {
 
         // Bank list display
 
-        if (addBankController.walletController.filteredBanks.length > 0)
+        if (bankController.filteredBanks.length > 0)
           SizedBox(
             child: ListView.builder(
-                itemCount: addBankController.walletController.filteredBanks.length,
+                itemCount: bankController.filteredBanks.length,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (_, index) {
-                  final bankDetail = addBankController.walletController.filteredBanks[index];
+                  final bankDetail = bankController.filteredBanks[index];
                   return BankListItem(bankDetail: bankDetail);
                 }
             ),
@@ -97,7 +97,7 @@ class BankList extends StatelessWidget {
 
         // Bank name display
 
-        if (addBankController.walletController.selectedBank.value.name != null)
+        if (bankController.selectedBank.value.name != null)
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -160,7 +160,7 @@ class BankList extends StatelessWidget {
                         ),
                         children: <TextSpan> [
                           TextSpan(
-                            text: addBankController.walletController.selectedBank.value.name,
+                            text: bankController.selectedBank.value.name,
                           ),
                         ]
                     )

@@ -10,7 +10,7 @@ class WalletList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
+  final WalletController walletController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Obx(() {
       if (walletController.showWalletLists.value) {

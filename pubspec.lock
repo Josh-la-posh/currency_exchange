@@ -501,7 +501,7 @@ packages:
     source: hosted
     version: "4.9.0"
   leak_tracker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: leak_tracker
       sha256: "3f87a60e8c63aecc975dda1ceedbc8f24de75f09e4856ea27daf8958f2f0ce05"

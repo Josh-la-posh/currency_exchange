@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/home/controller/home_controller.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../../utils/helpers/controller/helper_function_controller.dart';
 import '../../../utils/helpers/helper_functions.dart';
+import '../../wallet/controller/wallet_controller.dart';
 
 class HomeBalanceWidget extends StatelessWidget {
-
+  final WalletController walletController = Get.find();
+  final HelperFunctionsController helperFunctionsController = Get.put(HelperFunctionsController());
   @override
   Widget build(BuildContext context) {
-    HomeController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     final width = MediaQuery.of(context).size.width;
-    if (controller.walletController.defaultWallet.value.balance == null) {
-      controller.walletController.fetchingDefaultWallet();
+    if (walletController.defaultWallet.value.balance == null) {
+      walletController.fetchingDefaultWallet();
     }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
@@ -44,15 +45,12 @@ class HomeBalanceWidget extends StatelessWidget {
                       )
                   ),
                   const SizedBox(width: TSizes.md),
-                  SizedBox(
-                    // width: 15,
-                    child: IconButton(
-                        onPressed: () => controller.walletController.showWalletBalance.value = !controller.walletController.showWalletBalance.value,
-                        icon: controller.walletController.showWalletBalance.value == false
-                            ? Icon(Icons.visibility_off_outlined, color: Colors.white, size: 17,)
-                            : Icon(Icons.visibility_outlined, color: Colors.white, size: 17,)
-                    ),
-                  ),
+                  Obx(() => IconButton(
+                      onPressed: () => walletController.showWalletBalance.value = !walletController.showWalletBalance.value,
+                      icon: walletController.showWalletBalance.value == false
+                          ? Icon(Icons.visibility_off_outlined, color: Colors.white, size: 17,)
+                          : Icon(Icons.visibility_outlined, color: Colors.white, size: 17,)
+                  )),
                 ],
               ),
               Obx(() => Row(
@@ -64,11 +62,11 @@ class HomeBalanceWidget extends StatelessWidget {
                           style: Theme.of(context).textTheme.labelMedium,
                           children: <TextSpan> [
                             TextSpan(
-                              text: controller.walletController.isDefaultWalletLoading.value
+                              text: walletController.isDefaultWalletLoading.value
                                   ? '---'
-                                  : controller.walletController.defaultWallet.value.balance == null
+                                  : walletController.defaultWallet.value.balance == null
                                   ? '---'
-                                  : '${controller.walletController.showWalletBalance.value == false ? '*****' : controller.helperFunctionsController.moneyFormatter(controller.walletController.defaultWallet.value.balance.toString())} ',
+                                  : '${walletController.showWalletBalance.value == false ? '*****' : helperFunctionsController.moneyFormatter(walletController.defaultWallet.value.balance.toString())} ',
                               style: TextStyle(
                                   fontSize: width > 400 ? 28 : 20,
                                   fontWeight: TSizes.fontWeightXl,
@@ -84,11 +82,11 @@ class HomeBalanceWidget extends StatelessWidget {
                           children: <TextSpan> [
                             TextSpan(
                               text:
-                              controller.walletController.isDefaultWalletLoading.value
+                              walletController.isDefaultWalletLoading.value
                                   ? ''
-                                  : controller.walletController.defaultWallet.value.balance == null
+                                  : walletController.defaultWallet.value.balance == null
                                   ? ''
-                                  : '${controller.walletController.showWalletBalance.value == false ? '' : controller.walletController.defaultWallet.value.currency}',
+                                  : '${walletController.showWalletBalance.value == false ? '' : walletController.defaultWallet.value.currency}',
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: TSizes.fontWeightLg,
@@ -102,11 +100,11 @@ class HomeBalanceWidget extends StatelessWidget {
                   SizedBox(
                     height: 25,
                     width: 25,
-                    child: controller.walletController.isDefaultWalletLoading.isTrue
+                    child: walletController.isDefaultWalletLoading.isTrue
                         ? CircularProgressIndicator()
                         : IconButton(
                       onPressed: (){
-                        controller.walletController.fetchingDefaultWallet();
+                        walletController.fetchingDefaultWallet();
                       },
                       icon: Icon(Icons.refresh, size: 20, color: darkMode ? Colors.white : Colors.white,),
                     ),

@@ -6,6 +6,7 @@ import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/currencyWidget.dart';
+import '../controllers/tradingOfferController.dart';
 import '../icons/svg.dart';
 import '../models/offer.dart';
 
@@ -17,7 +18,7 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
   });
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
+    final TradingOfferController tradingOfferController = Get.put(TradingOfferController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
@@ -371,13 +372,13 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
                       const SizedBox(height: TSizes.spaceBtwSections),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
-                        child: Obx(() => TElevatedButton(onTap: offerController.isSwappingLoading.value ? null : (){
-                          offerController.swappingOffer(
+                        child: Obx(() => TElevatedButton(onTap: tradingOfferController.isSwappingLoading.value ? null : (){
+                          tradingOfferController.swappingOffer(
                               id: item!.id.toString(),
                               amount: item!.amount.toString(),
                               creditedCurrency: item!.debitedCurrency.toString());
                         },
-                            buttonText: offerController.isSwappingLoading.value
+                            buttonText: tradingOfferController.isSwappingLoading.value
                                 ? 'Loading ...'
                                 : 'Pay ${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.rate.toString()))} ${item?.creditedCurrency}'
                         )),

@@ -1,19 +1,23 @@
 import 'dart:async';
 import 'package:get/get.dart';
+import 'package:pouch/data/modules/inactivity_service.dart';
 import 'package:pouch/data/modules/reset_controllers.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
-import 'package:pouch/features/authentication/screens/login/login.dart';
-import 'package:pouch/features/authentication/screens/onboarding/onboarding.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pouch/utils/local_storage/local_storage.dart';
+import '../../features/authentication/models/user_model.dart';
 import '../../utils/constants/app.dart';
 
 class UserSessionController extends GetxController {
   static UserSessionController get to => Get.find<UserSessionController>();
 
   final SharedPreferences _storage = LocalStorage.instance.storage;
-  AuthController get authController => Get.find<AuthController>();
+  var user = UserModel().obs;
   final resetController = ResetControllers();
+  var isVerifiedDisplay = false.obs;
+
+  void getIsVerified() {
+    isVerifiedDisplay.value = !user.value.isVerified!;
+  }
 
   Future<void> setToken(String accessToken) async {
     await _storage.setString(USER_SESSION_TOKEN, accessToken);
@@ -81,33 +85,15 @@ class UserSessionController extends GetxController {
   //   }
   // }
 
-  Future<void> routeUserToHomeIfLoggedIn() async {
-    final userJson = _storage.getString(USER_DATA);
-    final email = _storage.getString(USER_REMEMBER_ME_EMAIL);
-    final password = _storage.getString(USER_REMEMBER_ME_PASS);
-    final rememberMe = _storage.getBool(USER_REMEMBER_ME_ENABLED);
-    var isLogin = await isLoginBool();
-    bool canUserGoDashboard = userJson != null && isLogin == true;
-    if (canUserGoDashboard) {
-      if (rememberMe == true) {
-        authController.login(
-            email: email.toString(),
-            password: password.toString(),
-            rememberMe: true,
-            handleEmailNotVerified: (){},
-        );
-      } else {
-        Get.offAll(() => LoginScreen());
-      }
-    } else {
-      Get.offAll(() => OnboardingScreen());
-    }
-  }
-
   Future<void> logoutUser({String? logoutMessage = ''}) async {
     clearRememberMeHandler();
     await resetController.clearData();
-    Get.snackbar('', '$logoutMessage');
+    if (logoutMessage != '') Get.snackbar('', '$logoutMessage');
+  }
+
+  void removeUser() {
+    user.value = UserModel();
+    _storage.remove(USER_DATA);
   }
 
   Future<void> setRememberMeHandler({
@@ -120,16 +106,12 @@ class UserSessionController extends GetxController {
     await _storage.setString(USER_REMEMBER_ME_PASS, password);
   }
 
-  Future<void> removeToken() async {
+  Future<void> clearRememberMeHandler() async {
     await _storage.remove(USER_SESSION_TOKEN);
     await _storage.remove(USER_REFRESH_TOKEN);
   }
 
-  Future<void> clearRememberMeHandler() async {
-    await _storage.remove(USER_REMEMBER_ME_EMAIL);
-    await _storage.remove(USER_REMEMBER_ME_PASS);
-    await _storage.remove(USER_REMEMBER_ME_ENABLED);
+  Future<void> removeAccessToken() async {
     await _storage.remove(USER_SESSION_TOKEN);
-    await _storage.remove(USER_REFRESH_TOKEN);
   }
 }

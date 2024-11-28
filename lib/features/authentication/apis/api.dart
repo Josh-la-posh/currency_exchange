@@ -46,7 +46,6 @@ class AuthService {
     return _apiService.post('/users/update-address', data: data);
   }
 
-
   // Get requests
 
   Future currentUserApi() async {

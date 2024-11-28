@@ -12,11 +12,13 @@ import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/validators/validation.dart';
 import '../../all_offer/decimal_formatter.dart';
+import '../controller/payment_controller.dart';
 
 class PaymentOptionScreen extends StatelessWidget {
   PaymentOptionScreen({Key? key}) : super(key: key);
 
-  WalletController controller = Get.find();
+  final WalletController controller = Get.find();
+  final PaymentController paymentController = Get.put(PaymentController());
 
   @override
   Widget build(BuildContext context) {
@@ -116,23 +118,23 @@ class PaymentOptionScreen extends StatelessWidget {
         children: [
           _buildBankTransferOption(context, 'Flutterwave', TImages.flutterwave, () {
             _showAmountDialog(context, 'Enter Amount', () {
-              if (controller.amount.value.isEmpty) {
+              if (paymentController.amount.value.isEmpty) {
                 controller.setShowErrorText(true);
               } else {
                 controller.setShowErrorText(false);
-                controller.isFundingWalletViaNairaTransfer.value ? null :
-                controller.fundingWalletViaNairaTransfer(amount: controller.amount.value);
+                paymentController.isFundingWalletViaNairaTransfer.value ? null :
+                paymentController.fundingWalletViaNairaTransfer(amount: paymentController.amount.value);
               }
             });
           }),
           _buildBankTransferOption(context, 'Paystack', TImages.paystack, () {
             _showAmountDialog(context, 'Enter Amount', () {
-              if (controller.amount.value.isEmpty) {
+              if (paymentController.amount.value.isEmpty) {
                 controller.setShowErrorText(true);
               } else {
                 controller.setShowErrorText(false);
-                controller.isFundingWalletViaPaystack.value ? null :
-                controller.fundingWalletViaPaystack(amount: controller.amount.value);
+                paymentController.isFundingWalletViaPaystack.value ? null :
+                paymentController.fundingWalletViaPaystack(amount: paymentController.amount.value);
               }
             });
           }),
@@ -166,7 +168,7 @@ class PaymentOptionScreen extends StatelessWidget {
       darkMode: darkMode,
       isExpanded: false,
       onTap: () {
-        controller.amount.value = '';
+        paymentController.amount.value = '';
         Get.to(() => UssdFundingScreen());
       },
     );
@@ -193,7 +195,7 @@ class PaymentOptionScreen extends StatelessWidget {
       darkMode: darkMode,
       isExpanded: false,
       onTap: () {
-        controller.amount.value = '';
+        paymentController.amount.value = '';
         Get.to(() => ForeignFundingScreen());
       },
     );
@@ -226,7 +228,7 @@ class PaymentOptionScreen extends StatelessWidget {
   }
 
   void _showAmountDialog(BuildContext context, String title, VoidCallback onContinue) {
-    controller.amount.value = '';
+    paymentController.amount.value = '';
     controller.setShowErrorText(false);
     Get.dialog(
       AlertDialog(
@@ -279,10 +281,10 @@ class PaymentOptionScreen extends StatelessWidget {
       ],
       style: Theme.of(context).textTheme.titleLarge,
       onChanged: (val) {
-        controller.setAmount(val);
+        paymentController.setAmount(val);
       },
       onSaved: (val) {
-        controller.setAmount(val ?? '');
+        paymentController.setAmount(val ?? '');
       },
       decoration: const InputDecoration(
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),

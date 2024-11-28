@@ -16,7 +16,7 @@ class ChangePasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ChangePasswordController controller = Get.put(ChangePasswordController());
+    final ChangePasswordController controller = Get.put(ChangePasswordController());
     final formKey = GlobalKey<FormState>();
     final darkMode = THelperFunctions.isDarkMode(context);
 
@@ -60,7 +60,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   label: 'Old Password',
                   isObscure: controller.obscureOldPassword,
                   onToggle: controller.toggleObscureOldPassword,
-                  onChanged: (value) => controller.oldPassword.text = value,
+                  onChanged: (value) => controller.oldPassword.value = value,
                   validator: TValidator.emptyFieldValidator,
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -71,7 +71,7 @@ class ChangePasswordScreen extends StatelessWidget {
                   label: 'New Password',
                   isObscure: controller.obscurePassword,
                   onToggle: controller.toggleObscurePassword,
-                  onChanged: (value) => controller.password.text = value,
+                  onChanged: (value) => controller.password.value = value,
                   validator: TValidator.validatePassword,
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -82,9 +82,9 @@ class ChangePasswordScreen extends StatelessWidget {
                   label: 'Confirm Password',
                   isObscure: controller.obscureConPassword,
                   onToggle: controller.toggleObscureConPassword,
-                  onChanged: (value) => controller.confirmPass.text = value,
+                  onChanged: (value) => controller.confirmPass.value = value,
                   validator: (value) =>
-                      TValidator.validateConfirmPassword(value, controller.password.text),
+                      TValidator.validateConfirmPassword(value, controller.password.value),
                 ),
 
                 const SizedBox(height: TSizes.spaceBtwSections * 2),

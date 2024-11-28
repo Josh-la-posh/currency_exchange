@@ -10,7 +10,7 @@ class NegotiationOfferScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NegotiationOfferController controller = Get.find();
+    final NegotiationOfferController controller = Get.find();
     controller.fetchAllNegotiatedOffers();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(

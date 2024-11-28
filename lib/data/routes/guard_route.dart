@@ -4,10 +4,8 @@ import 'package:get/get.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:pouch/data/modules/storage_session_controller.dart';
 import 'package:pouch/features/authentication/screens/login/login.dart';
-import '../../features/authentication/controllers/auth_controller.dart';
 
 class AuthGuard extends StatelessWidget {
-  final authController = Get.find<AuthController>();
   final Widget widget;
   final bool askIfUserWantToExitApp;
   final bool doNotPopRoute;
@@ -23,7 +21,7 @@ class AuthGuard extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserSessionController userSessionController = Get.find<UserSessionController>();
     return Obx(() {
-      if (authController.user.value.email == null ||
+      if (userSessionController.user.value.email == null ||
           userSessionController.isLoginBool() == false) {
         userSessionController.logoutUser();
         return Scaffold(

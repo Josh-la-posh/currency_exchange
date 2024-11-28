@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
+import '../../../data/modules/storage_session_controller.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 import '../../wallet/controller/wallet_controller.dart';
+import '../controller/payment_controller.dart';
 
 class FlutterwavePaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
-    NavigationController controller = Get.find();
+    final UserSessionController userSessionController = Get.find();
+    final WalletController walletController = Get.find();
+    final NavigationController controller = Get.find();
+    final PaymentController paymentController = Get.put(PaymentController());
     final darkMode = THelperFunctions.isDarkMode(context);
-    final item = walletController.flutterwaveDetails.value;
+    final item = paymentController.flutterwaveDetails.value;
     print('The result is: ${item.account_expiration}');
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +47,7 @@ class FlutterwavePaymentScreen extends StatelessWidget {
                           ),
                           children: <TextSpan> [
                             TextSpan(
-                              text: '${walletController.authController.user.value.email}',
+                              text: '${userSessionController.user.value.email}',
                             )
                           ]
                       )

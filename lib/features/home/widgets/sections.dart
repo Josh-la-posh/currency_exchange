@@ -18,7 +18,7 @@ class LinkSectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NavigationController controller = Get.find();
+    final NavigationController controller = Get.find();
     final width = MediaQuery.of(context).size.width;
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: 30),

@@ -3,19 +3,16 @@ import 'package:get/get.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import '../controller/splash_controller.dart';
 
-class SplashScreen extends GetView<SplashAnimationController> {
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(seconds: 3), () {
-        controller.isSplashCompleted.value = true;
-      });
-    });
+    final SplashAnimationController controller = Get.put(SplashAnimationController());
 
     return Obx(() {
       if (controller.isSplashCompleted.value) {
-        controller.updateSplashCompletion();
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          controller.navigateToNextScreen();
+        });
       }
 
       return Scaffold(

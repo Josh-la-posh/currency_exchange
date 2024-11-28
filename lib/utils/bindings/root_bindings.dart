@@ -9,6 +9,5 @@ class RootBindings implements Bindings {
   void dependencies() {
     Get.lazyPut<NavigationController>(() => NavigationController());
     Get.lazyPut<HelperFunctionsController>(() => HelperFunctionsController());
-    Get.lazyPut<SplashAnimationController>(() => SplashAnimationController());
   }
 }

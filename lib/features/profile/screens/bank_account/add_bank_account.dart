@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/wallet/controller/add_bank_controller.dart';
+import 'package:pouch/features/wallet/controller/bank_controller.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/common/widgets/buttons/outlined_button.dart';
 import '../../../../utils/constants/colors.dart';
@@ -10,25 +10,25 @@ import '../../../../utils/validators/validation.dart';
 import '../../../payment_method/widgets/bank_list.dart';
 
 class AddBankAccountScreen extends StatelessWidget {
-  final AddBankController addBankController = Get.put(AddBankController());
+  final BankController addBankController = Get.put(BankController());
 
   AddBankAccountScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final darkMode = THelperFunctions.isDarkMode(context);
-    if (addBankController.walletController.bankList.isEmpty) {
-      addBankController.walletController.fetchBankList();
+    if (addBankController.bankList.isEmpty) {
+      addBankController.fetchBankList();
     }
-    addBankController.walletController.verifyingAccount.value = false;
+    addBankController.verifyingAccount.value = false;
     return Scaffold(
       appBar: AppBar(
         leading: Obx(() => IconButton(
-          onPressed: addBankController.walletController.bankAccountDetails.value.account_name == null ?  () {
+          onPressed: addBankController.bankAccountDetails.value.account_name == null ?  () {
             addBankController.clearData();
             Get.back();
           } : null,
-          icon: addBankController.walletController.bankAccountDetails.value.account_name == null
+          icon: addBankController.bankAccountDetails.value.account_name == null
               ? const Icon(Icons.keyboard_arrow_left_outlined)
               : const Text(''),
           style: IconButton.styleFrom(
@@ -50,7 +50,7 @@ class AddBankAccountScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (addBankController.walletController.bankAccountDetails.value.account_name == null)
+                if (addBankController.bankAccountDetails.value.account_name == null)
                   RichText(
                       text: TextSpan(
                           style: Theme.of(context).textTheme.bodyMedium,
@@ -93,16 +93,16 @@ class AddBankAccountScreen extends StatelessWidget {
                       validator: TValidator.acctNumValidator,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: addBankController.accountNumberController,
-                      enabled: addBankController.walletController.bankAccountDetails.value.account_name == null,
+                      enabled: addBankController.bankAccountDetails.value.account_name == null,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ],
                 ),
-                if (addBankController.walletController.bankAccountDetails.value.account_name != null)
+                if (addBankController.bankAccountDetails.value.account_name != null)
                   const SizedBox(height: TSizes.defaultSpace),
 
                 // Account name
-                if (addBankController.walletController.bankAccountDetails.value.account_name != null)
+                if (addBankController.bankAccountDetails.value.account_name != null)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -124,9 +124,9 @@ class AddBankAccountScreen extends StatelessWidget {
                       const SizedBox(height: 10,),
                       TextFormField(
                         enabled: false,
-                        initialValue: addBankController.walletController.bankAccountDetails.value.account_name == null
+                        initialValue: addBankController.bankAccountDetails.value.account_name == null
                             ? ''
-                            : addBankController.walletController.bankAccountDetails.value.account_name,
+                            : addBankController.bankAccountDetails.value.account_name,
                         style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
@@ -136,21 +136,21 @@ class AddBankAccountScreen extends StatelessWidget {
 
                 // Submit Button
                 TElevatedButton(
-                    onTap: addBankController.walletController.verifyingAccount.value
+                    onTap: addBankController.verifyingAccount.value
                         ? null
                         : addBankController.submitForm,
-                    buttonText: addBankController.walletController.bankAccountDetails.value.account_name == null
-                        ? addBankController.walletController.verifyingAccount.value
+                    buttonText: addBankController.bankAccountDetails.value.account_name == null
+                        ? addBankController.verifyingAccount.value
                         ? 'Verifying ...'
                         : 'Proceed'
                         : 'Submit'
                 ),
 
                 // Cancel Button
-                if (addBankController.walletController.bankAccountDetails.value.account_name != null)
+                if (addBankController.bankAccountDetails.value.account_name != null)
                   const SizedBox(height: TSizes.defaultSpace),
 
-                if (addBankController.walletController.bankAccountDetails.value.account_name != null)
+                if (addBankController.bankAccountDetails.value.account_name != null)
                   TOutlinedButton(
                       onTap: () => addBankController.clearData(),
                       buttonText: 'Cancel'

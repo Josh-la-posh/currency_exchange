@@ -12,7 +12,7 @@ import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
 
 class SignUpForm extends StatelessWidget {
-  RegistrationFormController registrationFormController = Get.put(RegistrationFormController());
+  final RegistrationFormController registrationFormController = Get.put(RegistrationFormController());
   final formKey = GlobalKey<FormState>();
 
   @override
@@ -55,7 +55,7 @@ class SignUpForm extends StatelessWidget {
           child: _buildTextField(
             context: context,
             label: 'First Name',
-            controller: registrationFormController.firstName,
+            onChanged: (val) => registrationFormController.firstName.value = val,
             validator: TValidator.emptyFieldValidator,
           ),
         ),
@@ -64,7 +64,7 @@ class SignUpForm extends StatelessWidget {
           child: _buildTextField(
             context: context,
             label: 'Last Name',
-            controller: registrationFormController.lastName,
+            onChanged: (val) => registrationFormController.lastName.value = val,
             validator: TValidator.emptyFieldValidator,
           ),
         ),
@@ -76,7 +76,7 @@ class SignUpForm extends StatelessWidget {
     return _buildTextField(
       context: context,
       label: 'Email',
-      controller: registrationFormController.email,
+      onChanged: (val) => registrationFormController.email.value = val,
       validator: TValidator.validateEmail,
       keyboardType: TextInputType.emailAddress,
     );
@@ -89,7 +89,6 @@ class SignUpForm extends StatelessWidget {
         Text('Phone Number', style: Theme.of(context).textTheme.labelMedium),
         const SizedBox(height: TSizes.sm),
         IntlPhoneField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           initialCountryCode: 'NG',
           style: Theme.of(context).textTheme.labelMedium,
           pickerDialogStyle: PickerDialogStyle(
@@ -102,8 +101,8 @@ class SignUpForm extends StatelessWidget {
             ),
           ),
           onChanged: (value) {
-            registrationFormController.phoneNo.text = value.completeNumber;
-            print(registrationFormController.phoneNo.text);
+            registrationFormController.phoneNo.value = value.completeNumber;
+            print('The v: ${value.number.length}');
           },
           keyboardType: TextInputType.phone,
         ),
@@ -115,7 +114,7 @@ class SignUpForm extends StatelessWidget {
     return Obx(() => _buildTextField(
       context: context,
       label: 'Password',
-      controller: registrationFormController.password,
+      onChanged: (val) => registrationFormController.password.value = val,
       validator: TValidator.validatePassword,
       obscureText: registrationFormController.obscurePassword.value,
       suffixIcon: _buildToggleVisibilityIcon(
@@ -127,10 +126,10 @@ class SignUpForm extends StatelessWidget {
 
   Widget _buildConfirmPasswordField(BuildContext context) {
     return Obx(() => _buildTextField(
-      controller: registrationFormController.confirmPass,
+      onChanged: (val) => registrationFormController.confirmPass.value = val,
       context: context,
       label: 'Confirm Password',
-      validator: (value) => TValidator.validateConfirmPassword(value, registrationFormController.password.text),
+      validator: (value) => TValidator.validateConfirmPassword(value, registrationFormController.password.value),
       obscureText: registrationFormController.obscureConPassword.value,
       suffixIcon: _buildToggleVisibilityIcon(
           obscureText: registrationFormController.obscureConPassword.value,
@@ -197,7 +196,7 @@ class SignUpForm extends StatelessWidget {
   Widget _buildTextField({
     required BuildContext context,
     required String label,
-    required TextEditingController controller,
+    required Function(String) onChanged,
     required String? Function(String?) validator,
     TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
@@ -210,7 +209,7 @@ class SignUpForm extends StatelessWidget {
         const SizedBox(height: TSizes.sm),
         TextFormField(
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          controller: controller,
+          onChanged: onChanged,
           style: Theme.of(context).textTheme.labelMedium,
           validator: validator,
           keyboardType: keyboardType,

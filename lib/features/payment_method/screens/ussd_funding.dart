@@ -1,16 +1,14 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/validators/validation.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/enums.dart';
 import '../../all_offer/decimal_formatter.dart';
+import '../controller/payment_controller.dart';
 
 class UssdFundingScreen extends StatelessWidget {
   UssdFundingScreen({super.key});
@@ -18,7 +16,7 @@ class UssdFundingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
-    WalletController controller = Get.find();
+    final PaymentController paymentController = Get.put(PaymentController());
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Scaffold(
@@ -59,7 +57,7 @@ class UssdFundingScreen extends StatelessWidget {
                     ),
                     autofocus: false,
                     isExpanded: true,
-                    value: controller.selectedNigBanks.value,
+                    value: paymentController.selectedNigBanks.value,
                     icon: RotatedBox(
                       quarterTurns: 3,
                       child: Padding(
@@ -72,11 +70,11 @@ class UssdFundingScreen extends StatelessWidget {
                       ),
                     ),
                     onChanged: (val) {
-                      controller.setSelectedNigBank(val!);
+                      paymentController.setSelectedNigBank(val!);
                       formKey.currentState?.validate();
                     },
                     items: [
-                      for (final item in controller.nigBanks)
+                      for (final item in paymentController.nigBanks)
                         DropdownMenuItem<Bank>(
                           value: item,
                           child: SizedBox(
@@ -123,7 +121,7 @@ class UssdFundingScreen extends StatelessWidget {
                           FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                         ],
                         onChanged: (val) {
-                          controller.setAmount(val);
+                          paymentController.setAmount(val);
                           formKey.currentState?.validate();
                         },
                         decoration: const InputDecoration(
@@ -140,16 +138,16 @@ class UssdFundingScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 200,
                     child: Obx(() => TElevatedButton(
-                      onTap: controller.isFundWalletViaNairaUssd.value ? null : () {
+                      onTap: paymentController.isFundWalletViaNairaUssd.value ? null : () {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
-                          controller.fundWalletViaNairaUssd(
-                              amount: controller.amount.value,
-                              bank: getBankName(controller.selectedNigBanks.value)
+                          paymentController.fundWalletViaNairaUssd(
+                              amount: paymentController.amount.value,
+                              bank: getBankName(paymentController.selectedNigBanks.value)
                           );
                         }
                       },
-                      buttonText: controller.isFundWalletViaNairaUssd.value ? 'Loading' : 'Continue',
+                      buttonText: paymentController.isFundWalletViaNairaUssd.value ? 'Loading' : 'Continue',
                     )),
                   ),
                 ),

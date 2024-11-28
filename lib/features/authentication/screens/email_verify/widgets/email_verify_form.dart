@@ -6,10 +6,17 @@ import 'package:pouch/utils/constants/sizes.dart';
 import '../../../controllers/email_verification_controller.dart';
 
 class EmailVerificationForm extends StatelessWidget {
+  final String email;
+  final String password;
+  const EmailVerificationForm({
+    super.key,
+    required this.email,
+    required this.password,
+  });
 
   @override
   Widget build(BuildContext context) {
-    EmailVerificationController controller = Get.find();
+    final EmailVerificationController controller = Get.find();
     return Form(
       key: controller.formKey,
       child: Obx(() => controller.showEmailVerifiedSuccess.isTrue
@@ -23,7 +30,7 @@ class EmailVerificationForm extends StatelessWidget {
               style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 16),
               children: [
                 TextSpan(
-                  text: controller.email,
+                  text: email,
                   style: const TextStyle(fontWeight: TSizes.fontWeightLg),
                 ),
               ],
@@ -48,7 +55,7 @@ class EmailVerificationForm extends StatelessWidget {
   }
 
   Widget _buildOtpBox(int index) {
-    EmailVerificationController controller = Get.find();
+    final EmailVerificationController controller = Get.find();
     return SizedBox(
       width: 40,
       child: TextFormField(
@@ -80,7 +87,7 @@ class EmailVerificationForm extends StatelessWidget {
   }
 
   Widget _buildConfirmButton(BuildContext context) {
-    EmailVerificationController controller = Get.find();
+    final EmailVerificationController controller = Get.find();
     return Padding(
       padding: const EdgeInsets.only(top: TSizes.spaceBtwSections - 4),
       child: Column(
@@ -111,7 +118,7 @@ class EmailVerificationForm extends StatelessWidget {
   }
 
   Widget _buildSuccessView(BuildContext context) {
-    EmailVerificationController controller = Get.find();
+    final EmailVerificationController controller = Get.find();
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,7 +137,7 @@ class EmailVerificationForm extends StatelessWidget {
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.labelMedium,
         ),
-        TElevatedButton(onTap: controller.handleLogin, buttonText: 'Proceed')
+        TElevatedButton(onTap: controller.handleSuccess, buttonText: 'Proceed')
       ],
     );
   }

@@ -13,7 +13,7 @@ class MyBidAndOfferScreen extends StatelessWidget {
   final AppInterceptor appInterceptor = AppInterceptor();
   @override
   Widget build(BuildContext context) {
-    NegotiationOfferController controller = Get.put(NegotiationOfferController());
+    final NegotiationOfferController controller = Get.put(NegotiationOfferController());
     if (controller.myOffers.isEmpty) {
       controller.fetchMyOffers(days: '', currency: '');
     }

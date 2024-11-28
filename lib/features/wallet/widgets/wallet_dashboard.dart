@@ -8,7 +8,7 @@ class WalletDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
+    final WalletController walletController = Get.find();
     if (walletController.defaultWallet.value.balance == null) {
       walletController.fetchingDefaultWallet();
     }
@@ -30,7 +30,7 @@ class WalletDashboard extends StatelessWidget {
   }
 
   Widget _buildBalanceHeader(double width) {
-    WalletController walletController = Get.find();
+    final WalletController walletController = Get.find();
     return Padding(
       padding: const EdgeInsets.only(left: 20, top: 20),
       child: Row(

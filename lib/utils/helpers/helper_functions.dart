@@ -75,7 +75,6 @@ class THelperFunctions {
 
     int seconds = difference.inSeconds;
     String timeDifference;
-    print(seconds);
     if (seconds < 60) {
       timeDifference = "$seconds seconds ago";
     } else if (seconds >= 60 && seconds < 3600) {
@@ -277,28 +276,21 @@ class THelperFunctions {
   }
 
   static String formatRate(String? rate) {
-    // If rate is null or empty, return "0.00"
     if (rate == null || rate.isEmpty) {
       return '0.00';
     }
-
-    // Try parsing the rate to a double
     double parsedRate;
     try {
       parsedRate = double.parse(rate);
     } catch (e) {
-      // In case of parsing error, return "0.00"
       return '0.00';
     }
-
-    // Convert to a string with up to 2 decimal places
-    String formattedRate = parsedRate.toStringAsFixed(2);
-
-    // Remove trailing zeros and the decimal point if necessary
-    if (formattedRate.endsWith('.00')) {
-      formattedRate = formattedRate.substring(0, formattedRate.length - 3);
-    } else if (formattedRate.endsWith('0')) {
+    String formattedRate = parsedRate.toStringAsFixed(5);
+    if (formattedRate.contains('.')) {
       formattedRate = formattedRate.replaceAll(RegExp(r'0+$'), '');
+      formattedRate = formattedRate.replaceAll(RegExp(r'\.$'), '');
+      // formattedRate = formattedRate.substring(0, formattedRate.length - 3);
+    // } else if (formattedRate.endsWith('0')) {
     }
 
     return formattedRate;

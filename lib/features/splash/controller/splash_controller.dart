@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../../../data/modules/storage_session_controller.dart';
+import '../../authentication/screens/login/login.dart';
 
-class SplashAnimationController extends GetxController with SingleGetTickerProviderMixin {
+class SplashAnimationController extends GetxController with GetSingleTickerProviderStateMixin {
+  final UserSessionController userSessionController = Get.find();
 
-  UserSessionController userSessionController = Get.find();
   late AnimationController animationController;
   late Animation<double> animation;
   var isSplashCompleted = false.obs;
@@ -20,17 +20,14 @@ class SplashAnimationController extends GetxController with SingleGetTickerProvi
     );
 
     animation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController);
-
-    animationController.forward();
+    animationController.forward().whenComplete(() {
+      isSplashCompleted.value = true;
+    });
   }
 
-  void updateSplashCompletion() async {
-    final connectivityResult = await InternetConnection().hasInternetAccess;
-    if (connectivityResult) {
-      userSessionController.routeUserToHomeIfLoggedIn();
-    } else {
-      userSessionController.logoutUser(logoutMessage: 'No internet connection');
-    }
+  void navigateToNextScreen() {
+    Get.off(() => LoginScreen());
+    Get.delete<SplashAnimationController>();
   }
 
   @override

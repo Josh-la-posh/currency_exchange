@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 
+import '../../../../data/modules/storage_session_controller.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../verification/screens/verify_page.dart';
@@ -16,7 +16,7 @@ class ProfileDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Get.find();
+  final UserSessionController userSessionController = Get.find();
     return Container(
       color: darkMode ? TColors.textPrimaryO40 : Colors.white,
       padding: EdgeInsets.only(bottom: 15, left: TSizes.defaultSpace * 0.7, right: TSizes.defaultSpace * 0.3),
@@ -37,7 +37,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 22),
                       children: <TextSpan> [
                         TextSpan(
-                            text: THelperFunctions.getInitials(authController.user.value.lastName ?? 'My', authController.user.value.firstName ?? 'Pouch'),
+                            text: THelperFunctions.getInitials(userSessionController.user.value.lastName ?? 'My', userSessionController.user.value.firstName ?? 'Pouch'),
                             style: TextStyle(
                                 color: darkMode ? Colors.white : TColors.primary,
                                 fontWeight: FontWeight.w700
@@ -57,7 +57,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelMedium,
                       children: <TextSpan> [
                         TextSpan(
-                            text: '${authController.user.value.lastName} ${authController.user.value.firstName}',
+                            text: '${userSessionController.user.value.lastName} ${userSessionController.user.value.firstName}',
                             style: TextStyle(
                                 fontWeight: TSizes.fontWeightMd,
                                 fontSize: 20
@@ -71,7 +71,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.labelSmall,
                       children: <TextSpan> [
                         TextSpan(
-                            text: authController.user.value.email,
+                            text: userSessionController.user.value.email,
                             style: TextStyle(
                                 fontSize: TSizes.fontSize14,
                                 // fontWeight: FontWeight.w600,
@@ -83,7 +83,7 @@ class ProfileDetailsScreen extends StatelessWidget {
               ),
               SizedBox(height: 10),
               GestureDetector(
-                onTap: authController.user.value.isVerified == true
+                onTap: userSessionController.user.value.isVerified == true
                     ? null
                     : () => Get.to(() => VerificationPage()),
                 child: Container(
@@ -96,7 +96,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                   ),
                   child: Row(
                     children: [
-                      Icon(authController.user.value.isVerified == true
+                      Icon(userSessionController.user.value.isVerified == true
                           ? Icons.verified
                           : Icons.verified_user_outlined,
                         color: TColors.primary, size: 13),
@@ -106,7 +106,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                               style: Theme.of(context).textTheme.labelSmall,
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: authController.user.value.isVerified == true
+                                    text: userSessionController.user.value.isVerified == true
                                         ? 'Verified ID'
                                         : 'Verify now',
                                     style: TextStyle(

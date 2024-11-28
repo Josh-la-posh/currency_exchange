@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
+import '../../payment_method/controller/payment_controller.dart';
 import '../../wallet/controller/wallet_controller.dart';
 
 class WithdrawalConfirmSheet extends StatelessWidget {
@@ -11,9 +12,10 @@ class WithdrawalConfirmSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
+    final WalletController walletController = Get.find();
+    final PaymentController paymentController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
-    final item = walletController.selectedWithdrawalAccount.value;
+    final item = paymentController.selectedWithdrawalAccount.value;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: TSizes.defaultSpace * 1.5),
@@ -276,13 +278,13 @@ class WithdrawalConfirmSheet extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(TSizes.defaultSpace * 0.5),
                 child: Obx(() => TElevatedButton(
-                    onTap: walletController.isTransferToLocalBank.value ? null : (){
-                      walletController.transferToLocalBank(
-                          bankId: walletController.selectedWithdrawalAccount.value.id.toString(),
+                    onTap: paymentController.isTransferToLocalBank.value ? null : (){
+                      paymentController.transferToLocalBank(
+                          bankId: paymentController.selectedWithdrawalAccount.value.id.toString(),
                           amount: int.parse(amount),
                       );
                     },
-                    buttonText: walletController.isTransferToLocalBank.value ? 'Loading ...' : 'Confirm'
+                    buttonText: paymentController.isTransferToLocalBank.value ? 'Loading ...' : 'Confirm'
                 ))
             )
           ],

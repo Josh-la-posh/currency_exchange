@@ -13,7 +13,7 @@ import '../../withdrawals/screens/withdrawal.dart';
 class WalletDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    WalletController  controller = Get.find();
+    final WalletController controller = Get.find();
     final bool darkMode = THelperFunctions.isDarkMode(context);
     final backgroundColor = darkMode ? Color(0xFF1E1E1E) : Colors.grey[200];
     final borderColor = darkMode ? Color(0xFF2E2E2E).withOpacity(0.1) : Colors.grey[400]?.withOpacity(0.1);
@@ -64,7 +64,11 @@ class WalletDashboardScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 15),
                     WalletList(),
-                    AccountList(),
+                    Obx(() => controller.isWalletLoading.isTrue
+                        ? const WalletLoadingView()
+                        : controller.wallets.isEmpty
+                        ? NoWalletView()
+                        : AccountList()),
                     SizedBox(height: 50),
                   ],
                 ),
@@ -121,6 +125,29 @@ class WalletDashboardScreen extends StatelessWidget {
           fontSize: 20,
           fontWeight: TSizes.fontWeightMd,
         ),
+      ),
+    );
+  }
+
+}
+
+class NoWalletView extends StatelessWidget {
+  const NoWalletView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      decoration: BoxDecoration(
+        color: THelperFunctions.isDarkMode(context) ? const Color(0xFF3E3E3E) : const Color(0xFFF6F6F6),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: const [
+          Text('No wallet created'),
+        ],
       ),
     );
   }

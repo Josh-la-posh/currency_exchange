@@ -16,7 +16,7 @@ class MyOfferScreen extends StatelessWidget {
   });
 
   Widget build(BuildContext context) {
-    NegotiationOfferController controller = Get.find();
+    final NegotiationOfferController controller = Get.find();
     return Obx(() {
       if (controller.isMyOffersLoading.value) {
         return OrderShimmer(length: length);

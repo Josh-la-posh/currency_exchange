@@ -86,9 +86,14 @@ class TValidator {
     }
 
     // Check for special characters
-    if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      return 'Password must have a special character.';
-    }
+    // if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+  if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')) && !value.contains(RegExp(r'\p{S}', unicode: true))) {
+    return 'Password must have a special character.';
+  }
+
+  // if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+  //   return 'Password must have a special character.';
+  // }
     return null;
   }
 

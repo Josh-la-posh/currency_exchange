@@ -13,7 +13,7 @@ import '../controller/negotiation_offer_controller.dart';
 
 class MyBidItem extends StatelessWidget {
   final OfferEntity item;
-  NegotiationOfferController controller = Get.find();
+  final NegotiationOfferController controller = Get.find();
   MyBidItem({
     super.key,
     required this.item

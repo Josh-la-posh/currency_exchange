@@ -7,16 +7,16 @@ import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/shared/refresh_indicator/refresh_indicator.dart';
 import '../../../../common/widgets/buttons/floating_button.dart';
 import '../../../../utils/layouts/list_layout.dart';
-import '../../../wallet/controller/wallet_controller.dart';
+import '../../../wallet/controller/bank_controller.dart';
 import '../../widgets/bank/bank_item.dart';
 
 class BankAccountScreen extends StatelessWidget {
-  final walletController = Get.find<WalletController>();
+  final BankController bankController = Get.put(BankController());
   @override
   Widget build(BuildContext context) {
-    final banks = walletController.bankAccounts;
-    if (walletController.bankAccounts.isEmpty) {
-      walletController.fetchLocalBank();
+    final banks = bankController.bankAccounts;
+    if (bankController.bankAccounts.isEmpty) {
+      bankController.fetchLocalBank();
     }
     return Scaffold(
       appBar: AppBar(
@@ -38,15 +38,15 @@ class BankAccountScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Obx(() {
-        if (walletController.isLocalBankLoading.value) {
+        if (bankController.isLocalBankLoading.value) {
           return Center(child: CircularProgressIndicator());
         } else {
 
-          if (walletController.bankAccounts.isEmpty) {
+          if (bankController.bankAccounts.isEmpty) {
             return NoWalletScreen();
           } else {
             return CustomRefreshIndicator(
-              onRefresh: () => walletController.fetchLocalBank(),
+              onRefresh: () => bankController.fetchLocalBank(),
               child: Container(
                 height: THelperFunctions.screenHeight(),
                 child: SingleChildScrollView(

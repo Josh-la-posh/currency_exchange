@@ -13,7 +13,7 @@ class TransactionHistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TransactionController controller = Get.put(TransactionController());
+    final TransactionController controller = Get.put(TransactionController());
     final darkMode = THelperFunctions.isDarkMode(context);
     final backgroundColor = darkMode ? TColors.textPrimaryO40 : Colors.white;
     final screenHeight = THelperFunctions.screenHeight();

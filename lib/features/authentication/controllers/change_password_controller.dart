@@ -10,25 +10,16 @@ class ChangePasswordController extends GetxController {
   var obscureOldPassword = true.obs;
   var obscurePassword = true.obs;
   var obscureConPassword = true.obs;
-
-  final TextEditingController password = TextEditingController();
-  final TextEditingController oldPassword = TextEditingController();
-  final TextEditingController confirmPass = TextEditingController();
-
-  // @override
-  // void onInit() {
-  //   password.clear();
-  //   oldPassword.clear();
-  //   confirmPass.clear();
-  //   super.onInit();
-  // }
+  var password = ''.obs;
+  var oldPassword = ''.obs;
+  var confirmPass = ''.obs;
 
   @override
-  void onClose() {
-    password.dispose();
-    oldPassword.dispose();
-    confirmPass.dispose();
-    super.onClose();
+  void onInit() {
+    password.value = '';
+    oldPassword.value = '';
+    confirmPass.value = '';
+    super.onInit();
   }
 
   // Toggle password visibility
@@ -63,12 +54,13 @@ class ChangePasswordController extends GetxController {
       try {
         // isPasswordChanging.value = true;
         final response = await AuthService.instance.changePassword({
-          'currentPassword': oldPassword.text,
-          'newPassword': password.text,
+          'currentPassword': oldPassword.value.trim(),
+          'newPassword': password.value.trim(),
         });
 
         if (response?.statusCode == 200 || response?.statusCode == 201) {
           Get.snackbar('Success', 'Password Changed Successfully!!!', backgroundColor: Colors.green);
+          clearData();
         } else {
           print('Failed to change password. Please try again.');
         }
@@ -85,8 +77,8 @@ class ChangePasswordController extends GetxController {
 
 
   void clearData() {
-    password.clear();
-    oldPassword.clear();
-    confirmPass.clear();
+    password.value = '';
+    oldPassword.value = '';
+    confirmPass.value = '';
   }
 }

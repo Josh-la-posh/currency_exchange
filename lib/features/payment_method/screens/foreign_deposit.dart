@@ -9,15 +9,15 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/enums.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 import '../../all_offer/decimal_formatter.dart';
-import '../../wallet/controller/wallet_controller.dart';
+import '../controller/payment_controller.dart';
 
 class ForeignFundingScreen extends StatelessWidget {
   ForeignFundingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    WalletController controller = Get.find();
-    NavigationController navigationController = Get.find();
+    final NavigationController navigationController = Get.find();
+    final PaymentController paymentController = Get.put(PaymentController());
     final formKey = GlobalKey<FormState>();
     final darkMode = THelperFunctions.isDarkMode(context);
 
@@ -59,7 +59,7 @@ class ForeignFundingScreen extends StatelessWidget {
                     ),
                     autofocus: false,
                     isExpanded: true,
-                    value: controller.selectedForeignCurrency.value,
+                    value: paymentController.selectedForeignCurrency.value,
                     icon: RotatedBox(
                       quarterTurns: 3,
                       child: Padding(
@@ -72,11 +72,11 @@ class ForeignFundingScreen extends StatelessWidget {
                       ),
                     ),
                     onChanged: (val) {
-                      controller.setSelectedForeignCurrency(val!);
+                      paymentController.setSelectedForeignCurrency(val!);
                       formKey.currentState?.validate();
                     },
                     items: [
-                      for (final item in controller.foreignCurrencies)
+                      for (final item in paymentController.foreignCurrencies)
                         DropdownMenuItem<ForeignBank>(
                           value: item,
                           child: SizedBox(
@@ -123,7 +123,7 @@ class ForeignFundingScreen extends StatelessWidget {
                           FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                         ],
                         onChanged: (val) {
-                          controller.setAmount(val);
+                          paymentController.setAmount(val);
                           formKey.currentState?.validate();
                         },
                         decoration: const InputDecoration(
@@ -140,12 +140,12 @@ class ForeignFundingScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 200,
                     child: Obx(() => TElevatedButton(
-                      onTap: controller.isFundingFcy.value ? null : () {
+                      onTap: paymentController.isFundingFcy.value ? null : () {
                         if (formKey.currentState!.validate()) {
                           formKey.currentState!.save();
-                          controller.fundingFcy(
-                              currency: getForeignName(controller.selectedForeignCurrency.value),
-                              amount: controller.amount.value,
+                          paymentController.fundingFcy(
+                              currency: getForeignName(paymentController.selectedForeignCurrency.value),
+                              amount: paymentController.amount.value,
                               onSuccess: () {
                                 navigationController.selectedIndex.value = 3;
                                 Get.to(() => NavigationMenu());
@@ -164,7 +164,7 @@ class ForeignFundingScreen extends StatelessWidget {
                           // );
                         }
                       },
-                      buttonText: controller.isFundingFcy.value ? 'Loading ...' : 'Continue',
+                      buttonText: paymentController.isFundingFcy.value ? 'Loading ...' : 'Continue',
                     )),
                   ),
                 ),

@@ -9,8 +9,8 @@ import '../../../../utils/helpers/helper_functions.dart';
 class BiometricAuthenticationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    UserSessionController userSessionController = Get.find();
-    SecurityController securityController = Get.put(SecurityController());
+    final UserSessionController userSessionController = Get.find();
+    final SecurityController securityController = Get.put(SecurityController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(

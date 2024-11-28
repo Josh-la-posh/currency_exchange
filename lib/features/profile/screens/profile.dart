@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/profile/icons/svg.dart';
+import 'package:pouch/features/profile/screens/HelpAndSupport/HelpAndSupport.dart';
+import 'package:pouch/features/profile/screens/faq/faq.dart';
 import 'package:pouch/features/profile/screens/security/security.dart';
 import 'package:pouch/features/profile/widgets/profile/logout.dart';
 import 'package:pouch/features/profile/widgets/profile/profile_details.dart';
@@ -31,22 +33,26 @@ class ProfileScreen extends StatelessWidget {
                     onPressed: () => Get.to(() => BankAccountScreen()),
                     title: 'Bank Account',
                     icon: BankIcon(),
+                    hasChildren: true,
                   ),
                   ProfileLinkWidget(
                     onPressed: () => Get.to(() => SecurityScreen()),
                     title: 'Security',
                     icon: PasswordIcon(),
+                    hasChildren: true,
                   ),
                   const SizedBox(height: 8),
                   ProfileLinkWidget(
-                    onPressed: () {},
+                    onPressed: () => Get.to(() => FaqScreen()),
                     title: 'FAQs',
                     icon: FaqIcon(),
+                    hasChildren: true,
                   ),
                   ProfileLinkWidget(
-                    onPressed: () {},
+                    onPressed: () => Get.to(() => HelpAndSupportScreen()),
                     title: 'Help & Support',
                     icon: SupportIcon(),
+                    hasChildren: true,
                   ),
                   const SizedBox(height: 8),
                   LogoutButton(),

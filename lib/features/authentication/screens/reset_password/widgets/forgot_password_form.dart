@@ -13,7 +13,7 @@ class ForgetPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ForgotPasswordFormController forgotPasswordFormController = Get.put(ForgotPasswordFormController());
+    final ForgotPasswordFormController forgotPasswordFormController = Get.put(ForgotPasswordFormController());
     final formKey = GlobalKey<FormState>();
 
     return Form(
@@ -25,7 +25,7 @@ class ForgetPasswordForm extends StatelessWidget {
               children: [
                 Text('Email', style: Theme.of(context).textTheme.labelMedium,),
                 TextFormField(
-                  controller: forgotPasswordFormController.email,
+                  onChanged: (val) => forgotPasswordFormController.email.value = val,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   style: Theme.of(context).textTheme.labelMedium,
                   validator: TValidator.validateEmail,

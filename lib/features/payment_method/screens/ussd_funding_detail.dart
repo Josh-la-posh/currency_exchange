@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
+import '../../../data/modules/storage_session_controller.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 import '../../wallet/controller/wallet_controller.dart';
 import '../../wallet/models/ussd_modal.dart';
+import '../controller/payment_controller.dart';
 
 class UssdFundingDetailScreen extends StatelessWidget {
   final String? amount;
@@ -15,10 +18,11 @@ class UssdFundingDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
-    NavigationController controller = Get.find();
+    final WalletController walletController = Get.find();
+    final NavigationController controller = Get.find();
+    final PaymentController paymentController = Get.put(PaymentController());
     final darkMode = THelperFunctions.isDarkMode(context);
-    final item = walletController.ussdDetails.value;
+    final item = paymentController.ussdDetails.value;
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -55,9 +59,9 @@ class UssdFundingDetailScreen extends StatelessWidget {
   }
 
   Widget _buildReferenceAndEmailSection(BuildContext context, bool darkMode) {
-    WalletController walletController = Get.find();
-    AuthController authController = Get.find();
-    final item = walletController.ussdDetails.value;
+  final PaymentController paymentController = Get.find();
+  final UserSessionController userSessionController = Get.find();
+    final item = paymentController.ussdDetails.value;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +74,7 @@ class UssdFundingDetailScreen extends StatelessWidget {
         ),
         _buildTextColumn(
           context,
-          title: authController.user.value.email ?? '',
+          title: userSessionController.user.value.email ?? '',
           content: 'Pay NGN $amount',
           darkMode: darkMode,
         ),
@@ -123,9 +127,22 @@ class UssdFundingDetailScreen extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: TSizes.defaultSpace),
-          _buildRichText(context, item.ussd_code ?? '', darkMode, fontSize: width > 380 ? 32 : 26),
+          Row(
+            children: [
+              _buildRichText(context, item.ussd_code ?? '', darkMode, fontSize: width > 380 ? 32 : 26),
+              SizedBox(width: 5,),
+              IconButton(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: item.ussd_code.toString()));
+                    Get.snackbar('Success', 'Text copied to clipboard');
+                  },
+                  icon: Image(image: AssetImage(TImages.transferFile))
+              ),
+            ],
+          ),
           const SizedBox(height: TSizes.defaultSpace / 1.2),
           _buildRichText(context, item.display_text ?? '', darkMode, fontSize: 14),
+          const SizedBox(height: TSizes.defaultSpace / 2),
         ],
       ),
     );

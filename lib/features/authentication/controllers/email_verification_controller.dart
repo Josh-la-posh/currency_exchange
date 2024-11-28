@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
 import 'package:pouch/utils/otp/otp.dart';
 
 import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
-import 'auth_controller.dart';
 
 class EmailVerificationController extends GetxController {
-  final authController = Get.find<AuthController>();
+  final AuthFormController authFormController = Get.put(AuthFormController());
   final formKey = GlobalKey<FormState>();
   final List<TextEditingController> otpControllers =
   List.generate(6, (_) => TextEditingController());
@@ -149,7 +149,7 @@ class EmailVerificationController extends GetxController {
   void handleEmailVerificationSuccess() {
     showEmailVerifiedSuccess.value = true;
     onSuccess?.call();
-    Future.delayed(const Duration(seconds: 2), handleLogin);
+    Future.delayed(const Duration(seconds: 2), handleSuccess);
   }
 
   void handleVerifyOtp() {
@@ -174,13 +174,14 @@ class EmailVerificationController extends GetxController {
     }
   }
 
-  void handleLogin() {
+
+  void handleSuccess() {
     if (showEmailVerifiedSuccess.isTrue) {
-      authController.login(
-          email: email,
+      authFormController.login(
+          email: email.toLowerCase().trim(),
           password: password,
-          rememberMe: false,
-          handleEmailNotVerified: (){},
+          rememberMe: true,
+          handleEmailNotVerified: () {}
       );
     }
   }

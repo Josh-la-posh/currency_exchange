@@ -18,6 +18,7 @@ const GET_BANK_LIST_URL = 'list-banks';
 const VERIFY_BANK_ACCOUNT_URL = 'verify-bank-account';
 const CONFIRM_BIRTHDAY_URL = 'confirm-birthday';
 const CONFIRM_OTP_URL = 'confirm-otp';
+const CONVERT_RATES_URL = 'convert-rates';
 
 
 final _apiService = AppInterceptor(showLoader: false).dio;
@@ -198,6 +199,22 @@ class WalletServices{
           'baseCurrency': currency
         },
       );
+    return response;
+  }
+
+  Future fetchConversionRate({
+    required String baseCurrency,
+    required String targetCurrency,
+    required double amount
+  }) async {
+    final response = await _apiService.get(
+      '$WALLET_URL/fx-rates',
+      queryParameters: {
+        'baseCurrency': baseCurrency,
+        'targetCurrency': targetCurrency,
+        'amount': amount
+      },
+    );
     return response;
   }
 

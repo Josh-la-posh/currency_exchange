@@ -47,6 +47,7 @@ dependencies:
   device_user_agent: ^0.1.2
   carousel_slider: ^5.0.0
   flutter_local_notifications: ^17.2.3
+  leak_tracker: ^10.0.5
 
   #------------------- ./ PACKAGES END ---------------#
 

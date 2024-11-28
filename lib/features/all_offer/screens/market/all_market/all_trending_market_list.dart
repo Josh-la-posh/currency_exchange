@@ -12,7 +12,7 @@ class AllTrendingMarketList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
+    final OfferController offerController = Get.put(OfferController());
     if (offerController.trendingOffers.isEmpty) {
       offerController.fetchTrendingOffers();
     }

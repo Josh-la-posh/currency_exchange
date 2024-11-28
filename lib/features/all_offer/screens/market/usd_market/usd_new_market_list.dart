@@ -12,12 +12,12 @@ class UsdNewMarketList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
+  final OfferController offerController = Get.find();
     if (offerController.newUsdOffers.isEmpty) {
       offerController.fetchNewUsdOffers();
     }
     return Obx(() {
-      if (offerController.isOfferLoading.value && offerController.newUsdOffers.isEmpty) {
+      if (offerController.isUsdNewOffersLoading.value && offerController.newUsdOffers.isEmpty) {
         return OrderShimmer();
       } else {
         return CustomRefreshIndicator(

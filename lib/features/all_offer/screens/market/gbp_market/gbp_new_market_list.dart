@@ -12,7 +12,7 @@ class GbpNewMarketList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
+  final OfferController offerController = Get.find();
     if (offerController.newGbpOffers.isEmpty) {
       offerController.fetchNewGbpOffers();
     }

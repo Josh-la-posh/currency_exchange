@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/features/verification/controller/verification_controller.dart';
 import 'package:pouch/features/verification/screens/verification_in_progress.dart';
 import 'package:smile_id/smile_id_biometric_kyc.dart';
 import 'package:smile_id/smile_id_enhanced_document_verification.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
+import '../../../data/modules/storage_session_controller.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
@@ -15,8 +15,8 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    VerificationController verificationController = Get.find();
-    AuthController authController = Get.find();
+    final VerificationController verificationController = Get.find();
+  final UserSessionController userSessionController = Get.find();
     verificationController.fetchSmileData();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
@@ -84,7 +84,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                                   country: 'NG',
                                   idType: id['code'],
                                   idNumber: verificationController.bvnNumber.value,
-                                  userId: authController.user.value.id,
+                                  userId: userSessionController.user.value.id,
                                   jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
                                   onSuccess: (String? result) {
                                     Map<String, dynamic> jsonResult = json.decode(result ?? '{}');
@@ -110,7 +110,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                               body: SmileIDEnhancedDocumentVerification(
                                 countryCode: verificationController.selectedCountry.value!.countryCode,
                                 documentType: id['code'],
-                                userId: authController.user.value.id,
+                                userId: userSessionController.user.value.id,
                                 captureBothSides: true,
                                 jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
                                 onSuccess: (String? result) {
@@ -129,7 +129,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
                               body: SmileIDEnhancedDocumentVerification(
                                 countryCode: verificationController.selectedCountry.value!.countryCode,
                                 documentType: id['code'],
-                                userId: authController.user.value.id,
+                                userId: userSessionController.user.value.id,
                                 captureBothSides: false,
                                 jobId: 'user_${DateTime.now().millisecondsSinceEpoch}_${UniqueKey().toString()}',
                                 onSuccess: (String? result) {
@@ -195,7 +195,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
   }
 
   void _showBvnDialog(BuildContext context, VoidCallback onContinue) {
-    VerificationController verificationController = Get.find();
+    final VerificationController verificationController = Get.find();
     showDialog(
       context: context,
       builder: (_) {
@@ -255,7 +255,7 @@ class IdentityVerificationTypeScreen extends StatelessWidget {
 
   Widget _buildBvnInputField(BuildContext context) {
 
-    VerificationController verificationController = Get.find();
+    final VerificationController verificationController = Get.find();
     return TextFormField(
       focusNode: verificationController.bvnFocusNode,
       textAlign: TextAlign.center,

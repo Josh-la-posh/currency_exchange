@@ -29,7 +29,7 @@ Map<String, WidgetBuilder> offerRoute = {
   CREATE_REVIEW_DETAILS_SCREEN: (context) => AuthGuard(
     widget: CreateReviewDetailsScreen(),
   ),
-  CREATE_SUCCESS_SCREEN: (context) => AuthGuard(
-    widget: CreateOfferSuccessPage(),
-  ),
+  // CREATE_SUCCESS_SCREEN: (context) => AuthGuard(
+  //   widget: CreateOfferSuccessPage(),
+  // ),
 };

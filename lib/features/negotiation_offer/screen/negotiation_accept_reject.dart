@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/buttons/elevated_button.dart';
 import '../../../common/widgets/currencyWidget.dart';
@@ -8,6 +7,7 @@ import '../../../common/widgets/custom_time_line.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/layouts/list_layout.dart';
+import '../../all_offer/controllers/tradingOfferController.dart';
 import '../../all_offer/icons/svg.dart';
 import '../../all_offer/models/offer.dart';
 import '../../all_offer/widgets/success_page.dart';
@@ -18,7 +18,7 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
+    final TradingOfferController tradingOfferController = Get.put(TradingOfferController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
         appBar: AppBar(
@@ -38,7 +38,7 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
           ),
         ),
       body: Obx(() {
-        if (offerController.showAcceptOfferMsg.value == false && offerController.showRejectOfferMsg.value == false) {
+        if (tradingOfferController.showAcceptOfferMsg.value == false && tradingOfferController.showRejectOfferMsg.value == false) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -306,12 +306,12 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                             child: TElevatedButton(
-                                onTap: offerController.isAcceptingRejectingOfferLoading.value ? null : (){
-                              offerController.acceptingOrRejectingOffer(
+                                onTap: tradingOfferController.isAcceptingRejectingOfferLoading.value ? null : (){
+                                  tradingOfferController.acceptingOrRejectingOffer(
                                   id: item!.id.toString(),
                                   currency: item!.debitedCurrency.toString(),
                                   negotiationAccepted: true,
-                                  onSuccess: () => offerController.showAcceptOfferMsg.value = true
+                                  onSuccess: () => tradingOfferController.showAcceptOfferMsg.value = true
                               );
                             },
                                 buttonText: 'Accept'),
@@ -322,12 +322,12 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                               height: 48,
                               padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                               child: ElevatedButton(
-                                onPressed: offerController.isAcceptingRejectingOfferLoading.value ? null : () {
-                                  offerController.acceptingOrRejectingOffer(
+                                onPressed: tradingOfferController.isAcceptingRejectingOfferLoading.value ? null : () {
+                                  tradingOfferController.acceptingOrRejectingOffer(
                                       id: item!.id.toString(),
                                       currency: item!.debitedCurrency.toString(),
                                       negotiationAccepted: false,
-                                      onSuccess: () => offerController.showRejectOfferMsg.value = false
+                                      onSuccess: () => tradingOfferController.showRejectOfferMsg.value = false
                                   );
                                 },
                                 child: const Text(
@@ -344,7 +344,7 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
               ),
             ],
           );
-        } else if (offerController.showAcceptOfferMsg.value) {
+        } else if (tradingOfferController.showAcceptOfferMsg.value) {
           return SuccessScreenWidget(
             onTap: () {Get.back();},
             text: 'You have successfully swapped ${THelperFunctions.moneyFormatter(THelperFunctions.getStringMultiplication(item!.amount.toString(), item!.negotiatorRate.toString()))} ${item!.creditedCurrency} for ${THelperFunctions.moneyFormatter(item!.amount.toString())} ${item!.debitedCurrency}.',
@@ -363,7 +363,6 @@ class NegotiationAcceptRejectScreen extends StatelessWidget {
                               TextSpan(
                                   text: THelperFunctions.getFormattedTime(DateTime.now().toString()),
                                   style: TextStyle(
-                                    // color: TColors.textPrimary.withOpacity(0.6),
                                       height: 1.5
                                   )
                               ),

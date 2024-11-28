@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/controllers/create_offer_controller.dart';
-import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import 'package:pouch/utils/layouts/bottom_sheet_widget.dart';
 import 'package:pouch/utils/validators/validation.dart';
 import '../../../utils/layouts/navigation_menu.dart';
+import '../controllers/tradingOfferController.dart';
 
 class NegotiationScreen extends StatelessWidget {
-  OfferController offerController = Get.find();
-  NavigationController controller = Get.find();
-  CreateOfferController createOfferController = Get.put(CreateOfferController());
+  final TradingOfferController tradingOfferController = Get.put(TradingOfferController());
+  final NavigationController controller = Get.find();
+  final CreateOfferController createOfferController = Get.put(CreateOfferController());
   final String id;
   final String debitedCurrency;
   final String creditedCurrency;
@@ -74,9 +74,9 @@ class NegotiationScreen extends StatelessWidget {
                   ],
                 ),
                 Obx(() => TElevatedButton(
-                    onTap: offerController.isNegotiatingOfferLoading.value ? null : (){
+                    onTap: tradingOfferController.isNegotiatingOfferLoading.value ? null : (){
                       if (createOfferController.formKey.currentState!.validate()) {
-                        offerController.negotiatingOffer(
+                        tradingOfferController.negotiatingOffer(
                             id: id,
                             currency: debitedCurrency,
                             negotiatorRate: createOfferController.rateController.text,
@@ -90,7 +90,7 @@ class NegotiationScreen extends StatelessWidget {
                         );
                       }
                     },
-                    buttonText: offerController.isNegotiatingOfferLoading.value ? 'Loading ...' : 'Done'
+                    buttonText: tradingOfferController.isNegotiatingOfferLoading.value ? 'Loading ...' : 'Done'
                 ))
               ],
             ),

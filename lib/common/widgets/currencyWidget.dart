@@ -39,11 +39,17 @@ class CurrencyWidget extends StatelessWidget {
                     }).toList(),
                   ),
                 ),
-                Text('Daily Exchange Rate',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14
-                  ),
+                Row(
+                  children: [
+                    Icon(Icons.currency_lira_outlined, size: 18,),
+                    SizedBox(width: 7),
+                    Text('Daily Exchange Rate',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(),
               ],

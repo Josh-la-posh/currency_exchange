@@ -8,36 +8,23 @@ import '../apis/api.dart';
 import '../screens/email_verify/email_verify.dart';
 
 class RegistrationFormController extends GetxController {
-  UserSessionController userSessionController = Get.find();
+final UserSessionController userSessionController = Get.find();
   var isCreatingAccount = false.obs;
   var rememberMe = false.obs;
   var obscurePassword = true.obs;
   var obscureConPassword = true.obs;
   var acceptTerms = false.obs;
-
-  final TextEditingController firstName = TextEditingController();
-  final TextEditingController lastName = TextEditingController();
-  final TextEditingController email = TextEditingController();
-  final TextEditingController phoneNo = TextEditingController();
-  final TextEditingController password = TextEditingController();
-  final TextEditingController confirmPass = TextEditingController();
+  var firstName = ''.obs;
+  var lastName = ''.obs;
+  var email = ''.obs;
+  var phoneNo = ''.obs;
+  var password = ''.obs;
+  var confirmPass = ''.obs;
 
   @override
   void onInit() {
-    userSessionController.clearRememberMeHandler();
     clearData();
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    email.dispose();
-    password.dispose();
-    firstName.dispose();
-    lastName.dispose();
-    phoneNo.dispose();
-    confirmPass.dispose();
-    super.onClose();
   }
 
   // Toggle password visibility
@@ -64,25 +51,30 @@ class RegistrationFormController extends GetxController {
   Future<void> submitSignUpForm({required GlobalKey<FormState> formKey}) async {
     if (validateForm(formKey)) {
       saveForm(formKey);
-      try {
-        isCreatingAccount(true);
-        final response = await AuthService.instance.createAccount({
-          'firstName': firstName.text.toString(),
-          'lastName': lastName.text.toString(),
-          'email': email.text.toString(),
-          'phoneNumber': phoneNo.text.toString(),
-          'password': password.text.toString(),
-        });
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          Get.to(() => EmailVerificationScreen(
-            email: email.text.toString(),
-            password: password.text.toString(),
-          ));
+      if (phoneNo.value.length > 7) {
+        try {
+          isCreatingAccount(true);
+          userSessionController.clearRememberMeHandler();
+          final response = await AuthService.instance.createAccount({
+            'firstName': firstName.value.trim().toString(),
+            'lastName': lastName.value.trim().toString(),
+            'email': email.value.trim().toString(),
+            'phoneNumber': phoneNo.value.trim().toString(),
+            'password': password.value.trim().toString(),
+          });
+          if (response.statusCode == 200 || response.statusCode == 201) {
+            Get.to(() => EmailVerificationScreen(
+              email: email.value.trim().toString(),
+              password: password.value.trim().toString(),
+            ));
+          }
+        } catch (e) {
+          showErrorAlertHelper(errorMessage: handleApiFormatError(e));
+        } finally {
+          isCreatingAccount(false);
         }
-      } catch (e) {
-        showErrorAlertHelper(errorMessage: handleApiFormatError(e));
-      } finally {
-        isCreatingAccount(false);
+      } else {
+        Get.snackbar("Error", "Please fill in the phone number field correctly", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
       }
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.redAccent);
@@ -90,11 +82,11 @@ class RegistrationFormController extends GetxController {
   }
 
   void clearData() {
-    email.clear();
-    password.clear();
-    firstName.clear();
-    lastName.clear();
-    phoneNo.clear();
-    confirmPass.clear();
+    firstName.value = '';
+    lastName.value = '';
+    email.value = '';
+    phoneNo.value = '';
+    password.value = '';
+    confirmPass.value = '';
   }
 }

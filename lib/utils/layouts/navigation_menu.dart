@@ -12,7 +12,7 @@ import '../helpers/helper_functions.dart';
 class NavigationMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    NavigationController controller = Get.put(NavigationController(), permanent: true);
+    final NavigationController controller = Get.put(NavigationController(), permanent: true);
     return Scaffold(
       bottomNavigationBar: CustomBottomNavigationBar(),
       body: Obx(() => IndexedStack(
@@ -25,8 +25,8 @@ class NavigationMenu extends StatelessWidget {
 
 class NavigationController extends GetxController {
   final Rx<int> selectedIndex = 0.obs;
-  OfferController offerController = Get.put(OfferController());
-  WalletController walletController = Get.put(WalletController());
+  final OfferController offerController = Get.put(OfferController());
+  final WalletController walletController = Get.put(WalletController());
 
   final List<Widget> screens = [
     HomeScreen(),
@@ -40,7 +40,7 @@ class NavigationController extends GetxController {
 }
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  NavigationController controller = Get.find<NavigationController>();
+  final NavigationController controller = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {

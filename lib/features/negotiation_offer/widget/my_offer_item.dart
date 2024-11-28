@@ -20,7 +20,7 @@ class MyOfferItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NegotiationOfferController controller = Get.find();
+    final NegotiationOfferController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Container(
       height: TSizes.textReviewHeight * 1.2,

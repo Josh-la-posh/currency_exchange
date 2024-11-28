@@ -15,8 +15,8 @@ class CreateOfferForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CreateOfferController createOfferController = Get.find();
-    HelperFunctionsController helperFunctionsController = Get.find();
+    final CreateOfferController createOfferController = Get.find();
+    final HelperFunctionsController helperFunctionsController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Obx(() => Form(
         key: createOfferController.formKey,

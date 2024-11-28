@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/features/verification/screens/verify_page.dart';
-import '../../features/authentication/controllers/auth_controller.dart';
+import '../../data/modules/storage_session_controller.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/sizes.dart';
 import '../../utils/helpers/helper_functions.dart';
@@ -11,7 +11,7 @@ class VerifyYourAccountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController authController = Get.find<AuthController>();
+    final UserSessionController userSessionController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Stack(
       children: [
@@ -85,7 +85,7 @@ class VerifyYourAccountWidget extends StatelessWidget {
             top: 0,
             right: 0,
             child: IconButton(
-                onPressed: () => authController.isVerifiedDisplay.value = !authController.isVerifiedDisplay.value,
+                onPressed: () => userSessionController.isVerifiedDisplay.value = !userSessionController.isVerifiedDisplay.value,
                 icon: const Icon(
                   Icons.cancel_rounded,
                   color: TColors.primary,

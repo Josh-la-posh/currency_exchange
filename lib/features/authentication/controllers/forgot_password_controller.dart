@@ -12,19 +12,12 @@ class ForgotPasswordFormController extends GetxController {
   var obscureOldPassword = true.obs;
   var obscurePassword = true.obs;
   var obscureConPassword = true.obs;
-
-  final TextEditingController email = TextEditingController();
+  var email = ''.obs;
 
   @override
   void onInit() {
-    email.clear();
+    email.value = '';
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    email.dispose();
-    super.onClose();
   }
 
   // Validate the form
@@ -43,9 +36,9 @@ class ForgotPasswordFormController extends GetxController {
       saveForm(formKey);
       try {
         isForgotPasswordFormSubmitting(true);
-        final response = await AuthService.instance.sendEmailOtpCode({"email": email.text.toLowerCase().trim()});
+        final response = await AuthService.instance.sendEmailOtpCode({"email": email.value.toLowerCase().trim()});
         if (response.statusCode == 200 || response.statusCode == 201) {
-          Get.to(() => ResetPasswordOtpScreen(email: email.text));
+          Get.to(() => ResetPasswordOtpScreen(email: email.value));
         }
       } catch (e) {
         showErrorAlertHelper(errorMessage: handleApiFormatError(e));
@@ -55,9 +48,5 @@ class ForgotPasswordFormController extends GetxController {
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM);
     }
-  }
-
-  void clearData() {
-    email.clear();
   }
 }

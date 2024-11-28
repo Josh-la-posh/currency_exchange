@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:pouch/features/payment_method/controller/payment_controller.dart';
 import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/features/profile/screens/bank_account/add_bank_account.dart';
@@ -12,11 +13,14 @@ import 'package:pouch/utils/validators/validation.dart';
 import '../../../data/modules/interceptor.dart';
 import '../../../utils/layouts/list_layout.dart';
 import '../../all_offer/decimal_formatter.dart';
+import '../../wallet/controller/bank_controller.dart';
 import '../widgets/account_widget.dart';
 import '../widgets/withdrawal_sheet.dart';
 
 class WithdrawalScreen extends StatelessWidget {
-  WalletController walletController = Get.find();
+  final WalletController walletController = Get.find();
+  final PaymentController paymentController = Get.put(PaymentController());
+  final BankController bankController = Get.put(BankController());
   final AppInterceptor appInterceptor = AppInterceptor();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -32,13 +36,13 @@ class WithdrawalScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (walletController.bankAccounts.isEmpty) {
-      walletController.fetchLocalBank();
+    if (bankController.bankAccounts.isEmpty) {
+      bankController.fetchLocalBank();
     }
-    walletController.amount.value = '';
+    paymentController.amount.value = '';
     final bool darkMode = THelperFunctions.isDarkMode(context);
-    walletController.selectedWithdrawalAccount.value = GetBankAccountModel();
-    final banks = walletController.bankAccounts;
+    paymentController.selectedWithdrawalAccount.value = GetBankAccountModel();
+    final banks = bankController.bankAccounts;
     return Scaffold(
       appBar: _buildAppBar(darkMode),
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
@@ -65,12 +69,12 @@ class WithdrawalScreen extends StatelessWidget {
             ),
             SizedBox(height: 10),
             Obx(() => TElevatedButton(
-              onTap: walletController.selectedWithdrawalAccount.value.accountNumber == null
+              onTap: paymentController.selectedWithdrawalAccount.value.accountNumber == null
                   ? null
                   : () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  _showWithdrawalConfirmSheet(context, walletController.amount.value);
+                  _showWithdrawalConfirmSheet(context, paymentController.amount.value);
                 }
               },
               buttonText: 'Continue',
@@ -87,9 +91,9 @@ class WithdrawalScreen extends StatelessWidget {
       shadowColor: Colors.transparent,
       leading: BackButton(
         onPressed: () {
-          walletController.selectedWithdrawalAccount.value = GetBankAccountModel();
+          paymentController.selectedWithdrawalAccount.value = GetBankAccountModel();
           appInterceptor.cancelOngoingRequest(() {
-            walletController.resetBoolOnOutgoingRequest();
+            paymentController.resetBoolOnOutgoingRequest();
           });
           Get.back();
         },
@@ -153,7 +157,7 @@ class WithdrawalScreen extends StatelessWidget {
       child: TextFormField(
         validator: (val) {
           return TValidator.withdrawalValidator(
-            walletController.amount.value,
+            paymentController.amount.value,
             double.parse(walletController.defaultWallet.value.balance.toString()),
           );
         },
@@ -178,7 +182,7 @@ class WithdrawalScreen extends StatelessWidget {
           fontSize: 24,
         ),
         onChanged: (val) {
-          walletController.setAmount(val);
+          paymentController.setAmount(val);
           _formKey.currentState?.validate();
         },
       ),
@@ -271,10 +275,10 @@ class WithdrawalScreen extends StatelessWidget {
 
   Widget _buildBankList(List banks, bool darkMode) {
     return Obx(() {
-      if (walletController.isLocalBankLoading.value) {
+      if (bankController.isLocalBankLoading.value) {
         return Center(child: CircularProgressIndicator(),);
       } else {
-        if (walletController.bankAccounts.isEmpty) {
+        if (bankController.bankAccounts.isEmpty) {
           return Center(
             child: Text('No bank account saved.'),
           );

@@ -12,7 +12,7 @@ class NegotiationList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NegotiationOfferController controller = Get.find();
+    final NegotiationOfferController controller = Get.find();
     final negotiations = controller.negotiatedOffers;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

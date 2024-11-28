@@ -13,7 +13,7 @@ class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    UserSessionController userSessionController = Get.find();
+  final UserSessionController userSessionController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return SizedBox(
       width: double.infinity,

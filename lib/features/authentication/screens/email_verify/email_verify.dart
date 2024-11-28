@@ -17,8 +17,8 @@ class EmailVerificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserSessionController userSessionController = Get.find();
-    EmailVerificationController controller = Get.put(EmailVerificationController(
+    print('The email is : $email');
+    final EmailVerificationController controller = Get.put(EmailVerificationController(
       sendEmailOtpOnBuild: false,
       email: email,
       password: password,
@@ -26,10 +26,9 @@ class EmailVerificationScreen extends StatelessWidget {
     return AuthLayout(
         title: '', heading: 'Email Verification',
         onTap: () {
-          userSessionController.clearRememberMeHandler();
           Get.back();
         },
-        child: EmailVerificationForm()
+        child: EmailVerificationForm(email: email, password: password,)
     );
   }
 }

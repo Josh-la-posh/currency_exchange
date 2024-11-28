@@ -14,8 +14,8 @@ class WithdrawalSuccessScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
-    NavigationController controller = Get.find();
+  final WalletController walletController = Get.find();
+  final NavigationController controller = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? Colors.black : Colors.white,

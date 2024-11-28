@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/features/verification/controller/verification_controller.dart';
 import 'package:pouch/features/verification/screens/identity_verification_type.dart';
-import 'package:country_picker/country_picker.dart';
 
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
@@ -14,7 +12,7 @@ class CountrySelectionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    VerificationController verificationController = Get.find();
+    final VerificationController verificationController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,

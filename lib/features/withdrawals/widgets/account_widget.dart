@@ -4,7 +4,7 @@ import 'package:pouch/features/wallet/models/get_bank_account.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
-import '../../../features/wallet/controller/wallet_controller.dart';
+import '../../payment_method/controller/payment_controller.dart';
 
 class AccountWidget extends StatelessWidget {
   final bool darkMode;
@@ -19,7 +19,7 @@ class AccountWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
+  final PaymentController paymentController = Get.find();
     final width = MediaQuery.of(context).size.width;
 
     return Column(
@@ -106,10 +106,10 @@ class AccountWidget extends StatelessWidget {
                 ],
               ),
               Obx(() => Checkbox(
-                value: walletController.selectedWithdrawalAccount.value.id == item.id,
+                value: paymentController.selectedWithdrawalAccount.value.id == item.id,
                 onChanged: (val) {
                   if (val != null && val) {
-                    walletController.saveWithdrawalBank(item);
+                    paymentController.saveWithdrawalBank(item);
                   }
                 },
               )),

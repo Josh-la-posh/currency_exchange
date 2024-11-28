@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import 'package:pouch/features/wallet/models/get_bank_account.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/texts.dart';
 
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/sizes.dart';
+import '../../../wallet/controller/bank_controller.dart';
 
 class BankAccountItem extends StatelessWidget {
   final GetBankAccountModel item;
@@ -15,7 +15,7 @@ class BankAccountItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
+    final BankController bankController = Get.find();
     return Column(
       children: [
         SizedBox(
@@ -34,7 +34,7 @@ class BankAccountItem extends StatelessWidget {
                           child: ElevatedButton(
                               onPressed: () {
                                 Slidable.of(cont)!.close();
-                                walletController.deleteLocalBankAccount(id: item.id.toString());
+                                bankController.deleteLocalBankAccount(id: item.id.toString());
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(

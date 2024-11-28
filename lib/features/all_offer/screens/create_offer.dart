@@ -13,7 +13,7 @@ class CreateOfferScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CreateOfferController createOfferController = Get.put(CreateOfferController());
+    final CreateOfferController createOfferController = Get.put(CreateOfferController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,

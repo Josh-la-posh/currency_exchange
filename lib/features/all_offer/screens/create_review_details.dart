@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/controllers/create_offer_controller.dart';
-import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/features/home/icons/svg.dart';
@@ -10,15 +9,15 @@ import 'package:pouch/utils/constants/enums.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import '../../../data/modules/interceptor.dart';
 import '../../../utils/helpers/helper_functions.dart';
+import 'create_offer_success_screen.dart';
 
 class CreateReviewDetailsScreen extends StatelessWidget {
   final AppInterceptor appInterceptor = AppInterceptor();
 
   @override
   Widget build(BuildContext context) {
-    CreateOfferController createOfferController = Get.find();
-    OfferController offerController = Get.find();
-    HelperFunctionsController helperFunctionsController = Get.find();
+    final CreateOfferController createOfferController = Get.find();
+    final HelperFunctionsController helperFunctionsController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
@@ -28,7 +27,7 @@ class CreateReviewDetailsScreen extends StatelessWidget {
         leading: IconButton(
           onPressed: (){
             appInterceptor.cancelOngoingRequest(() {
-              offerController.resetBoolForOutgoingRequests();
+              createOfferController.isCreatingOfferLoading(false);
             });
             Get.back();
             },
@@ -381,20 +380,21 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
                         child: Obx(() => TElevatedButton(
-                            onTap: offerController.isCreatingOfferLoading.value ? null : (){
-                              offerController.creatingOffer(
+                            onTap: createOfferController.isCreatingOfferLoading.value ? null : (){
+                              createOfferController.creatingOffer(
                                   debitedCurrency: getCurrencyName(createOfferController.debitedCurrency.value),
                                   creditedCurrency: getCurrencyName(createOfferController.creditedCurrency.value),
                                   amount: createOfferController.amountController.text,
                                   rate: createOfferController.rateController.text,
                                   expireIn: createOfferController.expiryHour.value,
                                   onSuccess: () {
+                                    Get.to(() => CreateOfferSuccessPage(createOfferResponse: createOfferController.createOfferResponse.value,));
                                     createOfferController.clearForm();
                                     helperFunctionsController.multipliedString.value = '0';
                                   }
                               );
                             },
-                            buttonText: offerController.isCreatingOfferLoading.value ? 'Paying ...' : 'Pay ${helperFunctionsController.moneyFormatter(createOfferController.amountController.text.toString())} ${getCurrencyName(createOfferController.debitedCurrency.value)}')),
+                            buttonText: createOfferController.isCreatingOfferLoading.value ? 'Paying ...' : 'Pay ${helperFunctionsController.moneyFormatter(createOfferController.amountController.text.toString())} ${getCurrencyName(createOfferController.debitedCurrency.value)}')),
                       ),
                       const SizedBox(height: TSizes.spaceBtwElements),
                       Row(

@@ -4,10 +4,8 @@ import '../../../utils/otp/otp.dart';
 import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
-import 'auth_controller.dart';
 
 class ResetPasswordOtpFormController extends GetxController {
-  AuthController authController = Get.find();
   var otpCode = ''.obs;
   var password = ''.obs;
   var confirmPass = ''.obs;

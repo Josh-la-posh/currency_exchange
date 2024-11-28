@@ -13,7 +13,7 @@ class VerificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    VerificationController verificationController = Get.put(VerificationController());
+    final VerificationController verificationController = Get.put(VerificationController());
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
        backgroundColor: darkMode ? TColors.black.withOpacity(0.1) : TColors.secondaryBorder,

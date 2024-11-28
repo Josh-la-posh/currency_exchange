@@ -17,7 +17,7 @@ class SubscribeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SubscriptionController controller = Get.put(SubscriptionController());
+    final SubscriptionController controller = Get.put(SubscriptionController());
     final darkMode = THelperFunctions.isDarkMode(context);
 
     return Scaffold(

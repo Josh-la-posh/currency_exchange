@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/authentication/controllers/auth_controller.dart';
 import 'package:pouch/features/profile/screens/security/biometric_authentication.dart';
 import 'package:pouch/features/profile/screens/security/change_password.dart';
 import 'package:pouch/features/profile/widgets/profile/profile_link.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/constants/texts.dart';
+import '../../../../data/modules/storage_session_controller.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 
 class SecurityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Get.find();
+  final UserSessionController userSessionController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +52,7 @@ class SecurityScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'Last login time: ${THelperFunctions.getFormattedDate(authController.user.value.lastLogin.toString())} - ${THelperFunctions.getFormattedTime(authController.user.value.lastLogin.toString())}',
+                    'Last login time: ${THelperFunctions.getFormattedDate(userSessionController.user.value.lastLogin.toString())} - ${THelperFunctions.getFormattedTime(userSessionController.user.value.lastLogin.toString())}',
                     style: TextStyle(
                         fontSize: 11,
                         fontFamily: TTexts.fontFamily,
@@ -71,7 +71,7 @@ class SecurityScreen extends StatelessWidget {
                       ),
                       Icon(Icons.phone_android, size: 12,),
                       Text(
-                        authController.user.value.lastLoginDevice.toString(),
+                        userSessionController.user.value.lastLoginDevice.toString(),
                         style: TextStyle(
                             fontSize: 11,
                             fontFamily: TTexts.fontFamily,
@@ -95,16 +95,19 @@ class SecurityScreen extends StatelessWidget {
                   ProfileLinkWidget(
                     title: 'Change Password',
                     onPressed: () => Get.to(() => ChangePasswordScreen()),
+                    hasChildren: true,
                   ),
                   ProfileLinkWidget(
                     title: 'Email',
                     onPressed: () {},
-                    rightText: '${authController.user.value.email?.substring(0,3)}***@****',
+                    rightText: '${userSessionController.user.value.email?.substring(0,3)}***@****',
+                    hasChildren: false,
                   ),
                   ProfileLinkWidget(
                     title: 'Mobile',
                     onPressed: () {},
-                    rightText: '${authController.user.value.phoneNumber?.substring(0,7)}*****',
+                    rightText: '${userSessionController.user.value.phoneNumber?.substring(0,7)}*****',
+                    hasChildren: false,
                   ),
                 ],
               ),
@@ -124,6 +127,7 @@ class SecurityScreen extends StatelessWidget {
                   ProfileLinkWidget(
                     title: 'Biometric Authentication',
                     onPressed: () => Get.to(() => BiometricAuthenticationScreen()),
+                    hasChildren: true,
                   ),
                 ],
               ),

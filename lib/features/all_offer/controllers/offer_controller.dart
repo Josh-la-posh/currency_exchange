@@ -12,12 +12,6 @@ import '../screens/accept_offer_success_page.dart';
 import '../screens/offer_details.dart';
 
 class OfferController extends GetxController {
-  final helperFunctionsController = Get.put(HelperFunctionsController());
-  final isCreatingOfferLoading = false.obs;
-  final isAcceptingRejectingOfferLoading = false.obs;
-  final isSwappingLoading = false.obs;
-  final isNegotiatingOfferLoading = false.obs;
-  final isOfferLoading = false.obs;
   final isAllOffersLoading = false.obs;
   final isUsdOffersLoading = false.obs;
   final isEurOffersLoading = false.obs;
@@ -36,20 +30,12 @@ class OfferController extends GetxController {
   final isCadTrendingOffersLoading = false.obs;
   final isGbpTrendingOffersLoading = false.obs;
   final isNgnTrendingOffersLoading = false.obs;
-  final showAcceptOfferMsg = false.obs;
-  final showRejectOfferMsg = false.obs;
-  final isOfferDeleting = false.obs;
-  var showErrorText = false.obs;
-  var isFetchOfferByIdLoading = false.obs;
   var allOfferIndex = 0.obs;
   var usdOfferIndex = 0.obs;
   var ngnOfferIndex = 0.obs;
   var gbpOfferIndex = 0.obs;
   var cadOfferIndex = 0.obs;
   var eurOfferIndex = 0.obs;
-  final createOfferResponse = CreateOfferResponse().obs;
-  final offerDetailsEntity = OfferDetailsEntity().obs;
-  final offerById = OfferEntity().obs;
   final allOffers = <OfferEntity>[].obs;
   final allUsdOffers = <OfferEntity>[].obs;
   final allNgnOffers = <OfferEntity>[].obs;
@@ -75,136 +61,37 @@ class OfferController extends GetxController {
     super.onInit();
   }
 
-  void showErrorMessage() {
-    showErrorText.value = true;
-    Timer(Duration(seconds: 3), () {
-      showErrorText.value = false;
-    });
+  @override
+  void onClose() {
+    allOffers.clear();
+    allUsdOffers.clear();
+    allNgnOffers.clear();
+    allCadOffers.clear();
+    allEurOffers.clear();
+    allGbpOffers.clear();
+    newOffers.clear();
+    newUsdOffers.clear();
+    newNgnOffers.clear();
+    newCadOffers.clear();
+    newEurOffers.clear();
+    newGbpOffers.clear();
+    trendingOffers.clear();
+    trendingUsdOffers.clear();
+    trendingNgnOffers.clear();
+    trendingCadOffers.clear();
+    trendingEurOffers.clear();
+    trendingGbpOffers.clear();
+    allOfferIndex.value = 0;
+    usdOfferIndex.value = 0;
+    ngnOfferIndex.value = 0;
+    gbpOfferIndex.value = 0;
+    cadOfferIndex.value = 0;
+    eurOfferIndex.value = 0;
+    super.onClose();
   }
 
   Future<void> refreshHomePage() async {
     await fetchAllOffers();
-  }
-
-  Future<void> creatingOffer({
-    required String debitedCurrency,
-    required String creditedCurrency,
-    required String amount,
-    required String rate,
-    String? expireIn,
-    required onSuccess
-  }) async {
-    try {
-      isCreatingOfferLoading(true);
-      final queryParameters = <String, dynamic>{};
-      queryParameters['debitedCurrency'] = debitedCurrency;
-      queryParameters['creditedCurrency'] = creditedCurrency;
-      queryParameters['amount'] = amount;
-      queryParameters['rate'] = rate;
-      queryParameters['expireIn'] = expireIn != 'Never' ? int.parse(expireIn.toString()) : 0;
-
-      final response = await OfferService.instance.creatingOffer(queryParameters);
-     if (response.statusCode == 200 || response.statusCode == 201) {
-       var item = response.data;
-       createOfferResponse(CreateOfferResponse(
-           id: item['id'],
-           debitedCurrency: item['debitedCurrency'],
-           creditedCurrency: item['creditedCurrency'],
-           amount: item['amount'],
-           rate: item['rate'],
-           expireIn: item['expireIn'],
-           views: item['views'],
-           negotiatorRate: item['negotiatorRate'],
-           negotiatorAmount: item['negotiatorAmount'],
-           negotiationAccepted: item['negotiationAccepted'],
-           negotiatorId: item['negotiatorId'],
-           isActive: item['isActive'],
-           status: item['status'],
-           createdDate: item['createdDate'],
-           lastModifiedDate: item['lastModifiedDate'],
-           expireCountDown: item['expireCountDown']
-       ));
-       await onSuccess();
-       Get.offAndToNamed('/create-success-screen');
-     }
-    } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
-    } finally {
-      isCreatingOfferLoading(false);
-    }
-  }
-
-  Future<void> acceptingOrRejectingOffer({
-    required String id,
-    required String currency,
-    required bool negotiationAccepted,
-    required VoidCallback onSuccess
-  }) async {
-    try {
-      isAcceptingRejectingOfferLoading(true);
-      final response = await OfferService.instance.acceptingOrRejectingOffer(
-          id: id,
-          data: {'negotiationAccepted': negotiationAccepted}
-      );
-      var item = response.data;
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-      }
-    } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
-    } finally {
-      isAcceptingRejectingOfferLoading(false);
-    }
-  }
-
-  Future<void> negotiatingOffer({
-    required String id,
-    required String currency,
-    required String negotiatorRate,
-    required String negotiatorAmount,
-    required VoidCallback onSuccess,
-  }) async {
-    try {
-      isNegotiatingOfferLoading(true);
-      final response = await OfferService.instance.negotiatingOffer(
-          id: id,
-          data: {
-            'negotiatorRate': negotiatorRate,
-            'negotiatorAmount': negotiatorAmount
-          }
-      );
-      var item = response.data;
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-      }
-
-    } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
-    } finally {
-      isNegotiatingOfferLoading(false);
-    }
-  }
-
-  Future<void> swappingOffer({
-    required String id,
-    required String amount,
-    required String creditedCurrency
-  }) async {
-    try {
-      isSwappingLoading(true);
-      final response = await OfferService.instance.swappingOffer(id: id);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        await fetchAllOffers();
-        Get.to(() => AcceptOfferSuccessPage(
-          amount: amount,
-          creditedCurrency: creditedCurrency,
-        ));
-      }
-    } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
-    } finally {
-      isSwappingLoading(false);
-    }
   }
 
   Future<void> fetchAllOffers() async {
@@ -559,51 +446,7 @@ class OfferController extends GetxController {
     }
   }
 
-  Future<void> fetchOfferById({
-    required String id,
-    required String currency,
-    required VoidCallback onSuccess
-  }) async {
-    try {
-      isFetchOfferByIdLoading(true);
-      Get.to(() => OfferDetailsScreen());
-      print(('I want to load offer'));
-      final response = await OfferService.instance.fetchOfferById(id);
-      print(response);
-      var item = response.data;
-      offerById(OfferEntity(
-          id: item['id'],
-          debitedCurrency: item['debitedCurrency'],
-          creditedCurrency: item['creditedCurrency'],
-          amount: item['amount'],
-          rate: item['rate'],
-          expireIn: item['expireIn'],
-          expireCountDown: item['expireCountDown'],
-          views: item['views'],
-          negotiatorRate: item['negotiatorRate'],
-          negotiatorAmount: item['negotiatorAmount'],
-          negotiationAccepted: item['negotiationAccepted'],
-          negotiatorId: item['negotiatorId'],
-          isActive: item['isActive'],
-          status: item['status'],
-          createdDate: item['createdDate'],
-          lastModifiedDate: item['lastModifiedDate']
-      ));
-      await fetchAllOffers();
-      onSuccess();
-    } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
-    } finally {
-      isFetchOfferByIdLoading(false);
-    }
-  }
-
   void resetBoolForOutgoingRequests() {
-    isCreatingOfferLoading.value = false;
-    isAcceptingRejectingOfferLoading.value = false;
-    isSwappingLoading.value = false;
-    isNegotiatingOfferLoading.value = false;
-    isOfferLoading.value = false;
     isAllOffersLoading.value = false;
     isUsdOffersLoading.value = false;
     isEurOffersLoading.value = false;
@@ -622,17 +465,9 @@ class OfferController extends GetxController {
     isCadTrendingOffersLoading.value = false;
     isGbpTrendingOffersLoading.value = false;
     isNgnTrendingOffersLoading.value = false;
-    showAcceptOfferMsg.value = false;
-    showRejectOfferMsg.value = false;
-    isOfferDeleting.value = false;
-    showErrorText.value = false;
-    isFetchOfferByIdLoading.value = false;
   }
 
   void clearData() {
-    createOfferResponse.value = CreateOfferResponse();
-    offerDetailsEntity.value = OfferDetailsEntity();
-    offerById.value = OfferEntity();
     allOffers.clear();
     allUsdOffers.clear();
     allNgnOffers.clear();

@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import 'package:pouch/utils/constants/image_strings.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
+import '../../../data/modules/storage_session_controller.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 import '../../wallet/controller/wallet_controller.dart';
+import '../controller/payment_controller.dart';
 
 class PaystackPaymentScreen extends StatelessWidget {
   String? amount;
@@ -14,11 +16,13 @@ class PaystackPaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WalletController walletController = Get.find();
-    NavigationController controller = Get.find();
+    final WalletController walletController = Get.find();
+    final UserSessionController userSessionController = Get.find();
+    final NavigationController controller = Get.find();
+    final PaymentController paymentController = Get.put(PaymentController());
     final darkMode = THelperFunctions.isDarkMode(context);
 
-    final item = walletController.paystackDetails.value;
+    final item = paymentController.paystackDetails.value;
 
     return Scaffold(
       backgroundColor: darkMode ? TColors.black : const Color(0xFFE9D9FF).withOpacity(0.9),
@@ -48,7 +52,7 @@ class PaystackPaymentScreen extends StatelessWidget {
                               ),
                               children: <TextSpan> [
                                 TextSpan(
-                                    text: '${walletController.authController.user.value.email}',
+                                    text: '${userSessionController.user.value.email}',
                                 )
                               ]
                           )

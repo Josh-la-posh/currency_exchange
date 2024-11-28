@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
@@ -7,25 +8,24 @@ import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/validators/validation.dart';
 
 class AddAddressDetail extends StatelessWidget {
-  AddressFormController controller = Get.put(AddressFormController());
+  final AddressFormController controller = Get.put(AddressFormController());
   final formKey = GlobalKey<FormState>();
 
   AddAddressDetail({
     Key? key,
     required String email,
     required String password,
-    required bool rememberMe,
   }) : super(key: key) {
-    controller.email.text = email;
-    controller.password.text = password;
+    controller.email.value = email;
+    controller.password.value = password;
   }
 
   Widget _buildTextField({
     required String label,
-    required TextEditingController controller,
     required TextInputType keyboardType,
-    required Function(String) onSaved,
-    required String? Function(String?) validator,
+    TextEditingController? controller,
+    required Function(String) onChanged,
+    required String? Function(String?)? validator,
     Widget? suffix,
     bool isReadOnly = false,
   }) {
@@ -38,8 +38,9 @@ class AddAddressDetail extends StatelessWidget {
           child: TextFormField(
             controller: controller,
             keyboardType: keyboardType,
+            textDirection: TextDirection.ltr,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            onChanged: onSaved,
+            onChanged: onChanged,
             validator: validator,
             decoration: InputDecoration(suffixIcon: suffix),
             readOnly: isReadOnly,
@@ -82,27 +83,16 @@ class AddAddressDetail extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 DropdownButtonFormField<String>(
-                  // validator: TValidator.bankValidator,
                   decoration: InputDecoration(
                     fillColor: Get.isDarkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
                   ),
                   autofocus: false,
                   isExpanded: true,
                   value: controller.selectedRegion.value,
-                  icon: RotatedBox(
-                    quarterTurns: 3,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 14.8),
-                      child: Icon(
-                        Icons.arrow_back_ios_rounded,
-                        size: 15,
-                        color: Get.isDarkMode ? TColors.white : TColors.textPrimary.withOpacity(0.8),
-                      ),
-                    ),
-                  ),
+                  icon: Icon(Icons.arrow_drop_down, size: 20, color: TColors.textPrimary),
                   onChanged: (val) {
                     controller.updateSelectedRegion(val!);
-                    if (controller.selectedRegion.value == 'Nigeria' || controller.selectedRegion.value == 'Others') {
+                    if (controller.selectedRegion.value == 'Africa' || controller.selectedRegion.value == 'Others') {
                       controller.isAddressEdited.value = true;
                     } else {
                       controller.isAddressEdited.value = false;
@@ -128,23 +118,29 @@ class AddAddressDetail extends StatelessWidget {
                 const SizedBox(height: 20),
                 _buildTextField(
                   label: 'Number & Street name',
-                  controller: controller.address,
                   keyboardType: TextInputType.text,
-                  onSaved: (val) => controller.address.text = val,
+                  controller: controller.address,
+                  onChanged: (val) => controller.address.text = val,
                   validator: TValidator.emptyFieldValidator,
+                  suffix: IconButton(
+                    onPressed: () => controller.address.clear(),
+                    icon: Icon(Icons.clear, color: TColors.primary, size: 15),
+                  ),
                   isReadOnly: false,
                 ),
                 const SizedBox(height: 20),
-                Obx(() => _buildTextField(
-                  label: controller.selectedRegion.value == 'Nigeria' || controller.selectedRegion.value == 'Others'
-                      ? 'Zip or Postal Code (optional)' : 'Zip or Postal Code',
-                  controller: controller.postCode,
+                Obx(() => controller.selectedRegion.value == 'Africa' || controller.selectedRegion.value == 'Others'
+                    ? _buildTextField(
+                  label: 'Zip or Postal Code (optional)',
                   keyboardType: TextInputType.text,
-                  onSaved: (val) {
-                    controller.postCode.text = val;
-                    if (val.length > 1) {
-                      controller.fetchAddress(controller.postCode.text);
-                    }
+                  onChanged: (val) => controller.postCode.value = val,
+                  validator: null,
+                )
+                    : _buildTextField(
+                  label: 'Zip or Postal Code',
+                  keyboardType: TextInputType.text,
+                  onChanged: (val) {
+                    controller.postCode.value = val;
                   },
                   validator: TValidator.emptyFieldValidator,
                   suffix: Container(
@@ -159,40 +155,150 @@ class AddAddressDetail extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(Icons.search),
                       onPressed: () {
-                        if (controller.postCode.text.isNotEmpty) {
-                          controller.fetchAddress(controller.postCode.text);
+                        if (controller.postCode.value.isNotEmpty) {
+                          controller.fetchAddress(controller.postCode.value);
                         }
                       },
                     ),
                   ),
                 )),
                 const SizedBox(height: 20),
-                Obx(() => _buildTextField(
+                Obx(() => controller.selectedRegion.value == 'Africa' || controller.selectedRegion.value == 'Others'
+                    ? _buildTextField(
                   label: 'Town or City',
-                  controller: controller.city,
                   keyboardType: TextInputType.text,
-                  onSaved: (val) => controller.city.text = val,
+                  onChanged: (val) => controller.city.value = val,
                   validator: TValidator.emptyFieldValidator,
-                  isReadOnly: controller.isAddressEdited.isTrue ? false : true,
-                )),
+                  isReadOnly: false,
+                )
+                    : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Town or City', style: Get.textTheme.labelMedium),
+                        SizedBox(height: 5),
+                        Container(
+                        height: 48,
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                        decoration: BoxDecoration(
+                          color: TColors.textFieldBackground,
+                          borderRadius: BorderRadius.circular(TSizes.buttonRadius),
+                          border: Border.all(
+                              width: 1,
+                              color: controller.cityIsEmpty.isTrue ? TColors.danger :  TColors.secondaryBorder30
+                          ),
+                        ),
+                        child: Text(controller.city.value,
+                        style: Get.theme.textTheme.bodyLarge?.copyWith(color: TColors.textPrimary),),
+                      ),
+                      ],
+                    )
+                ),
                 const SizedBox(height: 20),
-                Obx(() => _buildTextField(
+                Obx(() => controller.selectedRegion.value == 'Africa' || controller.selectedRegion.value == 'Others'
+                    ? _buildTextField(
                   label: 'State or Province',
-                  controller: controller.state,
                   keyboardType: TextInputType.text,
-                  onSaved: (val) => controller.state.text = val,
+                  onChanged: (val) => controller.state.value = val,
                   validator: TValidator.emptyFieldValidator,
-                  isReadOnly: controller.isAddressEdited.isTrue ? false : true,
-                )),
+                  isReadOnly: false,
+                )
+                    : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('State or Province', style: Get.textTheme.labelMedium),
+                    SizedBox(height: 5),
+                    Container(
+                      height: 48,
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: TColors.textFieldBackground,
+                        borderRadius: BorderRadius.circular(TSizes.buttonRadius),
+                        border: Border.all(
+                            width: 1,
+                            color: controller.cityIsEmpty.isTrue ? TColors.danger : TColors.secondaryBorder30
+                        ),
+                      ),
+                      child: Text(controller.state.value,
+                        style: Get.theme.textTheme.bodyLarge?.copyWith(color: TColors.textPrimary),),
+                    ),
+                  ],
+                )
+                ),
                 const SizedBox(height: 20),
-                Obx(() => _buildTextField(
-                  label: 'Country',
-                  controller: controller.country,
-                  keyboardType: TextInputType.text,
-                  onSaved: (val) => controller.country.text = val,
-                  validator: TValidator.emptyFieldValidator,
-                  isReadOnly: controller.isAddressEdited.isTrue ? false : true,
-                )),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Country', style: Get.textTheme.labelLarge),
+                    SizedBox(height: 5),
+                    Obx(() => controller.selectedRegion.value == 'Africa' || controller.selectedRegion.value == 'Others'
+
+                        ? SizedBox(
+                      height: 48,
+                      width: double.infinity,
+                      child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              backgroundColor: TColors.textFieldBackground,
+                              side: BorderSide(
+                                  width: 1,
+                                  color: controller.cityIsEmpty.isTrue ? TColors.danger : TColors.secondaryBorder30
+                              )
+                          ),
+                          onPressed: (){
+                            controller.isCountrySelected.value = false;
+                            showCountryPicker(
+                                context: context,
+                                favorite: <String>['NG'],
+                                countryListTheme: CountryListThemeData(
+                                    flagSize: 18,
+                                    backgroundColor: Get.isDarkMode ? Colors.black : Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20)
+                                    ),
+                                    inputDecoration: InputDecoration(
+                                      labelText: 'Search Country...',
+                                      hintText: 'Start typing to search',
+                                      prefixIcon: const Icon(Icons.search),
+                                    )
+                                ),
+                                onSelect: (Country country) {
+                                  controller.country.value = country.name;
+                                  controller.isCountrySelected.value = true;
+                                }
+                            );
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Obx(() => Text(
+                                controller.isCountrySelected.isFalse ? 'Select Country' : controller.country.value,
+                                style: Get.theme.textTheme.bodyLarge?.copyWith(color: TColors.textPrimary),
+                              ),
+                              ),
+                            ],
+                          )
+                      ),
+                    )
+                        : Container(
+                          height: 48,
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                          decoration: BoxDecoration(
+                            color: TColors.textFieldBackground,
+                            borderRadius: BorderRadius.circular(TSizes.buttonRadius),
+                            border: Border.all(
+                                width: 1,
+                                color: controller.cityIsEmpty.isTrue ? TColors.danger : TColors.secondaryBorder30
+                            ),
+                          ),
+                          child: Text(controller.country.value,
+                            style: Get.theme.textTheme.bodyLarge?.copyWith(color: TColors.textPrimary),),
+                        )
+                    ),
+                  ],
+                ),
                 const SizedBox(height: TSizes.defaultSpace * 3),
                 Obx(() {
                   if (controller.isUpdatingAddress.value) {

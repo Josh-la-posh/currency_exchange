@@ -10,7 +10,7 @@ import 'eur_new_market_list.dart';
 import 'eur_trending_market_list.dart';
 
 class EurMarketScreen extends StatelessWidget {
-  OfferController offerController = Get.find();
+final OfferController offerController = Get.find();
 
   Widget _buildTab({
     required String title,

@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:pouch/data/firebase/firebase_api.dart';
+import 'package:leak_tracker/leak_tracker.dart';
+import 'package:pouch/data/modules/inactivity_service.dart';
 import 'package:pouch/data/modules/storage_session_controller.dart';
 import 'package:pouch/utils/local_storage/local_storage.dart';
 import 'package:pouch/utils/socket/my_http_override.dart';
 import 'app.dart';
 import 'firebase_options.dart';
-import 'features/authentication/controllers/auth_controller.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -34,6 +34,14 @@ Future<void> initializeLocalNotifications() async {
 }
 
 Future<void> main() async {
+  LeakTracking.start(
+    config: LeakTrackingConfig(
+      checkPeriod: const Duration(seconds: 10),
+      onLeaks: (leaks) {
+        print('Detected leaks: ${leaks}');
+      }
+    )
+  );
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverride();
   await LocalStorage.instance.initialize();
@@ -43,11 +51,11 @@ Future<void> main() async {
   } catch (e) {
     print('Firebase initialization error: $e');
   }
-  initializeLocalNotifications();
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  Get.put(AuthController(), permanent: true);
+  // initializeLocalNotifications();
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   Get.put(UserSessionController(), permanent: true);
-  await FirebaseApi().initNotifications();
+  await Get.putAsync(() async => InactivityService());
+  // await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 

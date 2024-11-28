@@ -12,7 +12,7 @@ class VerificationProcess extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    VerificationController verificationController = Get.find();
+    final VerificationController verificationController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
       backgroundColor: darkMode ? TColors.black.withOpacity(0.8) : TColors.secondaryBorder,

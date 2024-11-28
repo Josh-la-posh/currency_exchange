@@ -12,7 +12,7 @@ class EurMarketList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OfferController offerController = Get.find();
+  final OfferController offerController = Get.find();
     if (offerController.allEurOffers.isEmpty) {
       offerController.fetchAllEurOffers();
     }

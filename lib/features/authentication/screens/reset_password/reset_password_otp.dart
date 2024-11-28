@@ -15,7 +15,7 @@ class ResetPasswordOtpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ResetPasswordOtpFormController controller = Get.put(ResetPasswordOtpFormController(
+    final ResetPasswordOtpFormController controller = Get.put(ResetPasswordOtpFormController(
       sendEmailOtpOnBuild: false,
       email: email,
     ));

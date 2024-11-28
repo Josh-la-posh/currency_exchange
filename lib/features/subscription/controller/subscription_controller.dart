@@ -23,6 +23,16 @@ class SubscriptionController extends GetxController {
     }
   }
 
+  @override
+  void onClose() {
+    subscriptions.clear();
+    debitedCurrency.value = Currency.USD;
+    creditedCurrency.value = Currency.NGN;
+    minRate.value = '';
+    maxRate.value = '';
+    super.onClose();
+  }
+
   void setDebitedCurrency(Currency currency) {
     debitedCurrency.value = currency;
   }

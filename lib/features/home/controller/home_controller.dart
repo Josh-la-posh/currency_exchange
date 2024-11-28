@@ -5,24 +5,17 @@ import '../../../data/firebase/firebase_api.dart';
 import '../../../utils/helpers/controller/helper_function_controller.dart';
 import '../../../utils/socket/socket_helper.dart';
 import '../../all_offer/controllers/offer_controller.dart';
-import '../../authentication/controllers/auth_controller.dart';
 import '../../notification/controller/notification_controller.dart';
 import '../../wallet/controller/wallet_controller.dart';
 
 class HomeController extends GetxController {
-  AuthController authController = Get.find();
-  UserSessionController userSessionController = Get.find();
-  WalletController walletController = Get.find();
-  NegotiationOfferController negotiationOfferController = Get.put(NegotiationOfferController());
-  OfferController offerController = Get.find();
-  NotificationController notificationController = Get.put(NotificationController());
-  final helperFunctionsController = Get.find<HelperFunctionsController>();
+  final UserSessionController userSessionController = Get.find();
   final Rx<int> selectedIndex = 0.obs;
 
   @override
   void onReady() {
     super.onReady();
-    authController.getIsVerified();
+    userSessionController.getIsVerified();
   }
 
   @override
