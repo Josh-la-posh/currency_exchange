@@ -42,13 +42,6 @@ class AppInterceptor extends Interceptor {
     if (!hasInternet) {
       print('No internet connection.');
       showErrorAlertHelper(errorMessage: 'Check your internet connection and try again');
-      // handler.reject(
-      //   DioException(
-      //     requestOptions: requestOptions,
-      //     error: "No internet connection. Please try again later.",
-      //     type: DioExceptionType.connectionError,
-      //   ),
-      // );
       return;
     }
 
@@ -59,8 +52,8 @@ class AppInterceptor extends Interceptor {
     if (token != null) {
       requestOptions.headers['Accept'] = "application/json";
       requestOptions.headers['Authorization'] = 'Bearer $token';
-      requestOptions.headers['User-Agent'] = userAgent;
     }
+    requestOptions.headers['User-Agent'] = userAgent;
     return handler.next(requestOptions);
   }
 

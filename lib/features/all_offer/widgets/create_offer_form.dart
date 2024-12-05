@@ -18,7 +18,7 @@ class CreateOfferForm extends StatelessWidget {
     final CreateOfferController createOfferController = Get.find();
     final HelperFunctionsController helperFunctionsController = Get.find();
     final darkMode = THelperFunctions.isDarkMode(context);
-    return Obx(() => Form(
+    return Form(
         key: createOfferController.formKey,
         child: Column(
           children: [
@@ -37,7 +37,7 @@ class CreateOfferForm extends StatelessWidget {
                       helperFunctionsController.getStringMultiplication(createOfferController.amountController.text, createOfferController.rateController.text);
                     },
                     decoration: InputDecoration(
-                      suffixIcon: DropdownButton<Currency>(
+                      suffixIcon: Obx(() => DropdownButton<Currency>(
                         dropdownColor: darkMode ? Colors.black : TColors.white,
                         borderRadius: BorderRadius.circular(10),
                         focusColor: Colors.white,
@@ -75,7 +75,7 @@ class CreateOfferForm extends StatelessWidget {
                             ),
                           );
                         }).toList(),
-                      ),
+                      )),
                     ),
                   ),
                 ),
@@ -88,7 +88,7 @@ class CreateOfferForm extends StatelessWidget {
                 Text('I need', style: Theme.of(context).textTheme.labelMedium,),
                 TextFormField(
                   decoration: InputDecoration(
-                    suffixIcon: DropdownButton<Currency>(
+                    suffixIcon: Obx(() => DropdownButton<Currency>(
                       dropdownColor: darkMode ? Colors.black : TColors.white,
                       borderRadius: BorderRadius.circular(10),
                       focusColor: Colors.white,
@@ -126,7 +126,7 @@ class CreateOfferForm extends StatelessWidget {
                           ),
                         );
                       }).toList(),
-                    ),
+                    )),
                   ),
                 ),
               ],
@@ -154,8 +154,9 @@ class CreateOfferForm extends StatelessWidget {
                           if (createOfferController.amountController.text != '')
                             AppoxIcon(),
                           const SizedBox(width: TSizes.xl,),
-                          if (createOfferController.rateController.text != '')
-                            Text('${helperFunctionsController.multipliedString.value} ${getCurrencyName(createOfferController.creditedCurrency.value)}', style: Theme.of(context).textTheme.bodyMedium,),
+                          Obx(() => createOfferController.rateController.text != ''
+                              ? Text('${helperFunctionsController.multipliedString.value} ${getCurrencyName(createOfferController.creditedCurrency.value)}', style: Theme.of(context).textTheme.bodyMedium) 
+                              : Text('0.00 ${getCurrencyName(createOfferController.creditedCurrency.value)}', style: Theme.of(context).textTheme.bodyMedium)),
                         ],
                       ),
                     ),
@@ -171,7 +172,7 @@ class CreateOfferForm extends StatelessWidget {
                 TextFormField(
                   style: Theme.of(context).textTheme.labelMedium,
                   decoration: InputDecoration(
-                    suffixIcon: DropdownButton(
+                    suffixIcon: Obx(() => DropdownButton(
                       dropdownColor: darkMode ? Colors.black : TColors.white,
                       borderRadius: BorderRadius.circular(10),
                       focusColor: Colors.white,
@@ -202,7 +203,7 @@ class CreateOfferForm extends StatelessWidget {
                         ),
                       ),
                       onChanged: (value) {
-                          createOfferController.updateExpiryHour(value.toString());
+                        createOfferController.updateExpiryHour(value.toString());
                       },
                       items: [
                         for (final hour in createOfferController.expiryHours)
@@ -219,7 +220,7 @@ class CreateOfferForm extends StatelessWidget {
                             ),
                           ),
                       ],
-                    ),
+                    )),
                   ),
                 ),
               ],
@@ -240,10 +241,10 @@ class CreateOfferForm extends StatelessWidget {
                           width: 1
                       )
                   ),
-                  child: Text(
+                  child: Obx(() => Text(
                     '${getCurrencyName(createOfferController.debitedCurrency.value)} wallet',
                     style: Theme.of(context).textTheme.labelMedium,
-                  ),
+                  )),
                 ),
               ],
             ),
@@ -263,10 +264,10 @@ class CreateOfferForm extends StatelessWidget {
                           width: 1
                       )
                   ),
-                  child: Text(
+                  child: Obx(() => Text(
                     '${getCurrencyName(createOfferController.creditedCurrency.value)} wallet',
                     style: Theme.of(context).textTheme.labelMedium,
-                  ),
+                  )),
                 )
               ],
             ),
@@ -277,6 +278,6 @@ class CreateOfferForm extends StatelessWidget {
             const SizedBox(height: TSizes.spaceBtwSections,),
           ],
         )
-    ));
+    );
   }
 }

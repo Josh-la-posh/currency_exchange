@@ -181,7 +181,7 @@ class AddAddressDetail extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                         decoration: BoxDecoration(
-                          color: TColors.textFieldBackground,
+                          color: Get.isDarkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
                           borderRadius: BorderRadius.circular(TSizes.buttonRadius),
                           border: Border.all(
                               width: 1,
@@ -213,7 +213,7 @@ class AddAddressDetail extends StatelessWidget {
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                       decoration: BoxDecoration(
-                        color: TColors.textFieldBackground,
+                        color: Get.isDarkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
                         borderRadius: BorderRadius.circular(TSizes.buttonRadius),
                         border: Border.all(
                             width: 1,
@@ -239,7 +239,7 @@ class AddAddressDetail extends StatelessWidget {
                       width: double.infinity,
                       child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
-                              backgroundColor: TColors.textFieldBackground,
+                              backgroundColor: Get.isDarkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
                               side: BorderSide(
                                   width: 1,
                                   color: controller.cityIsEmpty.isTrue ? TColors.danger : TColors.secondaryBorder30
@@ -286,7 +286,7 @@ class AddAddressDetail extends StatelessWidget {
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                           decoration: BoxDecoration(
-                            color: TColors.textFieldBackground,
+                            color: Get.isDarkMode ? TColors.timeLineBorder : TColors.textFieldBackground,
                             borderRadius: BorderRadius.circular(TSizes.buttonRadius),
                             border: Border.all(
                                 width: 1,
