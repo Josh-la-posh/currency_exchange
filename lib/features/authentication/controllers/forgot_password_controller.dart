@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../utils/responses/handleApiError.dart';
@@ -7,6 +8,7 @@ import '../apis/api.dart';
 import '../screens/reset_password/reset_password_otp.dart';
 
 class ForgotPasswordFormController extends GetxController {
+  final CancelToken requestCancelToken = CancelToken();
   var isPasswordChanging = false.obs;
   var isForgotPasswordFormSubmitting = false.obs;
   var obscureOldPassword = true.obs;
@@ -36,17 +38,26 @@ class ForgotPasswordFormController extends GetxController {
       saveForm(formKey);
       try {
         isForgotPasswordFormSubmitting(true);
-        final response = await AuthService.instance.sendEmailOtpCode({"email": email.value.toLowerCase().trim()});
-        if (response.statusCode == 200 || response.statusCode == 201) {
-          Get.to(() => ResetPasswordOtpScreen(email: email.value));
-        }
+        await AuthService.instance.sendEmailOtpCode(
+            data: {"email": email.value.toLowerCase().trim()},
+            onFailure: () {
+              isForgotPasswordFormSubmitting(false);
+            }
+        );
+        Get.to(() => ResetPasswordOtpScreen(email: email.value));
       } catch (e) {
-        showErrorAlertHelper(errorMessage: handleApiFormatError(e));
+        showErrorAlertHelper(errorMessage: e.toString());
       } finally {
         isForgotPasswordFormSubmitting(false);
       }
     } else {
       Get.snackbar("Error", "Please fill in the form correctly", snackPosition: SnackPosition.BOTTOM);
     }
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

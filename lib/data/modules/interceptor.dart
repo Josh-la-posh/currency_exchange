@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' as GetX;
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -35,30 +36,45 @@ class AppInterceptor extends Interceptor {
   /// Handle outgoing requests
   Future<void> _handleRequest(
       RequestOptions requestOptions, RequestInterceptorHandler handler) async {
-    requestOptions.cancelToken = globalCancelToken;
+    try {
+      requestOptions.cancelToken = globalCancelToken;
+      // Check for internet connectivity
+      final hasInternet = await InternetConnection().hasInternetAccess;
+      if (!hasInternet) {
+        print('No internet connection.');
+        showErrorAlertHelper(errorMessage: 'Check your internet connection and try again');
+        globalCancelToken.cancel();
+        return handler.next(requestOptions);
 
-    // Check for internet connectivity
-    final hasInternet = await InternetConnection().hasInternetAccess;
-    if (!hasInternet) {
-      print('No internet connection.');
-      showErrorAlertHelper(errorMessage: 'Check your internet connection and try again');
-      return;
+
+        // return handler.reject(DioException(
+        //     requestOptions: requestOptions,
+        //     type: DioExceptionType.unknown,
+        //     error: 'No internet connection'
+        // ));
+      }
+
+      // Add authorization and user-agent headers
+      final token = await userSessionController.getAccessToken();
+      final userAgent = await getUserAgent();
+      if (token != null) {
+        requestOptions.headers['Accept'] = "application/json";
+        requestOptions.headers['Authorization'] = 'Bearer $token';
+      }
+      requestOptions.headers['User-Agent'] = userAgent;
+      print('Request Headers: ${requestOptions.headers}');
+      print('Request URL: ${requestOptions.uri}');
+
+      return handler.next(requestOptions);
+    } catch (e) {
+      handler.reject(DioException(requestOptions: requestOptions, error: 'Request handling error: $e'));
     }
 
-    // Add authorization and user-agent headers
-    final token = await userSessionController.getAccessToken();
-    final userAgent = await getUserAgent();
-
-    if (token != null) {
-      requestOptions.headers['Accept'] = "application/json";
-      requestOptions.headers['Authorization'] = 'Bearer $token';
-    }
-    requestOptions.headers['User-Agent'] = userAgent;
-    return handler.next(requestOptions);
   }
 
   /// Handle incoming responses
   void _handleResponse(Response response, ResponseInterceptorHandler handler) {
+    print('I got it fam');
     return handler.next(response);
   }
 
@@ -66,6 +82,8 @@ class AppInterceptor extends Interceptor {
   Future<void> _handleError(
       DioException err, ErrorInterceptorHandler handler) async {
     final isLoggedIn = await userSessionController.isLoginBool();
+
+    print('The request was nt successful. Check me out ${err.response}');
 
     // Handle 401 Unauthorized - Token expired
      if (err.response?.statusCode == 401 && isLoggedIn) {
@@ -79,12 +97,14 @@ class AppInterceptor extends Interceptor {
            userSessionController.logoutUser(
              logoutMessage: "Session expired. Please log in again.",
            );
+           return handler.reject(err);
          }
        } catch (e) {
          print('Refresh token error, redirecting to login page');
          userSessionController.logoutUser(
            logoutMessage: "Session expired. Please log in again.",
          );
+         return handler.reject(err);
        }
 
     } else if (err.response?.statusCode == 401 && !isLoggedIn) {
@@ -103,13 +123,16 @@ class AppInterceptor extends Interceptor {
     await userSessionController.removeAccessToken();
     final refreshToken = await userSessionController.getRefreshToken();
     try {
-      print('Refreshing token...');
       final response = await dio.post('$API_BASE_URL/auth/token/refresh',
         data: {"token": refreshToken});
       final newToken = response.data['access_token'];
       final newRefreshToken = response.data['refresh_token'];
 
-      if (response.statusCode == 200) {
+
+      print('Refreshing token...: ${response}');
+
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
         await userSessionController.setToken(newToken);
         await userSessionController.setRefreshToken(newRefreshToken);
         return newToken;
@@ -124,32 +147,55 @@ class AppInterceptor extends Interceptor {
 
   /// Retry a failed request
   Future<Response> _retry(RequestOptions requestOptions) async {
-    final token = await userSessionController.getAccessToken();
-
-    final options = Options(
-      method: requestOptions.method,
-      headers: {
-        ...requestOptions.headers,
-        "Authorization": "Bearer $token",
-      },
-    );
-
-    return dio.request<dynamic>(
-      requestOptions.path,
-      data: requestOptions.data,
-      queryParameters: requestOptions.queryParameters,
-      options: options,
-    );
+    try {
+      final token = await userSessionController.getAccessToken();
+      final options = Options(
+        method: requestOptions.method,
+        headers: {
+          ...requestOptions.headers,
+          "Authorization": "Bearer $token",
+        },
+      );
+      return dio.request<dynamic>(
+        requestOptions.path,
+        data: requestOptions.data,
+        queryParameters: requestOptions.queryParameters,
+        options: options,
+      );
+    } catch (e) {
+      throw DioException(
+          requestOptions: requestOptions,
+          type: DioExceptionType.unknown,
+          error: 'Retry failed: $e',
+      );
+    }
   }
 
   /// Cancel ongoing requests
-  void cancelOngoingRequest(Function endLoadingState) {
+  // void cancelOngoingRequest(Function endLoadingState) {
+  //   if (!globalCancelToken.isCancelled) {
+  //     globalCancelToken.cancel("Request was cancelled by the user.");
+  //     endLoadingState();
+  //     globalCancelToken = CancelToken();
+  //   }
+  // }
+
+  void cancelOngoingRequest([VoidCallback? endLoadingState]) {
     if (!globalCancelToken.isCancelled) {
-      globalCancelToken.cancel("Request was cancelled by the user.");
-      endLoadingState();
-      globalCancelToken = CancelToken();
+      try {
+        globalCancelToken.cancel("Request manually canceled");
+        print('I never cancel ooooo');
+      } catch (e) {
+        print('Cancel token error: $e');
+      } finally {
+        endLoadingState?.call();
+        globalCancelToken = CancelToken();
+      }
+    } else {
+      print('I don cancel ooooo');
     }
   }
+
 
   /// Refresh the Dio instance
   void refreshDioInstance() {

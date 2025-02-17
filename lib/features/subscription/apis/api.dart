@@ -1,4 +1,9 @@
+import 'dart:ui';
+
+import 'package:dio/dio.dart';
 import 'package:pouch/data/modules/dio.dart';
+import '../../../utils/responses/handleApiError.dart';
+import '../../../utils/shared/error_dialog_response.dart';
 
 class SubscriptionService {
   static final SubscriptionService _instance = SubscriptionService._();
@@ -7,98 +12,42 @@ class SubscriptionService {
 
   static SubscriptionService get instance => _instance;
 
-  Future createSubscription(Object data){
+  Future _createSubscription({required Object data}) {
     return apiService.post('/subscription/create', data: data);
   }
-  
-  Future getSubscriptions(String currency) {
-    return apiService.get(
-        '/subscription',
-        queryParameters: {'currency': currency}
-    );
+
+  Future _getSubscriptions({required Map<String, dynamic> queryParameters}) {
+    return apiService.get('/subscription', queryParameters: queryParameters);
   }
 
-  Future deleteSubscriptions(String id) {
+  Future _deleteSubscriptions({required String id}) {
     return apiService.delete('/subscription/$id');
   }
 
+  Future createSubscription({required Object data, required VoidCallback onFailure}) async{
+    return _createSubscription(data: data).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
+  }
+  
+  Future getSubscriptions({required String currency, required VoidCallback onFailure}) async {
+    return _getSubscriptions(queryParameters: {'currency': currency}).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
+  }
 
-
-
-
-  // createSubscription({
-  //   required SubscriptionProvider subscriptionProvider,
-  //   required String debitedCurrency,
-  //   required String creditedCurrency,
-  //   required int minRate,
-  //   required int maxRate
-  // }) {
-  //   _createSubscription({
-  //     'debitedCurrency': debitedCurrency,
-  //     'creditedCurrency': creditedCurrency,
-  //     'minRate': minRate,
-  //     'maxRate': maxRate
-  //   }).then((response) async {
-  //     await NoLoaderService.instance.getSubscriptions(
-  //         provider: subscriptionProvider,
-  //         currency : '',
-  //         onSuccess: (){}
-  //     );
-  //     handleShowCustomToast(message: 'Subscription created successfully');
-  //     Get.back();
-  //   }).catchError((error) {
-  //     print(error.toString());
-  //     showErrorAlertHelper(errorMessage: handleApiFormatError(error));
-  //   });
-  // }
-  //
-  // getSubscriptions({
-  //   required SubscriptionProvider provider,
-  //   required String currency,
-  //   required VoidCallback onSuccess,
-  //   // required VoidCallback onFailure,
-  // }) {
-  //   List<SubscriptionEntity> subscriptions = [];
-  //   _getSubscriptions(currency)
-  //       .then((response) {
-  //         var data = response.data;
-  //
-  //         SubscriptionDetailsEntity subscriptionDetails = SubscriptionDetailsEntity(
-  //           totalPages: data['totalPages'],
-  //           payloadSize: data['payloadSize'],
-  //           hasNext: data['hasNext'],
-  //           content: data['content'],
-  //           currentPage: data['currentPage'],
-  //           skippedRecords: data['skippedRecords'],
-  //           totalRecords: data['totalRecords'],
-  //         );
-  //         provider.saveSubscriptionDetails(subscriptionDetails);
-  //
-  //         var content = subscriptionDetails.content;
-  //
-  //         for (var item in content) {
-  //           subscriptions.add(SubscriptionEntity(
-  //             id: item['id'],
-  //             debitedCurrency: item['debitedCurrency'],
-  //             creditedCurrency: item['creditedCurrency'],
-  //             createdDate: item['createdDate'],
-  //             minRate: item['minRate'],
-  //             maxRate: item['maxRate'],
-  //             lastModifiedDate: item['lastModifiedDate'],
-  //           ));
-  //           provider.saveSubscriptions(subscriptions);
-  //         }
-  //         onSuccess();
-  //   });
-  // }
-  //
-  // deleteSubscription({required String id, required SubscriptionProvider subscriptionProvider}) {
-  //   _deleteSubscriptions(id).then((response) async {
-  //     await NoLoaderService.instance.getSubscriptions(provider: subscriptionProvider, currency: '', onSuccess: (){});
-  //     handleShowCustomToast(message: response.data['message']);
-  //   }).catchError((error) {
-  //     print(error.toString());
-  //     showErrorAlertHelper(errorMessage: handleApiFormatError(error));
-  //   });
-  // }
+  Future deleteSubscriptions({required String id, required VoidCallback onFailure}) async{
+    return _deleteSubscriptions(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
+  }
 }

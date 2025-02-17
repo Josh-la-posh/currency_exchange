@@ -1,9 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/constants/enums.dart';
-import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
 import '../models/create_offer_response.dart';
@@ -11,7 +11,7 @@ import '../screens/create_review_details.dart';
 
 class CreateOfferController extends GetxController {
   final isCreatingOfferLoading = false.obs;
-
+  final CancelToken requestCancelToken = CancelToken();
   final TextEditingController amountController = TextEditingController();
   final TextEditingController rateController = TextEditingController();
   final TextEditingController expiryHourController = TextEditingController();
@@ -23,6 +23,7 @@ class CreateOfferController extends GetxController {
   var expiryHour = '1'.obs;
   final expiryHours = ['1', '2', '5', '8', '12', '24', '48', '72', 'Never'];
   final createOfferResponse = CreateOfferResponse().obs;
+  final error = ''.obs;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -60,38 +61,44 @@ class CreateOfferController extends GetxController {
   }) async {
     try {
       isCreatingOfferLoading(true);
-      final queryParameters = <String, dynamic>{};
-      queryParameters['debitedCurrency'] = debitedCurrency;
-      queryParameters['creditedCurrency'] = creditedCurrency;
-      queryParameters['amount'] = amount;
-      queryParameters['rate'] = rate;
-      queryParameters['expireIn'] = expireIn != 'Never' ? int.parse(expireIn.toString()) : 0;
+      error.value = '';
 
-      final response = await OfferService.instance.creatingOffer(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var item = response.data;
-        createOfferResponse(CreateOfferResponse(
-            id: item['id'],
-            debitedCurrency: item['debitedCurrency'],
-            creditedCurrency: item['creditedCurrency'],
-            amount: item['amount'],
-            rate: item['rate'],
-            expireIn: item['expireIn'],
-            views: item['views'],
-            negotiatorRate: item['negotiatorRate'],
-            negotiatorAmount: item['negotiatorAmount'],
-            negotiationAccepted: item['negotiationAccepted'],
-            negotiatorId: item['negotiatorId'],
-            isActive: item['isActive'],
-            status: item['status'],
-            createdDate: item['createdDate'],
-            lastModifiedDate: item['lastModifiedDate'],
-            expireCountDown: item['expireCountDown']
-        ));
-        await onSuccess();
-      }
+      final response = await OfferService.instance.creatingOffer(
+        data: {
+          "debitedCurrency": debitedCurrency,
+          "creditedCurrency": creditedCurrency,
+          "amount": amount,
+          "rate": rate,
+          expireIn: expireIn != 'Never' ? int.parse(expireIn.toString()) : 0
+        },
+        onFailure: () {
+          isCreatingOfferLoading(false);
+        }
+      );
+
+      var item = response.data;
+      createOfferResponse(CreateOfferResponse(
+          id: item['id'],
+          debitedCurrency: item['debitedCurrency'],
+          creditedCurrency: item['creditedCurrency'],
+          amount: item['amount'],
+          rate: item['rate'],
+          expireIn: item['expireIn'],
+          views: item['views'],
+          negotiatorRate: item['negotiatorRate'],
+          negotiatorAmount: item['negotiatorAmount'],
+          negotiationAccepted: item['negotiationAccepted'],
+          negotiatorId: item['negotiatorId'],
+          isActive: item['isActive'],
+          status: item['status'],
+          createdDate: item['createdDate'],
+          lastModifiedDate: item['lastModifiedDate'],
+          expireCountDown: item['expireCountDown']
+      ));
+      await onSuccess();
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      error.value = err.toString();
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isCreatingOfferLoading(false);
     }
@@ -134,4 +141,9 @@ class CreateOfferController extends GetxController {
     selectedDate.value = Date.First;
   }
 
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
+  }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
@@ -14,7 +15,7 @@ class AddressFormController extends GetxController {
   UserSessionController userSessionController = Get.find<UserSessionController>();
   final AuthFormController authFormController = Get.put(AuthFormController());
   final addressService = AddressService();
-
+  final CancelToken requestCancelToken = CancelToken();
   var isAddressFetching = false.obs;
   var showErrorText = false.obs;
   var showAddressError = false.obs;
@@ -55,7 +56,9 @@ class AddressFormController extends GetxController {
 
   void fetchAddress(String postCode) async {
 
-    List? address = await addressService.getAddressFromPostalCode(postCode);
+    List? address = await addressService.getAddressFromPostalCode(
+      postCode,
+      cancelToken: requestCancelToken,);
     if (address != null) {
       address.forEach((val) {
         if ((val['types'].contains('locality') && val['types'].contains('political')) || val['types'].contains('postal_town')) {
@@ -95,11 +98,16 @@ class AddressFormController extends GetxController {
       if (country.value != '') {
         try {
           isUpdatingAddress(true);
-          final responseData = await AuthService.instance.updateAddress({
-            'postCode': postCode.value.trim(),
-            'address':
-            '${address.text.trim()}, ${city.value.trim()}, ${state.value.trim()}. ${country.value.trim()}'
-          });
+          final responseData = await AuthService.instance.updateAddress(
+              data: {
+                'postCode': postCode.value.trim(),
+                'address':
+                '${address.text.trim()}, ${city.value.trim()}, ${state.value.trim()}. ${country.value.trim()}'
+              },
+              onFailure: () {
+                isUpdatingAddress(false);
+              }
+          );
           authFormController.login(
               email: email.value,
               password: password.value,
@@ -110,7 +118,7 @@ class AddressFormController extends GetxController {
           Get.offAll(NavigationMenu());
         } catch (e) {
           print('The error $e');
-          Get.snackbar('Error', handleApiFormatError(e), backgroundColor: Colors.red);
+          Get.snackbar('Error', e.toString(), backgroundColor: Colors.red);
         } finally {
           isUpdatingAddress(false);
         }
@@ -129,5 +137,11 @@ class AddressFormController extends GetxController {
     city.value = '';
     state.value = '';
     country.value = '';
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

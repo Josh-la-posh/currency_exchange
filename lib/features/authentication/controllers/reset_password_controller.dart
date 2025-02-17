@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../utils/otp/otp.dart';
@@ -6,6 +7,7 @@ import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
 
 class ResetPasswordOtpFormController extends GetxController {
+  final CancelToken requestCancelToken = CancelToken();
   var otpCode = ''.obs;
   var password = ''.obs;
   var confirmPass = ''.obs;
@@ -46,13 +48,18 @@ class ResetPasswordOtpFormController extends GetxController {
     required VoidCallback onFailure
   }) async {
     try {
-      final response = await AuthService.instance.sendEmailOtpCode({"email": email.toLowerCase().trim()});
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-      }
+      await AuthService.instance.sendEmailOtpCode(
+          data: {
+            "email": email.toLowerCase().trim()
+          },
+          onFailure: () {
+
+          }
+          );
+      onSuccess();
     } catch (err) {
       onFailure();
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
     }
   }
@@ -60,16 +67,19 @@ class ResetPasswordOtpFormController extends GetxController {
   Future<void> resetPassword({required String otp, required String newPassword, required VoidCallback onSuccess}) async {
     try {
       isPasswordResetting(true);
-      final response = await AuthService.instance.resetPassword({
-        'otp': int.parse(otp),
-        'newPassword': newPassword
-      });
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-        Get.snackbar('Success', 'Password reset successful', backgroundColor: Colors.green);
-      }
+      await AuthService.instance.resetPassword(
+          data: {
+            'otp': int.parse(otp),
+            'newPassword': newPassword
+          },
+          onFailure: () {
+            isPasswordResetting(false);
+          }
+      );
+      onSuccess();
+      Get.snackbar('Success', 'Password reset successful', backgroundColor: Colors.green);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isPasswordResetting(false);
     }
@@ -107,5 +117,11 @@ class ResetPasswordOtpFormController extends GetxController {
   void onClose() {
     otpTimer?.stopTimer();
     super.onClose();
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

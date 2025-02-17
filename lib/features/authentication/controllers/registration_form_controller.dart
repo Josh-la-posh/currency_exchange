@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/data/modules/storage_session_controller.dart';
@@ -9,6 +10,7 @@ import '../screens/email_verify/email_verify.dart';
 
 class RegistrationFormController extends GetxController {
 final UserSessionController userSessionController = Get.find();
+final CancelToken requestCancelToken = CancelToken();
   var isCreatingAccount = false.obs;
   var rememberMe = false.obs;
   var obscurePassword = true.obs;
@@ -55,21 +57,25 @@ final UserSessionController userSessionController = Get.find();
         try {
           isCreatingAccount(true);
           userSessionController.clearRememberMeHandler();
-          final response = await AuthService.instance.createAccount({
-            'firstName': firstName.value.trim().toString(),
-            'lastName': lastName.value.trim().toString(),
-            'email': email.value.trim().toString(),
-            'phoneNumber': phoneNo.value.trim().toString(),
-            'password': password.value.trim().toString(),
-          });
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            Get.to(() => EmailVerificationScreen(
-              email: email.value.trim().toString(),
-              password: password.value.trim().toString(),
-            ));
-          }
+          await AuthService.instance.createAccount(
+            data: {
+              'firstName': firstName.value.trim().toString(),
+              'lastName': lastName.value.trim().toString(),
+              'email': email.value.trim().toString(),
+              'phoneNumber': phoneNo.value.trim().toString(),
+              'password': password.value.trim().toString(),
+            },
+            onFailure: () {
+              isCreatingAccount(false);
+            }
+          );
+          Get.to(() => EmailVerificationScreen(
+            email: email.value.trim().toString(),
+            password: password.value.trim().toString(),
+          ));
         } catch (e) {
-          showErrorAlertHelper(errorMessage: handleApiFormatError(e));
+          showErrorAlertHelper(errorMessage: e.toString());
+          isCreatingAccount(false);
         } finally {
           isCreatingAccount(false);
         }
@@ -88,5 +94,11 @@ final UserSessionController userSessionController = Get.find();
     phoneNo.value = '';
     password.value = '';
     confirmPass.value = '';
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

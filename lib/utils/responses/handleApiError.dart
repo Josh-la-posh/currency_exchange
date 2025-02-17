@@ -22,7 +22,8 @@ String handleApiFormatError(dynamic error) {
           }
 
           if (firstValue is String) {
-            return cleanErrorMessage(firstValue);
+            // return cleanErrorMessage(firstValue);
+            return firstValue;
           } else if (firstValue is List && firstValue.isNotEmpty) {
             return firstValue.first.toString();
           }

@@ -4,14 +4,15 @@ class AddressService {
   final Dio _dio = Dio();
   final String _apiKey = 'AIzaSyALj1kekJvTeiUeTQhmq1VAOjUP6_ICBJk';
 
-  Future<List?> getAddressFromPostalCode(String postalCode) async {
+  Future<List?> getAddressFromPostalCode(String postalCode, {required CancelToken cancelToken}) async {
     try {
       final response = await _dio.get(
-        'https://maps.googleapis.com/maps/api/geocode/json',
-        queryParameters: {
-          'address': postalCode,
-          'key': _apiKey,
-        },
+          'https://maps.googleapis.com/maps/api/geocode/json',
+          queryParameters: {
+            'address': postalCode,
+            'key': _apiKey,
+          },
+          cancelToken: cancelToken
       );
 
       print('The available response code is: ${response.statusCode}');

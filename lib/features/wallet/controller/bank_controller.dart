@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/wallet/models/bank_list.dart';
@@ -11,6 +12,7 @@ import '../apis/api.dart';
 import '../models/get_bank_account.dart';
 
 class BankController extends GetxController {
+  final CancelToken requestCancelToken = CancelToken();
   var showErrorText = false.obs;
   var isSubmitting = false.obs;
   var verifyingAccount = false.obs;
@@ -51,23 +53,20 @@ class BankController extends GetxController {
   }) async {
     try {
       verifyingAccount(true);
-      final response = await WalletServices.instance.addLocalBank(
+      await WalletServices.instance.addLocalBank(
           accountNumber: accountNumber,
           accountName: accountName,
           bankName: bankName,
-          bankCode: bankCode
+          bankCode: bankCode,
+          onFailure: () {verifyingAccount(false);}
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        await fetchLocalBank();
-        bankAccountDetails.value = VerifyBankAccountModel();
-        selectedBank.value = BankListModel();
-        onSubmit();
-        Get.back();
-      } else {
-        print('Failed to add local bank: ${response.data['message']}');
-      }
+      await fetchLocalBank();
+      bankAccountDetails.value = VerifyBankAccountModel();
+      selectedBank.value = BankListModel();
+      onSubmit();
+      Get.back();
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       verifyingAccount(false);
     }
@@ -81,20 +80,19 @@ class BankController extends GetxController {
       verifyingAccount(true);
       final response = await WalletServices.instance.verifyBankAccount(
           accountNumber: accountNumber,
-          bankCode: bankCode
+          bankCode: bankCode,
+          onFailure: () {
+            verifyingAccount(false);
+          }
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var data = response.data['data'];
-        bankAccountDetails(VerifyBankAccountModel(
-            account_number: data['account_number'],
-            account_name: data['account_name'],
-            bank_id: data['bank_id']
-        ));
-      } else {
-        print('Failed to verify bank account: ${response.data['message']}');
-      }
+      var data = response.data['data'];
+      bankAccountDetails(VerifyBankAccountModel(
+          account_number: data['account_number'],
+          account_name: data['account_name'],
+          bank_id: data['bank_id']
+      ));
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       verifyingAccount(false);
     }
@@ -103,17 +101,17 @@ class BankController extends GetxController {
   Future<void> fetchLocalBank() async {
     try {
       bankAccounts.isEmpty && isLocalBankLoading(true);
-      final response = await WalletServices.instance.fetchLocalBank();
-      if (response.statusCode == 200) {
-        final data = response.data;
-        List<GetBankAccountModel> fetchedBankAccounts = (data as List)
-            .map((json) => GetBankAccountModel.fromJson(json)).toList();
-        bankAccounts.assignAll(fetchedBankAccounts);
-      } else {
-        print('Failed to fetch local bank accounts: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.fetchLocalBank(
+          onFailure: () {
+            isLocalBankLoading(false);
+          }
+      );
+      final data = response.data;
+      List<GetBankAccountModel> fetchedBankAccounts = (data as List)
+          .map((json) => GetBankAccountModel.fromJson(json)).toList();
+      bankAccounts.assignAll(fetchedBankAccounts);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isLocalBankLoading(false);
     }
@@ -121,16 +119,14 @@ class BankController extends GetxController {
 
   Future<void> fetchBankList() async {
     try {
-      final response = await WalletServices.instance.fetchBankList();
-      if (response.statusCode == 200) {
-        final data = response.data['data'];
-        print(data);
-        List<BankListModel> fetchedBankLists = (data as List)
-            .map((json) => BankListModel.fromJson(json)).toList();
-        bankList.assignAll(fetchedBankLists);
-      } else {
-        print('Failed to fetch bank list: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.fetchBankList(
+          onFailure: () {}
+      );
+      final data = response.data['data'];
+      print(data);
+      List<BankListModel> fetchedBankLists = (data as List)
+          .map((json) => BankListModel.fromJson(json)).toList();
+      bankList.assignAll(fetchedBankLists);
     } catch (err) {
       print('Error occurred: $err');
     } finally {
@@ -140,15 +136,16 @@ class BankController extends GetxController {
   Future<void> deleteLocalBankAccount({required String id}) async {
     try {
       Get.snackbar('', 'Deleting local bank', backgroundColor: TColors.primary);
-      final response = await WalletServices.instance.deleteLocalBankAccount(id: id);
-      if (response.statusCode == 200) {
-        await fetchLocalBank();
-        Get.snackbar('Success', 'Bank account deleted successfully', backgroundColor: Colors.green);
-      } else {
-        print('Failed to delete bank account: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.deleteLocalBankAccount(
+          id: id,
+          onFailure: () {
+            Get.closeAllSnackbars();
+          }
+      );
+      await fetchLocalBank();
+      Get.snackbar('Success', 'Bank account deleted successfully', backgroundColor: Colors.green);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       Get.closeAllSnackbars();
     }
@@ -194,5 +191,11 @@ class BankController extends GetxController {
     bankAccountDetails.value = VerifyBankAccountModel();
     bankAccounts.clear();
     bankList.clear();
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

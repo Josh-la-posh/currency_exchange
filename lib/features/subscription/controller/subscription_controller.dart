@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/utils/constants/enums.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
 import '../models/subscribeEnity.dart';
 
@@ -52,27 +53,26 @@ class SubscriptionController extends GetxController {
   Future<void> createSubscription({
     required String debitedCurrency,
     required String creditedCurrency,
-    required int minRate,
-    required int maxRate,
+    required double minRate,
+    required double maxRate,
     required VoidCallback onSuccess
   }) async {
     try {
       isCreatingSubscription(true);
-      final response = await SubscriptionService.instance.createSubscription({
-            'debitedCurrency': debitedCurrency,
-            'creditedCurrency': creditedCurrency,
-            'minRate': minRate,
-            'maxRate': maxRate
-      });
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        await fetchSubscription(currency: '');
-        onSuccess();
-        Get.snackbar('Success', 'Subscription created successfully', backgroundColor: Colors.green);
-      } else {
-        Get.snackbar('Error', 'Failed to create subscription: ${response.data['message']}', backgroundColor: Colors.red);
-      }
+      final response = await SubscriptionService.instance.createSubscription(
+        data: {
+          'debitedCurrency': debitedCurrency,
+          'creditedCurrency': creditedCurrency,
+          'minRate': minRate,
+          'maxRate': maxRate
+        },
+        onFailure: () {isCreatingSubscription(false);}
+      );
+      await fetchSubscription(currency: '');
+      onSuccess();
+      Get.snackbar('Success', 'Subscription created successfully', backgroundColor: Colors.green);
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isCreatingSubscription(false);
     }
@@ -81,17 +81,16 @@ class SubscriptionController extends GetxController {
   Future<void> fetchSubscription({required String currency}) async {
     try {
       subscriptions.isEmpty && isFetchingSubscription(true);
-      final response = await SubscriptionService.instance.getSubscriptions(currency);
-      if (response.statusCode == 200) {
-        final data = response.data['content'];
-        List<SubscriptionEntity> fetchedSubscription = (data as List)
-            .map((json) => SubscriptionEntity.fromJson(json)).toList();
-        subscriptions.assignAll(fetchedSubscription);
-      } else {
-        Get.snackbar('Error', 'Failed to fetch subscriptions: ${response.data['message']}', backgroundColor: Colors.red);
-      }
+      final response = await SubscriptionService.instance.getSubscriptions(
+        currency: currency,
+        onFailure: () {isFetchingSubscription(false);}
+      );
+      final data = response.data['content'];
+      List<SubscriptionEntity> fetchedSubscription = (data as List)
+          .map((json) => SubscriptionEntity.fromJson(json)).toList();
+      subscriptions.assignAll(fetchedSubscription);
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isFetchingSubscription(false);
     }
@@ -100,15 +99,16 @@ class SubscriptionController extends GetxController {
   Future<void> deleteSubscription({required String id}) async {
     try {
       Get.snackbar('', 'Deleting subscription', backgroundColor: TColors.primary);
-      final response = await SubscriptionService.instance.deleteSubscriptions(id);
-      if (response.statusCode == 200) {
-        await fetchSubscription(currency: '');
-        Get.snackbar('Success', 'Subscription deleted successfully', backgroundColor: Colors.green);
-      } else {
-        Get.snackbar('Error', 'Failed to delete subscriptions ${response.data['message']}', backgroundColor: Colors.red);
-      }
+      await SubscriptionService.instance.deleteSubscriptions(
+        id: id,
+        onFailure: () {
+          Get.closeAllSnackbars();
+        }
+      );
+      await fetchSubscription(currency: '');
+      Get.snackbar('Success', 'Subscription deleted successfully', backgroundColor: Colors.green);
     } catch (err) {
-      return null;
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       Get.closeAllSnackbars();
     }

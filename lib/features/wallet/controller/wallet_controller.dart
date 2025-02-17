@@ -1,15 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/transaction/controller/transaction_controller.dart';
 import 'package:pouch/features/wallet/apis/api.dart';
 import 'package:pouch/features/wallet/models/get_wallet.dart';
 import 'package:pouch/utils/constants/enums.dart';
-import 'package:pouch/utils/responses/handleApiError.dart';
 import 'package:pouch/utils/shared/error_dialog_response.dart';
 import '../../../utils/constants/colors.dart';
 
 class WalletController extends GetxController {
-  // final TransactionController transactionController = Get.put(TransactionController());
+  final CancelToken requestCancelToken = CancelToken();
   var showBalance = false.obs;
   var showWalletLists = false.obs;
   var isWalletLoading = false.obs;
@@ -54,14 +53,17 @@ class WalletController extends GetxController {
   Future<void> creatingWallet({required String currency, required VoidCallback onSuccess}) async {
     try {
       isCreatingWallet(true);
-      final response = await WalletServices.instance.createWallet(currency: currency);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        await fetchWallets(currency: '');
-        onSuccess();
-        Get.snackbar('Success', 'Your wallet has been created successfully', backgroundColor: Colors.green);
-      }
+      final response = await WalletServices.instance.createWallet(
+          currency: currency,
+          onFailure: () {
+            isCreatingWallet(false);
+          }
+      );
+      await fetchWallets(currency: '');
+      onSuccess();
+      Get.snackbar('Success', 'Your wallet has been created successfully', backgroundColor: Colors.green);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isCreatingWallet(false);
     }
@@ -71,14 +73,16 @@ class WalletController extends GetxController {
     try {
       Get.snackbar('', 'Setting default wallet', backgroundColor: TColors.primary);
       isCreatingDefaultWallet(true);
-      final response = await WalletServices.instance.createDefaultWallet(walletId: walletId);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        await fetchingDefaultWallet();
-      } else {
-        print('Failed to create default wallet: ${response.data['message']}');
-      }
+      await WalletServices.instance.createDefaultWallet(
+          walletId: walletId,
+          onFailure: () {
+            isCreatingDefaultWallet(false);
+          }
+      );
+      await fetchingDefaultWallet();
+
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       Get.closeAllSnackbars();
       isCreatingDefaultWallet(false);
@@ -88,19 +92,19 @@ class WalletController extends GetxController {
   Future<void> fetchWallets({required String currency}) async {
     try {
       isWalletLoading(true);
-      final response = await WalletServices.instance.fetchWallets(currency: currency);
-      if (response.statusCode == 200) {
-        final data = response.data;
-        List<GetWalletModel> fetchedWallets = (data as List)
-            .map((json) => GetWalletModel.fromJson(json)).toList();
-        wallets.assignAll(fetchedWallets);
-        await fetchingDefaultWallet();
-        // await transactionController.fetchTransactions();
-      } else {
-        print('Failed to fetch wallets: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.fetchWallets(
+          currency: currency,
+          onFailure: () {
+            isWalletLoading(false);
+          }
+      );
+      final data = response.data;
+      List<GetWalletModel> fetchedWallets = (data as List)
+          .map((json) => GetWalletModel.fromJson(json)).toList();
+      wallets.assignAll(fetchedWallets);
+      await fetchingDefaultWallet();
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isWalletLoading(false);
     }
@@ -109,23 +113,23 @@ class WalletController extends GetxController {
   Future<void> fetchingDefaultWallet() async {
     try {
       isDefaultWalletLoading(true);
-      final response = await WalletServices.instance.fetchDefaultWallet();
-      if (response.statusCode == 200) {
-        final data = response.data;
-        defaultWallet(GetWalletModel(
-            id: data['id'],
-            currency: data['currency'],
-            balance: data['balance'],
-            isActive: data['isActive'],
-            pendingWithdrawals: data['pendingWithdrawals'],
-            createdDate: data['createdDate'],
-            lastModifiedDate: data['lastModifiedDate']
-        ));
-      } else {
-        print('Failed to fetch default wallet: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.fetchDefaultWallet(
+          onFailure: () {
+            isDefaultWalletLoading(false);
+          }
+      );
+      final data = response.data;
+      defaultWallet(GetWalletModel(
+          id: data['id'],
+          currency: data['currency'],
+          balance: data['balance'],
+          isActive: data['isActive'],
+          pendingWithdrawals: data['pendingWithdrawals'],
+          createdDate: data['createdDate'],
+          lastModifiedDate: data['lastModifiedDate']
+      ));
     } catch (err) {
-      // showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      // showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isDefaultWalletLoading(false);
     }
@@ -134,5 +138,11 @@ class WalletController extends GetxController {
   void clearData() {
     defaultWallet.value = GetWalletModel();
     wallets.clear();
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

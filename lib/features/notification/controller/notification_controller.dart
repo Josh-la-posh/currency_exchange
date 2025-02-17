@@ -1,12 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/all_offer/controllers/offer_controller.dart';
 import 'package:pouch/features/notification/apis/api.dart';
 import 'package:pouch/features/notification/model/get_user_notification.dart';
 
-import '../../negotiation_offer/controller/negotiation_offer_controller.dart';
-
 class NotificationController extends GetxController {
   var userNotifications = <GetUserNotification>[].obs;
+  final CancelToken requestCancelToken = CancelToken();
   var idsArray = [].obs;
   var isLoading = false.obs;
 
@@ -20,7 +19,11 @@ class NotificationController extends GetxController {
   Future<void> fetchNotification() async {
     try {
       userNotifications.isEmpty && isLoading(true);
-      final response = await NotificationService.instance.fetchNotification();
+      final response = await NotificationService.instance.fetchNotification(
+          onFailure: () {
+            isLoading(false);
+          }
+      );
       List<GetUserNotification> fetchNotification = (response.data as List)
         .map((json) => GetUserNotification.fromJson(json)).toList();
       userNotifications.assignAll(fetchNotification);
@@ -37,7 +40,10 @@ class NotificationController extends GetxController {
 
   Future<void> fetchNotificationById({required String id}) async {
     try {
-      final response = await NotificationService.instance.fetchNotificationById(id: id);
+      final response = await NotificationService.instance.fetchNotificationById(
+          id: id,
+          onFailure: () {}
+      );
       await fetchNotification();
     } catch (err) {
       print('Wahala getting notification by id');
@@ -48,7 +54,10 @@ class NotificationController extends GetxController {
   Future<void> updateNotification() async {
     try {
       Map<String, dynamic> requestData = {'ids': idsArray};
-      final response = NotificationService.instance.updateNotification(requestData);
+      final response = NotificationService.instance.updateNotification(
+          data: requestData,
+          onFailure: () {}
+      );
       idsArray.clear();
     } catch (e) {
       print('I don update nonsense notification ooooooo');
@@ -61,5 +70,11 @@ class NotificationController extends GetxController {
   }
 
   void saveUserNotifications(val) {
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

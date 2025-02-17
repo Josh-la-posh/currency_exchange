@@ -1,11 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pouch/utils/responses/handleApiError.dart';
 
 import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
 
 class ChangePasswordController extends GetxController {
+  final CancelToken requestCancelToken = CancelToken();
   var isPasswordChanging = false.obs;
   var obscureOldPassword = true.obs;
   var obscurePassword = true.obs;
@@ -52,21 +53,22 @@ class ChangePasswordController extends GetxController {
     if (validateForm(formKey)) {
       saveForm(formKey);
       try {
-        // isPasswordChanging.value = true;
-        final response = await AuthService.instance.changePassword({
-          'currentPassword': oldPassword.value.trim(),
-          'newPassword': password.value.trim(),
-        });
+        isPasswordChanging.value = true;
+        await AuthService.instance.changePassword(
+            data: {
+              'currentPassword': oldPassword.value.trim(),
+              'newPassword': password.value.trim(),
+            },
+          onFailure: () {
+            isPasswordChanging(false);
+          }
+        );
 
-        if (response?.statusCode == 200 || response?.statusCode == 201) {
-          Get.snackbar('Success', 'Password Changed Successfully!!!', backgroundColor: Colors.green);
-          clearData();
-        } else {
-          print('Failed to change password. Please try again.');
-        }
+        Get.snackbar('Success', 'Password Changed Successfully!!!', backgroundColor: Colors.green);
+        clearData();
       } catch (e) {
         print('Failed to change password. Please try again.');
-        showErrorAlertHelper(errorMessage: handleApiFormatError(e));
+        showErrorAlertHelper(errorMessage: e.toString());
       } finally {
         isPasswordChanging.value = false;
       }
@@ -75,10 +77,15 @@ class ChangePasswordController extends GetxController {
     }
   }
 
-
   void clearData() {
     password.value = '';
     oldPassword.value = '';
     confirmPass.value = '';
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

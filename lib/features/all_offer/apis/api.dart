@@ -1,19 +1,7 @@
-import 'package:pouch/utils/responses/handleApiError.dart';
-import 'package:pouch/utils/shared/error_dialog_response.dart';
+import 'dart:ui';
 
 import '../../../data/modules/interceptor.dart';
-
-
-const OFFER_URL = '/offer';
-const CREATE_OFFER_URL = 'create';
-const ACCEPT_REJECT_OFFER_URL = 'accept-reject';
-const NEGOTIATE_OFFER_URL = 'negotiate';
-const SWAP_OFFER_URL = 'swap';
-const ALL_NEGOTIATED_OFFER_URL = 'negotiate/negotiated-offers';
-const MY_OFFER_URL = 'me/my-offer';
-const MY_OFFERS_URL = 'me/my-offers';
-const MY_BIDS_URL = 'me/my-bids';
-const MY_BID_URL = 'me/my-bid';
+import '../../../utils/responses/handleApiError.dart';
 
 final _apiService = AppInterceptor(showLoader: false).dio;
 
@@ -24,70 +12,204 @@ class OfferService {
 
   static OfferService get instance => _instance;
 
+  Future _creatingOffer({required Object data}) {
+    return _apiService.post('/offer/create', data: data);
+  }
+
+  Future _acceptingOrRejectingOffer({required String id, required Object data}) {
+    return _apiService.post('/offer/accept-reject/$id', data: data);
+  }
+
+  Future _negotiatingOffer({required String id, required Object data}) {
+    return _apiService.post('/offer/negotiate/$id', data: data);
+  }
+
+  Future _swappingOffer({required String id}) {
+    return _apiService.get('/offer/swap/$id');
+  }
+
+  Future _fetchAllOffers({required Map<String, dynamic> queryParameters}) {
+    return _apiService.get('/offer', queryParameters: queryParameters);
+  }
+
+  Future _fetchOfferById({required String id}) {
+    return _apiService.get('/offer/$id');
+  }
+
+  Future _fetchAllNegotiatedOffers() {
+    return _apiService.get('/offer/negotiate/negotiated-offers');
+  }
+
+  Future _fetchMyOffers({required Map<String, dynamic> queryParameters}) {
+    return _apiService.get('/offer/me/my-offers', queryParameters: queryParameters);
+  }
+
+  Future _fetchMyBids({required Map<String, dynamic> queryParameters}) {
+    return _apiService.get('/offer/me/my-bids', queryParameters: queryParameters);
+  }
+
+  Future _fetchMyOffersById({required String id}) {
+    return _apiService.get('/offer/me/my-offer/$id');
+  }
+
+  Future _fetchMyBidsById({required String id}) {
+    return _apiService.get('/offer/me/my-bid/$id');
+  }
+
+  Future _switchInstantSwap({required String id}) {
+    return _apiService.put('/offer/instant-swap/update/$id');
+  }
+
+  Future _updateInstantSwap({required String id, required Object data}) {
+    return _apiService.put('/offer/instant-swap/update/$id', data: data);
+  }
+
+  Future _deleteOffer({required String id}) {
+    return _apiService.delete('/offer/$id');
+  }
+
+  Future _deleteBid({required String id}) {
+    return _apiService.delete('/offer/bid/$id');
+  }
+
   // post requests
 
-  Future creatingOffer(Map<String, dynamic> queryParameters) async {
-    final response = await _apiService.post('$OFFER_URL/$CREATE_OFFER_URL', data: queryParameters);
-    return response;
+  Future creatingOffer({required Object data, required VoidCallback onFailure}) async {
+    return _creatingOffer(data: data).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future acceptingOrRejectingOffer({required String id, required Object data}) async {
-    final response = await _apiService.post('$OFFER_URL/$ACCEPT_REJECT_OFFER_URL/$id', data: data);
-    return response;
+  Future acceptingOrRejectingOffer({required String id, required Object data, required VoidCallback onFailure}) async {
+    return _acceptingOrRejectingOffer(id: id, data: data).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future negotiatingOffer({required String id, required Object data}) async {
-    final response = await _apiService.post('$OFFER_URL/$NEGOTIATE_OFFER_URL/$id', data: data);
-    return response;
+  Future negotiatingOffer({required String id, required Object data, required VoidCallback onFailure}) async {
+    return _negotiatingOffer(id: id, data: data).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future swappingOffer({required String id}) async {
-    final response = await _apiService.post('$OFFER_URL/$SWAP_OFFER_URL/$id');
-    return response;
+  Future swappingOffer({required String id, required VoidCallback onFailure}) async {
+    return _swappingOffer(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchAllOffers(Map<String, dynamic> queryParameters) async {
-    final response = await _apiService.get('$OFFER_URL', queryParameters: queryParameters);
-    return response;
+  Future fetchAllOffers({required Map<String, dynamic> queryParameters, required VoidCallback onFailure}) async {
+    return _fetchAllOffers(queryParameters: queryParameters).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchOfferById(String id) async {
-    final response = await _apiService.get('$OFFER_URL/$id',);
-    return response;
+  Future fetchOfferById({required String id, required VoidCallback onFailure}) async {
+    return _fetchOfferById(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchAllNegotiatedOffers() async {
-    final response = await _apiService.get('$OFFER_URL/$ALL_NEGOTIATED_OFFER_URL');
-    return response;
+  Future fetchAllNegotiatedOffers({required VoidCallback onFailure}) async {
+    return _fetchAllNegotiatedOffers().then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchMyOffers(String days, String currency) async {
-    final response = await _apiService.get('$OFFER_URL/$MY_OFFERS_URL', queryParameters: {'days': days, 'currency': currency});
-    return response;
+  Future fetchMyOffers({required String days, required String currency, required VoidCallback onFailure}) async {
+    return _fetchMyOffers(queryParameters: {
+      'days': days, 'currency': currency
+    }).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchMyBids(String days, String currency) async {
-    final response = await _apiService.get('$OFFER_URL/$MY_BIDS_URL', queryParameters: {'days': days, 'currency': currency});
-    return response;
+  Future fetchMyBids({required String days, required String currency, required VoidCallback onFailure}) async {
+    return _fetchMyBids(queryParameters: {
+      'days': days, 'currency': currency
+    }).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchMyOffersById(String id) async {
-    final response = await _apiService.get('$OFFER_URL/$MY_OFFER_URL/$id');
-    return response;
+  Future fetchMyOffersById({required String id, required VoidCallback onFailure}) async {
+    return _fetchMyOffersById(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchMyBidsById(String id) async {
-    final response = await _apiService.get('$OFFER_URL/$MY_BID_URL/$id');
-    return response;
+  Future fetchMyBidsById({required String id, required VoidCallback onFailure}) async {
+    return _fetchMyBidsById(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future deleteOffer(String id) async {
-    final response = await _apiService.delete('$OFFER_URL/$id');
-    return response;
+  Future switchInstantSwap({required String id, required VoidCallback onFailure}) async {
+    return _switchInstantSwap(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future deleteBid(String id) async {
-    final response = await _apiService.delete('$OFFER_URL/bid/$id');
-    return response;
+  Future updateInstantSwap({required String id, required VoidCallback onFailure}) async {
+    return _updateInstantSwap(id: id, data: {}).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
+  }
+
+  Future deleteOffer({required String id, required VoidCallback onFailure}) async {
+    return _deleteOffer(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
+  }
+
+  Future deleteBid({required String id, required VoidCallback onFailure}) async {
+    return _deleteBid(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 }

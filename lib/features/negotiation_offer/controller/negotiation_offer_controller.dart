@@ -1,12 +1,13 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/constants/colors.dart';
-import '../../../utils/responses/handleApiError.dart';
 import '../../all_offer/apis/api.dart';
 import '../../all_offer/models/offer.dart';
 
 class NegotiationOfferController extends GetxController {
+  final CancelToken requestCancelToken = CancelToken();
   final isMyBidsLoading = false.obs;
   final isMyOffersLoading = false.obs;
   final isNegotiatedOfferLoading = false.obs;
@@ -30,7 +31,13 @@ class NegotiationOfferController extends GetxController {
   }) async {
     try {
       myOffers.isEmpty && isMyOffersLoading(true);
-      final response = await OfferService.instance.fetchMyOffers(days, currency);
+      final response = await OfferService.instance.fetchMyOffers(
+        days: days,
+        currency: currency,
+        onFailure: () {
+          isMyOffersLoading(false);
+        }
+      );
       var data = response.data;
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
@@ -38,7 +45,7 @@ class NegotiationOfferController extends GetxController {
       myOffers.assignAll(fetchAllNegotiation);
       print('This is ${myOffers}');
     } catch (err) {
-      Get.snackbar('Error`', handleApiFormatError(err), backgroundColor: Colors.redAccent);
+      Get.snackbar('Error`', err.toString(), backgroundColor: Colors.redAccent);
     } finally {
       isMyOffersLoading(false);
     }
@@ -50,14 +57,20 @@ class NegotiationOfferController extends GetxController {
   }) async {
     try {
       myBids.isEmpty && isMyBidsLoading(true);
-      final response = await OfferService.instance.fetchMyBids(days, currency);
+      final response = await OfferService.instance.fetchMyBids(
+        days: days,
+        currency: currency,
+        onFailure: () {
+          isMyBidsLoading(false);
+        }
+      );
       var data = response.data;
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       myBids.assignAll(fetchAllNegotiation);
     } catch (err) {
-      Get.snackbar('Error`', handleApiFormatError(err), backgroundColor: Colors.redAccent);
+      Get.snackbar('Error`', err.toString(), backgroundColor: Colors.redAccent);
     } finally {
       isMyBidsLoading(false);
     }
@@ -66,7 +79,10 @@ class NegotiationOfferController extends GetxController {
   Future<void> fetchMyOffersById({required String id, required VoidCallback onSuccess}) async {
     try {
       Get.snackbar('', 'Fetching data ...', backgroundColor: TColors.primary);
-      final response = await OfferService.instance.fetchMyOffersById(id);
+      final response = await OfferService.instance.fetchMyOffersById(
+        id: id,
+        onFailure: () {}
+      );
       var item = response.data;
       myOfferById(OfferEntity(
           id: item['id'],
@@ -88,7 +104,7 @@ class NegotiationOfferController extends GetxController {
       ));
       onSuccess();
     } catch (err) {
-      Get.snackbar('Error`', handleApiFormatError(err), backgroundColor: Colors.redAccent);
+      Get.snackbar('Error`', err.toString(), backgroundColor: Colors.redAccent);
     } finally {
       Get.closeAllSnackbars();
     }
@@ -97,7 +113,10 @@ class NegotiationOfferController extends GetxController {
   Future<void> fetchMyBidsById({required String id, required VoidCallback onSuccess}) async {
     try {
       Get.snackbar('', 'Fetching data ...', backgroundColor: TColors.primary);
-      final response = await OfferService.instance.fetchMyBidsById(id);
+      final response = await OfferService.instance.fetchMyBidsById(
+        id: id,
+        onFailure: () {}
+      );
       var item = response.data;
       myBidById(OfferEntity(
           id: item['id'],
@@ -120,7 +139,7 @@ class NegotiationOfferController extends GetxController {
       print('My Bid by id fetched $myBidById');
       onSuccess();
     } catch (err) {
-      Get.snackbar('Error`', handleApiFormatError(err), backgroundColor: Colors.redAccent);
+      Get.snackbar('Error`', err.toString(), backgroundColor: Colors.redAccent);
     } finally {
       Get.closeAllSnackbars();
     }
@@ -130,12 +149,17 @@ class NegotiationOfferController extends GetxController {
     print('Working');
     try {
       Get.snackbar('', 'Deleting offer ...', backgroundColor: TColors.primary);
-      final response = await OfferService.instance.deleteOffer(id);
+      final response = await OfferService.instance.deleteOffer(
+        id: id,
+        onFailure: () {
+          Get.closeAllSnackbars();
+        }
+      );
       print(response);
       await fetchMyOffers(days: days, currency: currency);
       Get.snackbar('Success', response.data);
     } catch (e) {
-      Get.snackbar('Error`', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      Get.snackbar('Error`', e.toString(), backgroundColor: Colors.redAccent);
     } finally {
       Get.closeAllSnackbars();
     }
@@ -144,11 +168,15 @@ class NegotiationOfferController extends GetxController {
   Future<void> deleteBid({required String id, required String currency, required String days}) async {
     try {
       Get.snackbar('', 'Deleting bid ...', backgroundColor: TColors.primary);
-      final response = await OfferService.instance.deleteBid(id);
+      final response = await OfferService.instance.deleteBid(
+          id: id,
+          onFailure: () {
+            Get.closeAllSnackbars();
+          });
       await fetchMyBids(days: days, currency: currency);
       Get.snackbar('Success', response.data);
     } catch (e) {
-      Get.snackbar('Error`', handleApiFormatError(e), backgroundColor: Colors.redAccent);
+      Get.snackbar('Error`', e.toString(), backgroundColor: Colors.redAccent);
     } finally {
       Get.closeAllSnackbars();
     }
@@ -157,7 +185,11 @@ class NegotiationOfferController extends GetxController {
   Future<void> fetchAllNegotiatedOffers() async {
     try {
       negotiatedOffers.isEmpty && isNegotiatedOfferLoading(true);
-      final response = await OfferService.instance.fetchAllNegotiatedOffers();
+      final response = await OfferService.instance.fetchAllNegotiatedOffers(
+        onFailure: () {
+          isNegotiatedOfferLoading(false);
+        }
+      );
       var data = response.data;
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
@@ -165,7 +197,7 @@ class NegotiationOfferController extends GetxController {
       negotiatedOffers.assignAll(fetchAllNegotiation);
       print('All negotiations fetched $negotiatedOffers');
     } catch (err) {
-      Get.snackbar('Error`', handleApiFormatError(err), backgroundColor: Colors.redAccent);
+      Get.snackbar('Error`', err.toString(), backgroundColor: Colors.redAccent);
     } finally {
       isNegotiatedOfferLoading(false);
     }
@@ -184,5 +216,11 @@ class NegotiationOfferController extends GetxController {
     myBids.clear();
     myOfferIndex.value = 0;
     negotiatedOffers.clear();
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

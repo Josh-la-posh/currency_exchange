@@ -1,6 +1,9 @@
 import 'dart:async';
-
+import 'dart:ui';
+import 'package:dio/dio.dart';
 import '../../../data/modules/interceptor.dart';
+import '../../../utils/responses/handleApiError.dart';
+import '../../../utils/shared/error_dialog_response.dart';
 
 const WALLET_URL = '/wallet';
 const CREATE_URL = 'create';
@@ -30,51 +33,145 @@ class WalletServices{
 
   static WalletServices get instance => _instance;
 
-  Future createWallet({required String currency}) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$CREATE_URL', data: {'currency': currency},
-      );
-    return response;
+  Future _createWallet({required Object data}) {
+    return _apiService.post('/wallet/create', data: data);
   }
 
-  Future createDefaultWallet({required String walletId}) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$DEFAULT_WALLET_URL',
-        data: {'walletId': walletId},
-      );
+  Future _createDefaultWallet({required Object data}) {
+    return _apiService.post('/wallet/default-wallet', data: data);
+  }
+
+  Future _fundWalletViaNairaTransfer({required Object data}) {
+    return _apiService.post('/wallet/fund-wallet-naira-transfer', data: data);
+  }
+
+  Future _createFcy({required Object data}) {
+    return _apiService.post('/wallet/create/fcy', data: data);
+  }
+
+  Future _fundFcy({required Object data}) {
+    return _apiService.post('/wallet/fund-fcy', data: data);
+  }
+
+  Future _fundWalletViaPaystack({required Object data}) {
+    return _apiService.post('/wallet/fund-wallet-naira-paystack', data: data);
+  }
+
+  Future _addLocalBank({required Object data}) {
+    return _apiService.post('/wallet/add-local-bank', data: data);
+  }
+
+  Future _verifyBankAccount({required Map<String, dynamic> queryParameters}) {
+    return _apiService.get('/wallet/verify-bank-account', queryParameters: queryParameters);
+  }
+
+  Future _transferToLocalBank({required Object data}) {
+    return _apiService.post('/wallet/transfer-local-bank', data: data);
+  }
+
+  Future _fundWalletViaNairaUssd({required Object data}) {
+    return _apiService.post('/wallet/fund-wallet-naira-ussd', data: data);
+  }
+
+  Future _fundWalletViaNairaBankDirect({required Object data}) {
+    return _apiService.post('/wallet/fund-wallet-naira-bank-direct', data: data);
+  }
+
+  Future _confirmBirthday({required Object data}) {
+    return _apiService.post('/wallet/confirm-birthday', data: data);
+  }
+
+  Future _confirmingOtp({required Object data}) {
+    return _apiService.post('/wallet/confirm-otp', data: data);
+  }
+
+  Future _fetchWallets({required Map<String, dynamic> queryParameters}) {
+    return _apiService.get('/wallet/get-wallets', queryParameters: queryParameters);
+  }
+
+  Future _fetchDefaultWallet() {
+    return _apiService.get('/wallet/user-default-wallet');
+  }
+
+  Future _fetchLocalBank() {
+    return _apiService.get('/wallet/get-local-bank');
+  }
+
+  Future _fetchFcyAccount({required Map<String, dynamic> queryParameters}) {
+    return _apiService.get('/wallet/fcy-account', queryParameters: queryParameters);
+  }
+
+  Future _fetchBankList() {
+    return _apiService.get('/wallet/list-banks');
+  }
+
+  Future _fetchFxRates({required Map<String, dynamic> queryParameters}) {
+    return _apiService.get('/wallet/fx-rates', queryParameters: queryParameters);
+  }
+
+  Future _deleteFcy({required String id}) {
+    return _apiService.delete('/wallet/fcy/$id');
+  }
+
+  Future _deleteLocalBankAccount({required String id}) {
+    return _apiService.delete('/wallet/local-account/$id');
+  }
+
+
+
+
+  Future createWallet({required String currency, required VoidCallback onFailure}) async {
+    return _createWallet(data: {'currency': currency}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fundWalletViaNairaTransfer({required String amount}) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$NAIRA_TRANSFER_URL',
-        data: {'amount': amount},
-      );
-    return response;
-  }
-
-  Future createFcy({required String currency, required String accountNumber}) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$CREATE_URL/fcy',
-        data: {'currency': currency, 'accountNumber': accountNumber},
-      );
+  Future createDefaultWallet({required String walletId, required VoidCallback onFailure}) async {
+    return _createDefaultWallet(data: {'walletId': walletId}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fundFcy({required String amount, required String currency}) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/fund-fcy',
-        data: {'amount': amount, 'currency': currency},
-      );
+  Future fundWalletViaNairaTransfer({required String amount, required VoidCallback onFailure}) async {
+    return _fundWalletViaNairaTransfer(data: {'amount': amount}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fundWalletViaPaystack({required String amount}) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$PAYSTACK_URL',
-        data: {'amount': amount},
-      );
+  Future createFcy({required String currency, required String accountNumber, required VoidCallback onFailure}) async {
+    return _createFcy(data: {'currency': currency, 'accountNumber': accountNumber}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
+  }
+
+  Future fundFcy({required String amount, required String currency, required VoidCallback onFailure}) async {
+    return _fundFcy(data: {'amount': amount, 'currency': currency}).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
+  }
+
+  Future fundWalletViaPaystack({required String amount, required VoidCallback onFailure}) async {
+    return _fundWalletViaPaystack(data: {'amount': amount}).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future addLocalBank({
@@ -82,149 +179,210 @@ class WalletServices{
     required String accountName,
     required String bankName,
     required String bankCode,
+    required VoidCallback onFailure
   }) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$ADD_LOCAL_BANK_URL',
-        data: {
-          'accountNumber': accountNumber,
-          'accountName': accountName,
-          'bankName': bankName,
-          'bankCode': bankCode,
-        },
-      );
+    return _addLocalBank(data: {
+      'accountNumber': accountNumber,
+      'accountName': accountName,
+      'bankName': bankName,
+      'bankCode': bankCode,
+    }).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future verifyBankAccount({
     required String accountNumber,
     required String bankCode,
+    required VoidCallback onFailure
   }) async {
-    final response = await _apiService.get(
-        '$WALLET_URL/$VERIFY_BANK_ACCOUNT_URL',
-        queryParameters: {'accountNumber': accountNumber, 'bankCode': bankCode},
-      );
-    return response;
+    return _verifyBankAccount(
+        queryParameters: {'accountNumber': accountNumber, 'bankCode': bankCode}).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future transferToLocalBank({
     required String bankId,
     required int amount,
+    required VoidCallback onFailure
   }) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$TRANSFER_LOCAL_BANK_URL',
-        data: {'bankId': bankId, 'amount': amount},
-      );
+    return _transferToLocalBank(
+        data: {'bankId': bankId, 'amount': amount}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future fundWalletViaNairaUssd({
     required String amount,
     required String bank,
+    required VoidCallback onFailure
   }) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$NAIRA_USSD_URL',
-        data: {'amount': amount, 'bank': bank},
-      );
+    return _fundWalletViaNairaUssd(
+        data: {'amount': amount, 'bank': bank}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future fundWalletViaNairaBankDirect({
     required int amount,
     required String bankId,
+    required VoidCallback onFailure
   }) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$NAIRA_BANK_DIRECT_URL',
-        data: {'amount': amount, 'bankId': bankId},
-      );
+    return _fundWalletViaNairaBankDirect(
+        data: {'amount': amount, 'bankId': bankId}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future confirmBirthday({
     required String birthday,
     required String reference,
+    required VoidCallback onFailure
   }) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$CONFIRM_BIRTHDAY_URL',
-        data: {'birthday': birthday, 'reference': reference},
-      );
-    return response;
+    return _confirmBirthday(
+        data: {'birthday': birthday, 'reference': reference}).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future confirmingOtp({
     required String otp,
     required String reference,
+    required VoidCallback onFailure
   }) async {
-    final response = await _apiService.post(
-        '$WALLET_URL/$CONFIRM_OTP_URL',
-        data: {'otp': otp, 'reference': reference},
-      );
+    return _confirmingOtp(
+        data: {'otp': otp, 'reference': reference}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchWallets({required String currency}) async {
-    final response = await _apiService.get(
-        '$WALLET_URL/$GET_WALLET_URL',
-        queryParameters: {'currency': currency},
-      );
+  Future fetchWallets({
+    required String currency,
+    required VoidCallback onFailure
+  }) async {
+    return _fetchWallets(
+        queryParameters: {'currency': currency}).then((response) {
       return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchDefaultWallet() async {
-    final response = await _apiService.get('$WALLET_URL/$GET_DEFAULT_WALLET_URL');
-    return response;
+  Future fetchDefaultWallet({required VoidCallback onFailure}) async {
+    return _fetchDefaultWallet().then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchLocalBank() async {
-    final response = await _apiService.get('$WALLET_URL/$GET_LOCAL_BANK_URL');
-    return response;
+  Future fetchLocalBank({required VoidCallback onFailure}) async {
+    return _fetchLocalBank().then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchFcyAccount({required String currency}) async {
-    final response = await _apiService.get(
-        '$WALLET_URL/fcy-account',
-        queryParameters: {'currency': currency},
-      );
-    return response;
+  Future fetchFcyAccount({
+    required String currency,
+    required VoidCallback onFailure
+  }) async {
+    return _fetchFcyAccount(queryParameters: {'currency': currency}).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchBankList() async {
-    final response = await _apiService.get('$WALLET_URL/$GET_BANK_LIST_URL');
-    return response;
+  Future fetchBankList({required VoidCallback onFailure}) async {
+    return _fetchBankList().then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future fetchFxRates({required String currency}) async {
-    final response = await _apiService.get(
-        '$WALLET_URL/fx-rates',
-        queryParameters: {
-          'baseCurrency': currency
-        },
-      );
-    return response;
+  Future fetchFxRates({
+    required String currency,
+    required VoidCallback onFailure
+  }) async {
+    return _fetchFxRates(queryParameters: {
+      'baseCurrency': currency
+    }).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future fetchConversionRate({
     required String baseCurrency,
     required String targetCurrency,
-    required double amount
+    required double amount,
+    required VoidCallback onFailure
   }) async {
-    final response = await _apiService.get(
-      '$WALLET_URL/fx-rates',
-      queryParameters: {
-        'baseCurrency': baseCurrency,
-        'targetCurrency': targetCurrency,
-        'amount': amount
-      },
-    );
-    return response;
+    return _fetchFxRates(queryParameters: {
+      'baseCurrency': baseCurrency,
+      'targetCurrency': targetCurrency,
+      'amount': amount
+    }).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future deleteFcy({required String id}) async {
-    final response = await _apiService.delete('$WALLET_URL/fcy/$id');
-    return response;
+  Future deleteFcy({
+    required String id,
+    required VoidCallback onFailure
+  }) async {
+    return _deleteFcy(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
-  Future deleteLocalBankAccount({required String id}) async {
-    final response = await _apiService.delete('$WALLET_URL/local-account/$id');
-    return response;
+  Future deleteLocalBankAccount({
+    required String id,
+    required VoidCallback onFailure
+  }) async {
+    return _deleteLocalBankAccount(id: id).then((response) {
+      return response;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 }

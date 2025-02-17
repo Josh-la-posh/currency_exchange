@@ -14,15 +14,14 @@ class CurrencyController extends GetxController {
   }
 
   Future<void> fetchCurrencyRates({required String currency}) async {
-
     try {
-      final response = await WalletServices.instance.fetchFxRates(currency: currency);
-      if (response.statusCode == 200) {
-        final rates = response.data['conversion_rates'] as Map<String, dynamic>;
-        currencyRates.value = rates.entries
-            .map((entry) => {'currency': entry.key, 'rate': entry.value})
-            .toList();
-      }
+      final response = await WalletServices.instance.fetchFxRates(
+          currency: currency,
+          onFailure: () {});
+      final rates = response.data['conversion_rates'] as Map<String, dynamic>;
+      currencyRates.value = rates.entries
+          .map((entry) => {'currency': entry.key, 'rate': entry.value})
+          .toList();
     } catch (e) {
       Get.snackbar('Error', 'Failed to load currency rates',
           snackPosition: SnackPosition.BOTTOM);

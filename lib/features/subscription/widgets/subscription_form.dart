@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/enums.dart';
+import 'package:pouch/utils/shared/error_dialog_response.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../../../utils/validators/validation.dart';
@@ -201,13 +202,17 @@ class SubscriptionForm extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwSections * 3),
           Obx(() => TElevatedButton(
             onTap: controller.isCreatingSubscription.value ? null : () {
+              if (double.parse(controller.minRate.value) >= double.parse(controller.maxRate.value)) {
+                showErrorAlertHelper(errorMessage: 'Maximum rate must be greater than Minimum rate');
+                return;
+              }
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
                 controller.createSubscription(
                     debitedCurrency: getCurrencyName(controller.debitedCurrency.value),
                     creditedCurrency: getCurrencyName(controller.creditedCurrency.value),
-                    minRate: int.parse(controller.minRate.value),
-                    maxRate: int.parse(controller.maxRate.value),
+                    minRate: double.parse(controller.minRate.value),
+                    maxRate: double.parse(controller.maxRate.value),
                     onSuccess: (){
                       Get.back();
                       controller.clearForm();

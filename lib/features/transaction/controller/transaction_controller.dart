@@ -1,8 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/transaction/apis/api.dart';
 import 'package:pouch/features/transaction/models/transaction_entity.dart';
 
+import '../../../utils/shared/error_dialog_response.dart';
+
 class TransactionController extends GetxController {
+  final CancelToken requestCancelToken = CancelToken();
   var isTransactionLoading = false.obs;
   var transactions = <TransactionEntity>[].obs;
 
@@ -15,15 +19,15 @@ class TransactionController extends GetxController {
   Future<void> fetchTransactions() async {
     try {
       transactions.isEmpty && isTransactionLoading(true);
-      final response = await TransactionService.instance.fetchTransactions();
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final data = response.data['content'];
-        List<TransactionEntity> fetchedTransactions = (data as List)
-            .map((json) => TransactionEntity.fromJson(json)).toList();
-        transactions.assignAll(fetchedTransactions);
-      }
+      final response = await TransactionService.instance.fetchTransactions(
+          onFailure: () {isTransactionLoading(false);}
+      );
+      final data = response.data['content'];
+      List<TransactionEntity> fetchedTransactions = (data as List)
+          .map((json) => TransactionEntity.fromJson(json)).toList();
+      transactions.assignAll(fetchedTransactions);
     } catch (e) {
-      print(e);
+      showErrorAlertHelper(errorMessage: e.toString());
     } finally {
       isTransactionLoading(false);
     }
@@ -31,5 +35,11 @@ class TransactionController extends GetxController {
 
   clearData() {
     transactions.clear();
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

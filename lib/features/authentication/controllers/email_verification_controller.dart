@@ -1,14 +1,14 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/authentication/controllers/auth_form_controller.dart';
 import 'package:pouch/utils/otp/otp.dart';
-
-import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
 
 class EmailVerificationController extends GetxController {
   final AuthFormController authFormController = Get.put(AuthFormController());
+  final CancelToken requestCancelToken = CancelToken();
   final formKey = GlobalKey<FormState>();
   final List<TextEditingController> otpControllers =
   List.generate(6, (_) => TextEditingController());
@@ -65,15 +65,16 @@ class EmailVerificationController extends GetxController {
   }) async {
     try {
       Get.snackbar('Sending Otp', 'We are sending an a 6 digit code to $email');
-      final response = await AuthService.instance.emailVerificationOtp({"email": email.toLowerCase().trim()});
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-      }
+      await AuthService.instance.emailVerificationOtp(
+          data: {"email": email.toLowerCase().trim()},
+          onFailure: () {}
+      );
+      onSuccess();
     } catch (err) {
       if (onFailure != null) {
         onFailure();
       }
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       Get.closeAllSnackbars();
     }
@@ -82,12 +83,13 @@ class EmailVerificationController extends GetxController {
   Future<void> verifyEmailOtp({required String otpCode,required VoidCallback onSuccess}) async {
     final intOtp = int.parse(otpCode);
     try {
-      final response = await AuthService.instance.confirmEmailOtp({"emailOtp": intOtp});
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-      }
+      await AuthService.instance.confirmEmailOtp(
+          data: {"emailOtp": intOtp},
+          onFailure: () {}
+      );
+      onSuccess();
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     }
   }
 
@@ -184,5 +186,11 @@ class EmailVerificationController extends GetxController {
           handleEmailNotVerified: () {}
       );
     }
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

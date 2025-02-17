@@ -397,30 +397,30 @@ class CreateReviewDetailsScreen extends StatelessWidget {
                             buttonText: createOfferController.isCreatingOfferLoading.value ? 'Paying ...' : 'Pay ${helperFunctionsController.moneyFormatter(createOfferController.amountController.text.toString())} ${getCurrencyName(createOfferController.debitedCurrency.value)}')),
                       ),
                       const SizedBox(height: TSizes.spaceBtwElements),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          NotiIcon(height: 15),
-                          const SizedBox(width: TSizes.sm),
-                          SizedBox(
-                            width: THelperFunctions.screenWidth() * 0.6,
-                            child: FittedBox(
-                              fit: BoxFit.fill,
-                              child: RichText(
-                                  text: TextSpan(
-                                      style: Theme.of(context).textTheme.labelSmall,
-                                      children: const <TextSpan> [
-                                        TextSpan(
-                                            text: 'You will be fully refunded if your offer is not matched in 1hour',
-                                            style: TextStyle(fontSize: TSizes.fontSize11)
-                                        )
-                                      ]
-                                  )
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     NotiIcon(height: 15),
+                      //     const SizedBox(width: TSizes.sm),
+                      //     SizedBox(
+                      //       width: THelperFunctions.screenWidth() * 0.6,
+                      //       child: FittedBox(
+                      //         fit: BoxFit.fill,
+                      //         child: RichText(
+                      //             text: TextSpan(
+                      //                 style: Theme.of(context).textTheme.labelSmall,
+                      //                 children: const <TextSpan> [
+                      //                   TextSpan(
+                      //                       text: 'You will be fully refunded if your offer is not matched in 1hour',
+                      //                       style: TextStyle(fontSize: TSizes.fontSize11)
+                      //                   )
+                      //                 ]
+                      //             )
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                       const SizedBox(width: TSizes.defaultSpace),
                     ],
                   ),

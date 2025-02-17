@@ -6,11 +6,13 @@ import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/constants/sizes.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../../../common/widgets/currencyWidget.dart';
+import '../../../data/modules/interceptor.dart';
 import '../controllers/tradingOfferController.dart';
 import '../icons/svg.dart';
 import '../models/offer.dart';
 
 class AcceptReviewDetailsScreen extends StatelessWidget {
+  final AppInterceptor appInterceptor = AppInterceptor();
   final OfferEntity? item;
   AcceptReviewDetailsScreen({
     super.key,
@@ -27,6 +29,9 @@ class AcceptReviewDetailsScreen extends StatelessWidget {
         surfaceTintColor: darkMode ? TColors.textPrimary.withOpacity(0) : Colors.white,
         leading: IconButton(
           onPressed: (){
+            appInterceptor.cancelOngoingRequest(() {
+              tradingOfferController.resetBoolForOutgoingRequests();
+            });
             Get.back();
           },
           icon: const Icon(Icons.arrow_back),

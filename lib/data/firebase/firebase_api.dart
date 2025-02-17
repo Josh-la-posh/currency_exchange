@@ -90,7 +90,7 @@ class FirebaseApi {
   Future<void> registerDeviceToken() async {
     try {
       final token = await userSessionController.getDeviceToken();
-      final response = await NotificationService.instance.registerDeviceToken({
+      final response = await NotificationService.instance.registerDeviceToken(data: {
         "token": token,
       });
       print('Register token response: ${response.data}');

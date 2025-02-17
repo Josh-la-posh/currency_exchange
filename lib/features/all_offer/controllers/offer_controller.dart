@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/apis/api.dart';
@@ -12,6 +13,7 @@ import '../screens/accept_offer_success_page.dart';
 import '../screens/offer_details.dart';
 
 class OfferController extends GetxController {
+  final CancelToken requestCancelToken = CancelToken();
   final isAllOffersLoading = false.obs;
   final isUsdOffersLoading = false.obs;
   final isEurOffersLoading = false.obs;
@@ -99,16 +101,18 @@ class OfferController extends GetxController {
     queryParameters['sortByAmount'] = 'sortByAmount';
     try {
       allOffers.isEmpty && isAllOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var data = response.data;
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        allOffers.assignAll(fetchAOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters, 
+          onFailure: () {
+            isAllOffersLoading(false);
+          });
+      var data = response.data;
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      allOffers.assignAll(fetchAOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isAllOffersLoading(false);
     }
@@ -120,15 +124,16 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'USD';
     try {
       isUsdOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        allUsdOffers.assignAll(fetchAOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isUsdOffersLoading(false);}
+      );
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      allUsdOffers.assignAll(fetchAOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isUsdOffersLoading(false);
     }
@@ -140,15 +145,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'NGN';
     try {
       isNgnOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        allNgnOffers.assignAll(fetchAOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isNgnOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      allNgnOffers.assignAll(fetchAOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isNgnOffersLoading(false);
     }
@@ -160,15 +165,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'CAD';
     try {
       isCadOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        allCadOffers.assignAll(fetchAOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isCadOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      allCadOffers.assignAll(fetchAOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isCadOffersLoading(false);
     }
@@ -180,15 +185,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'EUR';
     try {
       isEurOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        allEurOffers.assignAll(fetchAOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isEurOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      allEurOffers.assignAll(fetchAOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isEurOffersLoading(false);
     }
@@ -200,15 +205,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'GBP';
     try {
       isGbpOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        allGbpOffers.assignAll(fetchAOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isGbpOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      allGbpOffers.assignAll(fetchAOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isGbpOffersLoading(false);
     }
@@ -218,15 +223,15 @@ class OfferController extends GetxController {
     final queryParameters = <String, dynamic>{};
     try {
       isNewOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        newOffers.assignAll(fetchAOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isNewOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      newOffers.assignAll(fetchAOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isNewOffersLoading(false);
     }
@@ -237,15 +242,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'USD';
     try {
       isUsdNewOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        newUsdOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isUsdNewOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      newUsdOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isUsdNewOffersLoading(false);
     }
@@ -256,15 +261,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'NGN';
     try {
       isNgnNewOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        newNgnOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isNgnNewOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      newNgnOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isNgnNewOffersLoading(false);
     }
@@ -275,15 +280,16 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'CAD';
     try {
       isCadNewOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        newCadOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isCadNewOffersLoading(false);}
+      );
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      newCadOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: (err.toString()));
     } finally {
       isCadNewOffersLoading(false);
     }
@@ -294,15 +300,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'EUR';
     try {
       isEurNewOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        newEurOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isEurNewOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      newEurOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isEurNewOffersLoading(false);
     }
@@ -313,15 +319,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'GBP';
     try {
       isGbpNewOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        newGbpOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isGbpNewOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      newGbpOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isGbpNewOffersLoading(false);
     }
@@ -332,15 +338,15 @@ class OfferController extends GetxController {
     queryParameters['trending'] = 'trending';
     try {
       isTrendingOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        trendingOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isTrendingOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      trendingOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isTrendingOffersLoading(false);
     }
@@ -352,15 +358,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'USD';
     try {
       isUsdTrendingOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        trendingUsdOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isUsdTrendingOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      trendingUsdOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isUsdTrendingOffersLoading(false);
     }
@@ -372,15 +378,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'NGN';
     try {
       isNgnTrendingOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        trendingNgnOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isNgnTrendingOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      trendingNgnOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isNgnTrendingOffersLoading(false);
     }
@@ -392,15 +398,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'CAD';
     try {
       isCadTrendingOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        trendingCadOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isCadTrendingOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      trendingCadOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isCadTrendingOffersLoading(false);
     }
@@ -412,15 +418,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'EUR';
     try {
       isEurTrendingOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        trendingEurOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isEurTrendingOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      trendingEurOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isEurTrendingOffersLoading(false);
     }
@@ -432,15 +438,15 @@ class OfferController extends GetxController {
     queryParameters['currency'] = 'GBP';
     try {
       isGbpTrendingOffersLoading(true);
-      final response = await OfferService.instance.fetchAllOffers(queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var contents = response.data['content'];
-        List<OfferEntity> fetchAllOffers = (contents as List)
-            .map((json) => OfferEntity.fromJson(json)).toList();
-        trendingGbpOffers.assignAll(fetchAllOffers);
-      }
+      final response = await OfferService.instance.fetchAllOffers(
+          queryParameters: queryParameters,
+          onFailure: () {isGbpTrendingOffersLoading(false);});
+      var contents = response.data['content'];
+      List<OfferEntity> fetchAllOffers = (contents as List)
+          .map((json) => OfferEntity.fromJson(json)).toList();
+      trendingGbpOffers.assignAll(fetchAllOffers);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isGbpTrendingOffersLoading(false);
     }
@@ -492,5 +498,11 @@ class OfferController extends GetxController {
     gbpOfferIndex.value = 0;
     cadOfferIndex.value = 0;
     eurOfferIndex.value = 0;
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

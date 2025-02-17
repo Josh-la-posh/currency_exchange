@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:pouch/features/wallet/controller/wallet_controller.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/enums.dart';
-import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/shared/error_dialog_response.dart';
 import '../../wallet/apis/api.dart';
 import '../../wallet/models/fcy_account_entity.dart';
@@ -78,24 +77,25 @@ class PaymentController extends GetxController {
   Future<void> fundingWalletViaNairaTransfer({required String amount}) async {
     try {
       isFundingWalletViaNairaTransfer(true);
-      final response = await WalletServices.instance.fundWalletViaNairaTransfer(amount: amount);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var item = response.data['meta']['authorization'];
-        flutterwaveDetails(FlutterwaveModel(
-            transfer_reference: item['transfer_reference'],
-            transfer_account: item['transfer_account'],
-            transfer_bank: item['transfer_bank'],
-            account_expiration: item['account_expiration'],
-            transfer_note: item['transfer_note'],
-            transfer_amount: item['transfer_amount'],
-            mode: item['mode']
-        ));
-        Get.to(() => FlutterwavePaymentScreen());
-      } else {
-        print('Failed to fund wallet via Naira transfer: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.fundWalletViaNairaTransfer(
+          amount: amount,
+          onFailure: () {
+            isFundingWalletViaNairaTransfer(false);
+          }
+      );
+      var item = response.data['meta']['authorization'];
+      flutterwaveDetails(FlutterwaveModel(
+          transfer_reference: item['transfer_reference'],
+          transfer_account: item['transfer_account'],
+          transfer_bank: item['transfer_bank'],
+          account_expiration: item['account_expiration'],
+          transfer_note: item['transfer_note'],
+          transfer_amount: item['transfer_amount'],
+          mode: item['mode']
+      ));
+      Get.to(() => FlutterwavePaymentScreen());
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isFundingWalletViaNairaTransfer(false);
     }
@@ -104,15 +104,16 @@ class PaymentController extends GetxController {
   Future<void> creatingFcy({required String currency, required String accountNumber}) async {
     try {
       isCreatingFcy(true);
-      final response = await WalletServices.instance.createFcy(currency: currency, accountNumber: accountNumber);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var item = response.data;
-        print('created fcy $item');
-      } else {
-        print('Failed to create FCY account: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.createFcy(
+          currency: currency,
+          accountNumber: accountNumber,
+          onFailure: () {
+            isCreatingFcy(false);
+          }
+      );
+      var item = response.data;
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isCreatingFcy(false);
     }
@@ -121,16 +122,16 @@ class PaymentController extends GetxController {
   Future<void> fundingFcy({required String currency, required String amount, required VoidCallback onSuccess}) async {
     try {
       isFundingFcy(true);
-      final response = await WalletServices.instance.fundFcy(currency: currency, amount: amount);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var item = response.data;
-        await walletController.fetchWallets(currency: '');
-        onSuccess();
-      } else {
-        print('Failed to fund FCY account: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.fundFcy(
+          currency: currency,
+          amount: amount,
+          onFailure: () {isFundingFcy(false);}
+      );
+      var item = response.data;
+      await walletController.fetchWallets(currency: '');
+      onSuccess();
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isFundingFcy(false);
     }
@@ -139,24 +140,23 @@ class PaymentController extends GetxController {
   Future<void> fundingWalletViaPaystack({required String amount}) async {
     try {
       isFundingWalletViaPaystack(true);
-      final response = await WalletServices.instance.fundWalletViaPaystack(amount: amount);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var item = response.data['data'];
-        paystackDetails(PaystackModel(
-            reference: item['reference'],
-            status: item['status'],
-            display_text: item['display_text'],
-            account_name: item['account_name'],
-            account_number: item['account_number'],
-            bank: item['bank'],
-            account_expires_at: item['account_expires_at']
-        ));
-        Get.to(() => PaystackPaymentScreen(amount: amount));
-      } else {
-        print('Failed to fund wallet via Paystack: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.fundWalletViaPaystack(
+          amount: amount,
+          onFailure: () {isFundingWalletViaPaystack(false);}
+      );
+      var item = response.data['data'];
+      paystackDetails(PaystackModel(
+          reference: item['reference'],
+          status: item['status'],
+          display_text: item['display_text'],
+          account_name: item['account_name'],
+          account_number: item['account_number'],
+          bank: item['bank'],
+          account_expires_at: item['account_expires_at']
+      ));
+      Get.to(() => PaystackPaymentScreen(amount: amount));
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isFundingWalletViaPaystack(false);
     }
@@ -169,19 +169,18 @@ class PaymentController extends GetxController {
     try {
       isTransferToLocalBank(true);
       final response = await WalletServices.instance.transferToLocalBank(
-        bankId: bankId,
-        amount: amount,
+          bankId: bankId,
+          amount: amount,
+          onFailure: () {
+            isTransferToLocalBank(false);
+          }
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var title = response.data['message'];
-        await walletController.fetchWallets(currency: '');
-        selectedWithdrawalAccount.value = GetBankAccountModel();
-        Get.to(() => WithdrawalSuccessScreen(title: title,));
-      } else {
-        print('Failed to transfer to local bank: ${response.data['message']}');
-      }
+      var title = response.data['message'];
+      await walletController.fetchWallets(currency: '');
+      selectedWithdrawalAccount.value = GetBankAccountModel();
+      Get.to(() => WithdrawalSuccessScreen(title: title,));
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isTransferToLocalBank(false);
     }
@@ -195,22 +194,21 @@ class PaymentController extends GetxController {
       isFundWalletViaNairaUssd(true);
       final response = await WalletServices.instance.fundWalletViaNairaUssd(
           amount: amount,
-          bank: bank
+          bank: bank,
+          onFailure: () {
+            isFundWalletViaNairaUssd(false);
+          }
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        var item = response.data['data'];
-        ussdDetails(UssdModel(
-          reference: item['reference'],
-          status: item['status'],
-          display_text: item['display_text'],
-          ussd_code: item['ussd_code'],
-        ));
-        Get.to(() => UssdFundingDetailScreen(amount: amount,));
-      } else {
-        print('Failed to fund wallet via USSD: ${response.data['message']}');
-      }
+      var item = response.data['data'];
+      ussdDetails(UssdModel(
+        reference: item['reference'],
+        status: item['status'],
+        display_text: item['display_text'],
+        ussd_code: item['ussd_code'],
+      ));
+      Get.to(() => UssdFundingDetailScreen(amount: amount,));
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isFundWalletViaNairaUssd(false);
     }
@@ -224,16 +222,15 @@ class PaymentController extends GetxController {
       isFundWalletViaNairaBankDirect(true);
       final response = await WalletServices.instance.fundWalletViaNairaBankDirect(
           amount: amount,
-          bankId: bankId
+          bankId: bankId,
+          onFailure: () {
+            isFundWalletViaNairaBankDirect(false);
+          }
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        await walletController.fetchWallets(currency: '');
-        Get.snackbar('Pending', 'Your transaction is in progress', backgroundColor: Colors.yellowAccent);
-      } else {
-        print('Failed to fund wallet via Naira Bank Direct: ${response.data['message']}');
-      }
+      await walletController.fetchWallets(currency: '');
+      Get.snackbar('Pending', 'Your transaction is in progress', backgroundColor: Colors.yellowAccent);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isFundWalletViaNairaBankDirect(false);
     }
@@ -245,17 +242,16 @@ class PaymentController extends GetxController {
   }) async {
     try {
       isConfirmBirthday(true);
-      final response = await WalletServices.instance.confirmBirthday(
+      await WalletServices.instance.confirmBirthday(
           birthday: birthday,
-          reference: reference
+          reference: reference,
+          onFailure: () {
+            isConfirmBirthday(false);
+          }
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
         Get.snackbar('Pending', 'Your request is in progress', backgroundColor: Colors.yellowAccent);
-      } else {
-        print('Failed to confirm birthday: ${response.data['message']}');
-      }
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isConfirmBirthday(false);
     }
@@ -267,17 +263,16 @@ class PaymentController extends GetxController {
   }) async {
     try {
       isConfirmingOtp(true);
-      final response = await WalletServices.instance.confirmingOtp(
+      await WalletServices.instance.confirmingOtp(
           otp: otp,
-          reference: reference
+          reference: reference,
+          onFailure: () {
+            isConfirmingOtp(false);
+          }
       );
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        Get.snackbar('Pending', 'Your request is in progress', backgroundColor: Colors.yellowAccent);
-      } else {
-        print('Failed to confirm OTP: ${response.data['message']}');
-      }
+      Get.snackbar('Pending', 'Your request is in progress', backgroundColor: Colors.yellowAccent);
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isConfirmingOtp(false);
     }
@@ -285,16 +280,16 @@ class PaymentController extends GetxController {
 
   Future<void> fetchFcyAccount({required String currency}) async {
     try {
-      final response = await WalletServices.instance.fetchFcyAccount(currency: currency);
-      if (response.statusCode == 200) {
-        final data = response.data['content'];
-        List<GetFcyAccountEntity> fetchedFcyAccounts = (data as List)
-            .map((json) => GetFcyAccountEntity.fromJson(json)).toList();
-      } else {
-        print('Failed to fetch FCY accounts: ${response.data['message']}');
-      }
+      final response = await WalletServices.instance.fetchFcyAccount(
+          currency: currency,
+          onFailure: () {
+          }
+      );
+      final data = response.data['content'];
+      List<GetFcyAccountEntity> fetchedFcyAccounts = (data as List)
+          .map((json) => GetFcyAccountEntity.fromJson(json)).toList();
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
     }
   }
@@ -302,14 +297,15 @@ class PaymentController extends GetxController {
   Future<void> deleteFcy({required String id}) async {
     try {
       Get.snackbar('', 'Deleting account', backgroundColor: TColors.primary);
-      final response = await WalletServices.instance.deleteFcy(id: id);
-      if (response.statusCode == 200) {
-        await fetchFcyAccount(currency: '');
-      } else {
-        print('Failed to delete FCY account: ${response.data['message']}');
-      }
+      await WalletServices.instance.deleteFcy(
+          id: id,
+          onFailure: () {
+            Get.closeAllSnackbars();
+          }
+      );
+      await fetchFcyAccount(currency: '');
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       Get.closeAllSnackbars();
     }

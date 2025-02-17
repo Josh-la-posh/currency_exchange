@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:pouch/features/wallet/apis/api.dart';
-import 'package:pouch/utils/responses/handleApiError.dart';
 import 'package:pouch/utils/shared/error_dialog_response.dart';
 
 class ExchangeRateController extends GetxController {
@@ -34,7 +33,6 @@ class ExchangeRateController extends GetxController {
 
   // Logic for reversing currencies, if required
   void reverseCurrency() {
-    // Reverse operation or add logic for a toggle.
   }
 
   Future<void> fetchConversionRate() async {
@@ -44,15 +42,16 @@ class ExchangeRateController extends GetxController {
       final response = await WalletServices.instance.fetchConversionRate(
           baseCurrency: baseCurrency.value,
           targetCurrency: targetCurrency.value,
-          amount: baseAmount.value
+          amount: baseAmount.value,
+          onFailure: () {
+            isConverting(false);
+          }
       );
       final data = response.data['conversion_rates'];
-      print('The conversion rate is: $data');
-      print('The answer is: ${data[targetCurrency.value]}');
       exchangeRate.value = data[targetCurrency.value];
       updateTargetAmount();
     } catch (e) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(e));
+      showErrorAlertHelper(errorMessage: e.toString());
       isConverting(false);
     } finally {
       isConverting(false);

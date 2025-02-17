@@ -1,17 +1,17 @@
 import 'dart:async';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/apis/api.dart';
-import 'package:pouch/features/all_offer/models/create_offer_response.dart';
 import 'package:pouch/features/all_offer/models/offer.dart';
 import 'package:pouch/features/all_offer/models/offer_details_entity.dart';
-import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
-import 'package:pouch/utils/responses/handleApiError.dart';
 import 'package:pouch/utils/shared/error_dialog_response.dart';
+import '../../notification/apis/api.dart';
 import '../screens/accept_offer_success_page.dart';
 import '../screens/offer_details.dart';
 
 class TradingOfferController extends GetxController {
+  final CancelToken requestCancelToken = CancelToken();
   final isAcceptingRejectingOfferLoading = false.obs;
   final isSwappingLoading = false.obs;
   final isNegotiatingOfferLoading = false.obs;
@@ -37,15 +37,16 @@ class TradingOfferController extends GetxController {
     try {
       isAcceptingRejectingOfferLoading(true);
       final response = await OfferService.instance.acceptingOrRejectingOffer(
-          id: id,
-          data: {'negotiationAccepted': negotiationAccepted}
+        id: id,
+        data: {'negotiationAccepted': negotiationAccepted},
+        onFailure: () {
+          isAcceptingRejectingOfferLoading(false);
+        }
       );
       var item = response.data;
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-      }
+      onSuccess();
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isAcceptingRejectingOfferLoading(false);
     }
@@ -61,19 +62,20 @@ class TradingOfferController extends GetxController {
     try {
       isNegotiatingOfferLoading(true);
       final response = await OfferService.instance.negotiatingOffer(
-          id: id,
-          data: {
-            'negotiatorRate': negotiatorRate,
-            'negotiatorAmount': negotiatorAmount
-          }
+        id: id,
+        data: {
+          'negotiatorRate': negotiatorRate,
+          'negotiatorAmount': negotiatorAmount
+        },
+        onFailure: () {
+          isNegotiatingOfferLoading(false);
+        }
       );
       var item = response.data;
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        onSuccess();
-      }
+      onSuccess();
 
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isNegotiatingOfferLoading(false);
     }
@@ -86,16 +88,18 @@ class TradingOfferController extends GetxController {
   }) async {
     try {
       isSwappingLoading(true);
-      final response = await OfferService.instance.swappingOffer(id: id);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // await fetchAllOffers();
-        Get.to(() => AcceptOfferSuccessPage(
-          amount: amount,
-          creditedCurrency: creditedCurrency,
-        ));
-      }
+      final response = await OfferService.instance.swappingOffer(
+        id: id,
+        onFailure: () {
+          isSwappingLoading(false);
+        }
+      );
+      Get.to(() => AcceptOfferSuccessPage(
+        amount: amount,
+        creditedCurrency: creditedCurrency,
+      ));
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isSwappingLoading(false);
     }
@@ -109,8 +113,12 @@ class TradingOfferController extends GetxController {
     try {
       isFetchOfferByIdLoading(true);
       Get.to(() => OfferDetailsScreen());
-      print(('I want to load offer'));
-      final response = await OfferService.instance.fetchOfferById(id);
+      final response = await OfferService.instance.fetchOfferById(
+          id: id,
+          onFailure: () {
+            isFetchOfferByIdLoading(false);
+          }
+      );
       print(response);
       var item = response.data;
       offerById(OfferEntity(
@@ -131,10 +139,9 @@ class TradingOfferController extends GetxController {
           createdDate: item['createdDate'],
           lastModifiedDate: item['lastModifiedDate']
       ));
-      // await fetchAllOffers();
       onSuccess();
     } catch (err) {
-      showErrorAlertHelper(errorMessage: handleApiFormatError(err));
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isFetchOfferByIdLoading(false);
     }
@@ -152,5 +159,11 @@ class TradingOfferController extends GetxController {
   void clearData() {
     offerDetailsEntity.value = OfferDetailsEntity();
     offerById.value = OfferEntity();
+  }
+
+  @override
+  void dispose() {
+    requestCancelToken.cancel('Component disposed');
+    super.dispose();
   }
 }

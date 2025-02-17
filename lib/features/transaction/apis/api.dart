@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:pouch/data/modules/dio.dart';
+
+import '../../../utils/responses/handleApiError.dart';
 
 
 class TransactionService {
@@ -8,11 +12,18 @@ class TransactionService {
 
   static TransactionService get instance => _instance;
 
+  Future _fetchTransactions() {
+    return apiService.get('/transaction');
+  }
 
-  Future fetchTransactions(){
-    return apiService.get(
-      '/transaction',
-    );
+
+  Future fetchTransactions({required VoidCallback onFailure}) async{
+    return _fetchTransactions().then((response) async {
+      return response.data;
+    }).catchError((error) {
+      onFailure();
+      throw (handleApiFormatError(error));
+    });
   }
 
   Future _transaction({required String id}){
@@ -20,47 +31,6 @@ class TransactionService {
       '/transaction/$id',
     );
   }
-
-//   getTransactions({
-//     required TransactionProvider transactionProvider,
-// }) {
-//     List<TransactionEntity> transactions = [];
-//
-//     _transactions().then((response) {
-//       var data = response.data;
-//       TransactionsDetailsEntity transactionDetails = TransactionsDetailsEntity(
-//           totalPages: data['totalPages'],
-//           payloadSize: data['payloadSize'],
-//           hasNext: data['hasNext'],
-//           content: data['content'],
-//           currentPage: data['currentPage'],
-//           skippedRecords: data['skippedRecords'],
-//           totalRecords: data['totalRecords']
-//       );
-//       transactionProvider.saveTransactionDetails(transactionDetails);
-//       var content = transactionDetails.content;
-//         for (var item in content) {
-//           transactions.add(TransactionEntity(
-//             id: item['id'],
-//             transactionId: item['transactionId'],
-//             creditedCurrency: item['creditedCurrency'],
-//             debitedCurrency: item['debitedCurrency'],
-//             description: item['description'],
-//             amount: item['amount'],
-//             debitedAmount: item['debitedAmount'],
-//             transactionType: item['transactionType'],
-//             rate: item['rate'],
-//             rateDescription: item['rateDescription'],
-//             creditedWallet: item['creditedWallet'],
-//             debitedWallet: item['debitedWallet'],
-//             createdDate: item['createdDate'],
-//             status: item['status'],
-//             lastModifiedDate: item['lastModifiedDate'],
-//           ));
-//         }
-//         transactionProvider.saveTransactions(transactions);
-//     });
-//   }
 
 
 }
