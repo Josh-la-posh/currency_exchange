@@ -57,7 +57,7 @@ final CancelToken requestCancelToken = CancelToken();
         try {
           isCreatingAccount(true);
           userSessionController.clearRememberMeHandler();
-          await AuthService.instance.createAccount(
+          final response = await AuthService.instance.createAccount(
             data: {
               'firstName': firstName.value.trim().toString(),
               'lastName': lastName.value.trim().toString(),
@@ -69,10 +69,13 @@ final CancelToken requestCancelToken = CancelToken();
               isCreatingAccount(false);
             }
           );
-          Get.to(() => EmailVerificationScreen(
-            email: email.value.trim().toString(),
-            password: password.value.trim().toString(),
-          ));
+          print('The response is coming as: $response');
+          if (response != null) {
+            Get.to(() => EmailVerificationScreen(
+              email: email.value.trim().toString(),
+              password: password.value.trim().toString(),
+            ));
+          }
         } catch (e) {
           showErrorAlertHelper(errorMessage: e.toString());
           isCreatingAccount(false);

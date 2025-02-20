@@ -186,7 +186,7 @@ class ResetPasswordOtpForm extends StatelessWidget {
             child: Text(
               'You have successfully reset your password',
               textAlign: TextAlign.center,
-              style: Get.textTheme.bodySmall,
+              style: Get.textTheme.bodyMedium,
             ),
           ),
           SizedBox(

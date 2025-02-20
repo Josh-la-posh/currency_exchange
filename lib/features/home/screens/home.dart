@@ -165,7 +165,7 @@ class HomeScreen extends StatelessWidget {
   Widget _buildCurrencySection(bool darkMode) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15),
-      color: darkMode ? TColors.textPrimaryO40 : Colors.white,
+      color: darkMode ? TColors.textPrimaryO40 : TColors.primary.withOpacity(0.3),
       child: CurrencyWidget(),
     );
   }

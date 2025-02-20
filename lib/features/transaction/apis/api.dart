@@ -19,7 +19,7 @@ class TransactionService {
 
   Future fetchTransactions({required VoidCallback onFailure}) async{
     return _fetchTransactions().then((response) async {
-      return response.data;
+      return response;
     }).catchError((error) {
       onFailure();
       throw (handleApiFormatError(error));

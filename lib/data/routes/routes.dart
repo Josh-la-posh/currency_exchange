@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pouch/features/all_offer/routes/routes.dart';
 import 'package:pouch/features/home/routes/routes.dart';
+import 'package:pouch/features/instant_swap/routes/routes.dart';
 import 'package:pouch/features/negotiation_offer/routes/routes.dart';
 import 'package:pouch/features/payment_method/routes/routes.dart';
 import 'package:pouch/features/profile/routes/routes.dart';
@@ -25,7 +26,8 @@ Map<String, WidgetBuilder> routes = {
   ...walletRoute,
   ...depositRoute,
   ...withdrawRoute,
-  ...negotiationRoute
+  ...negotiationRoute,
+  ...swapRoute
 };
 
 

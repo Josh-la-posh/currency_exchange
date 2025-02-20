@@ -38,13 +38,15 @@ class ForgotPasswordFormController extends GetxController {
       saveForm(formKey);
       try {
         isForgotPasswordFormSubmitting(true);
-        await AuthService.instance.sendEmailOtpCode(
+        final response = await AuthService.instance.sendEmailOtpCode(
             data: {"email": email.value.toLowerCase().trim()},
             onFailure: () {
               isForgotPasswordFormSubmitting(false);
             }
         );
-        Get.to(() => ResetPasswordOtpScreen(email: email.value));
+        if (response != null) {
+          Get.to(() => ResetPasswordOtpScreen(email: email.value));
+        }
       } catch (e) {
         showErrorAlertHelper(errorMessage: e.toString());
       } finally {

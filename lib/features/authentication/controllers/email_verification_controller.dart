@@ -65,15 +65,14 @@ class EmailVerificationController extends GetxController {
   }) async {
     try {
       Get.snackbar('Sending Otp', 'We are sending an a 6 digit code to $email');
-      await AuthService.instance.emailVerificationOtp(
+      final response = await AuthService.instance.emailVerificationOtp(
           data: {"email": email.toLowerCase().trim()},
           onFailure: () {}
       );
-      onSuccess();
-    } catch (err) {
-      if (onFailure != null) {
-        onFailure();
+      if (response != null) {
+        onSuccess();
       }
+    } catch (err) {
       showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       Get.closeAllSnackbars();
@@ -83,11 +82,13 @@ class EmailVerificationController extends GetxController {
   Future<void> verifyEmailOtp({required String otpCode,required VoidCallback onSuccess}) async {
     final intOtp = int.parse(otpCode);
     try {
-      await AuthService.instance.confirmEmailOtp(
+      final response = await AuthService.instance.confirmEmailOtp(
           data: {"emailOtp": intOtp},
           onFailure: () {}
       );
-      onSuccess();
+      if (response != null) {
+        onSuccess();
+      }
     } catch (err) {
       showErrorAlertHelper(errorMessage: err.toString());
     }

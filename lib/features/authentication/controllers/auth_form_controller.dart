@@ -13,7 +13,7 @@ import 'package:local_auth_android/local_auth_android.dart';
 import 'package:local_auth_darwin/local_auth_darwin.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 import '../../../utils/local_storage/local_storage.dart';
-import '../../../utils/responses/handleApiError.dart';
+import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
 import '../models/user_model.dart';
 import '../screens/add_details/add_address_detail.dart';
@@ -108,23 +108,29 @@ class AuthFormController extends GetxController {
       },
         onFailure: () {isLoggingIn(false);}
       );
-      var token = response.data['access_token'];
-      var refreshToken = response.data['refresh_token'];
-      if (response != null && token != '') {
-        userSessionController.setToken(token);
-        userSessionController.setRefreshToken(refreshToken);
-        await fetchCurrentUser(
-          email: email.toLowerCase().trim(),
-          password: password,
-          rememberMe: rememberMe,
-          handleEmailNotVerified: handleEmailNotVerified,
-        );
 
-        // await FirebaseApi().updateDeviceToken();
+      print('The unknown response is: $response');
+
+      if (response != null) {
+        var token = response['access_token'] ?? '';
+        var refreshToken = response['refresh_token'] ?? '';
+
+        if (token.isNotEmpty) {
+          userSessionController.setToken(token);
+          userSessionController.setRefreshToken(refreshToken);
+          await fetchCurrentUser(
+            email: email.toLowerCase().trim(),
+            password: password,
+            rememberMe: rememberMe,
+            handleEmailNotVerified: handleEmailNotVerified,
+          );
+
+          // await FirebaseApi().updateDeviceToken();
+        }
       }
-      return token;
+      // return token;
     } catch (err) {
-      Get.snackbar('Error', err.toString(), backgroundColor: Colors.red);
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
     isLoggingIn(false);
     }
@@ -133,7 +139,6 @@ class AuthFormController extends GetxController {
   Future<void> loginWithBiometric() async {
     final email = _storage.getString(USER_REMEMBER_ME_EMAIL);
     final password = _storage.getString(USER_REMEMBER_ME_PASS);
-    print('The new email is ${email} $password');
     final useBiometrics = await userSessionController.getUserBiometrics();
     if (email != null) {
       if (useBiometrics == true) {
@@ -191,6 +196,13 @@ class AuthFormController extends GetxController {
           isLoggingIn(false);
         }
       );
+
+      print('The response is: $responseData');
+
+      if (responseData == null) {
+        throw Exception("Invalid response data");
+      }
+
       userSessionController.user(UserModel(
           id: responseData['id'],
           firstName: responseData['firstName'],
@@ -233,8 +245,6 @@ class AuthFormController extends GetxController {
         InactivityService.instance.startMonitoring();
       }
     } catch (err) {
-
-      print('the error is from here $err');
       Get.snackbar('Error', err.toString(), backgroundColor: Colors.red);
     } finally {
       isLoggingIn(false);

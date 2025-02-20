@@ -62,8 +62,8 @@ class AppInterceptor extends Interceptor {
         requestOptions.headers['Authorization'] = 'Bearer $token';
       }
       requestOptions.headers['User-Agent'] = userAgent;
-      print('Request Headers: ${requestOptions.headers}');
-      print('Request URL: ${requestOptions.uri}');
+      // print('Request Headers: ${requestOptions.headers}');
+      // print('Request URL: ${requestOptions.uri}');
 
       return handler.next(requestOptions);
     } catch (e) {

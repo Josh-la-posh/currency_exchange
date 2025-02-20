@@ -129,7 +129,7 @@ class AddAddressDetail extends StatelessWidget {
                   isReadOnly: false,
                 ),
                 const SizedBox(height: 20),
-                Obx(() => controller.selectedRegion.value == 'Africa' || controller.selectedRegion.value == 'Others'
+                Obx(() => (controller.selectedRegion.value == 'Africa' || controller.selectedRegion.value == 'Others')
                     ? _buildTextField(
                   label: 'Zip or Postal Code (optional)',
                   keyboardType: TextInputType.text,

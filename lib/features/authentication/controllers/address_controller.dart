@@ -8,6 +8,7 @@ import 'package:pouch/utils/layouts/navigation_menu.dart';
 import '../../../data/firebase/firebase_api.dart';
 import '../../../data/modules/storage_session_controller.dart';
 import '../../../utils/responses/handleApiError.dart';
+import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/address_service.dart';
 import '../apis/api.dart';
 
@@ -104,21 +105,21 @@ class AddressFormController extends GetxController {
                 'address':
                 '${address.text.trim()}, ${city.value.trim()}, ${state.value.trim()}. ${country.value.trim()}'
               },
-              onFailure: () {
-                isUpdatingAddress(false);
-              }
+              onFailure: () {isUpdatingAddress(false);}
           );
-          authFormController.login(
-              email: email.value,
-              password: password.value,
-              rememberMe: true,
-              handleEmailNotVerified: () {}
-          );
-          await FirebaseApi().registerDeviceToken();
-          Get.offAll(NavigationMenu());
+          if (responseData != null) {
+            authFormController.login(
+                email: email.value,
+                password: password.value,
+                rememberMe: true,
+                handleEmailNotVerified: () {}
+            );
+            await FirebaseApi().registerDeviceToken();
+            Get.offAll(NavigationMenu());
+          }
         } catch (e) {
           print('The error $e');
-          Get.snackbar('Error', e.toString(), backgroundColor: Colors.red);
+          showErrorAlertHelper(errorMessage: e.toString());
         } finally {
           isUpdatingAddress(false);
         }

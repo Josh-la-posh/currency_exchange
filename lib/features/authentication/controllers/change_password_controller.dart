@@ -54,7 +54,7 @@ class ChangePasswordController extends GetxController {
       saveForm(formKey);
       try {
         isPasswordChanging.value = true;
-        await AuthService.instance.changePassword(
+        final response = await AuthService.instance.changePassword(
             data: {
               'currentPassword': oldPassword.value.trim(),
               'newPassword': password.value.trim(),
@@ -64,10 +64,12 @@ class ChangePasswordController extends GetxController {
           }
         );
 
-        Get.snackbar('Success', 'Password Changed Successfully!!!', backgroundColor: Colors.green);
+        if (response != null) {
+          Get.snackbar('Success', 'Password Changed Successfully!!!', backgroundColor: Colors.green);
+        }
         clearData();
       } catch (e) {
-        print('Failed to change password. Please try again.');
+        print('Failed to change password. Please try again., $e');
         showErrorAlertHelper(errorMessage: e.toString());
       } finally {
         isPasswordChanging.value = false;

@@ -48,17 +48,13 @@ class ResetPasswordOtpFormController extends GetxController {
     required VoidCallback onFailure
   }) async {
     try {
-      await AuthService.instance.sendEmailOtpCode(
-          data: {
-            "email": email.toLowerCase().trim()
-          },
-          onFailure: () {
-
-          }
-          );
-      onSuccess();
+      final response = await AuthService.instance.sendEmailOtpCode(
+          data: {"email": email.toLowerCase().trim()},
+          onFailure: () {});
+      if (response != null) {
+        onSuccess();
+      }
     } catch (err) {
-      onFailure();
       showErrorAlertHelper(errorMessage: err.toString());
     } finally {
     }
@@ -67,17 +63,17 @@ class ResetPasswordOtpFormController extends GetxController {
   Future<void> resetPassword({required String otp, required String newPassword, required VoidCallback onSuccess}) async {
     try {
       isPasswordResetting(true);
-      await AuthService.instance.resetPassword(
+      final response = await AuthService.instance.resetPassword(
           data: {
             'otp': int.parse(otp),
             'newPassword': newPassword
           },
-          onFailure: () {
-            isPasswordResetting(false);
-          }
+          onFailure: () {isPasswordResetting(false);}
       );
-      onSuccess();
-      Get.snackbar('Success', 'Password reset successful', backgroundColor: Colors.green);
+      if (response != null) {
+        onSuccess();
+        Get.snackbar('Success', 'Password reset successful', backgroundColor: Colors.green);
+      }
     } catch (err) {
       showErrorAlertHelper(errorMessage: err.toString());
     } finally {

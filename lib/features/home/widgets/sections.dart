@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:pouch/features/all_offer/screens/exchange_rate_page.dart';
 import 'package:pouch/features/home/widgets/section_widget.dart';
+import 'package:pouch/features/instant_swap/screen/pouch_swap_screen.dart';
 import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
 import 'package:pouch/features/negotiation_offer/screen/negotiation_offer.dart';
 import 'package:pouch/features/payment_method/screens/payment_options.dart';
@@ -52,6 +54,16 @@ class LinkSectionWidget extends StatelessWidget {
                           title: 'Deposit',
                           image: TImages.depositIcon
                       ),
+                      const SizedBox(height: TSizes.xl),
+                      SectionWidgetContainer(
+                          onTap: () {
+                            Get.to(() => ExchangeRatePage());
+                          },
+                          icon: Icon(Icons.balance, size: 30, color: TColors.primary,),
+                          darkMode: darkMode,
+                          title: 'Exchange Rate',
+                          image: TImages.exchangeRateIcon
+                      ),
                     ],
                   ),
                 ],
@@ -83,6 +95,16 @@ class LinkSectionWidget extends StatelessWidget {
                         title: 'Withdraw',
                         image: TImages.withdrawHomeIcon
                     ),
+                    const SizedBox(height: TSizes.xl),
+                    SectionWidgetContainer(
+                        onTap: () {
+                          // Get.to(() => PouchSwapScreen());
+                        },
+                        icon: Icon(Icons.account_balance_wallet, size: 30, color: TColors.primary,),
+                        darkMode: darkMode,
+                        title: 'Pouch Swap',
+                        image: TImages.pouchSwapIcon
+                    ),
                   ],
                 ),
               ),
@@ -106,10 +128,20 @@ class LinkSectionWidget extends StatelessWidget {
                       onTap: () {
                         Get.to(() => NegotiationOfferScreen());
                       },
-                      icon: Icon(Iconsax.calculator5, size: 30, color: TColors.primary,),
+                      icon: Icon(Icons.calculate_outlined, size: 30, color: TColors.primary,),
                       darkMode: darkMode,
                       title: 'Offers In Review',
                       image: TImages.negotiationOfferIcon
+                  ),
+                  const SizedBox(height: TSizes.xl),
+                  SectionWidgetContainer(
+                      onTap: () {
+                        // Get.to(() => NegotiationOfferScreen());
+                      },
+                      icon: Icon(Icons.swap_horiz_sharp, size: 30, color: TColors.primary,),
+                      darkMode: darkMode,
+                      title: 'Instant Swap',
+                      image: TImages.instantSwapIcon
                   ),
                 ],
               ),

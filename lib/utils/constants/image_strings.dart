@@ -13,6 +13,9 @@ class TImages {
   static const String withdrawHomeIcon = 'assets/icons/homeIcons/payments.png';
   static const String negotiationOfferIcon = 'assets/icons/homeIcons/partner_exchange.png';
   static const String trendingOfferIcon = 'assets/icons/homeIcons/trading_offer.png';
+  static const String instantSwapIcon = 'assets/icons/homeIcons/instantSwap.png';
+  static const String pouchSwapIcon = 'assets/icons/homeIcons/pouch_swap.png';
+  static const String exchangeRateIcon = 'assets/icons/homeIcons/exchange_rate.png';
 
 
   // Bottom Nav Icons
