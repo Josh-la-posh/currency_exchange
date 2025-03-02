@@ -80,7 +80,6 @@ class FirebaseApi {
     });
   }
 
-
   // Future<void> initPushNotifications() async {
   //   FirebaseMessaging.onMessage.listen(handleMessage);
   //   FirebaseMessaging.instance.getInitialMessage().then(handleMessage);
@@ -92,8 +91,8 @@ class FirebaseApi {
       final token = await userSessionController.getDeviceToken();
       final response = await NotificationService.instance.registerDeviceToken(data: {
         "token": token,
-      });
-      print('Register token response: ${response.data}');
+      }, onFailure: () {  });
+      print('Register token response: ${response}');
     } catch (e) {
       print('Register token error: $e');
     }
@@ -102,10 +101,8 @@ class FirebaseApi {
   Future<void> updateDeviceToken() async {
     try {
       final token = await userSessionController.getDeviceToken();
-      final response = await NotificationService.instance.updateDeviceToken({
-        "token": token,
-      });
-      print('Update token response: ${response.data}');
+      final response = await NotificationService.instance.updateDeviceToken(data: {"token": token}, onFailure: () {  });
+      print('Update token response: ${response}');
     } catch (e) {
       print('Update token error: $e');
     }

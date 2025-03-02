@@ -1,83 +1,90 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/features/instant_swap/screen/pouch_exchange_rate_screen.dart';
-import 'package:pouch/features/instant_swap/screen/pouch_swap_success_screen.dart';
-import 'package:pouch/utils/constants/colors.dart';
+import 'package:pouch/common/widgets/form/custom_switch.dart';
 
+import '../../../common/widgets/buttons/elevated_button.dart';
+import '../../../utils/constants/colors.dart';
 import '../../all_offer/decimal_formatter.dart';
 import '../controller/instant_swap_controller.dart';
 
-class PouchSwapScreen extends StatelessWidget {
+class AddNewAutoSwap extends StatelessWidget {
   final SwapController controller = Get.put(SwapController());
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(title: Text('Swap with Pouch')),
+      appBar: AppBar(
+        title: Text('Create Auto Swap'),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Icon(Icons.account_balance_wallet, color: TColors.primary, size: width > 450 ? 28 : 24),
-                SizedBox(width: width > 450 ? 15 : 6),
-                Text('Swap with Pouch',
-                  style: TextStyle(
-                    color: TColors.primary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () => Get.to(() => PouchExchangeRateScreen()),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: width > 450 ? 12 : 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: TColors.primary
-                      ),
-                      borderRadius: BorderRadius.circular(8)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Auto swap details',
+                    style: TextStyle(
+                        color: TColors.primary,
+                        fontSize: width > 450 ? 18 : 15,
+                        fontWeight: FontWeight.w500
                     ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.account_balance_wallet, color: TColors.primary, size: width > 450 ? 24 : 18),
-                        SizedBox(width: width > 450 ? 10 : 7),
-                        Text('Check Pouch Rate',
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Switch(value: true, onChanged: (val) {}),
+                      // CustomSwitch(value: true, onChanged: () {}),
+                      Text('Turn on automatic swapping',
                           style: TextStyle(
-                              color: TColors.primary,
-                              fontSize: width > 450 ? 18 : 16,
-                              fontWeight: FontWeight.w500
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                              fontSize: width > 450 ? 11 : 9,
+                              color: TColors.primary
+                          )
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
             const SizedBox(height: 20),
-            _buildCurrencySelector(context, 'Has', controller.hasCurrency, controller.amount),
-            const SizedBox(height: 40),
-            _buildRateDisplay(context, controller.needCurrency),
-            const SizedBox(height: 40),
-            _buildEstimatedAmount(context),
-            const SizedBox(height: 40),
-            _buildReviewText(),
-            const SizedBox(height: 40),
-            _buildConfirmButton(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22),
+                color: TColors.secondaryBorder30,
+                border: Border(top: BorderSide(color: Color(0xFFDADADA)))
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                          onPressed: () => Get.back(),
+                          icon: Icon(Icons.close)
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  _buildCurrencySelector(context, 'Seller Has', controller.hasCurrency, controller.amount),
+                  const SizedBox(height: 40),
+                  _buildRateDisplay(context, controller.needCurrency),
+                  const SizedBox(height: 20),
+                  _buildEstimatedAmount(context),
+                  const SizedBox(height: 40),
+                  _buildReviewText(),
+                  const SizedBox(height: 40),
+                  _buildConfirmButton()
+                ],
+              ),
+            )
           ],
         ),
       ),
@@ -99,7 +106,7 @@ class PouchSwapScreen extends StatelessWidget {
                 children: [
                   Text(label,
                       style: TextStyle(
-                          fontSize: 12,
+                          fontSize: width > 450 ? 13 : 11,
                           color: TColors.primary
                       )
                   ),
@@ -114,9 +121,9 @@ class PouchSwapScreen extends StatelessWidget {
                             DropdownMenuItem(
                                 value: e,
                                 child: Text(e, style: TextStyle(
-                                  color: TColors.primary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800
+                                    color: TColors.primary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w800
                                 ),))).toList(),
                         onChanged: (val) => currency.value = val!,
                       ),
@@ -126,8 +133,8 @@ class PouchSwapScreen extends StatelessWidget {
               ),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8)
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8)
                 ),
                 alignment: Alignment.center,
                 width: width > 450 ? 130 : 100,
@@ -141,10 +148,10 @@ class PouchSwapScreen extends StatelessWidget {
                       border: InputBorder.none,
                       hintText: '100.00',
                       hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: TColors.primary,
-                        fontWeight: FontWeight.w900
-                    )
+                          fontSize: 14,
+                          color: TColors.primary,
+                          fontWeight: FontWeight.w900
+                      )
                   ),
                   style: TextStyle(
                       fontSize: width > 450 ? 16 : 14,
@@ -171,9 +178,9 @@ class PouchSwapScreen extends StatelessWidget {
         children: [
           Column(
             children: [
-              Text('Need',
+              Text('Seller Need',
                   style: TextStyle(
-                      fontSize: 12,
+                      fontSize: width > 450 ? 13 : 11,
                       color: TColors.primary
                   )
               ),
@@ -200,10 +207,10 @@ class PouchSwapScreen extends StatelessWidget {
           ),
           Column(
             children: [
-              Text('Pouch Rate', style: TextStyle(fontSize: width > 450 ? 16 : 14, fontWeight: FontWeight.bold, color: TColors.primary)),
-              SizedBox(height: 10),
+              Text('Prefer Rate', style: TextStyle(fontSize: width > 450 ? 13 : 10, fontWeight: FontWeight.w400, color: TColors.primary)),
+              SizedBox(height: 7),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(8)
@@ -226,7 +233,11 @@ class PouchSwapScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     return Obx(() => Container(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-      decoration: BoxDecoration(color: TColors.secondaryBorder30, borderRadius: BorderRadius.circular(8)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: TColors.textPrimaryO40),
+          color: Get.isDarkMode ? Colors.white12 : Colors.white
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -255,28 +266,21 @@ class PouchSwapScreen extends StatelessWidget {
       child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-          style: TextStyle(
-            color: Get.isDarkMode ? Colors.white : Colors.black,
-            fontSize: 14,
+            style: TextStyle(
+              color: Get.isDarkMode ? Colors.white : Colors.black,
+              fontSize: 14,
               letterSpacing: 0.25,
               height: 2
-          ),
-          children: [
-            TextSpan(
-              text: 'You are about to swap ${controller.amount} ${controller.hasCurrency} at rate of '
             ),
-            TextSpan(
-              text: '${controller.needCurrency} ${controller.rate}',
-              style: TextStyle(color: TColors.primary)
-            ),
-            TextSpan(
-                text: ' and you will be credited '
-            ),
-            TextSpan(
-                text: '${controller.estimatedAmount} ${controller.needCurrency}',
-                style: TextStyle(color: TColors.danger)
-            ),
-          ]
+            children: [
+              TextSpan(
+                  text: 'If your auto swap is matched, you will be credited ${controller.amount} ${controller.hasCurrency} and debited  '
+              ),
+              TextSpan(
+                  text: '${controller.estimatedAmount} ${controller.needCurrency}',
+                  style: TextStyle(color: TColors.danger)
+              ),
+            ]
         ),
       ),
     );
@@ -284,7 +288,7 @@ class PouchSwapScreen extends StatelessWidget {
 
   Widget _buildConfirmButton() {
     return TElevatedButton(
-        onTap: () => Get.to(() => PouchSwapSuccessScreen()),
-        buttonText: 'Confirm');
+        onTap: () {},
+        buttonText: 'Create');
   }
 }

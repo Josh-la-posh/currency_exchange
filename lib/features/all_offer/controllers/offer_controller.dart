@@ -1,16 +1,9 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/features/all_offer/apis/api.dart';
-import 'package:pouch/features/all_offer/models/create_offer_response.dart';
 import 'package:pouch/features/all_offer/models/offer.dart';
-import 'package:pouch/features/all_offer/models/offer_details_entity.dart';
-import 'package:pouch/utils/helpers/controller/helper_function_controller.dart';
-import 'package:pouch/utils/responses/handleApiError.dart';
 import 'package:pouch/utils/shared/error_dialog_response.dart';
-import '../screens/accept_offer_success_page.dart';
-import '../screens/offer_details.dart';
 
 class OfferController extends GetxController {
   final CancelToken requestCancelToken = CancelToken();
@@ -106,8 +99,8 @@ class OfferController extends GetxController {
           onFailure: () {
             isAllOffersLoading(false);
           });
-      var data = response.data;
-      var contents = response.data['content'];
+      var data = response;
+      var contents = response['content'];
       List<OfferEntity> fetchAOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       allOffers.assignAll(fetchAOffers);
@@ -128,7 +121,7 @@ class OfferController extends GetxController {
           queryParameters: queryParameters,
           onFailure: () {isUsdOffersLoading(false);}
       );
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       allUsdOffers.assignAll(fetchAOffers);
@@ -148,7 +141,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isNgnOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       allNgnOffers.assignAll(fetchAOffers);
@@ -168,7 +161,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isCadOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       allCadOffers.assignAll(fetchAOffers);
@@ -188,7 +181,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isEurOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       allEurOffers.assignAll(fetchAOffers);
@@ -208,7 +201,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isGbpOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       allGbpOffers.assignAll(fetchAOffers);
@@ -226,7 +219,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isNewOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       newOffers.assignAll(fetchAOffers);
@@ -245,7 +238,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isUsdNewOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       newUsdOffers.assignAll(fetchAllOffers);
@@ -264,7 +257,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isNgnNewOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       newNgnOffers.assignAll(fetchAllOffers);
@@ -284,7 +277,7 @@ class OfferController extends GetxController {
           queryParameters: queryParameters,
           onFailure: () {isCadNewOffersLoading(false);}
       );
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       newCadOffers.assignAll(fetchAllOffers);
@@ -303,7 +296,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isEurNewOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       newEurOffers.assignAll(fetchAllOffers);
@@ -322,7 +315,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isGbpNewOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       newGbpOffers.assignAll(fetchAllOffers);
@@ -341,7 +334,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isTrendingOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       trendingOffers.assignAll(fetchAllOffers);
@@ -361,7 +354,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isUsdTrendingOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       trendingUsdOffers.assignAll(fetchAllOffers);
@@ -381,7 +374,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isNgnTrendingOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       trendingNgnOffers.assignAll(fetchAllOffers);
@@ -401,7 +394,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isCadTrendingOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       trendingCadOffers.assignAll(fetchAllOffers);
@@ -421,7 +414,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isEurTrendingOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       trendingEurOffers.assignAll(fetchAllOffers);
@@ -441,7 +434,7 @@ class OfferController extends GetxController {
       final response = await OfferService.instance.fetchAllOffers(
           queryParameters: queryParameters,
           onFailure: () {isGbpTrendingOffersLoading(false);});
-      var contents = response.data['content'];
+      var contents = response['content'];
       List<OfferEntity> fetchAllOffers = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
       trendingGbpOffers.assignAll(fetchAllOffers);

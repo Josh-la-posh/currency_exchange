@@ -41,7 +41,6 @@ class BankAccountScreen extends StatelessWidget {
         if (bankController.isLocalBankLoading.value) {
           return Center(child: CircularProgressIndicator());
         } else {
-
           if (bankController.bankAccounts.isEmpty) {
             return NoWalletScreen();
           } else {

@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pouch/data/modules/storage_session_controller.dart';
-import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/api.dart';
 import '../screens/email_verify/email_verify.dart';

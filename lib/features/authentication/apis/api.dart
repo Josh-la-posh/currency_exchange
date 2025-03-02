@@ -1,9 +1,6 @@
 import 'dart:ui';
-import 'package:pouch/utils/responses/handleApiError.dart';
 import '../../../data/modules/dio_service.dart';
-import '../../../data/modules/interceptor.dart';
 
-// final _apiService = AppInterceptor(showLoader: false).dio;
 class AuthService {
   static final AuthService _instance = AuthService._();
 
@@ -146,7 +143,7 @@ class AuthService {
 
   Future<Map<String, dynamic>> currentUserApi({required VoidCallback onFailure}) async {
     try {
-      final response = await _dioService.getRequest('/users/current-user');
+      final response = await _dioService.getRequest(endpoint: '/users/current-user');
       return response;
     } catch (error) {
       onFailure();

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:pouch/features/all_offer/screens/exchange_rate_page.dart';
 import 'package:pouch/features/home/widgets/section_widget.dart';
+import 'package:pouch/features/instant_swap/screen/instant_swap_screen.dart';
 import 'package:pouch/features/instant_swap/screen/pouch_swap_screen.dart';
 import 'package:pouch/features/negotiation_offer/screen/bid_and_offer.dart';
 import 'package:pouch/features/negotiation_offer/screen/negotiation_offer.dart';
@@ -98,7 +99,7 @@ class LinkSectionWidget extends StatelessWidget {
                     const SizedBox(height: TSizes.xl),
                     SectionWidgetContainer(
                         onTap: () {
-                          // Get.to(() => PouchSwapScreen());
+                          Get.to(() => PouchSwapScreen());
                         },
                         icon: Icon(Icons.account_balance_wallet, size: 30, color: TColors.primary,),
                         darkMode: darkMode,
@@ -136,7 +137,7 @@ class LinkSectionWidget extends StatelessWidget {
                   const SizedBox(height: TSizes.xl),
                   SectionWidgetContainer(
                       onTap: () {
-                        // Get.to(() => NegotiationOfferScreen());
+                        Get.to(() => InstantSwapScreen());
                       },
                       icon: Icon(Icons.swap_horiz_sharp, size: 30, color: TColors.primary,),
                       darkMode: darkMode,

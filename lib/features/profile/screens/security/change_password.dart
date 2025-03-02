@@ -55,14 +55,14 @@ class ChangePasswordScreen extends StatelessWidget {
                 const SizedBox(height: TSizes.lg),
 
                 // Old Password
-                Obx(() => _buildPasswordField(
+                _buildPasswordField(
                   context,
                   label: 'Old Password',
                   isObscure: controller.obscureOldPassword,
                   onToggle: controller.toggleObscureOldPassword,
                   onChanged: (value) => controller.oldPassword.value = value,
                   validator: TValidator.emptyFieldValidator,
-                )),
+                ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
 
                 // New Password

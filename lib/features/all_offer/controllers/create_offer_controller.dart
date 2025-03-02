@@ -69,14 +69,14 @@ class CreateOfferController extends GetxController {
           "creditedCurrency": creditedCurrency,
           "amount": amount,
           "rate": rate,
-          expireIn: expireIn != 'Never' ? int.parse(expireIn.toString()) : 0
+          'expireIn': expireIn != 'Never' ? int.parse(expireIn.toString()) : 0
         },
         onFailure: () {
           isCreatingOfferLoading(false);
         }
       );
 
-      var item = response.data;
+      var item = response;
       createOfferResponse(CreateOfferResponse(
           id: item['id'],
           debitedCurrency: item['debitedCurrency'],

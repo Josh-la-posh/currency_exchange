@@ -1,9 +1,6 @@
 import 'dart:ui';
-
-import 'package:dio/dio.dart';
-import 'package:pouch/data/modules/dio.dart';
+import '../../../data/modules/dio_service.dart';
 import '../../../utils/responses/handleApiError.dart';
-import '../../../utils/shared/error_dialog_response.dart';
 
 class SubscriptionService {
   static final SubscriptionService _instance = SubscriptionService._();
@@ -12,42 +9,93 @@ class SubscriptionService {
 
   static SubscriptionService get instance => _instance;
 
-  Future _createSubscription({required Object data}) {
-    return apiService.post('/subscription/create', data: data);
-  }
+  final DioService _dioService = DioService();
 
-  Future _getSubscriptions({required Map<String, dynamic> queryParameters}) {
-    return apiService.get('/subscription', queryParameters: queryParameters);
-  }
-
-  Future _deleteSubscriptions({required String id}) {
-    return apiService.delete('/subscription/$id');
-  }
-
-  Future createSubscription({required Object data, required VoidCallback onFailure}) async{
-    return _createSubscription(data: data).then((response) {
+  Future<Map<String, dynamic>> createSubscription({
+    required Map<String, dynamic> data,
+    required VoidCallback onFailure,
+  }) async {
+    try {
+      final response = await _dioService.postRequest(endpoint: '/subscription/create', data: data);
       return response;
-    }).catchError((error) {
+    } catch (error) {
       onFailure();
-      throw (handleApiFormatError(error));
-    });
-  }
-  
-  Future getSubscriptions({required String currency, required VoidCallback onFailure}) async {
-    return _getSubscriptions(queryParameters: {'currency': currency}).then((response) {
-      return response;
-    }).catchError((error) {
-      onFailure();
-      throw (handleApiFormatError(error));
-    });
+      throw handleApiFormatError(error);
+    }
   }
 
-  Future deleteSubscriptions({required String id, required VoidCallback onFailure}) async{
-    return _deleteSubscriptions(id: id).then((response) {
+  Future<Map<String, dynamic>> getSubscriptions({
+    required String currency,
+    required VoidCallback onFailure,
+  }) async {
+    try {
+      final response = await _dioService.getRequest(endpoint: '/subscription', queryParameters: {'currency': currency});
       return response;
-    }).catchError((error) {
+    } catch (error) {
       onFailure();
-      throw (handleApiFormatError(error));
-    });
+      throw handleApiFormatError(error);
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteSubscriptions({
+    required String id,
+    required VoidCallback onFailure,
+  }) async {
+    try {
+      final response = await _dioService.deleteRequest(endpoint: '/subscription/$id');
+      return response;
+    } catch (error) {
+      onFailure();
+      throw handleApiFormatError(error);
+    }
   }
 }
+
+
+
+// class SubscriptionService {
+//   static final SubscriptionService _instance = SubscriptionService._();
+//
+//   SubscriptionService._();
+//
+//   static SubscriptionService get instance => _instance;
+//
+//   Future _createSubscription({required Object data}) {
+//     return apiService.post('/subscription/create', data: data);
+//   }
+//
+//   Future _getSubscriptions({required Map<String, dynamic> queryParameters}) {
+//     return apiService.get('/subscription', queryParameters: queryParameters);
+//   }
+//
+//   Future _deleteSubscriptions({required String id}) {
+//     return apiService.delete('/subscription/$id');
+//   }
+//
+//   Future createSubscription({required Object data, required VoidCallback onFailure}) async{
+//     return _createSubscription(data: data).then((response) {
+//       return response;
+//     }).catchError((error) {
+//       onFailure();
+//       throw (handleApiFormatError(error));
+//     });
+//   }
+//
+//   Future getSubscriptions({required String currency, required VoidCallback onFailure}) async {
+//     return _getSubscriptions(queryParameters: {'currency': currency}).then((response) {
+//       return response;
+//     }).catchError((error) {
+//       onFailure();
+//       throw (handleApiFormatError(error));
+//     });
+//   }
+//
+//   Future deleteSubscriptions({required String id, required VoidCallback onFailure}) async{
+//     return _deleteSubscriptions(id: id).then((response) {
+//       return response;
+//     }).catchError((error) {
+//       onFailure();
+//       throw (handleApiFormatError(error));
+//     });
+//   }
+// }

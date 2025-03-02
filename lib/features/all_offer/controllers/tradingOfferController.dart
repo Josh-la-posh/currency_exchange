@@ -6,7 +6,6 @@ import 'package:pouch/features/all_offer/apis/api.dart';
 import 'package:pouch/features/all_offer/models/offer.dart';
 import 'package:pouch/features/all_offer/models/offer_details_entity.dart';
 import 'package:pouch/utils/shared/error_dialog_response.dart';
-import '../../notification/apis/api.dart';
 import '../screens/accept_offer_success_page.dart';
 import '../screens/offer_details.dart';
 
@@ -43,7 +42,7 @@ class TradingOfferController extends GetxController {
           isAcceptingRejectingOfferLoading(false);
         }
       );
-      var item = response.data;
+      var item = response;
       onSuccess();
     } catch (err) {
       showErrorAlertHelper(errorMessage: err.toString());
@@ -71,7 +70,7 @@ class TradingOfferController extends GetxController {
           isNegotiatingOfferLoading(false);
         }
       );
-      var item = response.data;
+      var item = response;
       onSuccess();
 
     } catch (err) {
@@ -120,7 +119,7 @@ class TradingOfferController extends GetxController {
           }
       );
       print(response);
-      var item = response.data;
+      var item = response;
       offerById(OfferEntity(
           id: item['id'],
           debitedCurrency: item['debitedCurrency'],

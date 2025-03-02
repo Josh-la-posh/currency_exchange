@@ -53,7 +53,7 @@ class WalletController extends GetxController {
   Future<void> creatingWallet({required String currency, required VoidCallback onSuccess}) async {
     try {
       isCreatingWallet(true);
-      final response = await WalletServices.instance.createWallet(
+      await WalletServices.instance.createWallet(
           currency: currency,
           onFailure: () {
             isCreatingWallet(false);
@@ -98,7 +98,7 @@ class WalletController extends GetxController {
             isWalletLoading(false);
           }
       );
-      final data = response.data;
+      final data = response;
       List<GetWalletModel> fetchedWallets = (data as List)
           .map((json) => GetWalletModel.fromJson(json)).toList();
       wallets.assignAll(fetchedWallets);
@@ -118,7 +118,7 @@ class WalletController extends GetxController {
             isDefaultWalletLoading(false);
           }
       );
-      final data = response.data;
+      final data = response;
       defaultWallet(GetWalletModel(
           id: data['id'],
           currency: data['currency'],

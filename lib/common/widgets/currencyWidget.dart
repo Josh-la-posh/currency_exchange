@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pouch/common/widgets/buttons/elevated_button.dart';
 import 'package:pouch/utils/constants/colors.dart';
 import 'package:pouch/utils/helpers/helper_functions.dart';
 import '../controller/currency_rate_controller.dart';
@@ -21,8 +22,7 @@ class CurrencyWidget extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Obx(
-                      () => DropdownButton<String>(
+                Obx(() => DropdownButton<String>(
                     value: _controller.selectedCurrency.value,
                     onChanged: (newCurrency) =>
                         _controller.updateCurrency(newCurrency!),
@@ -54,10 +54,29 @@ class CurrencyWidget extends StatelessWidget {
                 SizedBox(),
               ],
             ),
-            Obx(
-                  () => _controller.currencyRates.isEmpty
-                  ? const CircularProgressIndicator()
-                  : CarouselSlider(
+            Obx(() => _controller.currencyRates.isEmpty
+                ? const CircularProgressIndicator()
+                : _controller.errMsg != ''
+                ? Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(_controller.errMsg.value, style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),),
+                SizedBox(height: 15,),
+                SizedBox(
+                  width: 120,
+                  child: TElevatedButton(
+                      onTap: () => _controller.fetchCurrencyRates(
+                          currency: _controller.selectedCurrency.value
+                      ),
+                      buttonText: 'Retry'
+                  ),
+                )
+              ],
+            )
+                : CarouselSlider(
                     options: CarouselOptions(
                         height: 40.0,
                         autoPlay: true,

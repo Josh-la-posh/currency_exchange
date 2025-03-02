@@ -83,7 +83,7 @@ class PaymentController extends GetxController {
             isFundingWalletViaNairaTransfer(false);
           }
       );
-      var item = response.data['meta']['authorization'];
+      var item = response['meta']['authorization'];
       flutterwaveDetails(FlutterwaveModel(
           transfer_reference: item['transfer_reference'],
           transfer_account: item['transfer_account'],
@@ -111,7 +111,7 @@ class PaymentController extends GetxController {
             isCreatingFcy(false);
           }
       );
-      var item = response.data;
+      var item = response;
     } catch (err) {
       showErrorAlertHelper(errorMessage: err.toString());
     } finally {
@@ -127,7 +127,7 @@ class PaymentController extends GetxController {
           amount: amount,
           onFailure: () {isFundingFcy(false);}
       );
-      var item = response.data;
+      var item = response;
       await walletController.fetchWallets(currency: '');
       onSuccess();
     } catch (err) {
@@ -144,7 +144,7 @@ class PaymentController extends GetxController {
           amount: amount,
           onFailure: () {isFundingWalletViaPaystack(false);}
       );
-      var item = response.data['data'];
+      var item = response['data'];
       paystackDetails(PaystackModel(
           reference: item['reference'],
           status: item['status'],
@@ -175,7 +175,7 @@ class PaymentController extends GetxController {
             isTransferToLocalBank(false);
           }
       );
-      var title = response.data['message'];
+      var title = response['message'];
       await walletController.fetchWallets(currency: '');
       selectedWithdrawalAccount.value = GetBankAccountModel();
       Get.to(() => WithdrawalSuccessScreen(title: title,));
@@ -199,7 +199,7 @@ class PaymentController extends GetxController {
             isFundWalletViaNairaUssd(false);
           }
       );
-      var item = response.data['data'];
+      var item = response['data'];
       ussdDetails(UssdModel(
         reference: item['reference'],
         status: item['status'],
@@ -220,7 +220,7 @@ class PaymentController extends GetxController {
   }) async {
     try {
       isFundWalletViaNairaBankDirect(true);
-      final response = await WalletServices.instance.fundWalletViaNairaBankDirect(
+      await WalletServices.instance.fundWalletViaNairaBankDirect(
           amount: amount,
           bankId: bankId,
           onFailure: () {
@@ -249,7 +249,7 @@ class PaymentController extends GetxController {
             isConfirmBirthday(false);
           }
       );
-        Get.snackbar('Pending', 'Your request is in progress', backgroundColor: Colors.yellowAccent);
+      Get.snackbar('Pending', 'Your request is in progress', backgroundColor: Colors.yellowAccent);
     } catch (err) {
       showErrorAlertHelper(errorMessage: err.toString());
     } finally {
@@ -285,7 +285,7 @@ class PaymentController extends GetxController {
           onFailure: () {
           }
       );
-      final data = response.data['content'];
+      final data = response['content'];
       List<GetFcyAccountEntity> fetchedFcyAccounts = (data as List)
           .map((json) => GetFcyAccountEntity.fromJson(json)).toList();
     } catch (err) {

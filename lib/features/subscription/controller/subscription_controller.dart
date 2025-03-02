@@ -85,7 +85,7 @@ class SubscriptionController extends GetxController {
         currency: currency,
         onFailure: () {isFetchingSubscription(false);}
       );
-      final data = response.data['content'];
+      final data = response['content'];
       List<SubscriptionEntity> fetchedSubscription = (data as List)
           .map((json) => SubscriptionEntity.fromJson(json)).toList();
       subscriptions.assignAll(fetchedSubscription);

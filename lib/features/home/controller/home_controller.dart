@@ -26,7 +26,7 @@ class HomeController extends GetxController {
 
   Future<void> _initializeSocket() async {
     String? token = await userSessionController.getAccessToken();
-    await FirebaseApi().initPushNotifications();
+    // await FirebaseApi().initPushNotifications();
     if (token != null) {
       SocketManager.shared.initSocket();
     } else {

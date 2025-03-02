@@ -8,7 +8,6 @@ import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_functions.dart';
 import '../../../utils/layouts/navigation_menu.dart';
 
-
 class SuccessScreenWidget extends StatelessWidget {
   SuccessScreenWidget({
     super.key,

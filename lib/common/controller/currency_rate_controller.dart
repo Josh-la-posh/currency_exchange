@@ -5,6 +5,7 @@ import '../../features/wallet/apis/api.dart';
 class CurrencyController extends GetxController {
   var selectedCurrency = 'USD'.obs;
   var currencyRates = <Map<String, dynamic>>[].obs;
+  final errMsg = ''.obs;
   final List<String> currencies = ['USD', 'NGN', 'EUR', 'GBP', 'CAD'];
 
   @override
@@ -15,16 +16,16 @@ class CurrencyController extends GetxController {
 
   Future<void> fetchCurrencyRates({required String currency}) async {
     try {
+      errMsg.value = '';
       final response = await WalletServices.instance.fetchFxRates(
           currency: currency,
           onFailure: () {});
-      final rates = response.data['conversion_rates'] as Map<String, dynamic>;
+      final rates = response['conversion_rates'] as Map<String, dynamic>;
       currencyRates.value = rates.entries
           .map((entry) => {'currency': entry.key, 'rate': entry.value})
           .toList();
     } catch (e) {
-      Get.snackbar('Error', 'Failed to load currency rates',
-          snackPosition: SnackPosition.BOTTOM);
+      errMsg.value = 'Failed to load currency rates';
     }
   }
 

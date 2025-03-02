@@ -24,7 +24,7 @@ class NotificationController extends GetxController {
             isLoading(false);
           }
       );
-      List<GetUserNotification> fetchNotification = (response.data as List)
+      List<GetUserNotification> fetchNotification = (response as List)
         .map((json) => GetUserNotification.fromJson(json)).toList();
       userNotifications.assignAll(fetchNotification);
 

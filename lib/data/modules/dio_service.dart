@@ -84,9 +84,9 @@ class DioService {
 
 
   // GET Request
-  Future<dynamic> getRequest(String endpoint, {Map<String, dynamic>? queryParams}) async {
+  Future<dynamic> getRequest({required String endpoint, Map<String, dynamic>? queryParameters}) async {
     try {
-      final response = await _dio.get(endpoint, queryParameters: queryParams);
+      final response = await _dio.get(endpoint, queryParameters: queryParameters);
       return response.data;
     } catch (error) {
       throw _handleDioError(error);
@@ -104,7 +104,7 @@ class DioService {
   }
 
   // PUT Request
-  Future<dynamic> putRequest(String endpoint, {Map<String, dynamic>? data}) async {
+  Future<dynamic> putRequest({required String endpoint, Map<String, dynamic>? data}) async {
     try {
       final response = await _dio.put(endpoint, data: data);
       return response.data;
@@ -114,7 +114,7 @@ class DioService {
   }
 
   // DELETE Request
-  Future<dynamic> deleteRequest(String endpoint, {Map<String, dynamic>? data}) async {
+  Future<dynamic> deleteRequest({required String endpoint, Map<String, dynamic>? data}) async {
     try {
       final response = await _dio.delete(endpoint, data: data);
       return response.data;

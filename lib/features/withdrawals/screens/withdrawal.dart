@@ -1,297 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:pouch/features/payment_method/controller/payment_controller.dart';
-import 'package:pouch/features/wallet/controller/wallet_controller.dart';
-import 'package:pouch/common/widgets/buttons/elevated_button.dart';
-import 'package:pouch/features/profile/screens/bank_account/add_bank_account.dart';
-import 'package:pouch/features/wallet/models/get_bank_account.dart';
-import 'package:pouch/utils/constants/colors.dart';
-import 'package:pouch/utils/constants/sizes.dart';
-import 'package:pouch/utils/helpers/helper_functions.dart';
-import 'package:pouch/utils/validators/validation.dart';
-import '../../../data/modules/interceptor.dart';
-import '../../../utils/layouts/list_layout.dart';
-import '../../all_offer/decimal_formatter.dart';
-import '../../wallet/controller/bank_controller.dart';
-import '../widgets/account_widget.dart';
-import '../widgets/withdrawal_sheet.dart';
+import 'package:pouch/features/wallet/controller/bank_controller.dart';
+import 'package:pouch/features/withdrawals/screens/foreign_withdrawal.dart';
+import 'package:pouch/features/withdrawals/screens/local_withdrawal.dart';
+import '../../../../utils/constants/colors.dart';
+import '../../../../utils/constants/sizes.dart';
+import '../../../../utils/helpers/helper_functions.dart';
 
 class WithdrawalScreen extends StatelessWidget {
-  final WalletController walletController = Get.find();
-  final PaymentController paymentController = Get.put(PaymentController());
-  final BankController bankController = Get.put(BankController());
-  final AppInterceptor appInterceptor = AppInterceptor();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  WithdrawalScreen({Key? key}) : super(key: key);
-
-  void _showWithdrawalConfirmSheet(BuildContext context, String amount) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (ctx) => WithdrawalConfirmSheet(amount: amount),
-    );
-  }
+  WithdrawalScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    if (bankController.bankAccounts.isEmpty) {
-      bankController.fetchLocalBank();
-    }
-    paymentController.amount.value = '';
-    final bool darkMode = THelperFunctions.isDarkMode(context);
-    paymentController.selectedWithdrawalAccount.value = GetBankAccountModel();
-    final banks = bankController.bankAccounts;
+    final BankController addBankController = Get.put(BankController());
+    final darkMode = THelperFunctions.isDarkMode(context);
     return Scaffold(
-      appBar: _buildAppBar(darkMode),
-      backgroundColor: darkMode ? TColors.textPrimaryO40 : Colors.white,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: TSizes.defaultSpace * 0.8, vertical: 30),
+      appBar: AppBar(
+        leading: Obx(() => IconButton(
+          onPressed: addBankController.bankAccountDetails.value.account_name == null ?  () {
+            addBankController.clearData();
+            Get.back();
+          } : null,
+          icon: addBankController.bankAccountDetails.value.account_name == null
+              ? const Icon(Icons.keyboard_arrow_left_outlined)
+              : const Text(''),
+          style: IconButton.styleFrom(
+              foregroundColor: TColors.primary,
+              iconSize: 35
+          ),
+        )),
+        title: Text(
+          'Withdrawal',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+            SizedBox(height: 20,),
+            GestureDetector(
+              onTap: () => Get.to(() => LocalWithdrawalScreen()),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: TColors.secondaryBorder,
+                ),
+                child: Row(
                   children: [
-                    _buildBalanceInfo(darkMode),
-                    const SizedBox(height: TSizes.defaultSpace * 1.5),
-                    _buildAmountSection(darkMode),
-                    const SizedBox(height: TSizes.defaultSpace * 2),
-                    _buildWithdrawToSection(context, darkMode),
-                    const SizedBox(height: TSizes.defaultSpace * 2),
-                    _buildBankList(banks, darkMode),
-                    const SizedBox(height: TSizes.defaultSpace * 2),
+                    Icon(Icons.account_balance_wallet, color: TColors.primary,),
+                    SizedBox(width: 8),
+                    Text('Local Withdrawal',
+                      style: TextStyle(
+                          color: Get.isDarkMode ? Colors.white : Colors.black,
+                          fontSize: 13,
+                          fontWeight: TSizes.fontWeightLg
+                      ),
+                    )
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 10),
-            Obx(() => TElevatedButton(
-              onTap: paymentController.selectedWithdrawalAccount.value.accountNumber == null
-                  ? null
-                  : () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  _showWithdrawalConfirmSheet(context, paymentController.amount.value);
-                }
-              },
-              buttonText: 'Continue',
-            ))
-          ],
-        ),
-      )
-    );
-  }
-
-  AppBar _buildAppBar(bool darkMode) {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      shadowColor: Colors.transparent,
-      leading: BackButton(
-        onPressed: () {
-          paymentController.selectedWithdrawalAccount.value = GetBankAccountModel();
-          appInterceptor.cancelOngoingRequest(() {
-            paymentController.resetBoolOnOutgoingRequest();
-          });
-          Get.back();
-        },
-      ),
-      title: Text(
-        'Withdraw Money',
-        style: TextStyle(
-          color: darkMode ? Colors.white : Colors.black,
-          fontWeight: FontWeight.w600,
-          fontSize: 18,
-        ),
-      ),
-      centerTitle: true,
-    );
-  }
-
-  Widget _buildAmountSection(bool darkMode) {
-    return Container(
-      padding: const EdgeInsets.only(top: TSizes.defaultSpace),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: darkMode ? Colors.white.withOpacity(0.09) : Colors.black.withOpacity(0.09),
-        ),
-      ),
-      child: Column(
-        children: [
-          _buildAmountLabel(darkMode),
-          const SizedBox(height: 30),
-          _buildAmountInputField(darkMode),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAmountLabel(bool darkMode) {
-    return Obx(() {
-      return RichText(
-        text: TextSpan(
-          style: TextStyle(
-            color: darkMode ? Colors.white : Colors.black.withOpacity(0.55),
-            fontWeight: FontWeight.w800,
-            fontSize: 18,
-          ),
-          children: [
-            const TextSpan(text: 'Amount '),
-            TextSpan(
-              text: walletController.defaultWallet.value.balance == null ? '***' : '(${walletController.defaultWallet.value.currency})',
-              style: const TextStyle(fontSize: 12),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
-  Widget _buildAmountInputField(bool darkMode) {
-    return Form(
-      key: _formKey,
-      child: TextFormField(
-        validator: (val) {
-          return TValidator.withdrawalValidator(
-            paymentController.amount.value,
-            double.parse(walletController.defaultWallet.value.balance.toString()),
-          );
-        },
-        textAlign: TextAlign.center,
-        keyboardType: TextInputType.number,
-        inputFormatters: [
-          DecimalTextInputFormatter(decimalRange: 2),
-          FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
-        ],
-        decoration: InputDecoration(
-          hintText: 'Enter amount',
-          hintStyle: TextStyle(
-            color: darkMode ? Colors.white : Colors.black.withOpacity(0.3),
-            fontWeight: FontWeight.w800,
-            fontSize: 24,
-          ),
-          border: const OutlineInputBorder().copyWith(borderSide: BorderSide.none),
-        ),
-        style: TextStyle(
-          color: darkMode ? Colors.white : Colors.black,
-          fontWeight: FontWeight.w800,
-          fontSize: 24,
-        ),
-        onChanged: (val) {
-          paymentController.setAmount(val);
-          _formKey.currentState?.validate();
-        },
-      ),
-    );
-  }
-
-  Widget _buildBalanceInfo(bool darkMode) {
-    return Column(
-      children: [
-        Obx(() => RichText(
-          text: TextSpan(
-            style: TextStyle(
-              color: darkMode ? Colors.white : Colors.black,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-            children: [
-              TextSpan(
-                text: walletController.defaultWallet .value.balance == null
-                    ? '*****'
-                    : '${walletController.defaultWallet.value.currency} ${THelperFunctions.moneyFormatter(walletController.defaultWallet.value.balance.toString())}',
-              ),
-            ],
-          ),
-        )),
-        const SizedBox(height: TSizes.md),
-        const Text(
-          'Available Balance',
-          style: TextStyle(
-            fontWeight: FontWeight.w800,
-            fontSize: 16,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildWithdrawToSection(BuildContext context, bool darkMode) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Icon(
-              Icons.wallet_travel_rounded,
-              size: 15,
-              color: darkMode ? Colors.white : Colors.black,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              'Withdraw To',
-              style: TextStyle(
-                color: darkMode ? Colors.white : Colors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-            ),
-          ],
-        ),
-        _buildAddBankAccountButton(context),
-      ],
-    );
-  }
-
-  Widget _buildAddBankAccountButton(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Get.to(() => AddBankAccountScreen()),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFFD9D9D9),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: const [
-            Icon(Icons.add, size: 20),
-            Text(
-              'Add Bank Account',
-              style: TextStyle(
-                color: TColors.primary,
-                fontWeight: FontWeight.w600,
-                fontSize: 12,
+            SizedBox(height: 20,),
+            GestureDetector(
+              onTap: () => Get.to(() => ForeignWithdrawalScreen()),
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: TColors.secondaryBorder,
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.account_balance_wallet, color: TColors.primary,),
+                    SizedBox(width: 8),
+                    Text('Foreign Withdrawal',
+                      style: TextStyle(
+                          color: Get.isDarkMode ? Colors.white : Colors.black,
+                          fontSize: 13,
+                          fontWeight: TSizes.fontWeightLg
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Widget _buildBankList(List banks, bool darkMode) {
-    return Obx(() {
-      if (bankController.isLocalBankLoading.value) {
-        return Center(child: CircularProgressIndicator(),);
-      } else {
-        if (bankController.bankAccounts.isEmpty) {
-          return Center(
-            child: Text('No bank account saved.'),
-          );
-        } else {
-          return TListLayout(
-            itemCount: banks.length,
-            itemBuilder: (_, index) {
-              final item = banks[index];
-              return AccountWidget(item: item, darkMode: darkMode);
-            },
-          );
-        }
-      }
-    });
   }
 }

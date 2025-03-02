@@ -22,7 +22,7 @@ class TransactionController extends GetxController {
       final response = await TransactionService.instance.fetchTransactions(
           onFailure: () {isTransactionLoading(false);}
       );
-      final data = response.data['content'];
+      final data = response['content'];
       List<TransactionEntity> fetchedTransactions = (data as List)
           .map((json) => TransactionEntity.fromJson(json)).toList();
       transactions.assignAll(fetchedTransactions);

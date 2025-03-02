@@ -7,7 +7,6 @@ import 'package:pouch/utils/layouts/navigation_menu.dart';
 
 import '../../../data/firebase/firebase_api.dart';
 import '../../../data/modules/storage_session_controller.dart';
-import '../../../utils/responses/handleApiError.dart';
 import '../../../utils/shared/error_dialog_response.dart';
 import '../apis/address_service.dart';
 import '../apis/api.dart';

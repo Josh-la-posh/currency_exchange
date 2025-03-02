@@ -17,6 +17,8 @@ class BankController extends GetxController {
   var isSubmitting = false.obs;
   var verifyingAccount = false.obs;
   var isLocalBankLoading = false.obs;
+  var viewDirectPayout = false.obs;
+  var viewUsdDomiciliary = false.obs;
   var bankAccountDetails = VerifyBankAccountModel().obs;
   var selectedBank = BankListModel().obs;
   var bankAccounts = <GetBankAccountModel>[].obs;
@@ -85,7 +87,7 @@ class BankController extends GetxController {
             verifyingAccount(false);
           }
       );
-      var data = response.data['data'];
+      var data = response['data'];
       bankAccountDetails(VerifyBankAccountModel(
           account_number: data['account_number'],
           account_name: data['account_name'],
@@ -106,7 +108,7 @@ class BankController extends GetxController {
             isLocalBankLoading(false);
           }
       );
-      final data = response.data;
+      final data = response;
       List<GetBankAccountModel> fetchedBankAccounts = (data as List)
           .map((json) => GetBankAccountModel.fromJson(json)).toList();
       bankAccounts.assignAll(fetchedBankAccounts);
@@ -122,7 +124,7 @@ class BankController extends GetxController {
       final response = await WalletServices.instance.fetchBankList(
           onFailure: () {}
       );
-      final data = response.data['data'];
+      final data = response['data'];
       print(data);
       List<BankListModel> fetchedBankLists = (data as List)
           .map((json) => BankListModel.fromJson(json)).toList();

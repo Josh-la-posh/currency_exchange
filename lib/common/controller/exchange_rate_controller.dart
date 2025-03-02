@@ -47,7 +47,7 @@ class ExchangeRateController extends GetxController {
             isConverting(false);
           }
       );
-      final data = response.data['conversion_rates'];
+      final data = response['conversion_rates'];
       exchangeRate.value = data[targetCurrency.value];
       updateTargetAmount();
     } catch (e) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pouch/common/widgets/form/custom_switch.dart';
 import 'package:pouch/data/modules/storage_session_controller.dart';
 import 'package:pouch/features/profile/controller/security_controller.dart';
 import 'package:pouch/utils/constants/sizes.dart';
@@ -85,15 +86,12 @@ class BiometricAuthenticationScreen extends StatelessWidget {
                             )
                         ),
                         Spacer(),
-                        Transform.scale(
-                          scale: 0.8,
-                          child: Obx(() => Switch(
-                            value: securityController.useBiometric.value,
-                            onChanged: (val) {
-                              userSessionController.setUserBiometrics(!securityController.useBiometric.value);
-                              securityController.getBiometricValue();
-                            },
-                          )),
+                        CustomSwitch(
+                          value: securityController.useBiometric,
+                          onChanged: () {
+                            userSessionController.setUserBiometrics(!securityController.useBiometric.value);
+                            securityController.getBiometricValue();
+                          },
                         ),
                       ],
                     ),

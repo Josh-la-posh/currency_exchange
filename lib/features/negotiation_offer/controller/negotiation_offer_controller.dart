@@ -32,13 +32,14 @@ class NegotiationOfferController extends GetxController {
     try {
       myOffers.isEmpty && isMyOffersLoading(true);
       final response = await OfferService.instance.fetchMyOffers(
-        days: days,
-        currency: currency,
         onFailure: () {
           isMyOffersLoading(false);
+        }, queryParameters: {
+          'days': days,
+          'currency': currency
         }
       );
-      var data = response.data;
+      var data = response;
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
@@ -58,13 +59,14 @@ class NegotiationOfferController extends GetxController {
     try {
       myBids.isEmpty && isMyBidsLoading(true);
       final response = await OfferService.instance.fetchMyBids(
-        days: days,
-        currency: currency,
         onFailure: () {
           isMyBidsLoading(false);
-        }
+        }, queryParameters: {
+          'days': days,
+          'currency': currency,
+      }
       );
-      var data = response.data;
+      var data = response;
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();
@@ -83,7 +85,7 @@ class NegotiationOfferController extends GetxController {
         id: id,
         onFailure: () {}
       );
-      var item = response.data;
+      var item = response;
       myOfferById(OfferEntity(
           id: item['id'],
           debitedCurrency: item['debitedCurrency'],
@@ -117,7 +119,7 @@ class NegotiationOfferController extends GetxController {
         id: id,
         onFailure: () {}
       );
-      var item = response.data;
+      var item = response;
       myBidById(OfferEntity(
           id: item['id'],
           debitedCurrency: item['debitedCurrency'],
@@ -157,7 +159,7 @@ class NegotiationOfferController extends GetxController {
       );
       print(response);
       await fetchMyOffers(days: days, currency: currency);
-      Get.snackbar('Success', response.data);
+      Get.snackbar('Success', response.toString());
     } catch (e) {
       Get.snackbar('Error`', e.toString(), backgroundColor: Colors.redAccent);
     } finally {
@@ -174,7 +176,7 @@ class NegotiationOfferController extends GetxController {
             Get.closeAllSnackbars();
           });
       await fetchMyBids(days: days, currency: currency);
-      Get.snackbar('Success', response.data);
+      Get.snackbar('Success', response.toString());
     } catch (e) {
       Get.snackbar('Error`', e.toString(), backgroundColor: Colors.redAccent);
     } finally {
@@ -190,7 +192,7 @@ class NegotiationOfferController extends GetxController {
           isNegotiatedOfferLoading(false);
         }
       );
-      var data = response.data;
+      var data = response;
       var contents = data['content'];
       List<OfferEntity> fetchAllNegotiation = (contents as List)
           .map((json) => OfferEntity.fromJson(json)).toList();

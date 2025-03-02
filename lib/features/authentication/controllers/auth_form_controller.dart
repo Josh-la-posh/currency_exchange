@@ -109,8 +109,6 @@ class AuthFormController extends GetxController {
         onFailure: () {isLoggingIn(false);}
       );
 
-      print('The unknown response is: $response');
-
       if (response != null) {
         var token = response['access_token'] ?? '';
         var refreshToken = response['refresh_token'] ?? '';
@@ -128,7 +126,9 @@ class AuthFormController extends GetxController {
           // await FirebaseApi().updateDeviceToken();
         }
       }
+
       // return token;
+
     } catch (err) {
       showErrorAlertHelper(errorMessage: err.toString());
     } finally {
@@ -187,7 +187,7 @@ class AuthFormController extends GetxController {
     required String email,
     required String password,
     required bool rememberMe,
-    required VoidCallback handleEmailNotVerified,
+    required VoidCallback handleEmailNotVerified
   }) async {
     try {
       isLoggingIn(true);
@@ -196,8 +196,6 @@ class AuthFormController extends GetxController {
           isLoggingIn(false);
         }
       );
-
-      print('The response is: $responseData');
 
       if (responseData == null) {
         throw Exception("Invalid response data");
@@ -245,7 +243,7 @@ class AuthFormController extends GetxController {
         InactivityService.instance.startMonitoring();
       }
     } catch (err) {
-      Get.snackbar('Error', err.toString(), backgroundColor: Colors.red);
+      showErrorAlertHelper(errorMessage: err.toString());
     } finally {
       isLoggingIn(false);
     }
